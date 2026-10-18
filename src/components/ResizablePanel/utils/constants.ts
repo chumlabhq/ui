@@ -3,7 +3,7 @@ import type { ResizablePanelClasses } from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 const DEFAULT_RESIZABLEPANEL_CLASSES: Required<ResizablePanelClasses> = {
   root: "relative",
-  handle: "absolute touch-none select-none motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent",
+  handle: "absolute touch-none select-none motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent data-[resizing]:bg-cl-accent data-[disabled]:opacity-0",
 };
 
 const UNSTYLED_RESIZABLEPANEL_CLASSES: Required<ResizablePanelClasses> =

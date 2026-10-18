@@ -76,8 +76,22 @@ export default function Example() {
 - `data-full-width` — when `fullWidth={true}`
 - `data-loading` — when `loading={true}`
 
+**Wrapper (`data-slot="wrapper"`, the `role="group"` holding the country select and the number):**
+- `data-disabled` — when `disabled`; the group dims
+- `data-loading` — when `loading`: the group dims and takes no pointer input, the number input is disabled, and a spinner shows after it
+- `data-reduce-motion` — on that spinner, while reduced motion is in force
+
 **Input (`data-slot="input"`):**
 - `data-disabled`, `data-error`, `data-valid`, `data-readonly` — mirrors root
+- `data-readonly` paints a dashed border, so a number that can be read but not changed does not look like one waiting for input
+
+**Country select** (the embedded `SearchableDropdown`; its own docs describe each):
+- trigger: `data-open`, `data-placeholder`
+- surface: `data-state="open" | "closed"`, `data-position`, `data-side`, `data-dropdown-id`
+- options: `data-selected`, `data-highlighted`, `data-value`
+- `data-code` — on each flag, the country it shows
+
+**Messages:** `data-invalid` on the error message
 
 **Other slots:** `data-slot="label"`, `data-slot="wrapper"`, `data-slot="error"`, `data-slot="success"`
 

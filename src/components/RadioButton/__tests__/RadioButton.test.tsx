@@ -341,3 +341,24 @@ describe("RadioButton", () => {
     });
   });
 });
+
+describe("RadioGroup loading", () => {
+  // A loading group disabled its radios and painted exactly as a disabled one
+  // does; its own `data-loading` styled nothing and each radio's
+  // `data-[loading]:` variant waited for an attribute only the group carried.
+  it("marks every radio data-loading, busies the group, and shows a spinner", () => {
+    render(
+      <RadioGroup loading label="Plan">
+        <RadioButton value="a" label="A" />
+        <RadioButton value="b" label="B" />
+      </RadioGroup>,
+    );
+    const group = screen.getByRole("radiogroup");
+    expect(group).toHaveAttribute("aria-busy", "true");
+    expect(group.querySelector('[role="status"]')).not.toBeNull();
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toBeDisabled();
+      expect(radio.closest("label")).toHaveAttribute("data-loading", "true");
+    }
+  });
+});

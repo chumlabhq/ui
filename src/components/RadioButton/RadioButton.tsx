@@ -8,6 +8,7 @@ import type {
 } from "./utils/types.js";
 import type { FocusEvent } from "react";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { CircularLoader } from "../Loader/index.js";
 import {
   SIZE_MAP,
   ICON_SIZE_MAP,
@@ -31,6 +32,7 @@ interface RadioGroupContextValue {
   selectedValue: string;
   onSelect: (value: string) => void;
   disabled?: boolean;
+  loading?: boolean;
   error?: boolean;
   /** `success` without `error`: the one validity state an item paints. */
   valid?: boolean;
@@ -155,6 +157,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         // A loading group disables its radios so they can't be operated by
         // keyboard mid-flight, not just visually dimmed.
         disabled: disabled || loading,
+        loading,
         error,
         valid: !error && success,
         size,
@@ -175,6 +178,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           aria-describedby={describedBy || undefined}
           aria-required={required || undefined}
           aria-invalid={error || undefined}
+          aria-busy={loading || undefined}
           className={cn(mergedClasses.root, className) || undefined}
           data-disabled={disabled || undefined}
           data-error={error || undefined}
@@ -202,6 +206,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
             orientation === "horizontal" ? "flex-row flex-wrap gap-4" : "flex-col gap-2",
           ) || undefined}>
             {children}
+            {loading && <CircularLoader size={16} thickness={2} reduceMotion={reduceMotion} unstyled={unstyled} aria-hidden="true" />}
           </div>
 
           {error && errorMessage && (
@@ -325,6 +330,7 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
         data-checked={isChecked || undefined}
         data-state={isChecked ? "checked" : "unchecked"}
         data-disabled={isDisabled || undefined}
+        data-loading={ctx.loading || undefined}
         data-value={value}
         {...rest}
       >

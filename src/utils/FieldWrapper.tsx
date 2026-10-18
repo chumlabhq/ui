@@ -131,7 +131,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
       <div
         ref={ref}
         data-slot="container"
-        className={cn(fullWidth && "w-full", loading && "opacity-50 pointer-events-none", className) || undefined}
+        className={cn(fullWidth && "w-full", className) || undefined}
         style={style}
         data-disabled={isDisabled || undefined}
         data-error={error || undefined}

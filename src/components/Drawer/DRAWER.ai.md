@@ -63,6 +63,21 @@ export default function Example() {
 
 ---
 
+## Data Attributes (for CSS selectors and testing)
+
+**Root:**
+- `data-state="open" | "closed"` — follows `open`; the panel slides and the overlay fades on it
+- `data-side="left" | "right" | "top" | "bottom"` — the edge the drawer comes from
+
+**Parts** (each a marker on its element, for a selector or a test; none of them is a state):
+- `data-drawer-overlay` — the backdrop, when `modal`
+- `data-drawer-panel` — the `role="dialog"` panel; it carries `data-side` too
+- `data-drawer-handle` — the drag handle, when `swipeable`
+- `data-drawer-header`, `data-drawer-body`, `data-drawer-footer` — the `DrawerHeader`, `DrawerBody` and `DrawerFooter` you place
+- `data-drawer-close` — the `DrawerCloseButton`
+
+---
+
 ## All Props
 
 <!-- generated from Drawer.schema.json — edit the schema, not this table -->

@@ -340,7 +340,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
                   resizeDirection === "right" ? "-right-1" : "-left-1",
                 ),
             disabled
-              ? "cursor-default opacity-0"
+              ? "cursor-default"
               : isVertical
                 ? "cursor-row-resize"
                 : "cursor-col-resize",

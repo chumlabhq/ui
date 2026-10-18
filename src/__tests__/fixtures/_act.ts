@@ -29,6 +29,15 @@ export interface ActTools {
     target: Element | null | undefined,
     init?: { pointerId?: number; clientX?: number; clientY?: number; buttons?: number },
   ): void;
+  /**
+   * A bubbling `pointermove`. A drag is a press and a move: Slider enters its
+   * dragging state on the first move after the press, so a press alone never
+   * reached it and its `dragging` fixture rendered a resting thumb.
+   */
+  pointerMove(
+    target: Element | null | undefined,
+    init?: { pointerId?: number; clientX?: number; clientY?: number; buttons?: number },
+  ): void;
   /** Moves focus for real, rather than dispatching a focus event at an element
    *  that stays unfocused. */
   focus(target: Element | null | undefined): void;
@@ -116,6 +125,10 @@ export const gestures = {
       new PointerEvent("pointerdown", { bubbles: true, cancelable: true, ...init }),
     );
   },
+  pointerMove: (
+    target: Element | null | undefined,
+    init: { pointerId?: number; clientX?: number; clientY?: number; buttons?: number } = {},
+  ) => dispatch(required(target), new PointerEvent("pointermove", { bubbles: true, cancelable: true, ...init })),
   focus: (target: Element | null | undefined) => (required(target) as HTMLElement).focus(),
   keyDown: (target: Element | null | undefined, key: string) =>
     dispatch(required(target), new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true })),

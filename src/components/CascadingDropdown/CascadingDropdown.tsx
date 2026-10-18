@@ -100,6 +100,8 @@ interface MenuItemProps {
   dropdownId: string;
   index: number;
   classes: Required<CascadingDropdownClasses>;
+  showSelectedIcon: boolean;
+  selectedIcon?: ReactNode;
   onHover: (option: CascadingOption, index: number) => void;
   onClick: (option: CascadingOption) => void;
   /** Set only while the submenu is open, so the reference always resolves. */
@@ -123,6 +125,8 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
   dropdownId,
   index,
   classes,
+  showSelectedIcon,
+  selectedIcon,
   onHover,
   onClick,
   submenuId,
@@ -152,6 +156,9 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
     >
       <span className="flex-1 truncate">{option.content || option.label}</span>
       {hasSubmenu && <ChevronRightIcon className={classes.itemIcon || undefined} />}
+      {isSelected &&
+        showSelectedIcon &&
+        (selectedIcon || <CheckIcon className={classes.itemIndicator || undefined} />)}
     </div>
   );
 }));
@@ -880,6 +887,8 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
                           dropdownId={dropdownId}
                           index={index}
                           classes={mergedClasses}
+                          showSelectedIcon={showSelectedIcon}
+                          selectedIcon={selectedIcon}
                           submenuId={submenuId}
                           onHover={handleMenuItemHover}
                           onClick={handleMenuItemClick}

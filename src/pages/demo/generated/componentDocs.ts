@@ -9827,6 +9827,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "varies"
       },
       {
+        "name": "data-placeholder",
+        "values": [],
+        "when": "always"
+      },
+      {
         "name": "data-position",
         "values": [],
         "when": "always"
@@ -10649,6 +10654,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "data-open",
         "values": [],
         "when": "varies"
+      },
+      {
+        "name": "data-placeholder",
+        "values": [],
+        "when": "always"
       },
       {
         "name": "data-position",
@@ -11966,7 +11976,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-loading",
         "values": [],
-        "when": "when loading"
+        "when": "varies"
       },
       {
         "name": "data-orientation",
@@ -16958,11 +16968,6 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     ],
     "shapes": [],
     "dataAttributes": [
-      {
-        "name": "data-auto-resize",
-        "values": [],
-        "when": "when autoResize"
-      },
       {
         "name": "data-disabled",
         "values": [],

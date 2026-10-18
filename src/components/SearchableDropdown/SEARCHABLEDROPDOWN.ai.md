@@ -79,10 +79,21 @@ export default function Example() {
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
-- `data-placeholder` — when no option is selected
+- `data-placeholder` — when no option is selected; the placeholder text is tertiary
 
 **Dropdown panel:**
 - `data-position` — `"top"` or `"bottom"` (actual rendered position)
+- `data-state="open" | "closed"`
+- `data-dropdown-id` — unique ID for click-outside detection
+- `data-side` — on the surface, the side it was placed on after any flip
+
+**Options:**
+- `data-selected` — a selected option; it shows the selected icon
+- `data-highlighted` — the keyboard position
+- `data-disabled` — a disabled option
+- `data-value` — the option's value
+
+**Messages:** `data-invalid` on the error message
 
 DOM nesting: `root > label + description + wrapper > trigger(combobox) + content(portal) > searchInput + optionList(listbox) > options`
 

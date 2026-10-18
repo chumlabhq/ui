@@ -5,7 +5,7 @@ import { expect, test } from "./_test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { PAINT_HELPERS } from "./_contrast-measure";
 import { BUTTON_SIZE_CLASSES } from "../src/components/Button/utils/constants";
-import { componentNames, emittedBy, itemSitesOf, loadingRowSitesOf, pressedToggleSitesOf } from "../src/test/emittedAttributes";
+import { componentNames, documentedAttributes, emittedBy, itemSitesOf, loadingRowSitesOf, pressedToggleSitesOf } from "../src/test/emittedAttributes";
 
 /**
  * A state the component reports has to be a state the component shows.
@@ -1532,7 +1532,7 @@ test("a field or selection control's resting boundary clears 3:1 on every librar
 });
 
 /**
- * Every documented state paints.
+ * Every state a component emits or documents paints.
  *
  * `every reported state is a visible state` above compares two values of one
  * attribute inside a fixture, so it covers the states that have values
@@ -1544,91 +1544,155 @@ test("a field or selection control's resting boundary clears 3:1 on every librar
  * `data-today`, and nothing painted them — a selected day, a range and the
  * adjacent month all looked like any other day from 2026-09-03 until L28.
  *
- * So the question is asked of the docs instead of the migration table: every
- * `data-*` attribute a component's `.ai.md` lists as a state, on every element
- * that carries it in any fixture, is removed and put back, and the element or
- * something inside it has to render differently without it — background,
- * border, colour, outline, opacity, text decoration, shadow or weight. Where a
- * parent mirrors the attribute of a child, the child is the one measured. A
- * documented attribute that no fixture renders is listed, not passed.
+ * L28 asked the question of the docs. S3 asks it of the code as well: the
+ * population is every `data-*` attribute a component's render graph emits and
+ * every one its `.ai.md` documents. Each, on every element that carries it in
+ * any fixture, is removed and put back, and the element, something inside it
+ * or one of the ancestors a `has-[…]` variant reaches has to render
+ * differently without it — background, border colour, width and style,
+ * colour, outline, opacity, text decoration, shadow, weight or transform. Or a
+ * peer of the same kind (tag, role, slot, parent and most of its classes) in
+ * the same other states paints or shows something different, or two values
+ * paint differently. A state no fixture renders is listed with its reason, or
+ * fails.
  *
- * Every other unpainted attribute is excused below by name, in one of five
- * groups; an excuse that stops excusing anything fails.
+ * Hooks are not measured; every other unpainted attribute is excused below by
+ * name, with a reason; an excuse that stops excusing anything fails.
  */
 const STATE_PAINT_EXEMPT: Record<string, string> = {};
 const exempt = (components: string[], attribute: string, reason: string) => {
   for (const c of components) STATE_PAINT_EXEMPT[`${c} ${attribute}`] = reason;
 };
 
-const HOOK = "a hook a consumer selects on, not a state: it names or positions the element and nothing in the library paints from it";
-for (const [attribute, components] of [
-  ["data-align", ["Stepper"]], ["data-breadcrumb-dropdown-id", ["Breadcrumb"]], ["data-code", ["CountryFlag"]],
-  ["data-direction", ["Pagination"]], ["data-dropdown-id", ["Dropdown"]], ["data-group", ["OtpInput"]], ["data-index", ["OtpInput"]],
-  ["data-marker-type", ["DatePicker"]], ["data-modal-content", ["Modal"]], ["data-next-status", ["Stepper"]],
-  ["data-position", ["Breadcrumb", "Dropdown", "MultiSelectSearchableDropdown", "SearchableDropdown"]], ["data-slot", ["Input", "TextArea"]],
-  ["data-toast-id", ["Toast"]], ["data-value", ["Accordion"]], ["data-selection-mode", ["Accordion"]],
-] as const) exempt([...components], attribute, HOOK);
+/**
+ * Hooks: attributes that name or place an element — an id, a slot, a part
+ * marker, an index, the side a surface landed on. They are not states, so they
+ * are not measured, and they never tell two elements apart: an option's
+ * `data-value` is unique to it, and kept in the comparison it left every
+ * selected option without a peer to be compared with.
+ */
+const STATE_PAINT_HOOKS: Record<string, string[]> = {
+  Accordion: ["data-value"],
+  Breadcrumb: ["data-breadcrumb-dropdown-id", "data-position", "data-side"],
+  CascadingDropdown: ["data-cascading-submenu", "data-side"],
+  CountryFlag: ["data-code"],
+  DatePicker: ["data-marker-type", "data-side"],
+  Drawer: ["data-drawer-overlay", "data-drawer-panel", "data-drawer-handle", "data-drawer-header", "data-drawer-body", "data-drawer-footer", "data-drawer-close", "data-side"],
+  Dropdown: ["data-dropdown-id", "data-position", "data-side", "data-value"],
+  Input: ["data-slot"],
+  InternationalPhoneInput: ["data-code", "data-dropdown-id", "data-position", "data-side", "data-slot", "data-value"],
+  Modal: ["data-modal-root", "data-modal-overlay", "data-modal-container", "data-modal-content", "data-modal-header", "data-modal-body", "data-modal-footer", "data-nesting-level"],
+  MultiSelectDropdown: ["data-dropdown-id", "data-position", "data-side"],
+  MultiSelectSearchableDropdown: ["data-dropdown-id", "data-position", "data-side"],
+  OtpInput: ["data-group", "data-index"],
+  Pagination: ["data-direction", "data-side"],
+  ResizablePanel: ["data-direction"],
+  SearchableDropdown: ["data-dropdown-id", "data-position", "data-side", "data-value"],
+  Slider: ["data-index"],
+  Stepper: ["data-align", "data-next-status"],
+  Table: ["data-column-index", "data-drag-handle", "data-edit-input", "data-expanded-content", "data-interactive", "data-mobile-card", "data-resize-handle",
+    "data-side", "data-table-container", "data-table-filter-content", "data-table-footer", "data-table-search", "data-testid", "data-loading-more"],
+  TextArea: ["data-slot"],
+  TimePicker: ["data-position", "data-side"],
+  Toast: ["data-toast-id"],
+};
+const isHook = (dir: string, attribute: string) => (STATE_PAINT_HOOKS[dir] ?? []).includes(attribute);
 
 const ECHO = "reports a prop whose paint the component resolves from the prop itself, so removing the attribute changes nothing: the attribute echoes the configuration, it does not cause it";
 for (const [attribute, components] of [
-  ["data-orientation", ["Accordion", "Button", "Stepper", "TabPanel"]], ["data-shape", ["Avatar", "Checkbox"]],
-  ["data-size", ["Button", "Checkbox", "Input", "TextArea"]], ["data-full-width", ["Button"]], ["data-variant", ["Stepper", "Toast"]],
+  ["data-orientation", ["Accordion", "Button"]], ["data-shape", ["Avatar", "Checkbox"]],
+  ["data-size", ["Accordion", "Button", "Checkbox", "Input", "Table", "TextArea"]],
+  ["data-full-width", ["Button", "CascadingDropdown", "Dropdown", "InternationalPhoneInput", "MultiSelectDropdown", "MultiSelectSearchableDropdown", "SearchableDropdown"]],
+  ["data-centered", ["Modal"]], ["data-fullscreen", ["Modal"]], ["data-mobile-view", ["Table"]],
 ] as const) exempt([...components], attribute, ECHO);
-exempt(["Checkbox", "Loader", "Modal", "Stepper", "Switch", "TabPanel"], "data-reduce-motion", "governs motion, not paint; `reduced-motion.contract` holds it");
+const AFFORDANCE = "reports that a click handler is set; the element is a button, or takes the pointer cursor and hover paint, and at rest looks like its peers by design";
+for (const [attribute, components] of [["data-clickable", ["Breadcrumb", "Stepper", "Table"]]] as const) exempt([...components], attribute, AFFORDANCE);
+exempt(["Accordion"], "data-accordion-expand-print", "paints only in print media: the injected print stylesheet opens every panel when the page is printed");
+exempt(["Checkbox", "DatePicker", "Loader", "Modal", "Pagination", "RadioButton", "ResizablePanel", "Stepper", "Switch", "TabPanel"], "data-reduce-motion", "governs motion, not paint; `reduced-motion.contract` holds it");
 
 exempt(["Checkbox", "Switch"], "data-checked", "the presence-only companion of `data-state`, which is the attribute that paints and is compared by value");
 exempt(["Checkbox"], "data-indeterminate", "the presence-only companion of `data-state=\"indeterminate\"`, which paints");
-for (const a of ["data-range-start", "data-range-end", "data-in-range"])
+for (const a of ["data-range-start", "data-range-end"])
   exempt(["DatePicker"], a, "a boolean companion of `data-range`, which paints (accent fill at the ends, accent text in the middle) and is the documented attribute to style");
 
-exempt(["Button", "Checkbox", "Input", "OtpInput", "TextArea"], "data-disabled", "painted from the native `disabled` and classes resolved from the prop; `disabled shows itself` above asserts the affordance absolutely");
-exempt(["Checkbox", "Input", "Switch", "TextArea"], "data-error", "painted by classes resolved from `error`; `success paints where error does` above holds the error paint");
+exempt(["Button", "OtpInput"], "data-disabled", "painted from the native `disabled` and classes resolved from the prop; `disabled shows itself` above asserts the affordance absolutely");
+exempt(["Checkbox", "Switch"], "data-error", "painted by classes resolved from `error`; `success paints where error does` above holds the error paint");
 
-const SHOWN = "measured as shown in L28 by a same-fixture comparison, but not by a paint the attribute itself causes:";
-exempt(["Dropdown"], "data-selected", `${SHOWN} the selected option renders its check indicator, a child`);
+/**
+ * Shown, not painted: the state is drawn by something the attribute does not
+ * style — a child it renders, the surface it opens, a region it moves to, the
+ * focus ring. Each reason names what a reader sees.
+ */
+const SHOWN = "shown rather than painted:";
+const OPEN = `${SHOWN} the open surface is the state; the trigger it belongs to keeps its resting paint`;
+for (const c of ["CascadingDropdown", "InternationalPhoneInput", "MultiSelectSearchableDropdown", "TimePicker"])
+  exempt([c], "data-open", OPEN);
+exempt(["Dropdown", "InternationalPhoneInput", "SearchableDropdown"], "data-state", `${SHOWN} on the listbox surface, \`open\` while it is showing; the surface is the state`);
+exempt(["Breadcrumb"], "data-dropdown-open", `${SHOWN} the collapsed-items menu is open`);
+exempt(["Breadcrumb"], "data-truncated", `${SHOWN} the hidden crumbs are replaced by the ellipsis item`);
+exempt(["CascadingDropdown"], "data-has-submenu", `${SHOWN} the item renders a chevron`);
 exempt(["DatePicker"], "data-marked", `${SHOWN} the marked day renders its marker dot, a child`);
-exempt(["DatePicker"], "data-highlighted", "the roving keyboard position; it is drawn by the focus ring whenever focus is in the grid, which CONTRAST_NONTEXT measures");
+exempt(["DatePicker", "Table"], "data-highlighted", "the roving keyboard position; it is drawn by the focus ring whenever focus is in the grid, which CONTRAST_NONTEXT measures");
 exempt(["Table"], "data-expanded", `${SHOWN} the expand control changes its icon and its label, not its paint`);
+exempt(["Table"], "data-editing", `${SHOWN} the cell holds the edit input in place of its text`);
+exempt(["Table"], "data-group-row", `${SHOWN} the row holds the group's label, count and toggle in place of a record`);
+exempt(["Table"], "data-pinned", `${SHOWN} a pinned column's header and cells move into the pinned region`);
 exempt(["OtpInput"], "data-filled", `${SHOWN} a filled cell shows its digit`);
 exempt(["Avatar"], "data-has-image", `${SHOWN} the avatar renders the image instead of its initials`);
-exempt(["Pagination"], "data-state", `${SHOWN} the current page paints the accent tint and accent text, against a plain page`);
 exempt(["Stepper"], "data-status", `${SHOWN} the active step's indicator paints the accent fill`);
 exempt(["Stepper"], "data-invalid", `${SHOWN} an invalid step's indicator paints differently from a valid one`);
+exempt(["Button", "OtpInput"], "data-loading", `${SHOWN} a spinner renders, and the control is disabled`);
+exempt(["CountryFlag"], "data-error", `${SHOWN} the fallback renders in place of the flag`);
+exempt(["Slider"], "data-error", `${SHOWN} the error message renders below, and paints \`text-cl-error\` on \`data-invalid\``);
 
-const NEXT = "NOT VERIFIED in L28; listed for the next slice: no default paint was found for it on the element that carries it";
-for (const [attribute, components] of [
-  ["data-open", ["DatePicker", "Dropdown", "MultiSelectDropdown", "SearchableDropdown"]], ["data-state", ["Dropdown"]],
-  ["data-loading", ["Button", "DatePicker", "InternationalPhoneInput", "OtpInput"]], ["data-placeholder", ["Dropdown", "SearchableDropdown"]],
-  ["data-readonly", ["InternationalPhoneInput"]], ["data-truncated", ["Breadcrumb"]], ["data-dropdown-open", ["Breadcrumb"]], ["data-clickable", ["Stepper"]],
-] as const) exempt([...components], attribute, NEXT);
-
-/** Every documented state when the gate was written (L28 step 0). */
-const STATE_PAINT_FLOOR = 161;
-
-const documentedStates = () => {
-  const out: { dir: string; attribute: string }[] = [];
-  for (const dir of readdirSync(resolve(process.cwd(), "src/components"))) {
-    let files: string[] = [];
-    try { files = readdirSync(resolve(process.cwd(), "src/components", dir)).filter((f) => f.endsWith(".ai.md")); } catch { continue; }
-    const seen = new Set<string>();
-    for (const f of files) {
-      for (const line of readFileSync(resolve(process.cwd(), "src/components", dir, f), "utf8").split("\n")) {
-        const m = /^- `(data-[a-z-]+)/.exec(line);
-        if (m && !seen.has(m[1])) { seen.add(m[1]); out.push({ dir, attribute: m[1] }); }
-      }
-    }
-  }
-  return out;
+/**
+ * States no fixture can render, each with the reason. A reason that stops
+ * being true — the state renders after all — fails as stale.
+ */
+const STATE_PAINT_UNRENDERED: Record<string, string> = {
+  "Accordion data-accordion-print-styles": "on the print <style> element Accordion adds to <head>, not on anything in the body",
+  "Accordion data-pending": "set only while a click's close waits out `preventCloseTimeout`, a window no fixture holds open",
+  "Avatar data-chumlab": "on the <style> element Avatar adds to <head>, not on anything in the body",
+  "Button data-reduce-motion": "on Button's spinner, which follows only the OS setting; fixture pages do not emulate it",
+  "Input data-reduce-motion": "on the field's spinner, which follows only the OS setting; fixture pages do not emulate it",
+  "InternationalPhoneInput data-reduce-motion": "on the number's spinner, which follows only the OS setting; fixture pages do not emulate it",
+  "TextArea data-reduce-motion": "on the field's spinner, which follows only the OS setting; fixture pages do not emulate it",
+  "CountryFlag data-loading": "set while the packaged flag image is in flight, which resolves before a fixture page settles",
+  "InternationalPhoneInput data-placeholder": "a country is always chosen (`defaultCountry`), so the country trigger never shows its placeholder",
+  "Table data-dragging": "set by an HTML drag-and-drop, which the fixture act tools do not perform",
+  "Table data-resizing": "set by TanStack during a mouse drag on the resize handle, which the fixture act tools do not perform",
 };
 
-test("every documented state paints", async ({ page }) => {
-  test.setTimeout(900_000);
-  const states = documentedStates();
+/** Every attribute emitted or documented when the population became the union (S3). */
+const STATE_PAINT_FLOOR = 296;
+
+/**
+ * The population: every attribute a component's render graph emits, read from
+ * the AST, and every one its `.ai.md` documents. Until S3 it was the doc
+ * bullets alone, which made the docs the ceiling of the gate — 136 emitted
+ * attributes were in no doc, and a dragged Slider thumb that painted nothing
+ * was never asked. `state-docs.contract` holds the two sides equal.
+ */
+/** Attributes written together with another that means the same, `[mirror, attribute]`. */
+const STATE_MIRRORS: [string, string][] = [
+  ["data-checked", "data-state"], ["data-indeterminate", "data-state"], ["data-active", "data-state"], ["data-dragging", "data-state"],
+  ["data-range-start", "data-range"], ["data-range-end", "data-range"], ["data-in-range", "data-range"],
+  ["data-range-start", "data-in-range"], ["data-range-end", "data-in-range"], ["data-open", "data-state"], ["data-expanded", "data-state"],
+];
+
+const stateAttributes = () =>
+  componentNames().flatMap((dir) =>
+    [...new Set([...emittedBy(dir).keys(), ...documentedAttributes(dir)])].sort().map((attribute) => ({ dir, attribute })),
+  );
+
+test("every state a component emits or documents paints", async ({ page }) => {
+  test.setTimeout(1_200_000);
+  const states = stateAttributes();
   await gotoFixtureIndex(page);
   const paths = await page.locator("[data-fixture-index] li a").evaluateAll((els) =>
     els.map((e) => new URL((e as HTMLAnchorElement).href).pathname),
   );
-  type Seen = { path: string; sig: string; others: string; value: string | null; paint: string; toggled: boolean };
+  type Seen = { path: string; kin: string; tokens: string[]; others: string; value: string | null; paint: string; toggled: boolean };
   const seen = new Map<string, Seen[]>();
   const dirs = [...new Set(states.map((s) => s.dir))];
   for (const dir of dirs) {
@@ -1636,87 +1700,147 @@ test("every documented state paints", async ({ page }) => {
     for (const path of paths.filter((p) => p.split("/")[2].split(".")[0] === dir)) {
       await page.goto(path, { waitUntil: "domcontentloaded" });
       await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
+      // The state an act reaches exists only once the act has run: until S3
+      // this read the page two frames after mount, so a dragged Slider thumb
+      // was measured before the drag and counted as never rendered.
+      await page
+        .waitForFunction(
+          () => {
+            const main = document.querySelector("main[data-fixture-act]");
+            const act = main?.getAttribute("data-fixture-act");
+            const still = main?.getAttribute("data-fixture-still");
+            return act && act !== "pending" && still && still !== "pending" ? act : null;
+          },
+          undefined,
+          { timeout: 30000 },
+        )
+        .catch(() => null);
       await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
-      const found = await page.evaluate((attrs) => {
+      const found = await page.evaluate(([attrs, mirrors, hooks]) => {
         const freeze = document.createElement("style");
         freeze.textContent = "*,*::before,*::after{transition:none!important;animation:none!important}";
         document.head.append(freeze);
-        const paint = (el: Element) => {
+        const props = (el: Element) => {
           const c = getComputedStyle(el);
           const a = getComputedStyle(el, "::after");
-          return [c.backgroundColor, c.borderTopColor, c.borderTopWidth, c.color, c.outlineStyle, c.outlineColor, c.opacity,
-            c.textDecorationLine, c.textDecorationColor, c.boxShadow, c.fontWeight, c.transform, c.translate, a.content, a.backgroundColor].join("~");
+          return [c.backgroundColor, c.borderTopColor, c.borderTopWidth, c.borderTopStyle, c.color, c.outlineStyle, c.outlineColor, c.opacity,
+            c.textDecorationLine, c.textDecorationColor, c.boxShadow, c.fontWeight, c.transform, c.translate, c.scale, a.content, a.backgroundColor].join("~");
         };
-        // What kind of element it is, so a carrier is compared with its peers and nothing else.
-        const subtree = (el: Element) => [el, ...el.querySelectorAll("*")].map(paint).join("|");
+        // What the element shows as well as how: a state drawn by a child (a
+        // check icon, a spinner, a digit) differs from its peer in what is
+        // inside it, which no property of its own reports.
+        const shape = (el: Element) =>
+          `${el.querySelectorAll("svg").length}/${el.querySelectorAll("*").length}/${(el.textContent ?? "").trim() ? 1 : 0}`;
+        const paint = (el: Element) => `${props(el)}#${shape(el)}`;
+        // The element, what is inside it, and the few ancestors a `has-[…]`
+        // variant can draw it on: Input's readonly border is on the control
+        // that holds the <input>, which is what carries `data-readonly`.
+        const around = (el: Element) => {
+          const up: Element[] = [];
+          for (let n = el.parentElement; n && up.length < 3 && !n.hasAttribute("data-fixture"); n = n.parentElement) up.push(n);
+          return [...up, el, ...el.querySelectorAll("*")].map(props).join("|");
+        };
+        // What kind of element it is: tag, role and slot, and the parent it
+        // sits in. A preset is compared with the other presets, not with the
+        // month-navigation button that is also a role-less <button> — which
+        // is how an active preset that painted nothing passed until S3.
         const sig = (el: Element) => `${el.tagName.toLowerCase()}|${el.getAttribute("role") ?? ""}|${el.getAttribute("data-slot") ?? ""}`;
-        // Every other documented state the element is in, and focus, so it is
-        // compared only with a peer that differs by the one attribute.
+        const kin = (el: Element) => `${sig(el)}^${el.parentElement?.tagName ?? ""}.${el.parentElement?.getAttribute("class") ?? ""}`;
+        const tokens = (el: Element) => (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
+        // Every other state the element is in, and focus, so it is compared
+        // only with a peer that differs by the one attribute.
+        // A mirror is written with the attribute and means the same thing, so
+        // it never tells two elements apart: a checked control always has both
+        // `data-state="checked"` and `data-checked`, an unchecked one neither.
+        const mirrored = (a: string, b: string) => mirrors.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
         const others = (el: Element, attribute: string) =>
-          [...attrs.filter((a) => a !== attribute && el.hasAttribute(a)).map((a) => `${a}=${el.getAttribute(a)}`), el === document.activeElement ? ":focus" : ""].join(" ");
-        const out: Record<string, { sig: string; others: string; value: string | null; paint: string; toggled: boolean }[]> = {};
+          [...attrs.filter((a) => a !== attribute && !mirrored(a, attribute) && !hooks.includes(a) && el.hasAttribute(a)).map((a) => `${a}=${el.getAttribute(a)}`), el === document.activeElement ? ":focus" : ""].join(" ");
+        const out: Record<string, { kin: string; tokens: string[]; others: string; value: string | null; paint: string; toggled: boolean }[]> = {};
         for (const attribute of attrs) {
-          const carriers = [...document.body.querySelectorAll(`[${attribute}]`)].filter((el) => !el.querySelector(`[${attribute}]`));
-          const sigs = new Set(carriers.map(sig));
+          // Every element that carries it, not only the innermost: a radio's
+          // label dims on `data-disabled` while the circle inside it carries
+          // the same attribute and paints nothing of its own, and Table's
+          // filter button shows `data-active` while the icon inside it does not.
+          const carriers = [...document.body.querySelectorAll(`[${attribute}]`)];
+          const kins = new Set(carriers.map(kin));
           const rows = carriers.map((el) => {
             const value = el.getAttribute(attribute)!;
-            const before = subtree(el);
+            const before = around(el);
             el.removeAttribute(attribute);
-            const toggled = subtree(el) !== before;
+            const toggled = around(el) !== before;
             el.setAttribute(attribute, value);
-            return { sig: sig(el), others: others(el, attribute), value, paint: paint(el), toggled };
+            return { kin: kin(el), tokens: tokens(el), others: others(el, attribute), value, paint: paint(el), toggled };
           });
           const peers = [...document.body.querySelectorAll("*")]
-            .filter((el) => !el.hasAttribute(attribute) && sigs.has(sig(el)))
-            .map((el) => ({ sig: sig(el), others: others(el, attribute), value: null, paint: paint(el), toggled: false }));
+            .filter((el) => !el.hasAttribute(attribute) && kins.has(kin(el)))
+            .map((el) => ({ kin: kin(el), tokens: tokens(el), others: others(el, attribute), value: null, paint: paint(el), toggled: false }));
           out[attribute] = [...rows, ...peers];
         }
         freeze.remove();
         return out;
-      }, attributes);
+      }, [attributes, STATE_MIRRORS, STATE_PAINT_HOOKS[dir] ?? []] as const);
       for (const [attribute, rows] of Object.entries(found)) {
         const key = `${dir} ${attribute}`;
         seen.set(key, [...(seen.get(key) ?? []), ...rows.map((r) => ({ ...r, path }))]);
       }
     }
   }
+  /** Two elements of one kind share most of their classes as well as their parent. */
+  const alike = (a: Seen, b: Seen) => {
+    const A = new Set(a.tokens);
+    const B = new Set(b.tokens);
+    const shared = [...A].filter((t) => B.has(t)).length;
+    return A.size + B.size === 0 || shared / (A.size + B.size - shared) >= 0.5;
+  };
   /**
    * Painted when the element renders differently without the state, all else
    * equal: removing the attribute changes it or something inside it (a state on
-   * a root is often drawn on a child); or a peer of the same kind, in
-   * the same other states and focus, that lacks the attribute paints
-   * differently — in the same fixture where there is one, since another
-   * fixture can differ for reasons of its own; or, for an attribute that always
-   * carries a value, two values on otherwise-equal elements paint differently.
-   * A selected day that is also the focused one is not compared with a
-   * resting day: the focus ring would answer for it.
+   * a root is often drawn on a child); or a peer of the same kind, in the same
+   * other states and focus, that lacks the attribute paints or shows something
+   * different — in the same fixture where there is one, since another fixture
+   * can differ for reasons of its own; or, for an attribute that always carries
+   * a value, two values on otherwise-equal elements paint differently. A
+   * selected day that is also the focused one is not compared with a resting
+   * day: the focus ring would answer for it.
    */
   const painted = (rows: Seen[]) => {
     const carriers = rows.filter((r) => r.value !== null);
     if (carriers.some((r) => r.toggled)) return true;
     for (const c of carriers) {
-      const peers = rows.filter((r) => r.value === null && r.sig === c.sig && r.others === c.others);
+      const peers = rows.filter((r) => r.value === null && r.kin === c.kin && r.others === c.others && alike(r, c));
       const local = peers.filter((r) => r.path === c.path);
       if ((local.length ? local : peers).some((r) => r.paint !== c.paint)) return true;
     }
     const groups = new Map<string, Map<string, string>>();
     for (const c of carriers) {
-      const g = `${c.sig}#${c.others}`;
+      const g = `${c.kin}#${c.others}`;
       if (!groups.has(g)) groups.set(g, new Map());
       groups.get(g)!.set(c.value!, c.paint);
     }
     return [...groups.values()].some((v) => v.size > 1 && new Set(v.values()).size > 1);
   };
-  const keys = states.map((s) => `${s.dir} ${s.attribute}`);
-  const unrendered = keys.filter((k) => !seen.get(k)?.some((r) => r.value !== null));
-  const unpainted = keys.filter((k) => !unrendered.includes(k) && !painted(seen.get(k)!) && !STATE_PAINT_EXEMPT[k]);
-  const stale = Object.keys(STATE_PAINT_EXEMPT).filter((k) => !keys.includes(k) || unrendered.includes(k) || painted(seen.get(k)!));
+  const all = states.map((s) => `${s.dir} ${s.attribute}`);
+  const hooks = states.filter((s) => isHook(s.dir, s.attribute)).map((s) => `${s.dir} ${s.attribute}`);
+  const keys = all.filter((k) => !hooks.includes(k));
+  const rendered = (k: string) => Boolean(seen.get(k)?.some((r) => r.value !== null));
+  const unrendered = keys.filter((k) => !rendered(k));
+  const unreasoned = unrendered.filter((k) => !STATE_PAINT_UNRENDERED[k]);
+  const unpainted = keys.filter((k) => rendered(k) && !painted(seen.get(k)!) && !STATE_PAINT_EXEMPT[k]);
+  const stale = [
+    ...Object.keys(STATE_PAINT_EXEMPT).filter((k) => !keys.includes(k) || !rendered(k) || painted(seen.get(k)!)),
+    ...Object.entries(STATE_PAINT_HOOKS).flatMap(([c, as]) => as.map((a) => `${c} ${a}`)).filter((k) => !all.includes(k) || !rendered(k)),
+    ...Object.keys(STATE_PAINT_UNRENDERED).filter((k) => !keys.includes(k) || rendered(k)),
+  ];
   const example = (k: string) => seen.get(k)!.find((r) => r.value !== null)!.path;
-  console.log(`STATE_PAINT states ${keys.length} (floor ${STATE_PAINT_FLOOR}), unpainted ${unpainted.length}, exempt ${Object.keys(STATE_PAINT_EXEMPT).length}, unrendered ${unrendered.length}`);
+  console.log(
+    `STATE_PAINT states ${all.length} (floor ${STATE_PAINT_FLOOR}), hooks ${hooks.length}, measured ${keys.length - unrendered.length}, ` +
+      `unpainted ${unpainted.length}, exempt ${Object.keys(STATE_PAINT_EXEMPT).length}, unrendered ${unrendered.length} (reasoned ${unrendered.length - unreasoned.length})`,
+  );
   for (const k of unpainted) console.log(`  STATE_PAINT_UNPAINTED ${k} — e.g. ${example(k)}`);
-  for (const k of unrendered) console.log(`  STATE_PAINT_UNRENDERED ${k}`);
+  for (const k of unreasoned) console.log(`  STATE_PAINT_UNRENDERED ${k}`);
   for (const k of stale) console.log(`  STATE_PAINT_STALE_EXEMPTION ${k}`);
-  expect(keys.length).toBeGreaterThanOrEqual(STATE_PAINT_FLOOR);
-  expect(unpainted, "a documented state renders exactly like the same element at rest").toEqual([]);
-  expect(stale, "an exemption that excuses nothing").toEqual([]);
+  expect(all.length).toBeGreaterThanOrEqual(STATE_PAINT_FLOOR);
+  expect(unpainted, "a state renders exactly like the same element at rest").toEqual([]);
+  expect(unreasoned, "a state no fixture renders, with no reason given").toEqual([]);
+  expect(stale, "an exemption or a reason that excuses nothing").toEqual([]);
 });

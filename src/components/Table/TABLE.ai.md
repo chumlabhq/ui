@@ -69,11 +69,40 @@ export default function Example() {
 
 ## Data Attributes (for CSS selectors and testing)
 
-- `data-clickable` — on rows when `onRowClick` is provided
-- `data-striped` — on alternating rows when `striped` is enabled
-- `data-selected` — on selected rows
-- `data-dragging` — on dragged row during reorder
-- `data-expanded` — on expanded rows
+Each is written or absent, never `"false"`.
+
+**Table root** (`data-table-container`, the `role="region"`):
+- `data-striped` — when `striped`
+- `data-size="sm" | "md" | "lg"` — from `size`
+- `data-mobile-view` — on the region instead, when the mobile card view is showing
+
+**Header cells** (`role="columnheader"`):
+- `data-sorted="asc" | "desc"` — the column the table is sorted by; its sort icon shows the direction
+- `data-pinned` — a pinned column's header
+- `data-column-index` — the column's position, from 0
+- the pin button carries `data-state="active"` while its column is pinned; the filter button carries `data-active` while its column has a filter, and so does its icon
+
+**Rows** (`role="row"`):
+- `data-selected` — a selected row; it takes the accent fill
+- `data-clickable` — when `onRowClick` is provided
+- `data-striped` — an alternating row when `striped` is on; it takes the hover tint
+- `data-state="open" | "closed"` — an expandable row's expansion
+- `data-group-row` — a group header row, when `groupBy` is set
+- `data-dragging` — the row being dragged during a reorder; it dims
+- `data-expanded-content` — the row a `renderExpandedRow` renders into
+
+**Cells** (`role="gridcell"`):
+- `data-highlighted` — the keyboard position in the grid; focus is on it
+- `data-editing` — the cell being edited; it holds the edit input, which carries `data-edit-input`
+- `data-grouped` — the cell a row is grouped by
+
+**Controls:**
+- `data-expanded` — on the expand button while its row is expanded; the icon turns
+- `data-drag-handle` — the row-reorder handle
+- `data-resize-handle` — a column's resize separator; its bar carries `data-resizing` while a mouse drag resizes the column, and paints the accent
+- `data-interactive` — the label of a custom selection checkbox
+
+**Regions:** `data-table-search` holds the search field, with `data-side="start" | "end"` for its icon; `data-table-filter-content` is the filter panel; `data-table-footer` the `<tfoot>`; `data-loading-more` the infinite-scroll loader; `data-mobile-card` each card in the mobile view; `data-testid="table-container"` the element that scrolls.
 
 DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight) > table > thead > tr > th + tbody > tr > td`
 

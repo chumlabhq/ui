@@ -58,13 +58,14 @@ export default function Example() {
 
 ## Data Attributes
 
-- `data-auto-resize="true"` — on the control when `autoResize` is set
-
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
 - `data-error` on root — when error state
 - `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
+- `data-loading` on root — when loading: the field dims, takes no input, and shows a spinner
+- `data-reduce-motion` on that spinner — while reduced motion is in force
+- `data-invalid` on the error message
 - `data-slot="textarea"` on the textarea element
 - `data-slot="count"` on the character count
 

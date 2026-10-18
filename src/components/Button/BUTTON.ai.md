@@ -93,6 +93,7 @@ To override structural defaults (e.g., different padding), include the override 
 - `data-full-width="true"` — when fullWidth
 - `data-orientation="horizontal" | "vertical"` — on `ButtonGroup`, from its `orientation` prop
 - `data-size="sm|md|lg"` — size prop value
+- `data-reduce-motion="true"` — on the loading spinner, while reduced motion is in force
 - `aria-busy="true"` — when loading
 - `aria-disabled="true"` — when disabled or loading
 

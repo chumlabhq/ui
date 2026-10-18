@@ -23,5 +23,6 @@ const fixtures: Fixtures<typeof Checkbox> = [
       </>
     ),
   },
+  { name: "readonly", props: { label: "Accept", readOnly: true, defaultChecked: true } },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -45,5 +45,10 @@ const fixtures: Fixtures<typeof Breadcrumb> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     act: (c, ui) => ui.click(c.querySelector("button")),
   },
+  {
+    name: "clickable",
+    props: { items: [{ id: "home", label: "Home" }, { id: "docs", label: "Docs" }, { id: "here", label: "Here" }], onItemClick: () => {} },
+    note: "Crumbs without an href render as buttons, the only crumbs that carry `data-clickable`.",
+  },
 ];
 export default fixtures;

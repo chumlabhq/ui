@@ -96,6 +96,7 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 
 - `data-has-image` — on Avatar root when image is loaded (boolean)
 - `data-shape="circle|rounded|square"` — on Avatar root
+- `data-chumlab="avatar-dark"` — not on the avatar: on the `<style>` element Avatar adds to `<head>` once, holding its dark-theme rules
 
 **DOM nesting:** Avatar root `<div>` → inner `<div>` → (`<img>` | initials `<span>` | fallback `<span>`) + optional status `<span>`
 

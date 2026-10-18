@@ -212,7 +212,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12cd, 2026-10-17, 968 -> 980 (HEAD 968 -> now 980): C Uncontrolled (6), D Long labels (6).
   // D12e, 2026-10-18, 980 -> 1044 (HEAD 1036 -> now 1044): Date and time together (8); the 56 before it were already on the page at HEAD: L24's Uncontrolled calendar open on load and L25's defaultValue row in the API Reference.
   // DT1, 2026-10-18, 1044 -> 1048: the API Reference's `showTodayIndicator` description now names `data-today`, `data-[today]:`, `classes.item` and `aria-current="date"`, four inline code spans (4).
-  "date-picker": 1048,
+  // S3, 2026-10-19, 1048 -> 1047: the Loading State section's trigger is disabled while loading, and a disabled control's text is not measured (-1).
+  "date-picker": 1047,
   // D12b, 2026-10-17, 418 -> 431 (HEAD 425 -> now 431): the new At phone width and Long sheet (3 each): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 431 -> 435 (HEAD 431 -> now 435): C Uncontrolled (4).
@@ -238,7 +239,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12b, 2026-10-17, 952 -> 955 (HEAD 952 -> now 955): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 955 -> 964 (HEAD 955 -> now 964): D Long labels (8, and 1 the new field portals).
-  "international-phone-input": 964,
+  // S3, 2026-10-19, 964 -> 963: the loading section's number input is disabled while loading, and a disabled control's text is not measured (-1).
+  "international-phone-input": 963,
   // L11, 426 -> 425: the In Context "Processing" button is now disabled while
   // it loads, and an inactive control's label is exempt from 1.4.3.
   // D11, 2026-10-17, 425 -> 399 (HEAD 425 -> now 399): Class overrides (62) became Anatomy (36).
@@ -337,7 +339,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D11, 2026-10-17, 504 -> 496 (HEAD 504 -> now 496): Class overrides (36) became Anatomy (28).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 496 -> 504 (HEAD 496 -> now 504): the new In a form (8).
-  "text-area": 504,
+  // S3, 2026-10-19, 504 -> 501: the API Reference's data-attribute table lost `data-auto-resize`, which never reached the DOM (name, values and condition, 3).
+  "text-area": 501,
   // D11, 2026-10-17, 871 -> 862 (HEAD 893 -> now 862): Class overrides (127) became Anatomy (96).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 862 -> 871 (HEAD 862 -> now 871): the new In a form (9).

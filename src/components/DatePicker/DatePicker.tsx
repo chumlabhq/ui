@@ -61,6 +61,7 @@ import { isBrowser } from "../../utils/isBrowser.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { createPortal } from "react-dom";
+import { CircularLoader } from "../Loader/index.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import {
   DEFAULT_DATEPICKER_CLASSES,
@@ -903,7 +904,8 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             aria-invalid={error || undefined}
             aria-describedby={[ariaDescribedBy, description && descriptionId, error && errorMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined}
             aria-required={required || undefined}
-            disabled={disabled}
+            aria-busy={loading || undefined}
+            disabled={disabled || loading}
             onClick={handleToggle}
             onKeyDown={handleKeyDown}
             className={cn(mergedClasses.trigger)}
@@ -911,15 +913,20 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             data-error={error || undefined}
             data-valid={(!error && success) || undefined}
             data-open={isOpen || undefined}
+            data-loading={loading || undefined}
           >
             <span id={valueId} className={mergedClasses.input}>
               {hasValue ? displayValue : placeholder || defaultPlaceholder}
             </span>
             <div className={mergedClasses.triggerActions || undefined}>
-              {showCalendarIcon &&
+              {loading ? (
+                <CircularLoader size={16} thickness={2} reduceMotion={reduceMotion} unstyled={unstyled} aria-hidden="true" />
+              ) : (
+                showCalendarIcon &&
                 (calendarIcon || (
                   <CalendarIcon className={mergedClasses.icon} />
-                ))}
+                ))
+              )}
             </div>
           </button>
 
@@ -929,7 +936,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               control never took focus, and its `aria-label` was folded into the
               trigger's own name. A real button here is reachable by Tab and
               announces itself. */}
-          {clearable && hasValue && !disabled && (
+          {clearable && hasValue && !disabled && !loading && (
             <button
               type="button"
               aria-label="Clear selection"

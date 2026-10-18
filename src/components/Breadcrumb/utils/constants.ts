@@ -4,8 +4,8 @@ import { structuralOnly } from "../../../utils/classLayers.js";
 export const DEFAULT_BREADCRUMB_CLASSES: Required<BreadcrumbClasses> = {
   root: "",
   list: "flex flex-wrap items-center gap-1",
-  item: "flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border-0 text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
-  link: "flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
+  item: "flex items-center gap-1 px-2 py-1 text-sm transition-colors cursor-pointer bg-transparent border-0 text-cl-text-tertiary hover:text-cl-text hover:bg-cl-bg-hover rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[state=active]:font-medium data-[state=active]:text-cl-text data-[state=active]:cursor-default",
+  link: "flex items-center gap-1 px-2 py-1 text-sm rounded transition-colors text-cl-accent hover:text-cl-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-1 focus-visible:ring-offset-cl-bg data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[state=active]:font-medium data-[state=active]:text-cl-text data-[state=active]:cursor-default",
   separator: "text-cl-text-tertiary dark:text-cl-text-secondary",
   itemIcon: "shrink-0",
   ellipsis: "",

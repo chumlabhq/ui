@@ -37,6 +37,20 @@ export default function Example() {
 
 ---
 
+## Data Attributes (for CSS selectors and testing)
+
+**Root (the panel):**
+- `data-resizing` — while a pointer drag is resizing it
+- `data-disabled` — when `disabled`
+- `data-reduce-motion` — while reduced motion is in force
+
+**Handle (`role="separator"`):**
+- `data-resizing` — while a pointer drag is resizing the panel; the handle shows an accent bar for the length of the drag, the only time it paints anything by default
+- `data-disabled` — when `disabled`; the handle is hidden and leaves the tab order
+- `data-direction="left" | "right" | "top" | "bottom"` — the edge it sits on, from `resizeDirection`
+
+---
+
 ## All Props
 
 <!-- generated from ResizablePanel.schema.json — edit the schema, not this table -->

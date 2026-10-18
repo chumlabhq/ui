@@ -76,5 +76,6 @@ const fixtures: Fixtures<typeof Accordion> = [
     children: items,
     note: "The only fixture that overrides a slot; without it the cursor and focus-ring gates never see the case the defect lived in.",
   },
+  { name: "expand-on-print", props: { selectionMode: "single", expandOnPrint: true }, children: items },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

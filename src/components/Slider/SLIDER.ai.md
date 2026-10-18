@@ -54,6 +54,37 @@ export default function Example() {
 
 ---
 
+## Data Attributes (for CSS selectors and testing)
+
+Each is written or absent, never `"false"`.
+
+**Root:**
+- `data-disabled` — when `disabled`
+- `data-error` — when `error`; the error itself is drawn by the message below
+- `data-valid` — when `success` and not `error`
+- `data-loading` — when `loading`
+- `data-orientation="horizontal" | "vertical"` — from `orientation`
+
+**Control** (`control`, the box the track sits in):
+- `data-orientation`, `data-disabled` — as on the root
+- `data-loading` — when `loading`; the control dims and takes no pointer input
+
+**Track and range:** `data-disabled` — both dim
+
+**Thumb** (`role="slider"`):
+- `data-dragging` — while a pointer is dragging it; the thumb grows by a quarter and takes a larger shadow, which the focus ring never does
+- `data-state="active"` — the same moment, for a selector keyed to `data-state`
+- `data-index` — which thumb, from 0, on a range slider
+- `data-disabled` — when `disabled`
+
+**Mark dot** (`mark`):
+- `data-state="active"` — the mark lies inside the selected range; its ring turns accent
+- `data-disabled` — when `disabled`
+
+**Message:** `data-invalid` on the error message, `data-valid` on the success message.
+
+---
+
 ## All Props
 
 <!-- generated from Slider.schema.json — edit the schema, not this table -->

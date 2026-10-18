@@ -709,3 +709,29 @@ describe("CascadingDropdown — submenuSide is logical", () => {
     expect(physicalSide("end", el)).toBe("right");
   });
 });
+
+describe("a selected top-level option", () => {
+  // A leaf at the top level is a `menuitemradio`, and until S3 it rendered no
+  // selected icon: only a submenu's options did, so a chosen top-level value
+  // looked exactly like the options around it.
+  it("shows the selected icon, as a selected submenu option does", async () => {
+    const user = userEvent.setup();
+    render(
+      <CascadingDropdown
+        options={[{ value: "fruit", label: "Fruit", children: [{ value: "a", label: "Apple" }] }, { value: "plain", label: "Plain" }]}
+        defaultValue={{ root: "plain" }}
+      />,
+    );
+    await user.click(screen.getByRole("button"));
+    const selected = screen.getByRole("menuitemradio", { name: "Plain" });
+    expect(selected).toHaveAttribute("data-selected", "true");
+    expect(selected.querySelector("svg")).not.toBeNull();
+  });
+
+  it("shows none with showSelectedIcon={false}", async () => {
+    const user = userEvent.setup();
+    render(<CascadingDropdown options={[{ value: "plain", label: "Plain" }]} defaultValue={{ root: "plain" }} showSelectedIcon={false} />);
+    await user.click(screen.getByRole("button"));
+    expect(screen.getByRole("menuitemradio", { name: "Plain" }).querySelector("svg")).toBeNull();
+  });
+});

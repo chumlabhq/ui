@@ -5,7 +5,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
   root: "flex flex-col gap-2",
   label: "text-sm font-medium text-cl-text",
   description: "text-xs text-cl-text-tertiary",
-  control: "relative select-none touch-none cursor-pointer data-[disabled]:cursor-not-allowed",
+  control: "relative select-none touch-none cursor-pointer data-[disabled]:cursor-not-allowed data-[loading]:opacity-50 data-[loading]:pointer-events-none",
   /**
    * The unfilled track needs to differ from the page, not from nothing.
    *
@@ -23,7 +23,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
    */
   range: "rounded-full bg-cl-accent data-[disabled]:opacity-50",
   thumb:
-    "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
+    "absolute rounded-full bg-white dark:bg-cl-text shadow-md transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg hover:shadow-lg cursor-grab data-[dragging]:cursor-grabbing data-[dragging]:shadow-lg data-[dragging]:scale-125 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   value:
     // `text-cl-text`, not `text-white`: the panel token is white in the light
     // theme, so a white label on it is a 1:1 tooltip.
@@ -32,7 +32,7 @@ export const DEFAULT_SLIDER_CLASSES: Required<SliderClasses> = {
    * The dot. It is clickable — the control jumps to a mark when you hit one —
    * so it says so.
    */
-  mark: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input cursor-pointer data-[disabled]:cursor-not-allowed",
+  mark: "rounded-full bg-cl-bg-panel border-2 border-cl-border-input cursor-pointer data-[state=active]:border-cl-accent data-[disabled]:cursor-not-allowed",
   /**
    * The label under the dot, which used to render with `mark`.
    *

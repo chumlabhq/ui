@@ -67,6 +67,7 @@ This renders correctly with no additional props, classes, or setup. The last ite
 - `data-state="active|inactive"` — on each item (last item is "active")
 - `data-position` — on the collapsed-items menu, the side it resolved to
 - `data-breadcrumb-dropdown-id` — on that menu, tying it to the trigger that owns it
+- `data-side="top" | "bottom"` — on that menu's surface, the side it was placed on after any flip
 - `data-disabled="true"` — on disabled items
 - `data-clickable="true"` — on interactive (non-active, non-disabled) items
 - `aria-current="page"` — on the last (active) item

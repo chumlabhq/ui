@@ -77,15 +77,18 @@ export default function Example() {
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
-- `data-placeholder` — when no option is selected
+- `data-placeholder` — when no option is selected; the placeholder text is tertiary
 
 **Content (portal):**
 - `data-state="open|closed"`
 - `data-position="top|bottom"` — actual rendered position
 - `data-dropdown-id` — unique ID for click-outside detection
+- `data-side` — on the surface, the side it was placed on after any flip
 
 **Options:**
 - `data-selected`, `data-highlighted`, `data-disabled`, `data-value`
+
+**Messages:** `data-invalid` on the error message
 
 **DOM nesting:** `root > label? + description? + wrapper > trigger + content(portal) > optionList > option*`
 

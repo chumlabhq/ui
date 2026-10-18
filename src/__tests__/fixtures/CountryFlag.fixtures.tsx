@@ -14,5 +14,10 @@ const fixtures: Fixtures<typeof CountryFlag> = [
     props: { code: "", fallback: <span>?</span> },
     note: "showFallback needs an invalid code AND a fallback node — it renders null otherwise.",
   },
+  {
+    name: "error",
+    props: { code: "US", basePath: "/__missing-flags" },
+    note: "A base path with no flags behind it: the image fails and the root takes `data-error`.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -7,13 +7,12 @@ const fixtures: Fixtures<typeof Slider> = [
   {
     name: "dragging",
     props: { defaultValue: 40 },
-    note: "thumbActive was gated on isDragging, which no static prop set reaches — the one state that needs a pointer.",
+    note: "thumbActive was gated on isDragging, which no static prop set reaches — the one state that needs a pointer. A press and a move: the slider starts dragging on the first move after the press, and a press alone left this fixture at rest until S3.",
     act: async (c, ui) => {
-      ui.pointerDown(c.ownerDocument.querySelector('[role="slider"]'), {
-        pointerId: 1,
-        clientX: 40,
-        buttons: 1,
-      });
+      const thumb = c.ownerDocument.querySelector('[role="slider"]');
+      ui.pointerDown(thumb, { pointerId: 1, clientX: 40, buttons: 1 });
+      await ui.settle();
+      ui.pointerMove(thumb, { pointerId: 1, clientX: 40, buttons: 1 });
       await ui.settle();
     },
   },
@@ -43,5 +42,6 @@ const fixtures: Fixtures<typeof Slider> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     note: "A slider's zero is on the right in RTL; the fill and the thumb are the directional part."
   },
+  { name: "loading", props: { defaultValue: 40, loading: true } },
 ];
 export default fixtures;

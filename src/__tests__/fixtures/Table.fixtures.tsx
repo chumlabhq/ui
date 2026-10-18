@@ -190,5 +190,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     props: { data: ROWS, columns: COLUMNS },
     render: () => <CheckboxPair />,
   },
+  { name: "sorted", props: { data: ROWS, columns: COLUMNS, sortable: true, sorting: [{ id: "name", desc: false }] } },
+  { name: "striped", props: { data: ROWS, columns: COLUMNS, striped: true } },
 ];
 export default fixtures;

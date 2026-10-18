@@ -111,5 +111,6 @@ const fixtures: Fixtures<typeof MultiSelectSearchableDropdown> = [
     props: { options: OPTIONS, defaultOpen: true, label: "Fruit" },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
+  { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
 ];
 export default fixtures;

@@ -22,7 +22,7 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   item: "relative w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full cursor-pointer transition-all data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text hover:bg-cl-bg-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:ring-offset-1 focus:ring-offset-cl-bg data-[outside]:text-cl-text-tertiary data-[range=middle]:text-cl-accent data-[selected]:bg-cl-accent data-[selected]:text-cl-on-accent data-[selected]:hover:bg-cl-accent-hover data-[today]:underline data-[today]:decoration-2 data-[today]:underline-offset-4",
   weekNumber: "text-xs text-cl-text-tertiary flex items-center justify-center",
   presetGroup: "flex flex-wrap gap-2 pb-4 mb-4 border-b border-cl-border",
-  presetTrigger: "px-3 py-1.5 text-xs font-semibold rounded-full bg-cl-bg-hover text-cl-text-chrome hover:bg-cl-bg-item-hover transition-all cursor-pointer",
+  presetTrigger: "px-3 py-1.5 text-xs font-semibold rounded-full bg-cl-bg-hover text-cl-text-chrome hover:bg-cl-bg-item-hover transition-all cursor-pointer data-[active]:bg-cl-accent data-[active]:text-cl-on-accent data-[active]:hover:bg-cl-accent-hover",
   footer: "flex justify-center pt-4 mt-4 border-t border-cl-border",
   todayTrigger: "flex items-center gap-2 px-4 py-2 text-sm font-semibold text-cl-accent hover:bg-cl-accent-bg-hover hover:text-cl-accent-hover rounded-cl-md transition-all cursor-pointer",
   markerIndicator: "w-1 h-1 rounded-full bg-cl-accent absolute bottom-1 left-1/2 -translate-x-1/2",

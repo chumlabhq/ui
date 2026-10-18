@@ -1341,6 +1341,35 @@ const LIBRARY_TOTAL_HISTORY = [
       "(below). No comments added to src/components or src/utils. Measured " +
       "against a build of 50c00bec.",
   },
+  {
+    kb: 160.11,
+    commit: "(uncommitted)",
+    date: "2026-10-18",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.42 KB on the record (163,518 -> 163,948 B gzipped, +430 B " +
+      "on a build of 5271abba; the per-file rises sum to +439 B), 83 files " +
+      "held. S3: every state a component emits or documents paints. Per chunk " +
+      "and state, each measured by building with that state's change reverted: " +
+      "DatePicker +105 (loading spinner and disabled trigger +86, active " +
+      "preset fill +19); InternationalPhoneInput +104 (loading +93, readonly " +
+      "+11); RadioButton +78 (a loading group's radios carry data-loading, " +
+      "the group shows the spinner and aria-busy); Breadcrumb +33 (the current " +
+      "page's weight and colour, lost in 6dd19258); Input +28 (readonly +11, " +
+      "the loading dim moved from FieldWrapper's JS class to a variant +17, " +
+      "FieldWrapper -17); Slider +26 (dragging +17, in-range mark +12, loading " +
+      "moved off an inline style -3); CascadingDropdown +22 (a selected " +
+      "top-level option shows the selected icon); MultiSelectSearchableDropdown " +
+      "+22 and MultiSelectDropdown +20 (data-placeholder emitted and painted); " +
+      "Checkbox +18 (readonly); ResizablePanel +17 (resizing bar +14, disabled " +
+      "as a variant +3); TextArea +17 (readonly +12, loading variant +5); " +
+      "Dropdown +11, SearchableDropdown +8 (placeholder); TimePicker +10 " +
+      "(loading variant). Entries -1 to +2 B. DatePicker's and " +
+      "InternationalPhoneInput's declared breaches moved with them (below): " +
+      "loading is distinguishable from disabled: spinner and aria-busy. No " +
+      "comments added to src/components or src/utils. Measured against a " +
+      "build of 5271abba.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1456,7 +1485,7 @@ const DECLARED_BREACHES = new Map([
   [
     "InternationalPhoneInput",
     {
-      kb: 8.69,
+      kb: 8.75,
       why: "10.65 until the 193 countries were packed into a delimited string " +
         "parsed at module load: 4.06 KB gzipped of object literals became 1.90, " +
         "and four fifths of what was there was structure rather than " +
@@ -1465,13 +1494,21 @@ const DECLARED_BREACHES = new Map([
         "The remaining 0.69 over is the data itself, which cannot be deferred: " +
         "`selectedCountry` resolves out of it during the first render to paint " +
         "the trigger's flag and dial code, so deferring it is a blank trigger " +
-        "on first paint. The parse is 0.036 ms, once per module load.",
+        "on first paint. The parse is 0.036 ms, once per module load.\n\n" +
+        "8.69 -> 8.75 on 2026-10-18, S3 (exclusive 8,859 -> 8,960 B gzipped, " +
+        "+101 B; own chunk +104 B, entry -1 B): loading is distinguishable " +
+        "from disabled: spinner and aria-busy. A loading field dimmed nothing " +
+        "and typed like an idle one, because its `data-[loading]:` variants " +
+        "sat on a wrapper that never carried the attribute. The wrapper now " +
+        "carries it, the number input is disabled while loading, and the " +
+        "shared CircularLoader shows after it: loading +93 B. Readonly draws a " +
+        "dashed border: +11 B.",
     },
   ],
   [
     "DatePicker",
     {
-      kb: 12.49,
+      kb: 12.60,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1520,7 +1557,15 @@ const DECLARED_BREACHES = new Map([
         "cell's default `item` gains one variant group per state, measured by " +
         "removing each from the built chunk: today's underline +24 B, the " +
         "selected fill with its hover +19 B, the range middle's accent text " +
-        "+10 B, the adjacent month's tertiary text +8 B.",
+        "+10 B, the adjacent month's tertiary text +8 B.\n\n" +
+        "12.49 -> 12.60 on 2026-10-18, S3 (exclusive 12,792 -> 12,898 B " +
+        "gzipped, +106 B; own chunk +105 B, entry +1 B): loading is " +
+        "distinguishable from disabled: spinner and aria-busy. `loading` set " +
+        "`data-loading` on a root with no class, so a loading picker looked " +
+        "idle and opened on click. The trigger now carries it and is disabled " +
+        "while loading, with the shared CircularLoader in place of the " +
+        "calendar icon: loading +86 B. The active preset takes the accent " +
+        "fill: +19 B.",
     },
   ],
   [

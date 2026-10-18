@@ -85,6 +85,8 @@ full set, so there is no hydration mismatch; the step-down runs after mount.
 - `data-highlighted` — on keyboard-focused dropdown option
 - `data-state` — `"open"` on dropdown portal when visible
 - `data-direction` — `"up"` or `"down"` on dropdown portal
+- `data-side` — on the rows-per-page surface, the side it was placed on after any flip
+- `data-reduce-motion` — on the root `<nav>`, while reduced motion is in force
 - `aria-current="page"` — on the active page button
 - `aria-expanded` — on selector button
 

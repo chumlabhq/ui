@@ -30,5 +30,18 @@ const fixtures: Fixtures<typeof InternationalPhoneInput> = [
   { name: "readonly", props: { readOnly: true } },
   { name: "loading", props: { loading: true } },
   { name: "required", props: { label: "Phone", required: true } },
+  { name: "full-width", props: { fullWidth: true } },
+  {
+    name: "country-keyboard-focus",
+    props: {},
+    note: "The country list's highlight has no prop: open it, then arrow down.",
+    act: async (c, ui) => {
+      const trigger = c.querySelector("[role='combobox'], button");
+      ui.click(trigger);
+      await ui.settle();
+      ui.keyDown(c.ownerDocument.activeElement ?? trigger, "ArrowDown");
+      await ui.settle();
+    },
+  },
 ];
 export default fixtures;

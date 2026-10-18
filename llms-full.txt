@@ -743,6 +743,7 @@ If an image fails to load, it falls back to step 2/3 automatically. Note: when b
 
 - `data-has-image` — on Avatar root when image is loaded (boolean)
 - `data-shape="circle|rounded|square"` — on Avatar root
+- `data-chumlab="avatar-dark"` — not on the avatar: on the `<style>` element Avatar adds to `<head>` once, holding its dark-theme rules
 
 **DOM nesting:** Avatar root `<div>` → inner `<div>` → (`<img>` | initials `<span>` | fallback `<span>`) + optional status `<span>`
 
@@ -1195,6 +1196,7 @@ This renders correctly with no additional props, classes, or setup. The last ite
 - `data-state="active|inactive"` — on each item (last item is "active")
 - `data-position` — on the collapsed-items menu, the side it resolved to
 - `data-breadcrumb-dropdown-id` — on that menu, tying it to the trigger that owns it
+- `data-side="top" | "bottom"` — on that menu's surface, the side it was placed on after any flip
 - `data-disabled="true"` — on disabled items
 - `data-clickable="true"` — on interactive (non-active, non-disabled) items
 - `aria-current="page"` — on the last (active) item
@@ -1548,6 +1550,7 @@ To override structural defaults (e.g., different padding), include the override 
 - `data-full-width="true"` — when fullWidth
 - `data-orientation="horizontal" | "vertical"` — on `ButtonGroup`, from its `orientation` prop
 - `data-size="sm|md|lg"` — size prop value
+- `data-reduce-motion="true"` — on the loading spinner, while reduced motion is in force
 - `aria-busy="true"` — when loading
 - `aria-disabled="true"` — when disabled or loading
 
@@ -1908,9 +1911,25 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 
 ### Data Attributes (for CSS selectors and testing)
 
-- `data-disabled` on trigger — when `disabled={true}`
-- `data-error` on trigger — when `error={true}`
-- `data-open` on trigger — when dropdown is open
+**Root and trigger:**
+- `data-disabled` — when `disabled={true}`
+- `data-error` — when `error={true}`
+- `data-valid` — when `success={true}` and not `error`
+- `data-open` — when dropdown is open
+- `data-full-width` — on the root, when `fullWidth`
+
+**Menu items** (top level and submenu):
+- `data-highlighted` — the keyboard position
+- `data-selected` — a selected option; a selected single-select option shows the selected icon (`showSelectedIcon`)
+- `data-disabled` — a disabled option
+- `data-has-submenu` — on a top-level item that opens a submenu
+
+**Multi-select checkbox** (inside a `menuitemcheckbox`): `data-state="checked" | "unchecked"`, and `data-checked` while checked
+
+**Surfaces:** `data-cascading-submenu` marks the submenu's surface; `data-side` on each surface is the side it was placed on after any flip
+
+**Messages:** `data-invalid` on the error message, `data-valid` on the success message
+
 - `role="menu"` on the dropdown menu container
 - `role="menuitem"` on parent-level menu items
 - `role="menuitemcheckbox"` on multi-select submenu items
@@ -2575,11 +2594,9 @@ export default function Example() {
 ### Data Attributes
 
 - `data-code` on root — the normalised alpha-2 code the flag resolved to, so a
-  stylesheet can reach one country. (Named `data-country` here until it was
-  checked against the component; there is no `data-country`.)
+  stylesheet can reach one country.
 - `data-loading="true"` on root — while the image has not resolved and no
-  fallback is showing. (There is no `data-loaded`: the attribute names the state
-  it is in, and is absent once loaded.)
+  fallback is showing. It is absent once the flag has loaded.
 - `data-error="true"` on root — when the image failed to load
 - `role="img"` on root — with `aria-label` set to alt or code
 
@@ -2824,6 +2841,11 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-loading` -- when loading state is active
 - `data-valid` -- when success state is active
 
+#### Trigger
+- `data-disabled`, `data-error`, `data-valid`, `data-open` -- as on the root
+- `data-loading` -- while `loading`: the trigger is disabled, dims, and shows a spinner in place of the calendar icon
+- `data-reduce-motion` -- on that spinner, while reduced motion is in force
+
 #### Day cells
 - `data-selected` -- selected day (accent fill; a range's start and end too)
 - `data-today` -- today's date (underlined by default)
@@ -2838,7 +2860,12 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-marker-type` -- marker type string (e.g. `"meeting"`, `"deadline"`)
 
 #### Preset buttons
-- `data-active` -- active preset
+- `data-active` -- the preset matching the current value; it takes the accent fill
+- `data-state="active"` -- the same preset, for a selector keyed to `data-state`
+
+#### Elsewhere
+- `data-side` -- on the calendar's surface, the side it was placed on after any flip
+- `data-invalid` -- on the error message
 
 **DOM nesting:** root `<div>` -> trigger `<button>` -> calendar popover `<div>` -> month grid -> day grid `<div role="grid">`
 
@@ -3212,6 +3239,21 @@ export default function Example() {
 
 ---
 
+### Data Attributes (for CSS selectors and testing)
+
+**Root:**
+- `data-state="open" | "closed"` — follows `open`; the panel slides and the overlay fades on it
+- `data-side="left" | "right" | "top" | "bottom"` — the edge the drawer comes from
+
+**Parts** (each a marker on its element, for a selector or a test; none of them is a state):
+- `data-drawer-overlay` — the backdrop, when `modal`
+- `data-drawer-panel` — the `role="dialog"` panel; it carries `data-side` too
+- `data-drawer-handle` — the drag handle, when `swipeable`
+- `data-drawer-header`, `data-drawer-body`, `data-drawer-footer` — the `DrawerHeader`, `DrawerBody` and `DrawerFooter` you place
+- `data-drawer-close` — the `DrawerCloseButton`
+
+---
+
 ### All Props
 
 <!-- generated from Drawer.schema.json — edit the schema, not this table -->
@@ -3331,15 +3373,18 @@ export default function Example() {
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
-- `data-placeholder` — when no option is selected
+- `data-placeholder` — when no option is selected; the placeholder text is tertiary
 
 **Content (portal):**
 - `data-state="open|closed"`
 - `data-position="top|bottom"` — actual rendered position
 - `data-dropdown-id` — unique ID for click-outside detection
+- `data-side` — on the surface, the side it was placed on after any flip
 
 **Options:**
 - `data-selected`, `data-highlighted`, `data-disabled`, `data-value`
+
+**Messages:** `data-invalid` on the error message
 
 **DOM nesting:** `root > label? + description? + wrapper > trigger + content(portal) > optionList > option*`
 
@@ -3660,6 +3705,9 @@ export default function Example() {
 - `data-error` on root — when error state
 - `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
+- `data-loading` on root — when loading: the field dims, takes no input, and shows a spinner
+- `data-reduce-motion` on that spinner — while reduced motion is in force
+- `data-invalid` on the error message
 - `data-slot="input"` on the input element
 - `data-slot="count"` on the character count
 
@@ -3892,8 +3940,22 @@ export default function Example() {
 - `data-full-width` — when `fullWidth={true}`
 - `data-loading` — when `loading={true}`
 
+**Wrapper (`data-slot="wrapper"`, the `role="group"` holding the country select and the number):**
+- `data-disabled` — when `disabled`; the group dims
+- `data-loading` — when `loading`: the group dims and takes no pointer input, the number input is disabled, and a spinner shows after it
+- `data-reduce-motion` — on that spinner, while reduced motion is in force
+
 **Input (`data-slot="input"`):**
 - `data-disabled`, `data-error`, `data-valid`, `data-readonly` — mirrors root
+- `data-readonly` paints a dashed border, so a number that can be read but not changed does not look like one waiting for input
+
+**Country select** (the embedded `SearchableDropdown`; its own docs describe each):
+- trigger: `data-open`, `data-placeholder`
+- surface: `data-state="open" | "closed"`, `data-position`, `data-side`, `data-dropdown-id`
+- options: `data-selected`, `data-highlighted`, `data-value`
+- `data-code` — on each flag, the country it shows
+
+**Messages:** `data-invalid` on the error message
 
 **Other slots:** `data-slot="label"`, `data-slot="wrapper"`, `data-slot="error"`, `data-slot="success"`
 
@@ -4425,8 +4487,8 @@ export default function Example() {
 
 **Other elements:**
 - `data-modal-overlay` — backdrop element
-- `data-modal-container` — scroll/centering wrapper
-- `data-modal-content` — the `role="dialog"` panel
+- `data-modal-container` — scroll/centering wrapper; it carries `data-centered` when `centered`
+- `data-modal-content` — the `role="dialog"` panel; it carries `data-fullscreen` when `fullScreen`
 - `data-modal-header` — header section
 - `data-modal-body` — body content area
 - `data-modal-footer` — footer (when using `ModalFooter` sub-component)
@@ -4762,10 +4824,22 @@ export default function Example() {
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
-- `data-placeholder` — when no options are selected
+- `data-placeholder` — when no options are selected; the placeholder text is tertiary
 
 **Dropdown panel:**
 - `data-position` — `"top"` or `"bottom"` (actual rendered position)
+- `data-state="open" | "closed"`
+- `data-dropdown-id` — unique ID for click-outside detection
+- `data-side` — on the surface, the side it was placed on after any flip
+
+**Options:**
+- `data-selected` — a selected option; its checkbox is checked
+- `data-highlighted` — the keyboard position
+- `data-disabled` — a disabled option
+
+**Option checkbox:** `data-state="checked" | "unchecked"`, and `data-checked` while checked
+
+**Messages:** `data-invalid` on the error message
 
 DOM nesting: `root > label + description + wrapper > trigger(combobox) + content(portal) > optionList(listbox) > options`
 
@@ -5050,10 +5124,23 @@ export default function Example() {
 - `data-disabled`, `data-error`, `data-open`, `data-full-width`, `data-valid`
 
 **Trigger element:**
-- `data-disabled`, `data-error`, `data-open`, `data-placeholder`
+- `data-disabled`, `data-error`, `data-open`
+- `data-placeholder` — when no options are selected; the placeholder text is tertiary
 
 **Dropdown panel:**
 - `data-position` — `"top"` or `"bottom"`
+- `data-state="open" | "closed"`
+- `data-dropdown-id` — unique ID for click-outside detection
+- `data-side` — on the surface, the side it was placed on after any flip
+
+**Options:**
+- `data-selected` — a selected option; its checkbox is checked
+- `data-highlighted` — the keyboard position
+- `data-disabled` — a disabled option
+
+**Option checkbox:** `data-state="checked" | "unchecked"`, and `data-checked` while checked
+
+**Messages:** `data-invalid` on the error message
 
 DOM nesting: `root > label + description + wrapper > trigger(combobox) + content(portal) > searchInput + optionList(listbox) > options`
 
@@ -5550,6 +5637,8 @@ full set, so there is no hydration mismatch; the step-down runs after mount.
 - `data-highlighted` — on keyboard-focused dropdown option
 - `data-state` — `"open"` on dropdown portal when visible
 - `data-direction` — `"up"` or `"down"` on dropdown portal
+- `data-side` — on the rows-per-page surface, the side it was placed on after any flip
+- `data-reduce-motion` — on the root `<nav>`, while reduced motion is in force
 - `aria-current="page"` — on the active page button
 - `aria-expanded` — on selector button
 
@@ -5863,6 +5952,30 @@ export default function Example() {
 // Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
 ```
 
+### Data Attributes (for CSS selectors and testing)
+
+Each is written or absent, never `"false"`.
+
+**RadioGroup root** (`role="radiogroup"`):
+- `data-disabled` — when `disabled`
+- `data-loading` — when `loading`; the group disables its radios, which dim, and a spinner shows after the last one
+- `data-reduce-motion` on that spinner, too, while reduced motion is in force
+- `data-error` — when `error`
+- `data-valid` — when `success` and not `error`
+- `data-orientation="vertical" | "horizontal"` — from `orientation`
+- `data-reduce-motion` — while reduced motion is in force
+
+**RadioButton root** (the `<label>`):
+- `data-state="checked" | "unchecked"` — always present
+- `data-checked` — only while checked, for a selector that wants presence
+- `data-disabled` — when the radio or its group is disabled or loading; it dims
+- `data-loading` — when its group is loading; it dims as a disabled radio does
+- `data-value` — the radio's `value`
+
+**Control** (the circle): `data-state`, `data-checked`, `data-disabled` as on the root, and `data-error` / `data-valid` from the group. The checked control fills with the accent.
+
+**Group message:** `data-invalid` on the error message, `data-valid` on the success message.
+
 ### Forms
 
 - **Submitted value.** With `name`, it submits the checked radio's `value` under the group's `name`, and nothing when none is checked — the radios are native.
@@ -5921,6 +6034,20 @@ export default function Example() {
   );
 }
 ```
+
+---
+
+### Data Attributes (for CSS selectors and testing)
+
+**Root (the panel):**
+- `data-resizing` — while a pointer drag is resizing it
+- `data-disabled` — when `disabled`
+- `data-reduce-motion` — while reduced motion is in force
+
+**Handle (`role="separator"`):**
+- `data-resizing` — while a pointer drag is resizing the panel; the handle shows an accent bar for the length of the drag, the only time it paints anything by default
+- `data-disabled` — when `disabled`; the handle is hidden and leaves the tab order
+- `data-direction="left" | "right" | "top" | "bottom"` — the edge it sits on, from `resizeDirection`
 
 ---
 
@@ -6043,10 +6170,21 @@ export default function Example() {
 
 **Trigger element:**
 - `data-disabled`, `data-error`, `data-open` — mirrors root
-- `data-placeholder` — when no option is selected
+- `data-placeholder` — when no option is selected; the placeholder text is tertiary
 
 **Dropdown panel:**
 - `data-position` — `"top"` or `"bottom"` (actual rendered position)
+- `data-state="open" | "closed"`
+- `data-dropdown-id` — unique ID for click-outside detection
+- `data-side` — on the surface, the side it was placed on after any flip
+
+**Options:**
+- `data-selected` — a selected option; it shows the selected icon
+- `data-highlighted` — the keyboard position
+- `data-disabled` — a disabled option
+- `data-value` — the option's value
+
+**Messages:** `data-invalid` on the error message
 
 DOM nesting: `root > label + description + wrapper > trigger(combobox) + content(portal) > searchInput + optionList(listbox) > options`
 
@@ -6322,6 +6460,37 @@ export default function Example() {
 | `marks` | Array of `{ value, label? }`. Rendered as dots on track. |
 | `showTooltip` | `boolean`. Shows the value above the thumb on hover/drag. Use `tooltipAlways` to keep it visible. |
 | `orientation` | `"horizontal"` (default) or `"vertical"`. |
+
+---
+
+### Data Attributes (for CSS selectors and testing)
+
+Each is written or absent, never `"false"`.
+
+**Root:**
+- `data-disabled` — when `disabled`
+- `data-error` — when `error`; the error itself is drawn by the message below
+- `data-valid` — when `success` and not `error`
+- `data-loading` — when `loading`
+- `data-orientation="horizontal" | "vertical"` — from `orientation`
+
+**Control** (`control`, the box the track sits in):
+- `data-orientation`, `data-disabled` — as on the root
+- `data-loading` — when `loading`; the control dims and takes no pointer input
+
+**Track and range:** `data-disabled` — both dim
+
+**Thumb** (`role="slider"`):
+- `data-dragging` — while a pointer is dragging it; the thumb grows by a quarter and takes a larger shadow, which the focus ring never does
+- `data-state="active"` — the same moment, for a selector keyed to `data-state`
+- `data-index` — which thumb, from 0, on a range slider
+- `data-disabled` — when `disabled`
+
+**Mark dot** (`mark`):
+- `data-state="active"` — the mark lies inside the selected range; its ring turns accent
+- `data-disabled` — when `disabled`
+
+**Message:** `data-invalid` on the error message, `data-valid` on the success message.
 
 ---
 
@@ -6968,11 +7137,40 @@ export default function Example() {
 
 ### Data Attributes (for CSS selectors and testing)
 
-- `data-clickable` — on rows when `onRowClick` is provided
-- `data-striped` — on alternating rows when `striped` is enabled
-- `data-selected` — on selected rows
-- `data-dragging` — on dragged row during reorder
-- `data-expanded` — on expanded rows
+Each is written or absent, never `"false"`.
+
+**Table root** (`data-table-container`, the `role="region"`):
+- `data-striped` — when `striped`
+- `data-size="sm" | "md" | "lg"` — from `size`
+- `data-mobile-view` — on the region instead, when the mobile card view is showing
+
+**Header cells** (`role="columnheader"`):
+- `data-sorted="asc" | "desc"` — the column the table is sorted by; its sort icon shows the direction
+- `data-pinned` — a pinned column's header
+- `data-column-index` — the column's position, from 0
+- the pin button carries `data-state="active"` while its column is pinned; the filter button carries `data-active` while its column has a filter, and so does its icon
+
+**Rows** (`role="row"`):
+- `data-selected` — a selected row; it takes the accent fill
+- `data-clickable` — when `onRowClick` is provided
+- `data-striped` — an alternating row when `striped` is on; it takes the hover tint
+- `data-state="open" | "closed"` — an expandable row's expansion
+- `data-group-row` — a group header row, when `groupBy` is set
+- `data-dragging` — the row being dragged during a reorder; it dims
+- `data-expanded-content` — the row a `renderExpandedRow` renders into
+
+**Cells** (`role="gridcell"`):
+- `data-highlighted` — the keyboard position in the grid; focus is on it
+- `data-editing` — the cell being edited; it holds the edit input, which carries `data-edit-input`
+- `data-grouped` — the cell a row is grouped by
+
+**Controls:**
+- `data-expanded` — on the expand button while its row is expanded; the icon turns
+- `data-drag-handle` — the row-reorder handle
+- `data-resize-handle` — a column's resize separator; its bar carries `data-resizing` while a mouse drag resizes the column, and paints the accent
+- `data-interactive` — the label of a custom selection checkbox
+
+**Regions:** `data-table-search` holds the search field, with `data-side="start" | "end"` for its icon; `data-table-filter-content` is the filter panel; `data-table-footer` the `<tfoot>`; `data-loading-more` the infinite-scroll loader; `data-mobile-card` each card in the mobile view; `data-testid="table-container"` the element that scrolls.
 
 DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight) > table > thead > tr > th + tbody > tr > td`
 
@@ -7471,13 +7669,14 @@ export default function Example() {
 
 ### Data Attributes
 
-- `data-auto-resize="true"` — on the control when `autoResize` is set
-
 - `data-size` on root — "sm", "md", "lg"
 - `data-disabled` on root — when disabled
 - `data-error` on root — when error state
 - `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
+- `data-loading` on root — when loading: the field dims, takes no input, and shows a spinner
+- `data-reduce-motion` on that spinner — while reduced motion is in force
+- `data-invalid` on the error message
 - `data-slot="textarea"` on the textarea element
 - `data-slot="count"` on the character count
 
@@ -7691,12 +7890,17 @@ export default function Example() {
 ### Data Attributes (for CSS selectors and testing)
 
 - `data-disabled` — on root and trigger when `disabled`
-- `data-error` — on trigger when `message`
-- `data-open` — on trigger when dropdown/clock is open
+- `data-error` — on root and trigger when `error`, or when the typed time is outside `minTime`/`maxTime`
+- `data-valid` — on root and trigger when `success` and not `error`
+- `data-open` — on root and trigger when dropdown/clock is open
+- `data-loading` — on root, and on the control holding the trigger, when `loading`; the control dims and takes no pointer input
 - `data-selected` — on selected option
 - `data-highlighted` — on keyboard-focused option
 - `data-position` — on dropdown portal (`"top"` or `"bottom"`)
-- `data-active` — on active clock display button and period button
+- `data-side` — on the dropdown's surface, the side it was placed on after any flip
+- `data-active` — on active clock display button and period button; `data-state="active"` on the same buttons
+- `data-inner` — on a clock number in the inner (13–24) ring of the 24-hour face
+- `data-invalid` on the error message, `data-valid` on the success message
 
 DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevron) + portal(dropdown|clock)) + error/success`
 

@@ -101,6 +101,30 @@ export default function Example() {
 // Passing only `control: "data-[state=checked]:…"` drops the base and the other 1 states.
 ```
 
+## Data Attributes (for CSS selectors and testing)
+
+Each is written or absent, never `"false"`.
+
+**RadioGroup root** (`role="radiogroup"`):
+- `data-disabled` — when `disabled`
+- `data-loading` — when `loading`; the group disables its radios, which dim, and a spinner shows after the last one
+- `data-reduce-motion` on that spinner, too, while reduced motion is in force
+- `data-error` — when `error`
+- `data-valid` — when `success` and not `error`
+- `data-orientation="vertical" | "horizontal"` — from `orientation`
+- `data-reduce-motion` — while reduced motion is in force
+
+**RadioButton root** (the `<label>`):
+- `data-state="checked" | "unchecked"` — always present
+- `data-checked` — only while checked, for a selector that wants presence
+- `data-disabled` — when the radio or its group is disabled or loading; it dims
+- `data-loading` — when its group is loading; it dims as a disabled radio does
+- `data-value` — the radio's `value`
+
+**Control** (the circle): `data-state`, `data-checked`, `data-disabled` as on the root, and `data-error` / `data-valid` from the group. The checked control fills with the accent.
+
+**Group message:** `data-invalid` on the error message, `data-valid` on the success message.
+
 ## Forms
 
 - **Submitted value.** With `name`, it submits the checked radio's `value` under the group's `name`, and nothing when none is checked — the radios are native.

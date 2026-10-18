@@ -206,6 +206,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             data-indeterminate={indeterminate || undefined}
             data-state={indeterminate ? "indeterminate" : isChecked ? "checked" : "unchecked"}
             data-disabled={disabled || undefined}
+            data-readonly={readOnly || undefined}
             data-error={error || undefined}
             data-valid={isValid || undefined}
           >

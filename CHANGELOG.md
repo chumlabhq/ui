@@ -704,6 +704,16 @@ tables say.
 
 ### Fixed
 
+- DatePicker's active preset takes the accent fill; it set `data-active`, which nothing styled.
+- A loading DatePicker disables its trigger and shows a spinner in place of the calendar icon, with `aria-busy`; it looked idle and opened on click.
+- A loading InternationalPhoneInput disables its number input, dims the field and shows a spinner, with `aria-busy`; its loading styles sat on a wrapper that never carried the attribute.
+- A loading RadioGroup shows a spinner and marks the group `aria-busy`, so loading no longer looks the same as disabled; each radio carries `data-loading`.
+- A readonly Input, TextArea, Checkbox or InternationalPhoneInput draws a dashed border; readonly looked the same as editable.
+- Slider's dragged thumb grows and takes a larger shadow, and a mark inside the selected range turns its ring accent; both stopped painting in 6dd19258.
+- Breadcrumb's current page is set in medium weight and the primary text colour; it looked like every other crumb after 6dd19258 removed `itemActive`.
+- CascadingDropdown shows the selected icon on a selected top-level option, as it already did inside a submenu.
+- Dropdown, SearchableDropdown, MultiSelectDropdown and MultiSelectSearchableDropdown show their placeholder in tertiary text, so it no longer reads as a chosen value; the two multi-selects now emit `data-placeholder`.
+- ResizablePanel's handle paints the accent while it is being dragged.
 - DatePicker's showTodayIndicator (on by default) now marks today's date with a 2px underline in the cell's text colour; it only set data-today, which nothing styled. The other day states paint again too: a selected day and a range's start and end take the accent fill, the days between take accent text, and days of the adjacent month take tertiary text. All of them stopped painting in 6dd19258 (2026-09-03), which deleted the per-state `classes` keys and their styles without moving the styles onto the day cell's state attributes.
 - The dark theme's `--cl-bg-hover` is a 10% light overlay, `rgba(237, 239, 244, 0.1)`; it was `#0a0d12`,
   which on the dark surfaces left a hovered or highlighted item looking unhovered.
@@ -939,6 +949,7 @@ tables say.
 
 ### Fixed (documentation)
 
+- **Every attribute a component emits is documented, and every documented one is emitted.** Drawer, RadioButton, ResizablePanel and Slider gained a Data Attributes section; 123 attributes the code emitted and no doc listed are now listed, among them Table's row, cell and header states, TimePicker's clock states and the dropdowns' surfaces and options. Removed: TextArea's `data-auto-resize`, which never reached the DOM, and CountryFlag's mentions of `data-country` and `data-loaded`, which it never emitted. MultiSelectDropdown's and MultiSelectSearchableDropdown's documented `data-placeholder` is now emitted.
 - **The shipped docs describe the code as it stands.** README, ACCESSIBILITY, llms.txt,
   llms-full.txt, the site's llms.txt and FAQ, and the `.ai.md` files no longer name renamed
   props, slots or values (Checkbox and Switch's `onCheckedChange`, Drawer's `side`, Accordion's

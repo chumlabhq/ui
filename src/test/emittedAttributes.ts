@@ -10,7 +10,7 @@
  * rather than from two lists that can drift. Test code only.
  */
 import ts from "typescript";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 export type Read = (file: string) => string;
@@ -27,10 +27,55 @@ function resolveImport(from: string, spec: string): string | null {
   return null;
 }
 
+/** The component directory a file sits in, or `null` outside `src/components`. */
+const componentDirOf = (file: string): string | null => /[\\/]src[\\/]components[\\/]([^\\/]+)[\\/]/.exec(file)?.[1] ?? null;
+
+/** The leftmost identifier of every JSX tag a file renders and every function it calls. */
+function usedNames(sf: ts.SourceFile): Set<string> {
+  const out = new Set<string>();
+  const leftmost = (e: ts.Node): string | null =>
+    ts.isIdentifier(e)
+      ? e.text
+      : ts.isPropertyAccessExpression(e) || ts.isPropertyAccessChain(e)
+        ? leftmost(e.expression)
+        : null;
+  const visit = (node: ts.Node): void => {
+    if (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) {
+      const name = leftmost(node.tagName);
+      if (name) out.add(name);
+    }
+    if (ts.isCallExpression(node)) {
+      const name = leftmost(node.expression);
+      if (name) out.add(name);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return out;
+}
+
+/** The local names an import declaration binds. */
+const boundNames = (node: ts.ImportDeclaration): string[] => {
+  const clause = node.importClause;
+  if (!clause) return [];
+  const names = clause.name ? [clause.name.text] : [];
+  const bindings = clause.namedBindings;
+  if (bindings && ts.isNamespaceImport(bindings)) names.push(bindings.name.text);
+  if (bindings && ts.isNamedImports(bindings))
+    for (const el of bindings.elements) if (!el.isTypeOnly) names.push(el.name.text);
+  return names;
+};
+
 /**
  * Every non-test file a component's entry reaches. Type-only imports are not
  * followed: a type from another component's module renders nothing, and
  * following it would credit this component with everything that one emits.
+ *
+ * Nor is an import into ANOTHER component's directory followed unless this
+ * file renders or calls something it binds, and a re-export across components
+ * never is. Table re-exported two of Pagination's constants, and following that
+ * line credited Table with everything Pagination, its Dropdown and their
+ * Checkbox emit: `data-direction`, `data-disabled`, `data-reduce-motion`.
  */
 export function graph(entry: string, read: Read): string[] {
   const seen = new Set<string>();
@@ -39,6 +84,12 @@ export function graph(entry: string, read: Read): string[] {
     const file = stack.pop()!;
     if (seen.has(file) || /__tests__|\.test\./.test(file)) continue;
     seen.add(file);
+    const sf = parse(file, read);
+    let used: Set<string> | null = null;
+    const crosses = (next: string) => {
+      const dir = componentDirOf(next);
+      return dir !== null && dir !== componentDirOf(file);
+    };
     const visit = (node: ts.Node): void => {
       if (
         (ts.isImportDeclaration(node) && !node.importClause?.isTypeOnly) ||
@@ -47,7 +98,11 @@ export function graph(entry: string, read: Read): string[] {
         const spec = node.moduleSpecifier;
         if (spec && ts.isStringLiteral(spec)) {
           const next = resolveImport(file, spec.text);
-          if (next) stack.push(next);
+          if (next && crosses(next)) {
+            used ??= usedNames(sf);
+            const names = ts.isImportDeclaration(node) ? boundNames(node) : [];
+            if (names.some((n) => used!.has(n))) stack.push(next);
+          } else if (next) stack.push(next);
         }
       }
       if (
@@ -61,7 +116,7 @@ export function graph(entry: string, read: Read): string[] {
       }
       ts.forEachChild(node, visit);
     };
-    visit(parse(file, read));
+    visit(sf);
   }
   return [...seen].sort();
 }
@@ -297,6 +352,27 @@ export function loadingRowSitesOf(
     visit(sf);
   }
   return sites;
+}
+
+/**
+ * Every `data-*` attribute a component's `.ai.md` names in its
+ * `## Data Attributes` section — the bullets and the names written mid-line,
+ * since a section that lists `data-disabled`, `data-error`, `data-valid` on one
+ * line documents all three. Variant syntax (`data-[state=open]:`) is not a name.
+ */
+export function documentedAttributes(
+  name: string,
+  read: Read = (file) => readFileSync(file, "utf8"),
+  root = process.cwd(),
+): Set<string> {
+  const dir = resolve(root, "src/components", name);
+  const docs = readdirSync(dir).filter((f) => f.endsWith(".ai.md")).map((f) => read(join(dir, f)));
+  const out = new Set<string>();
+  for (const doc of docs) {
+    const section = /^## Data Attributes[^\n]*\n([\s\S]*?)(?=^## |(?![\s\S]))/m.exec(doc)?.[1] ?? "";
+    for (const m of section.matchAll(/(?<![\w[-])data-[a-z][a-z-]*[a-z]/g)) out.add(m[0]);
+  }
+  return out;
 }
 
 /** Everything one component, and anything it renders, emits. */

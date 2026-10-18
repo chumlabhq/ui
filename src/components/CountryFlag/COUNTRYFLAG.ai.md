@@ -57,11 +57,9 @@ export default function Example() {
 ## Data Attributes
 
 - `data-code` on root — the normalised alpha-2 code the flag resolved to, so a
-  stylesheet can reach one country. (Named `data-country` here until it was
-  checked against the component; there is no `data-country`.)
+  stylesheet can reach one country.
 - `data-loading="true"` on root — while the image has not resolved and no
-  fallback is showing. (There is no `data-loaded`: the attribute names the state
-  it is in, and is absent once loaded.)
+  fallback is showing. It is absent once the flag has loaded.
 - `data-error="true"` on root — when the image failed to load
 - `role="img"` on root — with `aria-label` set to alt or code
 

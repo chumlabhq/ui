@@ -38,5 +38,6 @@ const fixtures: Fixtures<typeof Input> = [
     props: { label: "Email" },
     render: () => <Input label="Email" classes={{ control: UNDERLINE_CONTROL }} />,
   },
+  { name: "readonly", props: { label: "Email", readOnly: true, defaultValue: "ada@example.com" } },
 ];
 export default fixtures;

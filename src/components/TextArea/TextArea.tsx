@@ -241,7 +241,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         wrapperAlign="items-start"
         data-size={size || undefined}
         data-readonly={readOnly || undefined}
-        data-auto-resize={autoResize || undefined}
       >
         <textarea
           {...rest}

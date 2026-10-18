@@ -2180,3 +2180,24 @@ describe("DatePicker form submission", () => {
     expect(container.querySelector('input[type="hidden"]')).toBeNull();
   });
 });
+
+describe("loading", () => {
+  // `loading` set `data-loading` on the root, whose default class is empty,
+  // while the trigger's `data-[loading]:` variants waited for an attribute it
+  // never got: a loading picker looked idle and opened on click.
+  it("disables the trigger, marks it data-loading, and shows a spinner in place of the calendar icon", () => {
+    render(<DatePicker loading aria-label="Date" />);
+    const trigger = screen.getByRole("combobox");
+    expect(trigger).toBeDisabled();
+    expect(trigger).toHaveAttribute("data-loading", "true");
+    expect(trigger).toHaveAttribute("aria-busy", "true");
+    expect(trigger.querySelector('[role="status"]')).not.toBeNull();
+  });
+
+  it("leaves the trigger enabled when not loading", () => {
+    render(<DatePicker aria-label="Date" />);
+    const trigger = screen.getByRole("combobox");
+    expect(trigger).toBeEnabled();
+    expect(trigger).not.toHaveAttribute("data-loading");
+  });
+});

@@ -655,7 +655,8 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
 
         <div
           ref={containerRef}
-          className={[wrapperLayoutClass, mergedClasses.control, loading ? "opacity-50 pointer-events-none" : ""].filter(Boolean).join(" ")}
+          className={[wrapperLayoutClass, mergedClasses.control].filter(Boolean).join(" ")}
+          data-loading={loading || undefined}
         >
           <div
             ref={triggerElRef}

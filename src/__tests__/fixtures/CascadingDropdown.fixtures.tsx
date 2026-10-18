@@ -355,5 +355,11 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     note: "Centred, so either side has room: the side it opens on is the one `submenuSide` resolves to, not the one that fits.",
     act: openSubmenu,
   },
+  { name: "full-width", props: { options: NESTED, fullWidth: true } },
+  {
+    name: "open-top-level-selected",
+    props: { options: [...NESTED, { value: "plain", label: "Plain" }], defaultValue: { root: "plain" }, defaultOpen: true },
+    note: "A selected top-level option with no submenu, which showed no selected icon until S3.",
+  },
 ];
 export default fixtures;

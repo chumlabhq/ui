@@ -580,10 +580,11 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         <div
           ref={trackRef}
           className={cn(mc.control) || undefined}
-          style={{ position: "relative", overflow: "visible", ...wrapperStyle, ...(loading ? { opacity: 0.5, pointerEvents: "none" } : {}) }}
+          style={{ position: "relative", overflow: "visible", ...wrapperStyle }}
           onPointerDown={handleTrackPointerDown}
           data-orientation={orientation}
           data-disabled={disabled || undefined}
+          data-loading={loading || undefined}
         >
           {/* Track background */}
           <div

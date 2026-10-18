@@ -78,8 +78,8 @@ export default function Example() {
 
 **Other elements:**
 - `data-modal-overlay` — backdrop element
-- `data-modal-container` — scroll/centering wrapper
-- `data-modal-content` — the `role="dialog"` panel
+- `data-modal-container` — scroll/centering wrapper; it carries `data-centered` when `centered`
+- `data-modal-content` — the `role="dialog"` panel; it carries `data-fullscreen` when `fullScreen`
 - `data-modal-header` — header section
 - `data-modal-body` — body content area
 - `data-modal-footer` — footer (when using `ModalFooter` sub-component)

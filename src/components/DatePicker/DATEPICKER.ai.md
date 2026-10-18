@@ -71,6 +71,11 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-loading` -- when loading state is active
 - `data-valid` -- when success state is active
 
+### Trigger
+- `data-disabled`, `data-error`, `data-valid`, `data-open` -- as on the root
+- `data-loading` -- while `loading`: the trigger is disabled, dims, and shows a spinner in place of the calendar icon
+- `data-reduce-motion` -- on that spinner, while reduced motion is in force
+
 ### Day cells
 - `data-selected` -- selected day (accent fill; a range's start and end too)
 - `data-today` -- today's date (underlined by default)
@@ -85,7 +90,12 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-marker-type` -- marker type string (e.g. `"meeting"`, `"deadline"`)
 
 ### Preset buttons
-- `data-active` -- active preset
+- `data-active` -- the preset matching the current value; it takes the accent fill
+- `data-state="active"` -- the same preset, for a selector keyed to `data-state`
+
+### Elsewhere
+- `data-side` -- on the calendar's surface, the side it was placed on after any flip
+- `data-invalid` -- on the error message
 
 **DOM nesting:** root `<div>` -> trigger `<button>` -> calendar popover `<div>` -> month grid -> day grid `<div role="grid">`
 

@@ -122,5 +122,10 @@ const fixtures: Fixtures<typeof DatePicker> = [
     props: { defaultOpen: true, value: D },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
+  {
+    name: "loading-reduced-motion",
+    props: { loading: true, value: D, reduceMotion: true },
+    note: "The trigger's spinner follows the picker's reduceMotion, the one state that writes `data-reduce-motion`.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

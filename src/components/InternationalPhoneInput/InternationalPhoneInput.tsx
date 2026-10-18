@@ -33,6 +33,7 @@ import {
   computeCursorPosition,
 } from "./utils.js";
 import { CountryFlag } from "../CountryFlag/index.js";
+import { CircularLoader } from "../Loader/index.js";
 import { SearchableDropdown } from "../SearchableDropdown/index.js";
 import type { SearchableDropdownOption } from "../SearchableDropdown/index.js";
 import { useControllableState } from "../../utils/useControllableState.js";
@@ -591,6 +592,9 @@ const InternationalPhoneInput = forwardRef<
         <div
           className={cn(mergedClasses.control) || undefined}
           data-slot="wrapper"
+          data-disabled={disabled || undefined}
+          data-loading={loading || undefined}
+          aria-busy={loading || undefined}
           role="group"
           aria-labelledby={ariaLabelledBy ?? (label ? labelId : undefined)}
           aria-label={label ? undefined : ariaLabel || "Phone number input"}
@@ -635,7 +639,7 @@ const InternationalPhoneInput = forwardRef<
             onPaste={handlePaste}
             onCopy={handleCopy}
             placeholder={placeholder}
-            disabled={disabled}
+            disabled={disabled || loading}
             readOnly={readOnly}
             required={required}
             aria-invalid={displayError || undefined}
@@ -650,7 +654,10 @@ const InternationalPhoneInput = forwardRef<
             data-readonly={readOnly || undefined}
             {...rest}
           />
-          {clearable && phoneInput && !disabled && !readOnly && (
+          {loading && (
+            <CircularLoader size={16} thickness={2} unstyled={unstyled} style={{ alignSelf: "center" }} aria-hidden="true" />
+          )}
+          {clearable && phoneInput && !disabled && !readOnly && !loading && (
             <button
               type="button"
               aria-label="Clear phone number"

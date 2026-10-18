@@ -103,7 +103,9 @@ const BASELINE: Record<string, number> = {
   "Table/FilterPanel.tsx": 3,
   "Table/icons.tsx": 0,
   "TextArea/TextArea.tsx": 1,
-  "TimePicker/TimePicker.tsx": 5,
+  // 5 until S3 moved the loading dim off a literal at the call site and onto
+  // the `control` slot as `data-[loading]:` variants.
+  "TimePicker/TimePicker.tsx": 4,
   "Toast/Toast.tsx": 3,
   "Toast/components/ToastProvider.tsx": 3,
 };

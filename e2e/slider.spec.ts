@@ -16,7 +16,9 @@ import { gotoFixture } from "./_nav";
  */
 test.describe("Slider (fixtures)", () => {
   test("marks the thumb active while it is dragged", async ({ page }) => {
-    await gotoFixture(page, "Slider", "dragging");
+    // `default`, not `dragging`: since S3 that fixture's act drags the thumb
+    // itself, and this test starts from rest to drive the drag.
+    await gotoFixture(page, "Slider", "default");
 
     const thumb = page.locator('[data-fixture] [role="slider"]').first();
     await expect(thumb).toBeVisible();

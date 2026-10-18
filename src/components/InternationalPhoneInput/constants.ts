@@ -213,7 +213,7 @@ export const DEFAULT_INTERNATIONAL_PHONE_INPUT_CLASSES: Required<InternationalPh
   description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
   control: "flex gap-2 items-stretch data-[loading]:opacity-50 data-[loading]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
   input:
-    "flex-1 h-10 px-3 rounded-cl-md border outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-cl-bg-input focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus data-[error]:border-cl-error data-[valid]:border-cl-success",
+    "flex-1 h-10 px-3 rounded-cl-md border outline-none text-sm transition-all duration-150 text-cl-text placeholder:text-cl-text-tertiary border-cl-border-input bg-cl-bg-input focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus data-[readonly]:border-dashed data-[error]:border-cl-error data-[valid]:border-cl-success",
   message:
     "text-xs mt-1.5 flex items-center gap-1.5 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   itemRow: "flex items-center gap-2 min-w-0",

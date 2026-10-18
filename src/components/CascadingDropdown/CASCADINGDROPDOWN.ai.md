@@ -82,9 +82,25 @@ This renders correctly with built-in styles, dark mode, and keyboard navigation.
 
 ## Data Attributes (for CSS selectors and testing)
 
-- `data-disabled` on trigger — when `disabled={true}`
-- `data-error` on trigger — when `error={true}`
-- `data-open` on trigger — when dropdown is open
+**Root and trigger:**
+- `data-disabled` — when `disabled={true}`
+- `data-error` — when `error={true}`
+- `data-valid` — when `success={true}` and not `error`
+- `data-open` — when dropdown is open
+- `data-full-width` — on the root, when `fullWidth`
+
+**Menu items** (top level and submenu):
+- `data-highlighted` — the keyboard position
+- `data-selected` — a selected option; a selected single-select option shows the selected icon (`showSelectedIcon`)
+- `data-disabled` — a disabled option
+- `data-has-submenu` — on a top-level item that opens a submenu
+
+**Multi-select checkbox** (inside a `menuitemcheckbox`): `data-state="checked" | "unchecked"`, and `data-checked` while checked
+
+**Surfaces:** `data-cascading-submenu` marks the submenu's surface; `data-side` on each surface is the side it was placed on after any flip
+
+**Messages:** `data-invalid` on the error message, `data-valid` on the success message
+
 - `role="menu"` on the dropdown menu container
 - `role="menuitem"` on parent-level menu items
 - `role="menuitemcheckbox"` on multi-select submenu items

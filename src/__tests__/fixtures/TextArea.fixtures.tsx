@@ -46,5 +46,6 @@ const fixtures: Fixtures<typeof TextArea> = [
       </>
     ),
   },
+  { name: "readonly", props: { label: "Notes", readOnly: true, defaultValue: "Read only" } },
 ];
 export default fixtures;

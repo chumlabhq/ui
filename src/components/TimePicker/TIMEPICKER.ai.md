@@ -55,12 +55,17 @@ export default function Example() {
 ## Data Attributes (for CSS selectors and testing)
 
 - `data-disabled` — on root and trigger when `disabled`
-- `data-error` — on trigger when `message`
-- `data-open` — on trigger when dropdown/clock is open
+- `data-error` — on root and trigger when `error`, or when the typed time is outside `minTime`/`maxTime`
+- `data-valid` — on root and trigger when `success` and not `error`
+- `data-open` — on root and trigger when dropdown/clock is open
+- `data-loading` — on root, and on the control holding the trigger, when `loading`; the control dims and takes no pointer input
 - `data-selected` — on selected option
 - `data-highlighted` — on keyboard-focused option
 - `data-position` — on dropdown portal (`"top"` or `"bottom"`)
-- `data-active` — on active clock display button and period button
+- `data-side` — on the dropdown's surface, the side it was placed on after any flip
+- `data-active` — on active clock display button and period button; `data-state="active"` on the same buttons
+- `data-inner` — on a clock number in the inner (13–24) ring of the 24-hour face
+- `data-invalid` on the error message, `data-valid` on the success message
 
 DOM nesting: `root > label + description + wrapper(trigger(input + clear + chevron) + portal(dropdown|clock)) + error/success`
 

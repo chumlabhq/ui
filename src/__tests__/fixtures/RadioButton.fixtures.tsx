@@ -24,6 +24,17 @@ const fixtures: Fixtures<typeof RadioGroup> = [
   { name: "success", props: { label: "Fruit", success: true, successMessage: "Saved" }, children: radios },
   { name: "disabled", props: { disabled: true }, children: radios },
   { name: "loading", props: { loading: true }, children: radios },
+  {
+    name: "loading-beside-idle",
+    props: {},
+    note: "A loading group next to an idle one. A loading group's mark is the spinner it renders, which only a group of the same kind on the same page shows the absence of.",
+    render: () => (
+      <>
+        <RadioGroup loading label="Loading">{radios}</RadioGroup>
+        <RadioGroup label="Idle">{radios}</RadioGroup>
+      </>
+    ),
+  },
   { name: "horizontal", props: { orientation: "horizontal" }, children: radios },
   { name: "required", props: { label: "Fruit", required: true }, children: radios },
 ];

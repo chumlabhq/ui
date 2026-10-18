@@ -102,5 +102,6 @@ const fixtures: Fixtures<typeof Dropdown> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     note: "Every anchored surface in the package aligns to the trigger's left edge; in RTL it should align to the right. e2e/rtl.spec.ts measures it."
   },
+  { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
 ];
 export default fixtures;

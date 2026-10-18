@@ -872,3 +872,17 @@ describe("InternationalPhoneInput", () => {
     });
   });
 });
+
+describe("loading", () => {
+  // The group's `data-[loading]:` dimming sat on a wrapper that never carried
+  // the attribute, and the number input stayed enabled: a loading field looked
+  // and typed like an idle one.
+  it("disables the number input, marks the group data-loading, and shows a spinner", () => {
+    render(<InternationalPhoneInput loading />);
+    const group = screen.getByRole("group");
+    expect(group).toHaveAttribute("data-loading", "true");
+    expect(group).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByRole("textbox", { name: "Number" })).toBeDisabled();
+    expect(group.querySelector('[role="status"]')).not.toBeNull();
+  });
+});

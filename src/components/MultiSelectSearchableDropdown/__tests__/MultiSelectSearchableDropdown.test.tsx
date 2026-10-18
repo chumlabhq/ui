@@ -595,3 +595,13 @@ describe("MultiSelectSearchableDropdown focus callbacks", () => {
     expect(onBlur).toHaveBeenCalledWith(expect.objectContaining({ type: "blur", target: trigger }));
   });
 });
+
+describe("placeholder state", () => {
+  // Documented on the trigger since before S3, and never emitted.
+  it("marks the trigger data-placeholder while nothing is selected, and not after", () => {
+    const { rerender } = render(<MultiSelectSearchableDropdown options={[{ value: "a", label: "Apple" }]} value={[]} onValueChange={() => {}} />);
+    expect(screen.getByRole("combobox")).toHaveAttribute("data-placeholder", "true");
+    rerender(<MultiSelectSearchableDropdown options={[{ value: "a", label: "Apple" }]} value={["a"]} onValueChange={() => {}} />);
+    expect(screen.getByRole("combobox")).not.toHaveAttribute("data-placeholder");
+  });
+});

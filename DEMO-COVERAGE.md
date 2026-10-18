@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 59 |
 | Library-authored props across the public surface | 1252 |
 | With no demo | 267 (21%) |
-| With no fixture | 706 (56%) |
+| With no fixture | 693 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
@@ -84,7 +84,7 @@ listed here with no demo anywhere fails the generator.
 
 | Component | Props | Inherited | No demo | Real | No fixture | Phantom | Tier-A gaps | Real props with no demo |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Accordion | 31 | 271 | 8 | 4 | 19 | 0 | `asChild`, `unstyled` | `onKeyDown`, `preventCloseTimeout`, `onFocusCapture`, `onBlurCapture` |
+| Accordion | 31 | 271 | 8 | 4 | 18 | 0 | `asChild`, `unstyled` | `onKeyDown`, `preventCloseTimeout`, `onFocusCapture`, `onBlurCapture` |
 | AccordionContent | 10 | 279 | 3 | 2 | 8 | 0 | `asChild` | `animationDuration`, `animationEasing` |
 | AccordionItem | 6 | 277 | 2 | 0 | 5 | 0 | `asChild` | — |
 | AccordionShimmer | 11 | 278 | 7 | 1 | 3 | 0 | `reduceMotion`, `unstyled`, `variant`, `asChild` | `classes` |
@@ -95,34 +95,34 @@ listed here with no demo anywhere fails the generator.
 | AvatarGroupCount | 14 | 278 | 9 | 4 | 11 | 0 | `size`, `shape`, `asChild` | `max`, `bordered`, `textClassName`, `textStyle` |
 | AvatarGroupShimmer | 9 | 280 | 2 | 0 | 8 | 0 | `reduceMotion`, `asChild` | — |
 | AvatarShimmer | 6 | 280 | 2 | 1 | 1 | 0 | `unstyled` | `classes` |
-| Breadcrumb | 23 | 277 | 10 | 4 | 15 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `ellipsisIcon`, `tooltipOffset`, `dropdownZIndex`, `ellipsisAriaLabel` |
+| Breadcrumb | 23 | 277 | 10 | 4 | 14 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `ellipsisIcon`, `tooltipOffset`, `dropdownZIndex`, `ellipsisAriaLabel` |
 | Button | 24 | 292 | 0 | 0 | 12 | 0 | — | — |
 | ButtonGroup | 2 | 279 | 0 | 0 | 0 | 0 | — | — |
-| CascadingDropdown | 60 | 2 | 23 | 13 | 29 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` | `open`, `onOpenChange`, `onBlur`, `onFocus`, `onKeyDown`, `shimmerCount`, `clearable`, `dropdownZIndex`, `dropdownOffset`, `clearIcon`, `renderTrigger`, `menuSearchAriaLabel`, `submenuSearchAriaLabel` |
+| CascadingDropdown | 60 | 2 | 23 | 13 | 28 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` | `open`, `onOpenChange`, `onBlur`, `onFocus`, `onKeyDown`, `shimmerCount`, `clearable`, `dropdownZIndex`, `dropdownOffset`, `clearIcon`, `renderTrigger`, `menuSearchAriaLabel`, `submenuSearchAriaLabel` |
 | Checkbox | 21 | 303 | 2 | 1 | 10 | 0 | `reduceMotion` | `indeterminateIcon` |
 | CircularLoader | 7 | 280 | 3 | 1 | 2 | 0 | `reduceMotion`, `unstyled` | `classes` |
-| CountryFlag | 13 | 278 | 3 | 2 | 8 | 0 | `unstyled` | `onLoad`, `onError` |
+| CountryFlag | 13 | 278 | 3 | 2 | 7 | 0 | `unstyled` | `onLoad`, `onError` |
 | CountryFlagGroup | 8 | 279 | 2 | 2 | 4 | 0 | — | `countTooltip`, `surplusTooltipContent` |
 | CountryFlagGroupShimmer | 6 | 280 | 3 | 2 | 6 | 0 | `reduceMotion` | `aspectRatio`, `animate` |
 | CountryFlagShimmer | 6 | 280 | 4 | 3 | 2 | 0 | `unstyled` | `classes`, `aspectRatio`, `animate` |
-| DatePicker | 62 | 276 | 10 | 6 | 33 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `todayAction`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
+| DatePicker | 62 | 276 | 10 | 6 | 32 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `todayAction`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
 | DotLoader | 7 | 280 | 4 | 2 | 3 | 0 | `reduceMotion`, `unstyled` | `animationDuration`, `classes` |
 | Drawer | 30 | 278 | 5 | 3 | 19 | 0 | `unstyled`, `portalContainer` | `zIndex`, `overlayColor`, `swipeThreshold` |
 | DrawerBody | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerCloseButton | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerFooter | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerHeader | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
-| Dropdown | 51 | 2 | 4 | 0 | 27 | 0 | `unstyled` | — |
+| Dropdown | 51 | 2 | 4 | 0 | 26 | 0 | `unstyled` | — |
 | Input | 26 | 307 | 2 | 0 | 10 | 0 | `unstyled` | — |
 | InputLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |
-| InternationalPhoneInput | 49 | 296 | 10 | 5 | 34 | 0 | `unstyled`, `portalContainer` | `clearable`, `onClear`, `numberAriaLabel`, `dropdownZIndex`, `dropdownOffset` |
+| InternationalPhoneInput | 49 | 296 | 10 | 5 | 33 | 0 | `unstyled`, `portalContainer` | `clearable`, `onClear`, `numberAriaLabel`, `dropdownZIndex`, `dropdownOffset` |
 | LinearLoader | 8 | 280 | 3 | 1 | 4 | 0 | `reduceMotion`, `unstyled` | `classes` |
 | Modal | 41 | 2 | 12 | 5 | 28 | 0 | `unstyled` | `minWidth`, `minHeight`, `animationDuration`, `maxNestingLevel`, `contentStyle` |
 | ModalBody | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalFooter | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalHeader | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
-| MultiSelectDropdown | 52 | 2 | 8 | 4 | 26 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
-| MultiSelectSearchableDropdown | 57 | 2 | 13 | 9 | 30 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
+| MultiSelectDropdown | 52 | 2 | 8 | 4 | 25 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
+| MultiSelectSearchableDropdown | 57 | 2 | 13 | 9 | 29 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
 | OtpInput | 29 | 277 | 3 | 1 | 13 | 0 | `unstyled` | `inputPattern` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | 0 | — | — |
 | Pagination | 31 | 278 | 5 | 1 | 20 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` | `dropdownOffset` |
@@ -130,13 +130,13 @@ listed here with no demo anywhere fails the generator.
 | RadioButton | 8 | 279 | 1 | 0 | 3 | 0 | `size` | — |
 | RadioGroup | 21 | 275 | 4 | 2 | 5 | 0 | `unstyled`, `reduceMotion` | `onFocus`, `onBlur` |
 | ResizablePanel | 14 | 279 | 2 | 0 | 11 | 0 | `reduceMotion`, `unstyled` | — |
-| SearchableDropdown | 58 | 2 | 6 | 2 | 31 | 0 | `unstyled` | `searchInputAriaLabel`, `typeaheadTimeout` |
-| Slider | 36 | 273 | 5 | 0 | 19 | 0 | `unstyled` | — |
+| SearchableDropdown | 58 | 2 | 6 | 2 | 30 | 0 | `unstyled` | `searchInputAriaLabel`, `typeaheadTimeout` |
+| Slider | 36 | 273 | 5 | 0 | 18 | 0 | `unstyled` | — |
 | Slot | 1 | 279 | 1 | 0 | 1 | 0 | — | — |
 | Stepper | 32 | 2 | 7 | 1 | 19 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |
 | Switch | 28 | 277 | 5 | 2 | 11 | 0 | `reduceMotion` | `loader`, `loaderSize` |
 | TabPanel | 26 | 2 | 6 | 0 | 16 | 0 | `reduceMotion`, `unstyled` | — |
-| Table | 103 | 0 | 14 | 6 | 67 | 0 | `unstyled` | `showHeader`, `pinnableColumns`, `onCursorPositionChange`, `onHeaderHoverChange`, `minHeight`, `onGroupByChange` |
+| Table | 103 | 0 | 14 | 6 | 65 | 0 | `unstyled` | `showHeader`, `pinnableColumns`, `onCursorPositionChange`, `onHeaderHoverChange`, `minHeight`, `onGroupByChange` |
 | TextArea | 25 | 293 | 1 | 0 | 6 | 0 | `unstyled` | — |
 | TextAreaLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |
 | TimePicker | 45 | 276 | 1 | 0 | 24 | 0 | `portalContainer` | — |

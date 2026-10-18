@@ -548,6 +548,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       "data-error": (error || undefined) as true | undefined,
       "data-valid": ((!error && success) || undefined) as true | undefined,
       "data-open": (isOpen || undefined) as true | undefined,
+      "data-placeholder": (selectedOptions.length === 0 || undefined) as true | undefined,
     };
 
     return (

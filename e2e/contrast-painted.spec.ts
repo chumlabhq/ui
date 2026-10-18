@@ -319,6 +319,33 @@ const MEASURE_NONTEXT = `(() => {
     }
   }
 
+  // the other state marks S3 added, each the only thing that shows its state:
+  // an active preset's fill, an in-range mark's ring, a resizing handle's bar.
+  // A tint (a fill under full opacity) is not the cue where it appears —
+  // TimePicker's and Pagination's active buttons draw it with their border and
+  // text — so only an opaque fill is held here. A dragged thumb grows rather
+  // than taking a colour, so it has no cue to hold to a ratio: it took a ring
+  // first, which was the focus ring again and hid focus during a drag.
+  for (const root of roots) {
+    const cue = (el, what, colour, detail) => {
+      const behind = el.parentElement ? backgroundOf(el.parentElement) : null;
+      if (!behind || !colour) return;
+      const value = ratio(over(colour, behind), behind);
+      out.push({ kind: "mark", key: selectorFor(el) + " " + what, ratio: Math.round(value * 100) / 100, exact: value, detail });
+    };
+    for (const el of root.querySelectorAll("button[data-active],[role=separator][data-resizing]")) {
+      if (hidden(el)) continue;
+      const fill = parse(getComputedStyle(el).backgroundColor);
+      if (fill && fill[3] === 1) cue(el, "fill", fill, getComputedStyle(el).backgroundColor);
+    }
+    // A Slider's mark: active inside the range, in the control that holds the thumbs.
+    for (const el of root.querySelectorAll("[data-state=active]:not([role])")) {
+      if (hidden(el) || !el.closest("[data-orientation]")?.querySelector("[role=slider]")) continue;
+      const cs = getComputedStyle(el);
+      if (parseFloat(cs.borderTopWidth) > 0) cue(el, "border", parse(cs.borderTopColor), cs.borderTopColor);
+    }
+  }
+
   // the focus indicator, one focusable element at a time
   const focusable = [];
   for (const root of roots) {

@@ -59,6 +59,9 @@ export default function Example() {
 - `data-error` on root — when error state
 - `data-valid` on root — when success state
 - `data-readonly` on root — when readOnly
+- `data-loading` on root — when loading: the field dims, takes no input, and shows a spinner
+- `data-reduce-motion` on that spinner — while reduced motion is in force
+- `data-invalid` on the error message
 - `data-slot="input"` on the input element
 - `data-slot="count"` on the character count
 

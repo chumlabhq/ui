@@ -1,5 +1,6 @@
 import Drawer from "../../components/Drawer/Drawer.js";
 import DrawerCloseButton from "../../components/Drawer/components/DrawerCloseButton.js";
+import DrawerFooter from "../../components/Drawer/components/DrawerFooter.js";
 import DrawerHeader from "../../components/Drawer/components/DrawerHeader.js";
 import { IndexPicker, Toggle } from "./_harness.js";
 import type { Fixtures } from "./types.js";
@@ -143,5 +144,6 @@ const fixtures: Fixtures<typeof Drawer> = [
     children: <><DrawerHeader>Drawer</DrawerHeader>Body</>,
     note: "`side` is physical (left/right), not logical (start/end), so nothing here mirrors — which is the finding."
   },
+  { name: "open-with-footer", props: { open: true }, children: <><DrawerHeader>Drawer</DrawerHeader>Body<DrawerFooter>Footer</DrawerFooter></> },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];
