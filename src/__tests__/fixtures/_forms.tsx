@@ -171,7 +171,7 @@ export const FORM_FIXTURES: FormFixture[] = [
     valueProp: "checked",
     initial: true,
     formData: ["f=on"],
-    empty: ["f="],
+    empty: [],
     blocks: true,
     change: async (c, ui) => {
       ui.click(c.querySelector("[role='switch']"));

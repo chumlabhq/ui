@@ -713,7 +713,7 @@ const RadioButtonDemo = () => {
       {/* ─── Settings form ────────────────────────────────────────────────── */}
       <Section
         title="Settings form"
-        description="A RadioGroup, a Switch and a Checkbox in one form, submitted by its Button. The readout is the FormData the browser built: the switch submits its value while on and an empty entry while off, and the checkbox submits only while checked."
+        description="A RadioGroup, a Switch and a Checkbox in one form, submitted by its Button. The readout is the FormData the browser built: the switch and the checkbox each submit only while on, as a native checkbox does."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">

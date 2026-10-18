@@ -190,7 +190,7 @@ const CASES: Case[] = [
   { id: "SearchableDropdown/SearchableDropdown", name: true, rootSlot: true, render: (p, ref) => <SearchableDropdown {...spread(p)} ref={r(ref)} options={OPTIONS} /> },
   { id: "Slider/Slider", name: true, rootSlot: true, render: (p, ref) => <Slider {...spread(p)} ref={r(ref)} defaultValue={40} /> },
   { id: "Stepper/Stepper", container: true, rootSlot: true, render: (p, ref) => <Stepper {...spread(p)} ref={r(ref)} steps={[{ id: "a", label: "A" }]} /> },
-  { id: "Switch/Switch", name: true, rootSlot: true, render: (p, ref) => <Switch {...spread(p)} ref={r(ref)} label="Wifi" /> },
+  { id: "Switch/Switch", name: true, rootSlot: true, render: (p, ref) => <Switch {...spread(p)} ref={r(ref)} label="Wifi" defaultChecked /> },
   { id: "TabPanel/TabPanel", container: true, rootSlot: true, render: (p, ref) => <TabPanel {...spread(p)} ref={r(ref)} tabs={[{ id: "a", label: "A" }]} /> },
   { id: "Table/Table", container: true, rootSlot: true, render: (p, ref) => <Table {...spread(p)} ref={r(ref)} data={[]} columns={[]} /> },
   { id: "TextArea/TextArea", name: true, rootSlot: true, render: (p, ref) => <TextArea {...spread(p)} ref={r(ref)} /> },

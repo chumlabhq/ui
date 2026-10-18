@@ -32,6 +32,8 @@ import { Avatar } from "../../components/Avatar/index.js";
 import { MultiSelectDropdown } from "../../components/MultiSelectDropdown/index.js";
 import { MultiSelectSearchableDropdown } from "../../components/MultiSelectSearchableDropdown/index.js";
 import { DatePicker } from "../../components/DatePicker/index.js";
+import { Switch } from "../../components/Switch/index.js";
+import { Checkbox } from "../../components/Checkbox/index.js";
 
 beforeEach(() => setReducedMotion(false));
 afterEach(cleanup);
@@ -208,6 +210,48 @@ describe("an empty multi-value field submits no entry", () => {
     const view = render(
       <form>
         <DatePicker name="f" label="Days" selectionMode="multiple" required />
+      </form>,
+    );
+    await ui.settle();
+    expect(view.container.querySelector("form")!.checkValidity()).toBe(false);
+  });
+});
+
+/**
+ * An on/off field submits like a native checkbox.
+ *
+ * A native checkbox submits no entry while off and its value, or "on", while
+ * on. L26 step 0 measured Switch submitting `f=` while off, in all three
+ * engines, which a server reads as a value that is present and empty; Checkbox
+ * matched native. L26 routes Switch through FormValue's empty-entries path.
+ */
+describe("an on/off field submits like a native checkbox", () => {
+  const entries = async (field: ReactElement) => {
+    const view = render(<form>{field}</form>);
+    await ui.settle();
+    return formEntries(view.container.querySelector("form")!);
+  };
+  const ROWS = [
+    { on: false, value: undefined, expected: [] },
+    { on: false, value: "yes", expected: [] },
+    { on: true, value: undefined, expected: ["f=on"] },
+    { on: true, value: "yes", expected: ["f=yes"] },
+  ];
+  for (const [id, field] of [
+    ["native checkbox", (on: boolean, value?: string) => <input type="checkbox" name="f" defaultChecked={on} {...(value ? { value } : {})} />],
+    ["Switch", (on: boolean, value?: string) => <Switch label="S" name="f" defaultChecked={on} {...(value ? { value } : {})} />],
+    ["Checkbox", (on: boolean, value?: string) => <Checkbox label="C" name="f" defaultChecked={on} {...(value ? { value } : {})} />],
+  ] as const) {
+    for (const row of ROWS) {
+      it(`${id}, ${row.on ? "on" : "off"}, value ${row.value ?? "default"}: ${JSON.stringify(row.expected)}`, async () => {
+        expect(await entries(field(row.on, row.value))).toEqual(row.expected);
+      });
+    }
+  }
+  it("Switch, off and required, still blocks the submit", async () => {
+    const view = render(
+      <form>
+        <Switch label="S" name="f" required />
       </form>,
     );
     await ui.settle();

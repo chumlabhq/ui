@@ -440,18 +440,21 @@ describe("Switch Component", () => {
 
   describe("Form Integration", () => {
     it("renders hidden input when name is provided", () => {
-      render(<Switch name="notifications" aria-label="Toggle" />);
+      render(<Switch name="notifications" defaultChecked aria-label="Toggle" />);
 
       const hidden = document.querySelector('input[aria-hidden="true"]');
       expect(hidden).toBeInTheDocument();
       expect(hidden).toHaveAttribute("name", "notifications");
     });
 
-    it("sends empty string value when unchecked", () => {
-      render(<Switch name="notifications" checked={false} aria-label="Toggle" />);
+    it("submits no entry when unchecked, like a native checkbox", () => {
+      const { container } = render(
+        <form>
+          <Switch name="notifications" checked={false} aria-label="Toggle" />
+        </form>,
+      );
 
-      const hidden = document.querySelector('input[aria-hidden="true"]');
-      expect(hidden).toHaveAttribute("value", "");
+      expect([...new FormData(container.querySelector("form")!).keys()]).toEqual([]);
     });
 
     it("sends value when checked", () => {
@@ -482,15 +485,19 @@ describe("Switch Component", () => {
       expect(hidden).toBeDisabled();
     });
 
-    it("updates hidden input value when toggled", async () => {
+    it("updates the submitted entry when toggled", async () => {
       const user = userEvent.setup();
-      render(<Switch name="notifications" aria-label="Toggle" />);
+      const { container } = render(
+        <form>
+          <Switch name="notifications" aria-label="Toggle" />
+        </form>,
+      );
+      const entries = () => [...new FormData(container.querySelector("form")!)];
 
-      const hidden = document.querySelector('input[aria-hidden="true"]');
-      expect(hidden).toHaveAttribute("value", "");
+      expect(entries()).toEqual([]);
 
       await user.click(screen.getByRole("switch"));
-      expect(hidden).toHaveAttribute("value", "on");
+      expect(entries()).toEqual([["notifications", "on"]]);
     });
   });
 

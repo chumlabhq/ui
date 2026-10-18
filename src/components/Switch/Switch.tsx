@@ -241,7 +241,7 @@ const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
           {name && (
             <FormValue
-              entries={[[name, isChecked ? value : ""]]}
+              entries={isChecked ? [[name, value]] : []}
               required={required}
               disabled={disabled}
               form={buttonProps.form}

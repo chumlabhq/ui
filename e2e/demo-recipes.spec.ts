@@ -10,9 +10,9 @@ import { test, expect, type Locator, type Page } from "./_test";
  *   - Date and time together: the readout joins the picked day and time;
  *   - A wizard with fields: Next is disabled until the step is valid, Back
  *     returns with the values entered, and Finish confirms them;
- *   - Settings form: the FormData readout follows the radio, the switch's
- *     value (an empty entry while off, as SWITCH.ai.md documents) and the
- *     checkbox;
+ *   - Settings form: the FormData readout follows the radio, the switch and
+ *     the checkbox, each of which submits only while on, as a native checkbox
+ *     does;
  *   - Tabs holding forms: a value typed on one tab is still there after
  *     switching away and back;
  *   - A toast after submit: the toast shows the value the form submitted;
@@ -97,7 +97,7 @@ const RECIPES: Recipe[] = [
       await section.getByRole("switch", { name: "Weekly email digest" }).click();
       await section.getByRole("checkbox", { name: "Try features before they ship" }).check();
       await section.getByRole("button", { name: "Submit", exact: true }).click();
-      await expect(readout).toHaveText("theme=dark\ndigest=\nbeta=on");
+      await expect(readout, "the switch, off, submitted an entry").toHaveText("theme=dark\nbeta=on");
       return (await readout.textContent())?.replace(/\n/g, " ") ?? "";
     },
   },
