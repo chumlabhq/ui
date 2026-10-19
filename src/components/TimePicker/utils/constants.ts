@@ -2,7 +2,7 @@ import type { TimePickerClasses } from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 
 export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
-  root: "inline-flex flex-col gap-1 text-cl-text",
+  root: "inline-flex flex-col gap-1 max-w-full text-cl-text",
   label:
     "block text-sm font-medium mb-1 text-cl-text-chrome",
   control: "relative data-[loading]:opacity-50 data-[loading]:pointer-events-none",

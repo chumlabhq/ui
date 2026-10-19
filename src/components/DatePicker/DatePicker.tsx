@@ -1083,7 +1083,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                             that renders the calendar. */}
                         <div
                           className={mergedClasses.listHeader}
-                          style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
+                          style={showWeekNumbers ? { gridTemplateColumns: "auto repeat(7, 1fr)" } : undefined}
                           role="row"
                           aria-label="Days of the week"
                         >
@@ -1112,7 +1112,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                             key={weekIndex}
                             role="row"
                             className="grid grid-cols-7"
-                            style={showWeekNumbers ? { gridTemplateColumns: "2rem repeat(7, 1fr)" } : undefined}
+                            style={showWeekNumbers ? { gridTemplateColumns: "auto repeat(7, 1fr)" } : undefined}
                           >
                             {showWeekNumbers && (
                               <div

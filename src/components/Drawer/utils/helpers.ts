@@ -24,9 +24,9 @@ export const getSideStyles = (
 
   switch (side) {
     case "left":
-      return { top: 0, left: 0, height: "100vh", width: size, transform: `translateX(${-closedPercent}%)`, transition };
+      return { top: 0, left: 0, height: "100vh", width: size, maxWidth: "100vw", transform: `translateX(${-closedPercent}%)`, transition };
     case "right":
-      return { top: 0, right: 0, height: "100vh", width: size, transform: `translateX(${closedPercent}%)`, transition };
+      return { top: 0, right: 0, height: "100vh", width: size, maxWidth: "100vw", transform: `translateX(${closedPercent}%)`, transition };
     case "top":
       return { top: 0, left: 0, width: "100vw", height: size, transform: `translateY(${-closedPercent}%)`, transition };
     case "bottom":

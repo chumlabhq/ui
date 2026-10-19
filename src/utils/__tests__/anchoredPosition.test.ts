@@ -24,7 +24,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { gap: 4 },
       );
-      expect(r).toEqual({ top: 144, left: 200, width: 100, side: "bottom" });
+      expect(r).toEqual({ top: 144, left: 200, width: 100, side: "bottom", maxWidth: 984 });
     });
 
     it("sits above the trigger when asked", () => {
@@ -242,12 +242,12 @@ describe("computeAnchoredPosition", () => {
     // pinned to the top margin, over its own trigger, with its end off screen.
     it("opens below when there is more room below, capped to that room", () => {
       const r = computeAnchoredPosition(rect({ top: 100 }), rect({ height: 960 }), VIEWPORT, { gap: 4, margin: 8, fit: true });
-      expect(r).toEqual({ top: 144, left: 8, width: 100, side: "bottom", maxHeight: 648 });
+      expect(r).toEqual({ top: 144, left: 8, width: 100, side: "bottom", maxHeight: 648, maxWidth: 984 });
     });
 
     it("opens above when there is more room above, ending at the trigger", () => {
       const r = computeAnchoredPosition(rect({ top: 600 }), rect({ height: 960 }), VIEWPORT, { gap: 4, margin: 8, fit: true });
-      expect(r).toEqual({ top: 8, left: 8, width: 100, side: "top", maxHeight: 588 });
+      expect(r).toEqual({ top: 8, left: 8, width: 100, side: "top", maxHeight: 588, maxWidth: 984 });
       expect(r.top + r.maxHeight!).toBe(600 - 4);
     });
 
@@ -256,6 +256,44 @@ describe("computeAnchoredPosition", () => {
       const plain = computeAnchoredPosition(rect({ top: 100, left: 200 }), rect({ height: 200 }), VIEWPORT, { gap: 4 });
       expect({ ...fitted, maxHeight: undefined }).toEqual({ ...plain, maxHeight: undefined });
       expect(fitted.maxHeight).toBe(800 - 140 - 4 - 8);
+    });
+  });
+
+  describe("width cap: a surface wider than the viewport", () => {
+    it("caps the width at the viewport inside its margin on both sides", () => {
+      const r = computeAnchoredPosition(
+        rect({ top: 100, left: 24, width: 232 }),
+        rect({ width: 288, height: 100 }),
+        { width: 280, height: 640, offsetTop: 0, offsetLeft: 0 },
+        { margin: 8 },
+      );
+      expect(r.maxWidth).toBe(264);
+    });
+
+    it("places the capped width, so the surface ends inside the right margin", () => {
+      const viewport = { width: 280, height: 640, offsetTop: 0, offsetLeft: 0 };
+      const r = computeAnchoredPosition(rect({ top: 100, left: 24, width: 232 }), rect({ width: 288, height: 100 }), viewport, { margin: 8 });
+      expect(r.left).toBe(8);
+      expect(r.left + r.maxWidth).toBe(viewport.width - 8);
+    });
+
+    it("reads a measured rect whose fields are getters, as a DOMRect's are", () => {
+      class Measured {
+        get top() { return 0; }
+        get left() { return 0; }
+        get width() { return 288; }
+        get height() { return 100; }
+      }
+      const viewport = { width: 280, height: 640, offsetTop: 0, offsetLeft: 0 };
+      const r = computeAnchoredPosition(rect({ top: 100, left: 24, width: 232 }), new Measured(), viewport, { gap: 4, margin: 8 });
+      expect(r.top).toBe(100 + 40 + 4);
+      expect(r.left).toBe(8);
+    });
+
+    it("leaves a surface that fits its measured width", () => {
+      const r = computeAnchoredPosition(rect({ top: 100, left: 880, width: 100 }), rect({ width: 300, height: 100 }), VIEWPORT, { margin: 8 });
+      expect(r.left).toBe(1000 - 300 - 8);
+      expect(r.maxWidth).toBe(984);
     });
   });
 

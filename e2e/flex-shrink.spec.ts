@@ -30,11 +30,18 @@ import { markPortalRoots, PORTAL_MARK } from "./_portals";
  * layout, and across 1083 rows in each engine every row that fits read them
  * equal, so there is no rounding slack to allow for.
  *
- * What this does not see: a row whose container is sized to its content. Such
- * a row grows with the item instead of overflowing, and the overflow lands on
- * an ancestor — SearchableDropdown's list in Firefox grows past a 280 px
- * viewport that way. That is a different cause (the surface is not bounded by
- * the viewport) and is not asserted here.
+ * A row inside a container sized to its content grows with the item instead
+ * of overflowing, so its own widths agree and the overflow lands on an
+ * ancestor. TimePicker's root is `inline-flex`: it shrink-wraps the trigger,
+ * whose input holds its intrinsic width — 201 px in Firefox — so the trigger
+ * row read 273 in 273 while it stood in a 248 px column. So each row is also
+ * held inside its nearest container whose width the page decides rather than
+ * its content: the fixture's box, a fixed-position surface, or an element with
+ * an authored inline width (a fixture's own wrapper). Edges are rounded to
+ * whole pixels, as `scrollWidth` and `clientWidth` are. A horizontally
+ * scrolling or clipping ancestor met first ends the walk with no comparison:
+ * content inside a scroller is wider than it on purpose. Whether a surface
+ * itself fits the viewport is `surface-fit.spec.ts`'s question.
  */
 
 const WIDTHS = [280, 320, 360] as const;
@@ -106,7 +113,7 @@ function ownersFor(component: string): string[] {
   return [component, ...deps];
 }
 
-type Row = { key: string | null; el: string; client: number; scroll: number };
+type Row = { key: string | null; el: string; client: number; scroll: number; escapes: number; container: string | null };
 
 /**
  * Every growing flex child in the fixture and its portals that holds a field
@@ -133,15 +140,41 @@ async function growingRows(page: Page, cases: Case[], owners: string[]): Promise
           );
           if (!field && !nowrap) continue;
           const classes = [...el.classList];
+          // Nearest owner first, then the most specific string it owns: a slot
+          // merged from a default and an override can hold every token of a
+          // third component's string, and the component that rendered it is
+          // the one that owns it.
           const fits = cases.filter((c) => c.tokens.every((t) => classes.includes(t)));
-          const most = Math.max(0, ...fits.map((c) => c.tokens.length));
-          const best = fits.filter((c) => c.tokens.length === most);
-          const owned = owners.map((o) => best.filter((c) => c.owner === o)).find((list) => list.length) ?? best;
+          const near = owners.map((o) => fits.filter((c) => c.owner === o)).find((list) => list.length) ?? fits;
+          const most = Math.max(0, ...near.map((c) => c.tokens.length));
+          const owned = near.filter((c) => c.tokens.length === most);
+          let box: HTMLElement | null = row.parentElement;
+          let container: HTMLElement | null = null;
+          while (box) {
+            const style = getComputedStyle(box);
+            if (box.matches("[data-fixture]") || style.position === "fixed" || box.style.width) {
+              container = box;
+              break;
+            }
+            if (style.overflowX !== "visible") break;
+            box = box.parentElement;
+          }
+          let escapes = 0;
+          if (container) {
+            const c = container.getBoundingClientRect();
+            const cs = getComputedStyle(container);
+            const start = Math.round(c.left + container.clientLeft + parseFloat(cs.paddingLeft));
+            const end = Math.round(c.left + container.clientLeft + container.clientWidth - parseFloat(cs.paddingRight));
+            const r = row.getBoundingClientRect();
+            escapes = Math.max(0, start - Math.round(r.left)) + Math.max(0, Math.round(r.right) - end);
+          }
           rows.push({
             key: owned.length === 1 ? owned[0].key : null,
             el: `${el.tagName.toLowerCase()}.${classes.slice(0, 3).join(".")}`,
             client: row.clientWidth,
             scroll: row.scrollWidth,
+            escapes,
+            container: container ? `${container.tagName.toLowerCase()}${container.matches("[data-fixture]") ? "[data-fixture]" : `.${[...container.classList].slice(0, 2).join(".")}`}` : null,
           });
         }
         return rows;
@@ -206,6 +239,7 @@ test("a growing flex child holding a field or nowrap text shrinks with its row",
   const overflowing: string[] = [];
   let rows = 0;
   let unattributed = 0;
+  let contained = 0;
   for (const path of paths) {
     const id = path.replace("/__fixtures/", "");
     await page.setViewportSize({ width: WIDTHS[0], height: 640 });
@@ -219,7 +253,9 @@ test("a growing flex child holding a field or nowrap text shrinks with its row",
         rows += 1;
         if (r.key) reached.add(r.key);
         else unattributed += 1;
+        if (r.container) contained += 1;
         if (r.scroll > r.client) overflowing.push(`${id} at ${width}px: ${r.key ? at.get(r.key) : r.el} — row ${r.client}, content ${r.scroll} (+${r.scroll - r.client})`);
+        if (r.escapes > 0) overflowing.push(`${id} at ${width}px: ${r.key ? at.get(r.key) : r.el} — row runs ${r.escapes} px outside ${r.container}`);
       }
     }
   }
@@ -230,15 +266,16 @@ test("a growing flex child holding a field or nowrap text shrinks with its row",
   const findings = [...new Set(overflowing)];
   console.log(
     `FLEX_SHRINK cases ${reached.size} (floor ${FLOOR}, expected ${expected.length}, excluded ${excluded.length}), ` +
-      `rows ${rows} (unattributed ${unattributed}), fixtures ${paths.length} x ${WIDTHS.length} widths, overflowing ${findings.length}`,
+      `rows ${rows} (unattributed ${unattributed}, held to a container ${contained}), fixtures ${paths.length} x ${WIDTHS.length} widths, overflowing ${findings.length}`,
   );
   for (const f of findings) console.log(`FLEX_SHRINK_FINDING ${f}`);
+  for (const m of missing) console.log(`FLEX_SHRINK_MISSING ${m}`);
 
   expect(reached.size, "fewer cases than step 0 counted: the walk lost fixtures or states").toBeGreaterThanOrEqual(FLOOR);
   expect(missing, "class strings that grow a flex child and that no fixture reached — reach them, or exclude them with a reason").toEqual([]);
   expect(stillExcluded, "excluded, but the walk found them holding a field or nowrap text: the exclusion no longer applies").toEqual([]);
   expect(stale, "exclusions naming a class string no longer in source").toEqual([]);
-  expect(findings, "a growing flex child that cannot shrink below its content runs out of its row — give it min-w-0").toEqual([]);
+  expect(findings, "a row that runs out of itself or out of its container — a child that cannot shrink, or an ancestor sized to its content").toEqual([]);
 });
 
 /**

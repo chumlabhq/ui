@@ -30,6 +30,10 @@ const CONTROLS: Array<{
    * is; the control has to be measured in the state it is meant to be used in.
    */
   dismiss?: boolean;
+  /** A viewport width to measure at, for a control that is smaller below a breakpoint. */
+  width?: number;
+  /** The control is in a surface the fixture portals out, so it is looked up in the whole document. */
+  portal?: boolean;
 }> = [
   { component: "MultiSelectDropdown", fixture: "multi-value", selector: '[aria-label^="Remove"]', label: "MSD chip remove" },
   { component: "MultiSelectSearchableDropdown", fixture: "multi-value", selector: '[aria-label^="Remove"]', label: "MSSD chip remove" },
@@ -54,6 +58,13 @@ const CONTROLS: Array<{
   { component: "TextArea", fixture: "size-sm", selector: "textarea", label: "TextArea size=sm" },
   { component: "TextArea", fixture: "size-md", selector: "textarea", label: "TextArea size=md" },
   { component: "TextArea", fixture: "size-lg", selector: "textarea", label: "TextArea size=lg" },
+  // DatePicker's header nav buttons are p-1 below `sm` since A1b, which put
+  // the calendar inside a 280 px viewport: 24 px, exactly the floor, so they
+  // are measured where they are smallest.
+  { component: "DatePicker", fixture: "open", selector: '[aria-label="Previous year"]', label: "DatePicker prev year", width: 320, portal: true },
+  { component: "DatePicker", fixture: "open", selector: '[aria-label="Previous month"]', label: "DatePicker prev month", width: 320, portal: true },
+  { component: "DatePicker", fixture: "open", selector: '[aria-label="Next month"]', label: "DatePicker next month", width: 320, portal: true },
+  { component: "DatePicker", fixture: "open", selector: '[aria-label="Next year"]', label: "DatePicker next year", width: 320, portal: true },
 ];
 
 /**
@@ -97,7 +108,9 @@ test("every target is hittable at its declared size", async ({ page }) => {
   const rows: string[] = [];
   const undersized: string[] = [];
 
-  for (const { component, fixture, selector, label, dismiss } of CONTROLS) {
+  const initial = page.viewportSize()!;
+  for (const { component, fixture, selector, label, dismiss, width, portal } of CONTROLS) {
+    await page.setViewportSize(width ? { width, height: 900 } : initial);
     await gotoFixture(page, component, fixture);
     await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
     if (dismiss) {
@@ -106,7 +119,7 @@ test("every target is hittable at its declared size", async ({ page }) => {
     }
     const r = await page.evaluate(
       ([sel]) => {
-        const el = document.querySelector<HTMLElement>(`[data-fixture] ${sel}`);
+        const el = document.querySelector<HTMLElement>(sel);
         if (!el) return null;
         const a = el.getBoundingClientRect();
         const cx = a.left + a.width / 2;
@@ -126,17 +139,20 @@ test("every target is hittable at its declared size", async ({ page }) => {
         // The centre has to hit before the walk means anything: an element
         // covered by a sibling answers nowhere, and counting the centre as a
         // hit by construction reported that as 1x1 rather than 0x0.
-        if (!hits(cx, cy)) return { rect: [Math.round(a.width), Math.round(a.height)], hit: [0, 0] };
+        if (!hits(cx, cy)) return { rect: [a.width, a.height], hit: [0, 0] };
         const w = edge(-1, 0, half) + edge(1, 0, half) + 1;
         const h = edge(0, -1, half) + edge(0, 1, half) + 1;
-        return { rect: [Math.round(a.width), Math.round(a.height)], hit: [w, h] };
+        return { rect: [a.width, a.height], hit: [w, h] };
       },
-      [selector] as const,
+      [portal ? selector : `[data-fixture] ${selector}`] as const,
     );
     if (!r) { rows.push(`${label}: NOT FOUND`); continue; }
-    const line = `${label.padEnd(22)} rect ${r.rect[0]}x${r.rect[1]}  effective ${r.hit[0]}x${r.hit[1]}`;
+    // The painted rect to two decimals, and held to the floor as well as the
+    // hit area: a 23.6 px button rounds to 24 and can answer 24 probes.
+    const rect = `${r.rect[0].toFixed(2)}x${r.rect[1].toFixed(2)}`;
+    const line = `${label.padEnd(22)} rect ${rect}  effective ${r.hit[0]}x${r.hit[1]}${width ? `  at ${width}px` : ""}`;
     rows.push(line);
-    if (r.hit[0] < FLOOR || r.hit[1] < FLOOR) undersized.push(`${label}: effective ${r.hit[0]}x${r.hit[1]} (rect ${r.rect[0]}x${r.rect[1]})`);
+    if (r.hit[0] < FLOOR || r.hit[1] < FLOOR || r.rect[0] < FLOOR || r.rect[1] < FLOOR) undersized.push(`${label}: effective ${r.hit[0]}x${r.hit[1]} (rect ${rect})`);
   }
 
   console.log("TARGET_SIZE_EFFECTIVE");

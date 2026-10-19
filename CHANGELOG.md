@@ -704,6 +704,11 @@ tables say.
 
 ### Fixed
 
+- InternationalPhoneInput's country list fits a phone screen; a fixed 288 px wide, it ran 16 px past a 280 px viewport.
+- SearchableDropdown's list fits a phone screen, and its search input shrinks with it; sized to its content, it ran 7 px past a 280 px viewport in Firefox.
+- DatePicker's calendar fits a phone screen: below `sm` its days are 32 px, its week-number column 24 px, and its header and padding tighter. It ran 58 px past a 280 px viewport, and 18 px past a 320 px one with week numbers.
+- Drawer's left and right sheets are never wider than the viewport; at the default 300 px they ran 20 px past a 280 px one.
+- TimePicker's trigger fits its column: it took its input's full intrinsic width whatever the column, and ran up to 27 px past it in Firefox and 16 px in WebKit, with its list 3 px past the viewport.
 - InternationalPhoneInput's number input shrinks with its row at phone widths; it held its intrinsic width and ran past the field's edge, by up to 121 px at 280 px, and the page scrolled sideways.
 - MultiSelectSearchableDropdown's search input shrinks with its list; at 280 px it ran 31 px past the list's edge in Firefox and 4 px in WebKit.
 - CascadingDropdown's search input shrinks with its menu; at 280 px it ran 3 px past the menu's edge in Firefox.

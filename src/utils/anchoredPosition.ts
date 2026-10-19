@@ -64,6 +64,7 @@ export interface AnchoredPosition {
   side: AnchoredSide;
   /** With `fit`: the height available on that side, inside the margin. */
   maxHeight?: number;
+  maxWidth: number;
 }
 
 const OPPOSITE: Record<AnchoredSide, AnchoredSide> = {
@@ -134,7 +135,7 @@ const fits = (
  */
 export function computeAnchoredPosition(
   trigger: AnchoredRect,
-  floating: AnchoredRect,
+  measured: AnchoredRect,
   viewport: AnchoredViewport,
   options: AnchoredPositionOptions = {},
 ): AnchoredPosition {
@@ -146,6 +147,14 @@ export function computeAnchoredPosition(
     clampOnlyWhenTriggerVisible = false,
     fit = false,
   } = options;
+
+  const maxWidth = Math.max(0, viewport.width - 2 * margin);
+  const floating: AnchoredRect = {
+    top: measured.top,
+    left: measured.left,
+    width: Math.min(measured.width, maxWidth),
+    height: measured.height,
+  };
 
   const space = (s: AnchoredSide): number =>
     s === "top"
@@ -218,5 +227,6 @@ export function computeAnchoredPosition(
     width: trigger.width,
     side,
     maxHeight,
+    maxWidth,
   };
 }

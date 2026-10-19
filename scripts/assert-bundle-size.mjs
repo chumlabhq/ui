@@ -1398,6 +1398,32 @@ const LIBRARY_TOTAL_HISTORY = [
       "+1 B. No declared breach moved. No comments added to src/components or " +
       "src/utils. Measured against a build of 1aee7467.",
   },
+  {
+    kb: 160.29,
+    commit: "(uncommitted)",
+    date: "2026-10-19",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.08 KB (164,055 -> 164,135 B gzipped, +80 B on a build of " +
+      "cfa00fec), 83 files held. A1b: a popup is never wider than the " +
+      "viewport, and TimePicker's trigger fits its column. Per file: the " +
+      "shared menu chunk +48 B (the anchored positioner returns a maxWidth, " +
+      "the viewport inside its margin, and places the capped width, copying " +
+      "the measured rect field by field: a DOMRect's fields are getters, and " +
+      "spreading one dropped top and height; " +
+      "MenuSurface applies it, so every anchored list, menu and calendar " +
+      "is capped at once); DatePicker +21 B (32 px days, a 24 px week-number " +
+      "column and a tighter header and panel below `sm`, so the capped " +
+      "calendar's content fits it); Drawer +6 B (its left and right sheets " +
+      "take maxWidth 100vw, as its top and bottom ones already took width " +
+      "100vw); SearchableDropdown +5 B (its search input takes min-w-0, so it " +
+      "shrinks with a capped list); TimePicker +4 B (its inline-flex root " +
+      "takes max-w-full, so it cannot shrink-wrap past its column). The rest, " +
+      "-8 to +2 B on each importer, is the shared chunk's new hashed name in " +
+      "their import strings. DatePicker's declared breach moved with it " +
+      "(below). No comments added to src/components or src/utils. Measured " +
+      "against a build of cfa00fec.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1536,7 +1562,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.60,
+      kb: 12.62,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1593,7 +1619,15 @@ const DECLARED_BREACHES = new Map([
         "idle and opened on click. The trigger now carries it and is disabled " +
         "while loading, with the shared CircularLoader in place of the " +
         "calendar icon: loading +86 B. The active preset takes the accent " +
-        "fill: +19 B.",
+        "fill: +19 B.\n\n" +
+        "12.60 -> 12.62 on 2026-10-19, A1b (exclusive 12,898 -> 12,918 B " +
+        "gzipped, +20 B; own chunk +21 B): the calendar fits a phone screen. It " +
+        "was 298 px of fixed 40 px days and a 279 px header in a 264 px room at " +
+        "a 280 px viewport. Below `sm` the days are 32 px, the week-number " +
+        "column 24 px (the inline `2rem` column became `auto` and the width " +
+        "moved to the `weekNumber` class, which can carry a breakpoint), the " +
+        "header's nav buttons p-1 and month and year buttons px-1, and the " +
+        "panel p-1.5.",
     },
   ],
   [

@@ -92,6 +92,7 @@ const MenuSurface = forwardRef<HTMLDivElement, MenuSurfaceProps>(function MenuSu
         left: position.left,
         ...(matchTriggerWidth ? { width: position.width } : {}),
         maxHeight: position.maxHeight,
+        maxWidth: position.maxWidth,
       }
     : null;
   const positioned = surfaceStyle(placed, isStable);
