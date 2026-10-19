@@ -704,6 +704,9 @@ tables say.
 
 ### Fixed
 
+- InternationalPhoneInput's number input shrinks with its row at phone widths; it held its intrinsic width and ran past the field's edge, by up to 121 px at 280 px, and the page scrolled sideways.
+- MultiSelectSearchableDropdown's search input shrinks with its list; at 280 px it ran 31 px past the list's edge in Firefox and 4 px in WebKit.
+- CascadingDropdown's search input shrinks with its menu; at 280 px it ran 3 px past the menu's edge in Firefox.
 - CascadingDropdown's clear empties an uncontrolled value as well as reporting `{}`; it reported and left the selection in place. A disabled option opens no submenu, takes no hover highlight and takes no focus on a click.
 - MultiSelectDropdown's Clear all empties an uncontrolled selection as well as reporting `[]`; it reported and left every chip and submitted value in place. A disabled option takes no hover highlight.
 - MultiSelectSearchableDropdown's Clear all empties an uncontrolled selection as well as reporting `[]`, and a disabled option takes no hover highlight.
