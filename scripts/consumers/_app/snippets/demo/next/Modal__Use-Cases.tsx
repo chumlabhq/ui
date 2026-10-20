@@ -42,6 +42,7 @@ export default function ModalExample() {
         open={confirmDeleteOpen}
         onOpenChange={setConfirmDeleteOpen}
         showHeader={false}
+        aria-labelledby="confirm-delete-title"
         closeOnOverlayClick={false}
         closeOnEscape={false}
         classes={{ body: "p-6" }}
@@ -65,7 +66,9 @@ export default function ModalExample() {
               />
             </svg>
           </div>
-          <h3 className="text-lg font-bold mb-1 text-cl-text">Delete this project?</h3>
+          <h3 id="confirm-delete-title" className="text-lg font-bold mb-1 text-cl-text">
+            Delete this project?
+          </h3>
           <p className="text-sm text-center mb-5 max-w-xs text-cl-text-secondary">
             This will permanently remove
             <span className="font-semibold text-cl-error">"Marketing Website"</span>
@@ -116,6 +119,7 @@ export default function ModalExample() {
         open={successOpen}
         onOpenChange={setSuccessOpen}
         showHeader={false}
+        aria-labelledby="payment-success-title"
         classes={{ body: "p-6" }}
       >
         <div className="flex flex-col items-center">
@@ -139,7 +143,9 @@ export default function ModalExample() {
               </svg>
             </div>
           </div>
-          <h3 className="text-xl font-bold mb-1 text-cl-text">Payment Successful!</h3>
+          <h3 id="payment-success-title" className="text-xl font-bold mb-1 text-cl-text">
+            Payment Successful!
+          </h3>
           <p className="text-sm mb-5 text-cl-text-secondary">
             Your order has been confirmed and is being processed.
           </p>
@@ -179,6 +185,7 @@ export default function ModalExample() {
         open={upgradeOpen}
         onOpenChange={setUpgradeOpen}
         showHeader={false}
+        aria-labelledby="upgrade-title"
         classes={{ body: "p-0" }}
       >
         <div className="bg-cl-accent p-8 text-center text-cl-on-accent">
@@ -194,7 +201,7 @@ export default function ModalExample() {
               />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold mb-2">Upgrade to Pro</h3>
+          <h3 id="upgrade-title" className="text-2xl font-bold mb-2">Upgrade to Pro</h3>
           <p className="text-white/85">Unlock all features and boost your productivity.</p>
         </div>
         <div className="p-6">
@@ -249,6 +256,7 @@ export default function ModalExample() {
         open={imagePreviewOpen}
         onOpenChange={setImagePreviewOpen}
         showHeader={false}
+        aria-labelledby="image-preview-title"
         overlayOpacity={0.85}
         classes={{ content: "bg-cl-bg", body: "p-0" }}
       >
@@ -289,7 +297,9 @@ export default function ModalExample() {
           </div>
           <div className="bg-cl-bg p-4 flex flex-wrap items-center justify-between gap-3">
             <div className="text-cl-text min-w-0">
-              <p className="font-medium truncate">Sunset at Malibu Beach</p>
+              <p id="image-preview-title" className="font-medium truncate">
+                Sunset at Malibu Beach
+              </p>
               <p className="text-sm text-cl-text-tertiary truncate">4032 × 3024 • 3.2 MB</p>
               {
                 imageAction && (

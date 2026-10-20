@@ -73,7 +73,8 @@ export interface CountryFlagProps
   onError?: (event: SyntheticEvent<HTMLImageElement>) => void;
 }
 
-export interface CountryFlagGroupProps extends HTMLAttributes<HTMLDivElement> {
+export interface CountryFlagGroupProps
+  extends HTMLAttributes<HTMLDivElement>, Pick<CountryFlagShimmerProps, "unstyled"> {
   /** Content rendered inside this element. */
   children: ReactNode;
   /** How many flags to show before the rest are collapsed into a surplus count. */

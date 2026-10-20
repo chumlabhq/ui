@@ -12,6 +12,7 @@ import {
 } from "../utils/constants.js";
 import { DEFAULT_ASPECT_RATIO } from "../utils/constants.js";
 import { useReducedMotion } from "../../../utils/useReducedMotion.js";
+import { useCountryFlagGroupContext } from "../utils/context.js";
 
 export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmerProps>(
   (
@@ -28,13 +29,15 @@ export const CountryFlagShimmer = forwardRef<HTMLSpanElement, CountryFlagShimmer
     },
     ref,
   ) => {
+    const groupContext = useCountryFlagGroupContext();
+    const effectiveUnstyled = unstyled || !!groupContext?.unstyled;
     const pixelSize = getPixelSize(size);
     const width = pixelSize;
     const height = Math.round(pixelSize * aspectRatio);
     const effectiveReduceMotion = useReducedMotion(reduceMotion);
     const shouldAnimate = animate && !effectiveReduceMotion;
 
-    const base = unstyled
+    const base = effectiveUnstyled
       ? UNSTYLED_COUNTRY_FLAG_SHIMMER_CLASSES
       : DEFAULT_COUNTRY_FLAG_SHIMMER_CLASSES;
     const rootClass = cn(base.root, classes?.root);

@@ -522,3 +522,39 @@ describe("CountryFlagGroupShimmer", () => {
     );
   });
 });
+
+describe("CountryFlagGroup unstyled", () => {
+  const pulsing = (root: HTMLElement) => root.querySelectorAll(".animate-pulse").length;
+
+  it("passes unstyled to every flag it renders, so a loading flag or shimmer stops pulsing", () => {
+    const styled = render(
+      <CountryFlagGroup>
+        <CountryFlag code="us" loading />
+        <CountryFlag code="gb" loading />
+        <CountryFlagShimmer />
+      </CountryFlagGroup>,
+    );
+    expect(pulsing(styled.container)).toBe(3);
+    styled.unmount();
+
+    const { container } = render(
+      <CountryFlagGroup unstyled>
+        <CountryFlag code="us" loading />
+        <CountryFlag code="gb" loading />
+        <CountryFlagShimmer />
+      </CountryFlagGroup>,
+    );
+    expect(pulsing(container)).toBe(0);
+    expect(container.firstElementChild).not.toHaveAttribute("unstyled");
+  });
+
+  it("keeps a flag's own unstyled inside a styled group", () => {
+    const { container } = render(
+      <CountryFlagGroup>
+        <CountryFlag code="us" loading unstyled />
+        <CountryFlag code="gb" loading />
+      </CountryFlagGroup>,
+    );
+    expect(pulsing(container)).toBe(1);
+  });
+});

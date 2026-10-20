@@ -66,6 +66,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
     }
 
     const groupContext = useCountryFlagGroupContext();
+    const effectiveUnstyled = unstyled || !!groupContext?.unstyled;
     const effectiveReduceMotion = useReducedMotion(reduceMotion);
 
     const normalizedCode = code?.toLowerCase() || "";
@@ -84,7 +85,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
 
     const prefersReducedMotionForClasses = useReducedMotion(reduceMotion);
 
-    const baseClassesRaw = unstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
+    const baseClassesRaw = effectiveUnstyled ? UNSTYLED_COUNTRYFLAG_CLASSES : DEFAULT_COUNTRYFLAG_CLASSES;
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotionForClasses);
     const mergedClasses: Required<CountryFlagClasses> = useMemo(
       () => ({
@@ -132,7 +133,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
           aspectRatio={aspectRatio}
           reduceMotion={reduceMotion}
           classes={mergedClasses.loading}
-          unstyled={unstyled}
+          unstyled={effectiveUnstyled}
           className={cn(groupContext?.itemClassName, className)}
           style={style}
         />

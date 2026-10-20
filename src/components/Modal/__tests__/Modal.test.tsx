@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef } from "react";
@@ -753,5 +753,57 @@ describe("Modal Icons", () => {
     const { container } = render(<InfoIcon />);
     const svg = container.querySelector("svg");
     expect(svg).toBeInTheDocument();
+  });
+});
+
+describe("Modal missing-name warning", () => {
+  const nameWarnings = (warn: MockInstance<typeof console.warn>) =>
+    warn.mock.calls.filter((call) => String(call[0]).startsWith("Modal: rendered with no accessible name")).length;
+
+  let warn: MockInstance<typeof console.warn>;
+  beforeEach(() => {
+    warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+  });
+  afterEach(() => warn.mockRestore());
+
+  it("warns once for an open modal with no title, aria-label or aria-labelledby", () => {
+    const { rerender } = render(<Modal open onOpenChange={() => {}} animationDuration={0}>Body</Modal>);
+    rerender(<Modal open onOpenChange={() => {}} animationDuration={0}>Body again</Modal>);
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-labelledby");
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-label");
+    expect(nameWarnings(warn)).toBe(1);
+  });
+
+  it("does not warn for a closed modal with no name, mounted or not", () => {
+    render(<Modal open={false} onOpenChange={() => {}}>Body</Modal>);
+    render(<Modal open={false} onOpenChange={() => {}} keepMounted>Body</Modal>);
+    expect(nameWarnings(warn)).toBe(0);
+  });
+
+  it("warns only once a closed modal with no name opens", () => {
+    const { rerender } = render(<Modal open={false} onOpenChange={() => {}} animationDuration={0}>Body</Modal>);
+    expect(nameWarnings(warn)).toBe(0);
+    rerender(<Modal open onOpenChange={() => {}} animationDuration={0}>Body</Modal>);
+    expect(nameWarnings(warn)).toBe(1);
+  });
+
+  it.each([
+    ["a title", { title: "Settings" }],
+    ["an aria-label", { "aria-label": "Settings" }],
+    ["an aria-labelledby", { "aria-labelledby": "elsewhere" }],
+    ["a string title with no header", { title: "Settings", showHeader: false }],
+  ])("does not warn for an open modal with %s", (_, props) => {
+    render(<Modal open onOpenChange={() => {}} animationDuration={0} {...props}>Body</Modal>);
+    expect(nameWarnings(warn)).toBe(0);
+  });
+
+  it("warns for an open modal whose only name is a non-string title it does not render", () => {
+    render(
+      <Modal open onOpenChange={() => {}} animationDuration={0} showHeader={false} title={<span>Settings</span>}>
+        Body
+      </Modal>,
+    );
+    expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-label");
+    expect(nameWarnings(warn)).toBe(1);
   });
 });

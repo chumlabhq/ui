@@ -4352,6 +4352,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "required": false,
             "default": null,
             "description": "Class overrides for this component's slots."
+          },
+          {
+            "name": "unstyled",
+            "type": "boolean",
+            "required": false,
+            "default": "false",
+            "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring."
           }
         ]
       },

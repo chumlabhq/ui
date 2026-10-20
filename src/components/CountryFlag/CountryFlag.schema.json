@@ -187,6 +187,11 @@
         "classes": {
           "type": "CountryFlagGroupClasses | undefined",
           "description": "Class overrides for this component's slots."
+        },
+        "unstyled": {
+          "type": "boolean | undefined",
+          "description": "Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring.",
+          "default": false
         }
       }
     },

@@ -73,6 +73,7 @@ export default function ModalExample() {
         open={fullScreenOpen}
         onOpenChange={setFullScreenOpen}
         showHeader={false}
+        aria-labelledby="document-preview-title"
         fullScreen
         centered={false}
         classes={
@@ -112,7 +113,9 @@ export default function ModalExample() {
                 }
               />
               <div className="min-w-0">
-                <h1 className="font-semibold text-cl-text truncate">Document Preview</h1>
+                <h1 id="document-preview-title" className="font-semibold text-cl-text truncate">
+                  Document Preview
+                </h1>
                 <p className="text-sm text-cl-text-tertiary truncate">Annual Report 2024.pdf</p>
               </div>
             </div>

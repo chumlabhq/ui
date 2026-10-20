@@ -203,7 +203,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // Custom Base Path example's "US" fallback, whose /assets/flags image 404s.
   // D11, 2026-10-17, 455 -> 433 (HEAD 455 -> now 433): Class overrides (52) and the old Anatomy (3) became Anatomy (33).
   // The dropped Type and Default columns carried no information (string, — on every slot).
-  "country-flag": 433,
+  // M2, 2026-10-21, 433 -> 437 (HEAD 433 -> now 437 in both themes): CountryFlagGroup's API Reference gained the `unstyled` row (4).
+  "country-flag": 437,
   // D11, 2026-10-17, 975 -> 952 (HEAD 981 -> now 952): Class overrides (119) became Anatomy (90).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 952 -> 965 (HEAD 952 -> now 965): the new In a form (13).

@@ -8,6 +8,7 @@ import type {
 } from "../utils/types.js";
 import {
   DEFAULT_COUNTRYFLAG_GROUP_CLASSES,
+  UNSTYLED_COUNTRYFLAG_GROUP_CLASSES,
 } from "../utils/constants.js";
 import { Tooltip } from "../../Tooltip/index.js";
 import { cn } from "../../../utils/scopedCn.js";
@@ -26,22 +27,24 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
       surplusTooltipContent,
       renderSurplus,
       classes: classesProp,
+      unstyled = false,
       className,
       style,
       ...rest
     },
     ref,
   ) => {
+    const baseClasses = unstyled ? UNSTYLED_COUNTRYFLAG_GROUP_CLASSES : DEFAULT_COUNTRYFLAG_GROUP_CLASSES;
     const effectiveMax =
       maxVisible != null && Number.isFinite(maxVisible) && maxVisible > 0 ? Math.floor(maxVisible) : undefined;
 
     const mergedClasses: Required<CountryFlagGroupClasses> = useMemo(
       () => ({
-        root: mergeSlot(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.root, classesProp?.root),
-        item: mergeSlot(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.item, classesProp?.item),
-        count: mergeSlot(DEFAULT_COUNTRYFLAG_GROUP_CLASSES.count, classesProp?.count),
+        root: mergeSlot(baseClasses.root, classesProp?.root),
+        item: mergeSlot(baseClasses.item, classesProp?.item),
+        count: mergeSlot(baseClasses.count, classesProp?.count),
       }),
-      [classesProp],
+      [baseClasses, classesProp],
     );
 
     const { visibleChildren, remainingChildren, remainingCount, totalCount } =
@@ -79,8 +82,8 @@ export const CountryFlagGroup = forwardRef<HTMLDivElement, CountryFlagGroupProps
     const pixelSize = getPixelSize(size);
 
     const contextValue = useMemo(
-      () => ({ itemClassName: mergedClasses.item, size }),
-      [mergedClasses.item, size],
+      () => ({ itemClassName: mergedClasses.item, size, unstyled }),
+      [mergedClasses.item, size, unstyled],
     );
 
     return (

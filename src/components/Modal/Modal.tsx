@@ -22,6 +22,7 @@ import { ModalContext } from "./ModalContext.js";
 import { LAYERS, LAYER_STEP, OverlayLayerContext } from "../../utils/layers.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { acquireScrollLock, releaseScrollLock } from "../../utils/scrollLock.js";
 import { useHydrated } from "../../utils/useHydrated.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -103,6 +104,11 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       value: openProp,
       defaultValue: defaultOpen,
       onChange: onOpenChange,
+    });
+    useAccessibleNameWarning("Modal", {
+      label: !isOpen || (showHeader || typeof title === "string" ? title : undefined),
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
     });
 
     const generatedId = useId();

@@ -704,6 +704,8 @@ tables say.
 
 ### Fixed
 
+- Modal warns once in development when it is open with no accessible name: no `title` it renders, no `aria-label` and no `aria-labelledby`. It was silent, while Drawer and every form field warned; a closed Modal does not warn, and a `title` with `showHeader={false}` still names it when it is a string.
+- CountryFlagGroup takes `unstyled` and passes it to every flag and every `CountryFlagShimmer` it renders. It was the only top-level component without it, and its loading flags kept `animate-pulse` whatever the group was given. A flag or shimmer is unstyled when either it or its group says so: a flag's own `unstyled` still applies inside a styled group, and `unstyled={false}` on a flag does not restyle it inside an unstyled one.
 - Table's pin control for an unpinned column shows while its header cell has focus, and always on a screen without hover. It was revealed only by hover, so a keyboard user focused an invisible button and a touch user could hit it only by luck; on a screen with hover it still appears on hover.
 - Toast pauses its countdown while focus is inside it and resumes when focus leaves, as it does for the pointer, and the two combine: the toast resumes only once both have left. The focus pause holds whatever `pauseOnHover` is set to. It went on counting with focus on its close button, gone at 2.82 s against 2.83 s untouched, so a keyboard or screen-reader user could lose it while reading (WCAG 2.2.1).
 - Drawer warns about a missing name only once its panel is open, after its DrawerHeader has registered. It warned for every drawer at mount, closed, kept mounted or open, header or not; an open drawer with no DrawerHeader, `aria-label` or `aria-labelledby` still warns.

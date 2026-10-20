@@ -2665,6 +2665,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `surplusTooltipContent` | `ReactNode` | Content for the surplus count's tooltip, replacing the generated country list. |
 | `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Renders the surplus indicator yourself, given the number of hidden flags. |
 | `classes` | `CountryFlagGroupClasses \| undefined` | Class overrides for this component's slots. |
+| `unstyled` | `boolean \| undefined` | Drops the decorative default classes and keeps the structural ones, along with focus, keyboard and ARIA wiring. |
 
 #### CountryFlagShimmer
 

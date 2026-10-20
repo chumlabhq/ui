@@ -11,12 +11,12 @@ recorded there because they belong next to the code that implements them.
 | | count |
 | --- | --- |
 | Components audited | 59 |
-| Library-authored props across the public surface | 1252 |
+| Library-authored props across the public surface | 1253 |
 | With no demo | 263 (21%) |
 | With no fixture | 692 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
-| Tier-A demonstrated canonically (once, for the library) | 53 |
+| Tier-A demonstrated canonically (once, for the library) | 54 |
 | Tier-A left undemonstrated with a recorded reason | 20 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |
 | **Real: no demo, and a demo gap** | **112** |
@@ -46,8 +46,8 @@ when it rises, and when it falls without the record being lowered in the same ch
 | Left out | Props | Rule |
 | --- | --- | --- |
 | children | 6 | the component's content, passed between the tags (counted as demoed where a demo does) |
-| passthrough | 72 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
-| canonical | 53 | demonstrated once for the library; see below |
+| passthrough | 71 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
+| canonical | 54 | demonstrated once for the library; see below |
 | left | 20 | left undemonstrated with a reason, by name; see below |
 | **real** | **112** | everything else |
 
@@ -65,7 +65,7 @@ listed here with no demo anywhere fails the generator.
 
 | Prop | Components | Where the one demo is |
 | --- | --- | --- |
-| `unstyled` | 32 | StylingDemo — live side-by-side against the styled render |
+| `unstyled` | 33 | StylingDemo — live side-by-side against the styled render |
 | `asChild` | 9 | StylingDemo — `<Button asChild><a/></Button>`, a real anchor beside a button |
 | `portalContainer` | 8 | StylingDemo — two identical dropdowns, one portalled into the box beside it |
 | `keepMounted` | 4 | AnimationDemo — two dropdowns, one kept, counting `[role=listbox]` nodes |
@@ -102,7 +102,7 @@ listed here with no demo anywhere fails the generator.
 | Checkbox | 21 | 303 | 2 | 1 | 10 | 0 | `reduceMotion` | `indeterminateIcon` |
 | CircularLoader | 7 | 280 | 3 | 1 | 2 | 0 | `reduceMotion`, `unstyled` | `classes` |
 | CountryFlag | 13 | 278 | 3 | 2 | 7 | 0 | `unstyled` | `onLoad`, `onError` |
-| CountryFlagGroup | 8 | 279 | 2 | 2 | 4 | 0 | — | `countTooltip`, `surplusTooltipContent` |
+| CountryFlagGroup | 9 | 279 | 3 | 2 | 4 | 0 | `unstyled` | `countTooltip`, `surplusTooltipContent` |
 | CountryFlagGroupShimmer | 6 | 280 | 3 | 2 | 6 | 0 | `reduceMotion` | `aspectRatio`, `animate` |
 | CountryFlagShimmer | 6 | 280 | 4 | 3 | 2 | 0 | `unstyled` | `classes`, `aspectRatio`, `animate` |
 | DatePicker | 62 | 276 | 10 | 6 | 32 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `todayAction`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
@@ -117,7 +117,7 @@ listed here with no demo anywhere fails the generator.
 | InputLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |
 | InternationalPhoneInput | 49 | 296 | 10 | 5 | 33 | 0 | `unstyled`, `portalContainer` | `clearable`, `onClear`, `numberAriaLabel`, `dropdownZIndex`, `dropdownOffset` |
 | LinearLoader | 8 | 280 | 3 | 1 | 4 | 0 | `reduceMotion`, `unstyled` | `classes` |
-| Modal | 41 | 2 | 12 | 5 | 28 | 0 | `unstyled` | `minWidth`, `minHeight`, `animationDuration`, `maxNestingLevel`, `contentStyle` |
+| Modal | 41 | 2 | 11 | 5 | 28 | 0 | `unstyled` | `minWidth`, `minHeight`, `animationDuration`, `maxNestingLevel`, `contentStyle` |
 | ModalBody | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalFooter | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalHeader | 2 | 278 | 2 | 0 | 2 | 0 | — | — |

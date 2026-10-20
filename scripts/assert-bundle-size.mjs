@@ -1444,6 +1444,26 @@ const LIBRARY_TOTAL_HISTORY = [
       "declared breach moved with it (below). No comments added to " +
       "src/components or src/utils. Measured against a build of 0ea7d77c.",
   },
+  {
+    kb: 160.44,
+    commit: "(uncommitted)",
+    date: "2026-10-21",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.11 KB (164,182 -> 164,289 B gzipped, +107 B on a build of " +
+      "9c13207b), 83 files held. Accepted over the 0.10 KB slice limit by the " +
+      "maintainer. Modal's name check, +69 B exclusive (useModal +64 B, its " +
+      "entry +1 B, the rest identifier renaming in the chunk): an open Modal " +
+      "with no accessible name warns once in development through the shared " +
+      "useAccessibleNameWarning chunk, counting a title only when it renders " +
+      "or becomes the aria-label. CountryFlagGroup's unstyled through the " +
+      "group context, +36 B in the group chunk (it selects the unstyled group " +
+      "classes, carries unstyled in the context, and the shimmer reads it) and " +
+      "+33 B in the flag chunk (a flag is unstyled when it or its group says " +
+      "so). The rest, +1 to +5 B on three entries, is the chunks' new hashed " +
+      "names in import strings. No declared breach moved. No comments added to " +
+      "src/components or src/utils. Measured against a build of 9c13207b.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
