@@ -213,7 +213,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12e, 2026-10-18, 980 -> 1044 (HEAD 1036 -> now 1044): Date and time together (8); the 56 before it were already on the page at HEAD: L24's Uncontrolled calendar open on load and L25's defaultValue row in the API Reference.
   // DT1, 2026-10-18, 1044 -> 1048: the API Reference's `showTodayIndicator` description now names `data-today`, `data-[today]:`, `classes.item` and `aria-current="date"`, four inline code spans (4).
   // S3, 2026-10-19, 1048 -> 1047: the Loading State section's trigger is disabled while loading, and a disabled control's text is not measured (-1).
-  "date-picker": 1047,
+  // G1, 2026-10-20, 1047 -> 1078 (now 1078 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "date-picker": 1078,
   // D12b, 2026-10-17, 418 -> 431 (HEAD 425 -> now 431): the new At phone width and Long sheet (3 each): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 431 -> 435 (HEAD 431 -> now 435): C Uncontrolled (4).
@@ -228,7 +229,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 739 -> 753 (HEAD 739 -> now 753): A When loading fails (10), C Starts open (4).
   // D12e, 2026-10-18, 753 -> 757 (HEAD 757 -> now 757): none from D12e; HEAD already read 757: L24's Starts open example open on load.
-  "dropdown": 757,
+  // G1, 2026-10-20, 757 -> 810 (now 810 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "dropdown": 810,
   // D11, 2026-10-17, 530 -> 520 (HEAD 530 -> now 520): Class overrides (43) became Anatomy (33).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 520 -> 528 (HEAD 520 -> now 528): the new In a form (8).
@@ -260,7 +262,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 676 -> 695 (HEAD 676 -> now 695): A When loading fails (10), C Uncontrolled (9).
   // D12e, 2026-10-18, 695 -> 700 (HEAD 700 -> now 700): none from D12e; HEAD already read 700: L24's Uncontrolled list open on load.
-  "multi-select-dropdown": 700,
+  // G1, 2026-10-20, 700 -> 733 (now 733 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "multi-select-dropdown": 733,
   // D11, 2026-10-17, 707 -> 685 (HEAD 709 -> now 685): Class overrides (102) became Anatomy (78).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 685 -> 694 (HEAD 685 -> now 694): the new In a form (9); the onFocus/onBlur section
@@ -268,7 +271,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12b, 2026-10-17, 694 -> 697 (HEAD 694 -> now 697): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 697 -> 707 (HEAD 697 -> now 707): A When loading fails (10).
-  "multi-select-searchable-dropdown": 707,
+  // G1, 2026-10-20, 707 -> 715 (now 715 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "multi-select-searchable-dropdown": 715,
   // A2f, 433 -> 429: the API Reference lost the group-name prop's row (4 cells),
   // folded into aria-label (measured A2e vs now; no other change on the page).
   // D11, 2026-10-17, 429 -> 420 (HEAD 429 -> now 420): Class overrides (40) became Anatomy (31).
@@ -284,13 +288,15 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // D12b, 2026-10-17, 626 -> 629 (HEAD 626 -> now 629): the new At phone width (3): its heading and the frame's caption;
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 629 -> 639 (HEAD 629 -> now 639): C Uncontrolled (10).
-  "pagination": 639,
+  // G1, 2026-10-20, 639 -> 640 (now 640 in both themes, two runs): not bisected: PaginationDemo.tsx is unchanged since D12cd, so the element came through the component or its generated reference (S3 1aee7467 and S4 14b8cacf touched both).
+  "pagination": 640,
   // D11, 2026-10-17, 476 -> 465 (HEAD 476 -> now 465): Class overrides (48) and the old Anatomy (3) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 465 -> 475 (HEAD 465 -> now 475): the new In a form (10).
   // D12cd, 2026-10-17, 475 -> 481 (HEAD 475 -> now 481): D Long labels (6).
   // D12e, 2026-10-18, 481 -> 494 (HEAD 481 -> now 494): Settings form (13).
-  "radio-button": 494,
+  // G1, 2026-10-20, 494 -> 496 (now 496 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "radio-button": 496,
   // D11, 2026-10-17, 359 -> 356 (HEAD 359 -> now 356): Class overrides (15) became Anatomy (12).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12b, 2026-10-17, 356 -> 359 (HEAD 356 -> now 359): the new At phone width (3): its heading and the frame's caption;
@@ -304,7 +310,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 748 -> 762 (HEAD 748 -> now 762): A When loading fails (10), C Starts open (4).
   // D12e, 2026-10-18, 762 -> 768 (HEAD 768 -> now 768): none from D12e; HEAD already read 768: L24's Starts open example open on load.
-  "searchable-dropdown": 768,
+  // G1, 2026-10-20, 768 -> 807 (now 807 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "searchable-dropdown": 807,
   // D11, 2026-10-17, 545 -> 534 (HEAD 546 -> now 534): Class overrides (52) became Anatomy (40).
   // The dropped Type and Default columns carried no information (string, — on every slot).
   // D12a, 2026-10-17, 534 -> 536 (HEAD 534 -> now 536): Form Integration (6) became In a form (8).
@@ -327,7 +334,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 635 -> 643 (HEAD 635 -> now 643): D Long labels (8).
   // D12e, 2026-10-18, 643 -> 650 (HEAD 643 -> now 650): Tabs holding forms (7).
-  "tab-panel": 650,
+  // G1, 2026-10-20, 650 -> 651 (now 651 in both themes, two runs): not bisected: TabPanelDemo.tsx is unchanged since D12e, so the element came through the component or its generated reference (S3 1aee7467 and S4 14b8cacf touched both).
+  "tab-panel": 651,
   // X4, 5342 -> 5543, 2026-10-16: the Server-Side example's rows are the 24
   // fixture products (10 a page) and its category filter, waited for, where
   // 5342 was the cold read with dummyjson.com's rows not yet landed.
@@ -348,7 +356,8 @@ const MEASURED_FLOOR: Readonly<Record<string, number>> = {
   // the frame's content is the /preview route's, measured on its own below.
   // D12cd, 2026-10-17, 874 -> 891 (HEAD 874 -> now 891): B Typed times outside the range (6, and 1 it portals), C Starts open (4), D Long labels (5, and 1 it portals).
   // D12e, 2026-10-18, 891 -> 988 (HEAD 988 -> now 988): none from D12e; HEAD already read 988: L24's Starts open list open on load.
-  "time-picker": 988,
+  // G1, 2026-10-20, 988 -> 1029 (now 1029 in both themes, two runs): A3 aca8bcac (every demo field named; captioned DemoLabels on this page).
+  "time-picker": 1029,
   // A2a, 564 -> 562: the API Reference lost the onRemove row (4 cells) and the
   // rewritten onDismiss(id) description gained two `id` code spans.
   // D11, 2026-10-17, 562 -> 560 (HEAD 563 -> now 560): Class overrides (43) became Anatomy (40).

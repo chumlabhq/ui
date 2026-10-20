@@ -186,6 +186,8 @@ test("every spec takes test from the shared fixture", () => {
     .map((file) => resolve(dir, file));
   const direct = files.flatMap(directTestImports);
   console.log(`direct @playwright/test imports: checked ${files.length} files, found ${direct.length}${direct.length ? ` — ${direct.join(", ")}` : ""}`);
-  expect(files.length, "e2e/**/*.ts files checked").toBeGreaterThanOrEqual(42);
+  // 42 from G4 (a3508960) until G1, which found 65 checked at aca8bcac: 23
+  // files could have left the walk without failing it.
+  expect(files.length, "e2e/**/*.ts files checked").toBeGreaterThanOrEqual(65);
   expect(direct, "these bypass the third-party block in _test.ts").toEqual([]);
 });

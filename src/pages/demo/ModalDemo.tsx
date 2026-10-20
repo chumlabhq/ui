@@ -1606,7 +1606,7 @@ const ModalDemo = () => {
       {/* ─── At phone width ──────────────────────────────────────────────── */}
       <Section
         title="At phone width"
-        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+        codeless="the same component at phone width, in a frame; its code is in the sections above"
       >
         <PhoneFrame
           route="/preview/Modal/phone"
@@ -1617,7 +1617,7 @@ const ModalDemo = () => {
       {/* ─── Taller than the screen ──────────────────────────────────────── */}
       <Section
         title="Taller than the screen"
-        codeless="the same component at a 360 px viewport, in a frame; its code is in the sections above"
+        codeless="the same component at phone width, in a frame; its code is in the sections above"
       >
         <PhoneFrame
           route="/preview/Modal/tall"

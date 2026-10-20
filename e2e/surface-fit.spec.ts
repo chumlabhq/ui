@@ -40,8 +40,13 @@ import { gotoFixture, gotoFixtureIndex } from "./_nav";
 
 const WIDTHS = [280, 320, 360] as const;
 
-/** Fixtures with an open surface that step 0 of A1b read, in every engine; a walk that reaches fewer has lost surfaces. */
-const FLOOR = 154;
+/**
+ * Fixtures with an open surface, in every engine; a walk that reaches fewer has
+ * lost surfaces. 154 was step 0 of A1b, read before its fixes; A1b (684ea8a1)
+ * shipped at 155 and no fixture or spec has changed since. Raised to 155 in V1,
+ * read in chromium, firefox and webkit on the same tree.
+ */
+const FLOOR = 155;
 
 /**
  * In the document before it loads, not added once the fixture has opened:

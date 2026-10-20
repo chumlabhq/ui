@@ -73,32 +73,32 @@
     {
       "component": "Breadcrumb",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "CascadingDropdown",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "DatePicker",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Drawer",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Drawer",
       "title": "Long sheet",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Dropdown",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "GettingStarted",
@@ -118,7 +118,7 @@
     {
       "component": "InternationalPhoneInput",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Introduction",
@@ -138,47 +138,47 @@
     {
       "component": "Modal",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Modal",
       "title": "Taller than the screen",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "MultiSelectDropdown",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "MultiSelectSearchableDropdown",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "OtpInput",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Pagination",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "ResizablePanel",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "SearchableDropdown",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Stepper",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Styling",
@@ -213,7 +213,7 @@
     {
       "component": "TabPanel",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Table",
@@ -368,17 +368,17 @@
     {
       "component": "TimePicker",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Toast",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     },
     {
       "component": "Tooltip",
       "title": "At phone width",
-      "reason": "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above"
+      "reason": "code-less by decision: the same component at phone width, in a frame; its code is in the sections above"
     }
   ],
   "droppedClassesKeys": []

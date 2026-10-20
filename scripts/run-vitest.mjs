@@ -32,8 +32,13 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * one in every summary vitest prints, and a constant only noticed the loss once
  * it outgrew the slack: when a forks worker failed to start, the run reported
  * 106 of 107 files and cleared a floor of 92.
+ *
+ * 4749 from 2026-09-08 (032eb67f) to 2026-10-20, while the suite grew to 5497:
+ * 748 tests could have stopped being collected without this noticing. Raised
+ * to the measured count in G1; the per-file basis is the `unit+contracts` row
+ * of docs/adr/002-gate-populations.json's `$basisChanges`.
  */
-const SUITE_FLOOR = { tests: 4749 };
+const SUITE_FLOOR = { tests: 5497 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");

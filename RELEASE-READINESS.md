@@ -73,7 +73,8 @@ past every gate above and were found by eye (§6.9), which is what these answer:
 The library build's own post-build asserts ran with it: the default phone entry is
 libphonenumber-free, 250 per-flag chunks are emitted in each module format with no inlined
 SVG, `styles.css` carries 484 rules with 471 utility selectors confined to the `cl-s` marker
-and no preflight, and 1161 built files carry no fixture-harness code.
+and no preflight, and 1172 built files carry no fixture-harness code; `npm run build`'s
+postbuild scan finds none in the production site's 355 files either.
 
 ### 1.2 The browser matrix
 
@@ -262,7 +263,7 @@ generated content, which removes the coupling instead of ignoring it. That is po
 | Docs name no prop the types lack | `doc-truth.contract` |
 | Committed generated files match their source | `build-tokens.mjs --check`, `build-component-docs.mjs --check`, `build-subcomponent-schemas.mjs --check` |
 | Shipped docs' links resolve in the tarball | `assert-packaging.mjs`, with a planted broken link |
-| The fixture harness never ships | `assert-fixture-bundle.mjs` over all 1161 built files |
+| The fixture harness never ships | `assert-fixture-bundle.mjs` over all 1172 built files, and with `--site` over the production site's 355 files after every `npm run build` |
 
 ---
 

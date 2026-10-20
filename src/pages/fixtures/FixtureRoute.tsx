@@ -24,7 +24,8 @@ import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegi
  *
  * DEV ONLY. App.tsx imports the subtree inside a ternary on import.meta.env.DEV,
  * so a production build drops the branch and the chunk;
- * scripts/assert-fixture-bundle.mjs asserts it never reaches the package.
+ * scripts/assert-fixture-bundle.mjs asserts it never reaches the package, and
+ * with `--site`, run by `postbuild`, never reaches the production site.
  */
 /**
  * Resolves once the document has stopped mutating.

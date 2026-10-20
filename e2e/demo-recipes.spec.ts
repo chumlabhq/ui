@@ -180,7 +180,8 @@ const RECIPES: Recipe[] = [
   },
 ];
 
-const FLOOR = 7;
+/** D12e's eight recipes (04e8fd4a). It was 7 until G1, one under what D12e shipped. */
+const FLOOR = 8;
 
 test("every composition recipe works end to end", async ({ page }) => {
   test.setTimeout(240_000);

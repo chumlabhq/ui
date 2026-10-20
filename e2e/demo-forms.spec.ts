@@ -167,7 +167,12 @@ const PAGES: Page_[] = [
   },
 ];
 
-const FLOOR = 15;
+/**
+ * The pages walked: the 15 form-field pages and Modal's Form in a modal. It was
+ * 15 from D12a (4035b0a3) to G1, one under the 16 the walk has read since D12a,
+ * so one page could drop out unnoticed.
+ */
+const FLOOR = 16;
 
 test("every form field's In a form section blocks, submits and resets as documented", async ({ page }) => {
   test.setTimeout(300_000);

@@ -152,8 +152,10 @@ async function modalFocus(page: Page): Promise<{ open: boolean; inside: boolean;
  * with the focus outside; 20 of DatePicker's fixtures open that way.
  * `DatePicker/keyboard-focus` now opens from its trigger and still makes the
  * claim, and overlay-focus.contract holds a trigger-opened calendar to it.
+ * 25 at G1: S3 (1aee7467) added Modal/open-with-footer and
+ * Drawer/open-with-footer, both open at mount, and the floor stayed at 23.
  */
-const ARIA_MODAL_FLOOR = 23;
+const ARIA_MODAL_FLOOR = 25;
 
 /**
  * Every rendered DrawerHeader and ModalHeader has text.
@@ -177,9 +179,11 @@ const headerTexts = (page: Page) =>
  * Headers rendered across the fixture index, L19: 24 on 490 pages. The source
  * holds 68 header elements across fixtures, demos, the consumer app and the
  * .ai.md examples, ten of them in fixture files; `TallDrawer` renders one for
- * eight fixtures and Modal's own `title` renders the rest.
+ * eight fixtures and Modal's own `title` renders the rest. 26 at G1: S3
+ * (1aee7467) added Drawer/open-with-footer's DrawerHeader and
+ * Modal/open-with-footer's title, and the floor stayed at 24.
  */
-const HEADERS_FLOOR = 24;
+const HEADERS_FLOOR = 26;
 
 /** The /preview pages the phone-width frames load: 19 at D12b, 20 at L24 (CascadingDropdown/phone). */
 const PREVIEW_FLOOR = 20;

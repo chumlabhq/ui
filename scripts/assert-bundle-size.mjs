@@ -1477,8 +1477,13 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.4,
-      why: "2026-10-15, X2 focus reveal: 16.37 -> 16.40 (exclusive 16,766 -> 16,791 B gzipped, +25 B). " +
+      kb: 16.39,
+      why: "2026-10-20, G1: 16.40 -> 16.39 (exclusive 16,794 -> 16,780 B gzipped, -14 B), " +
+        "lowered by hand to the measured value, all of it S4 14b8cacf (the search reports through " +
+        "TanStack's one handler, so typing and Clear search report once, not twice), measured on " +
+        "archived builds of 1aee7467 and 14b8cacf; unchanged since. It sat under its record inside " +
+        "DECLARED_SLACK_KB, which is how the drop went unrecorded. " +
+        "2026-10-15, X2 focus reveal: 16.37 -> 16.40 (exclusive 16,766 -> 16,791 B gzipped, +25 B). " +
         "The grid's roving focus goes through focusAndReveal, so the focused cell is scrolled into " +
         "its region instead of left past the edge of a narrow table. " +
         "2026-10-12, L13: 16.41 -> 16.37 (exclusive 16,805 -> 16,765 B gzipped, -40 B). The " +
@@ -1539,7 +1544,7 @@ const DECLARED_BREACHES = new Map([
   [
     "InternationalPhoneInput",
     {
-      kb: 8.75,
+      kb: 8.74,
       why: "10.65 until the 193 countries were packed into a delimited string " +
         "parsed at module load: 4.06 KB gzipped of object literals became 1.90, " +
         "and four fifths of what was there was structure rather than " +
@@ -1556,7 +1561,14 @@ const DECLARED_BREACHES = new Map([
         "sat on a wrapper that never carried the attribute. The wrapper now " +
         "carries it, the number input is disabled while loading, and the " +
         "shared CircularLoader shows after it: loading +93 B. Readonly draws a " +
-        "dashed border: +11 B.",
+        "dashed border: +11 B.\n\n" +
+        "8.75 -> 8.74 on 2026-10-20, G1 (exclusive 8,960 -> 8,954 B gzipped, " +
+        "-6 B), lowered by hand to the measured value: it sat 0.01 over since " +
+        "S4, inside DECLARED_SLACK_KB, which is how the drop went unrecorded. " +
+        "Each step measured on an archived build: S4 14b8cacf -8 B (8,952; " +
+        "onClear no longer replaces the clear), A1 cfa00fec +3 B (8,955), " +
+        "A1b 684ea8a1 -1 B (8,954, the shared menu chunk's new hashed name " +
+        "in an import string); unchanged since.",
     },
   ],
   [

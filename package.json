@@ -469,6 +469,7 @@
     "dev": "vite",
     "prebuild": "npm run build:lib",
     "build": "tsc -b && vite build",
+    "postbuild": "node scripts/assert-fixture-bundle.mjs --site",
     "lint": "eslint .",
     "typecheck": "node scripts/assert-typecheck.mjs",
     "verify:dist-records": "node scripts/assert-dist-records.mjs",

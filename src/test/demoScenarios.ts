@@ -506,7 +506,7 @@ export const PREDICATES: Record<Scenario, (s: Section, c: Component) => boolean>
         (ts.isArrayLiteralExpression(n) && n.elements.length >= 10))),
   // A frame at phone width around the component: an enclosing element held to
   // 300-379px. The component's own width is not a phone, it is a narrow input.
-  // Or a PhoneFrame, whose iframe gives the component a 360 px viewport.
+  // Or a PhoneFrame, whose iframe gives the component a phone-width viewport.
   phoneWidth: (s, c) =>
     framed(s, c) ||
     s.elements.some((frame) => !c.tags.includes(frame.tag) &&

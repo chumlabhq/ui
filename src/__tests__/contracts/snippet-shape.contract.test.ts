@@ -174,14 +174,14 @@ describe("snippet shape contract", () => {
    * A phone-width frame shows no code, and only a frame says so.
    *
    * A `PhoneFrame` section is the component its page already shows, loaded at
-   * a 360 px viewport: its code is the page's other sections. Each one is
+   * phone width: its code is the page's other sections. Each one is
    * code-less by decision, with one reason, and the generator lists it in
    * demoSnippets.skipped.json. Both ways: a frame section without the reason
    * has dropped its exemption, and the reason on a section with no frame is an
    * exemption excusing nothing.
    */
   it("shows no code in a phone-width frame, and claims that only for one", () => {
-    const REASON = "code-less by decision: the same component at a 360 px viewport, in a frame; its code is in the sections above";
+    const REASON = "code-less by decision: the same component at phone width, in a frame; its code is in the sections above";
     const skipped = (JSON.parse(readFileSync("src/pages/demo/generated/demoSnippets.skipped.json", "utf8")) as {
       sections: Array<{ component: string; title: string; reason: string }>;
     }).sections;
