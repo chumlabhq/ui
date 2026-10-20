@@ -1,5 +1,5 @@
 import { gotoFixture } from "./_nav";
-import { skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, skipWithoutTouchEvents } from "./_helpers";
 import { test, expect } from "./_test";
 import { injectAxe, checkA11y } from "axe-playwright";
 
@@ -246,11 +246,7 @@ test.describe("Stepper (fixtures)", () => {
     await gotoFixture(page, "Stepper", "clickable");
 
     const target = page.locator('[role="navigation"] button').first();
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
-    await target.dispatchEvent("touchstart");
-    await target.dispatchEvent("touchend");
-    await target.click();
+    await activateByTouch(page, target);
 
     await expect(target).toHaveAttribute("aria-current", "step");
   });

@@ -1,5 +1,5 @@
 import { test, expect } from "./_test";
-import { skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, skipWithoutTouchEvents } from "./_helpers";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
@@ -42,12 +42,8 @@ test.describe("OtpInput (fixtures)", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "OtpInput", "default");
 
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
     const first = page.locator(INPUTS).first();
-    await first.dispatchEvent("touchstart");
-    await first.dispatchEvent("touchend");
-    await first.click();
+    await activateByTouch(page, first);
     await page.keyboard.type("7");
 
     await expect(first).toHaveValue("7");

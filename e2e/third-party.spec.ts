@@ -53,16 +53,45 @@ function watchThirdParty(page: Page) {
     seen.push({ host, url: request.url(), kind, how: csp ? "csp" : error });
     inFlight -= 1;
   });
-  return { seen, inFlight: () => inFlight };
+  /**
+   * A duplicate request to a URL the suite has already stubbed or blocked is
+   * not an unhandled request: the engine cancelled a second request to a URL
+   * it had an answer for in flight. Firefox is the engine that does it — the
+   * errorText is `NS_BINDING_ABORTED` — and before this reclassification the
+   * second /avatar's `images.unsplash.com` photo was counted as unhandled and
+   * failed the whole run.
+   *
+   * Narrow by rule: the cancelled URL must equal, byte for byte, a URL already
+   * recorded as `stubbed` or `blocked`, and the cancellation must look like an
+   * abort rather than a network or policy failure. A genuinely unroute-able
+   * URL (any new host) stays `unhandled` and the spec still fails on it. Run
+   * once after `inFlight` drains, so a reorder between `requestfailed` of the
+   * duplicate and `requestfinished` of its handled sibling does not matter.
+   */
+  const reclassifyDuplicateAborts = () => {
+    const abort = /abort|NS_BINDING_ABORTED|ERR_ABORTED/i;
+    const handled = new Map<string, { kind: Kind; how: string }>();
+    for (const r of seen) if (r.kind === "stubbed" || r.kind === "blocked") handled.set(r.url, r);
+    for (const r of seen) {
+      if (r.kind !== "unhandled") continue;
+      if (!abort.test(r.how)) continue;
+      const sibling = handled.get(r.url);
+      if (!sibling) continue;
+      r.kind = sibling.kind;
+      r.how = `duplicate aborted (${r.how}), original ${sibling.how}`;
+    }
+  };
+  return { seen, inFlight: () => inFlight, reclassifyDuplicateAborts };
 }
 
 test("third-party hosts are aborted before the network", async ({ page }, testInfo) => {
-  const { seen } = watchThirdParty(page);
+  const { seen, reclassifyDuplicateAborts } = watchThirdParty(page);
 
   await page.goto("/", { waitUntil: "load" });
   const load = await page.evaluate(() =>
     Math.round((performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming).loadEventEnd),
   );
+  reclassifyDuplicateAborts();
 
   const razorpay = seen.filter((r) => r.host === "checkout.razorpay.com");
   for (const r of seen) console.log(`[${testInfo.project.name}] ${r.kind}: ${r.host} (${r.how})`);
@@ -82,7 +111,7 @@ test("third-party hosts are aborted before the network", async ({ page }, testIn
  */
 test("every demo page's third-party requests are stubbed or blocked", async ({ page }, testInfo) => {
   test.setTimeout(300_000);
-  const { seen, inFlight } = watchThirdParty(page);
+  const { seen, inFlight, reclassifyDuplicateAborts } = watchThirdParty(page);
   const routes = ["", ...demoRoutes()];
   const painted = new Function("section", `return (${paintPending})(section).length === 0;`) as (
     section: string | null,
@@ -99,6 +128,7 @@ test("every demo page's third-party requests are stubbed or blocked", async ({ p
     }
     await expect.poll(inFlight, `third-party requests still in flight on /${route}`).toBe(0);
   }
+  reclassifyDuplicateAborts();
 
   const count = (kind: Kind) => seen.filter((r) => r.kind === kind).length;
   const byHost = new Map<string, number>();

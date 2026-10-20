@@ -1,5 +1,5 @@
 import { gotoFixture } from "./_nav";
-import { skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, skipWithoutTouchEvents } from "./_helpers";
 import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
 
@@ -603,12 +603,8 @@ test.describe("Toast (fixtures)", () => {
     const toast = page.locator("[data-toast-id]");
     await expect(toast).toBeVisible();
 
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
     const close = page.getByRole("button", { name: "Close notification" });
-    await close.dispatchEvent("touchstart");
-    await close.dispatchEvent("touchend");
-    await close.click();
+    await activateByTouch(page, close);
 
     await expect(toast).toHaveCount(0);
   });

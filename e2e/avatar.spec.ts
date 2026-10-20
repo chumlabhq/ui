@@ -1,5 +1,5 @@
 import { test, expect } from "./_test";
-import { skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, skipWithoutTouchEvents } from "./_helpers";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
@@ -119,11 +119,8 @@ test.describe("Avatar (fixtures)", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Avatar", "initials");
 
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
     const avatar = page.locator(AVATAR).first();
-    await avatar.dispatchEvent("touchstart");
-    await avatar.dispatchEvent("touchend");
+    await activateByTouch(page, avatar);
 
     await expect(avatar).toBeVisible();
     await expect(avatar).toHaveAttribute("data-shape");

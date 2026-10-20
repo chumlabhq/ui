@@ -1,7 +1,7 @@
 import { gotoFixture } from "./_nav";
 import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
-import { watchClicks, skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, watchClicks, skipWithoutTouchEvents } from "./_helpers";
 
 /**
  * Waits for a button that is actually on screen.
@@ -400,11 +400,7 @@ test.describe("Button (fixtures)", () => {
     const button = page.getByRole("button").first();
     const clicks = await watchClicks(page);
 
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
-    await button.dispatchEvent("touchstart");
-    await button.dispatchEvent("touchend");
-    await button.click();
+    await activateByTouch(page, button);
 
     expect(await clicks()).toBeGreaterThan(0);
   });

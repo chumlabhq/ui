@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 /**
  * Counts click events reaching the document.
@@ -41,8 +41,41 @@ export async function skipWithoutTouchEvents(
   test.skip(
     !supported,
     "this engine does not define TouchEvent (desktop Firefox); the touch path " +
-      "is covered by the Mobile Chrome and Mobile Safari projects",
+      "is driven by `locator.tap()` on Mobile Chrome and Mobile Safari, where " +
+      "the engine itself builds and dispatches the TouchEvent and the click " +
+      "that follows — not a synthetic touchstart/touchend plus a Playwright " +
+      ".click()",
   );
+}
+
+/**
+ * Taps `locator` the way the engine's user would, with the strongest signal
+ * each project is wired for.
+ *
+ * On a project with `hasTouch` (Mobile Chrome and Mobile Safari), `locator.tap()`
+ * — Playwright drives the engine's own touchscreen, which builds a real
+ * `TouchEvent` and the click that follows from it. That is the whole point of
+ * a touch assertion: the engine fires both events, in order, over the control
+ * at its measured centre, as a user's finger would.
+ *
+ * On a desktop project without `hasTouch` (Chromium, WebKit — Firefox is
+ * skipped above by `skipWithoutTouchEvents`), `tap()` throws rather than
+ * degrading, so the touch is dispatched synthetically (`touchstart` and
+ * `touchend`) and followed by a `.click()`. That is a smoke test: a touch
+ * dispatch does not break the control and a click still activates it. The
+ * real-touch claim lives with the Mobile projects above.
+ */
+export async function activateByTouch(page: Page, locator: Locator): Promise<void> {
+  const hasTouch = await page.evaluate(
+    () => "ontouchstart" in window || navigator.maxTouchPoints > 0,
+  );
+  if (hasTouch) {
+    await locator.tap();
+    return;
+  }
+  await locator.dispatchEvent("touchstart");
+  await locator.dispatchEvent("touchend");
+  await locator.click();
 }
 
 /**

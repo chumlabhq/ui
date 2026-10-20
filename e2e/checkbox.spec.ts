@@ -1,5 +1,5 @@
 import { test, expect } from "./_test";
-import { skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
+import { activateByTouch, skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
 
@@ -84,12 +84,8 @@ test.describe("Checkbox (fixtures)", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Checkbox", "labelled");
 
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
     const box = page.locator(BOX);
-    await box.dispatchEvent("touchstart");
-    await box.dispatchEvent("touchend");
-    await box.click();
+    await activateByTouch(page, box);
 
     await expect(box).toBeChecked();
   });

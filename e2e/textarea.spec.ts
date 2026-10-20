@@ -1,7 +1,7 @@
 import { test, expect } from "./_test";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
-import { watchClicks, skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, watchClicks, skipWithoutTouchEvents } from "./_helpers";
 
 /**
  * Nine of textarea.spec.ts's thirty-five tests (E2E-TRIAGE.md, Appendix B).
@@ -110,12 +110,8 @@ test.describe("TextArea (fixtures)", () => {
       await page.setViewportSize({ width: 375, height: 667 });
       await gotoFixture(page, "TextArea", "labelled");
 
-      // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-      // projects and `tap()` throws there instead of degrading.
       const textarea = page.locator(TEXTAREA);
-      await textarea.dispatchEvent("touchstart");
-      await textarea.dispatchEvent("touchend");
-      await textarea.click();
+      await activateByTouch(page, textarea);
       await page.keyboard.type("tapped");
 
       await expect(textarea).toHaveValue("tapped");

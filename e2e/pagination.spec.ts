@@ -1,5 +1,5 @@
 import { test, expect } from "./_test";
-import { skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
+import { activateByTouch, skipWithoutTouchEvents, skipWithoutTabTraversal } from "./_helpers";
 import { injectAxe } from "axe-playwright";
 import { gotoFixture, gotoGuarded } from "./_nav";
 
@@ -643,12 +643,8 @@ test.describe("Pagination (fixtures)", () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await gotoFixture(page, "Pagination", "default");
 
-    // Dispatched rather than `tap()`: `hasTouch` is off in the desktop
-    // projects and `tap()` throws there instead of degrading.
     const target = page.locator(`${NAV} button[aria-label="Page 2"]`);
-    await target.dispatchEvent("touchstart");
-    await target.dispatchEvent("touchend");
-    await target.click();
+    await activateByTouch(page, target);
 
     await expect(page.locator(`${NAV} button[aria-current="page"]`)).toHaveText("2");
   });
