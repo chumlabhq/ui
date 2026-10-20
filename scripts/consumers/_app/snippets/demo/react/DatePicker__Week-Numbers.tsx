@@ -4,6 +4,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
+        label="Date, week numbers shown"
         placeholder="With week numbers"
         showWeekNumbers
         classes={

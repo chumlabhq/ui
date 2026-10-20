@@ -25,6 +25,7 @@ export default function SearchableDropdownExample() {
     <>
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           value={customKeyDownValue}
           onValueChange={(v) => setCustomKeyDownValue(v)}

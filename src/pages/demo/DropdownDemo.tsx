@@ -443,6 +443,7 @@ const DropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={basicValue}
               onValueChange={(v) => setBasicValue(v)}
@@ -464,6 +465,7 @@ const DropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Default (empty)</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 placeholder="Select a fruit..."
                 classes={c.dropdown}
@@ -472,6 +474,7 @@ const DropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Selected</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 defaultValue="banana"
                 placeholder="Select a fruit..."
@@ -481,6 +484,7 @@ const DropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Disabled</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 defaultValue="cherry"
                 disabled
@@ -494,6 +498,7 @@ const DropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Error state</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 placeholder="Select a fruit..."
                 error
@@ -507,6 +512,7 @@ const DropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Loading state</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={[]}
                 placeholder="Loading..."
                 loading={true}
@@ -517,6 +523,7 @@ const DropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Clearable (selected)</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 defaultValue="grape"
                 clearable
@@ -537,6 +544,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               defaultValue="cherry"
               placeholder="Select a fruit..."
@@ -556,6 +564,7 @@ const DropdownDemo = () => {
           <div className="w-full flex flex-col sm:flex-row sm:items-end gap-4">
             <div className="w-full sm:max-w-64">
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={controlledValue}
                 onValueChange={(v) => setControlledValue(v)}
@@ -597,6 +606,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={clearableValue}
               onValueChange={(v) => setClearableValue(v)}
@@ -624,6 +634,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <Dropdown
+              aria-label="Fruit"
               options={fruitOptions}
               value={renderTriggerValue}
               onValueChange={(v) => setRenderTriggerValue(v)}
@@ -686,6 +697,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Country"
               options={countryOptions}
               value={countryValue}
               onValueChange={(v) => setCountryValue(v)}
@@ -705,6 +717,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-80">
             <Dropdown
+              label="Country"
               value={asyncCountryValue}
               onValueChange={(v) => setAsyncCountryValue(v)}
               placeholder="Select a country..."
@@ -736,6 +749,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Status"
               options={statusOptions}
               value={statusValue}
               onValueChange={(v) => setStatusValue(v)}
@@ -759,6 +773,7 @@ const DropdownDemo = () => {
             </DemoLabel>
             <div className="w-full sm:max-w-64">
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={customSelectedValue}
                 onValueChange={(v) => setCustomSelectedValue(v)}
@@ -776,6 +791,7 @@ const DropdownDemo = () => {
             </DemoLabel>
             <div className="w-full sm:max-w-64">
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={customIconValue}
                 onValueChange={(v) => setCustomIconValue(v)}
@@ -798,6 +814,7 @@ const DropdownDemo = () => {
             <DemoLabel isDarkMode={dark}>Circle dot icon</DemoLabel>
             <div className="w-full sm:max-w-64">
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 placeholder="Select a fruit..."
                 selectedIcon={
@@ -815,6 +832,7 @@ const DropdownDemo = () => {
             </DemoLabel>
             <div className="w-full sm:max-w-64">
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={noIconValue}
                 onValueChange={(v) => setNoIconValue(v)}
@@ -840,6 +858,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Purple focus</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={purpleFocusValue}
                 onValueChange={(v) => setPurpleFocusValue(v)}
@@ -855,6 +874,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Green focus</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={greenFocusValue}
                 onValueChange={(v) => setGreenFocusValue(v)}
@@ -882,6 +902,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Dark Theme</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={darkThemeValue}
                 onValueChange={(v) => setDarkThemeValue(v)}
@@ -892,6 +913,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Warm Theme</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={warmThemeValue}
                 onValueChange={(v) => setWarmThemeValue(v)}
@@ -902,6 +924,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Cool Theme</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={coolThemeValue}
                 onValueChange={(v) => setCoolThemeValue(v)}
@@ -912,6 +935,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Minimal Theme</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={minimalThemeValue}
                 onValueChange={(v) => setMinimalThemeValue(v)}
@@ -933,6 +957,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Available option"
               options={disabledItemOptions}
               value={disabledItemValue}
               onValueChange={(v) => setDisabledItemValue(v)}
@@ -1018,6 +1043,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={disabledValue}
               disabled
@@ -1108,6 +1134,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Custom chevron</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={customChevronValue}
                 onValueChange={(v) => setCustomChevronValue(v)}
@@ -1119,6 +1146,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>No chevron</DemoLabel>
               <Dropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={noChevronValue}
                 onValueChange={(v) => setNoChevronValue(v)}
@@ -1140,6 +1168,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={fullWidthValue}
               onValueChange={(v) => setFullWidthValue(v)}
@@ -1160,6 +1189,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Default (scrollable)"
               classes={c.dropdown}
@@ -1167,6 +1197,7 @@ const DropdownDemo = () => {
           </div>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="lockScroll enabled"
               lockScroll
@@ -1186,6 +1217,7 @@ const DropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Select..."
               classes={c.dropdown}
@@ -1194,6 +1226,7 @@ const DropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Borderless</p>
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Select..."
               classes={{
@@ -1206,6 +1239,7 @@ const DropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Bottom border only</p>
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Select..."
               classes={{
@@ -1218,6 +1252,7 @@ const DropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Ghost</p>
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Select..."
               classes={{
@@ -1230,6 +1265,7 @@ const DropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             <p className={`mb-2 ${c.label}`}>Pill</p>
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Select..."
               fullWidth
@@ -1257,6 +1293,7 @@ const DropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={posBotValue}
                   onValueChange={(v) => setPosBotValue(v)}
@@ -1272,6 +1309,7 @@ const DropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={posTopValue}
                   onValueChange={(v) => setPosTopValue(v)}
@@ -1298,6 +1336,7 @@ const DropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={forceBotValue}
                   onValueChange={(v) => setForceBotValue(v)}
@@ -1314,6 +1353,7 @@ const DropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={forceTopValue}
                   onValueChange={(v) => setForceTopValue(v)}
@@ -1338,6 +1378,7 @@ const DropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={forceLockValue}
                   onValueChange={(v) => setForceLockValue(v)}
@@ -1402,6 +1443,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Type 'g' to jump to Grape..."
               classes={c.dropdown}
@@ -1427,6 +1469,7 @@ const DropdownDemo = () => {
               <p className={c.label}>Fast timeout (200ms)</p>
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={customTimeoutValue}
                   onValueChange={(v) => setCustomTimeoutValue(v)}
@@ -1440,6 +1483,7 @@ const DropdownDemo = () => {
               <p className={c.label}>Slow timeout (1500ms)</p>
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   placeholder="More time to type..."
                   typeaheadTimeout={1500}
@@ -1460,6 +1504,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={keepMountedValue}
               onValueChange={(v) => setKeepMountedValue(v)}
@@ -1487,6 +1532,7 @@ const DropdownDemo = () => {
               <p className={c.label}>No gap (0px)</p>
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   dropdownOffset={0}
                   placeholder="No gap..."
@@ -1498,6 +1544,7 @@ const DropdownDemo = () => {
               <p className={c.label}>Large gap (16px)</p>
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={customGapValue}
                   onValueChange={(v) => setCustomGapValue(v)}
@@ -1520,6 +1567,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={zIndexValue}
               onValueChange={(v) => setZIndexValue(v)}
@@ -1544,6 +1592,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={customClearIconValue}
               onValueChange={(v) => setCustomClearIconValue(v)}
@@ -1578,6 +1627,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={customCheckIconValue}
               onValueChange={(v) => setCustomCheckIconValue(v)}
@@ -1610,6 +1660,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={formIntegrationValue}
               onValueChange={(v) => setFormIntegrationValue(v)}
@@ -1643,6 +1694,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
+              label="Fruit"
               options={fruitOptions}
               value={customKeyDownValue}
               onValueChange={(v) => setCustomKeyDownValue(v)}
@@ -1681,6 +1733,7 @@ const DropdownDemo = () => {
               <p className={c.label}>className (fallback for classes.root)</p>
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   placeholder="Select a fruit..."
                   className={`opacity-90`}
@@ -1692,6 +1745,7 @@ const DropdownDemo = () => {
               <p className={c.label}>style (inline styles on root)</p>
               <div className="w-full sm:max-w-64 mt-2">
                 <Dropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={classNameStyleValue}
                   onValueChange={(v) => setClassNameStyleValue(v)}
@@ -1725,8 +1779,9 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full flex flex-wrap gap-8">
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>3 shimmer items</DemoLabel>
+              <DemoLabel id="dropdown-shimmer-3" isDarkMode={dark}>3 shimmer items</DemoLabel>
               <Dropdown
+                aria-labelledby="dropdown-shimmer-3"
                 options={[]}
                 placeholder="Loading..."
                 loading={true}
@@ -1735,8 +1790,9 @@ const DropdownDemo = () => {
               />
             </div>
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>8 shimmer items</DemoLabel>
+              <DemoLabel id="dropdown-shimmer-8" isDarkMode={dark}>8 shimmer items</DemoLabel>
               <Dropdown
+                aria-labelledby="dropdown-shimmer-8"
                 options={[]}
                 placeholder="Loading..."
                 loading={true}
@@ -1757,16 +1813,18 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full flex flex-wrap gap-8">
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>Default text</DemoLabel>
+              <DemoLabel id="dropdown-empty-default" isDarkMode={dark}>Default text</DemoLabel>
               <Dropdown
+                aria-labelledby="dropdown-empty-default"
                 options={[]}
                 placeholder="No options..."
                 classes={c.dropdown}
               />
             </div>
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>Custom ReactNode</DemoLabel>
+              <DemoLabel id="dropdown-empty-custom" isDarkMode={dark}>Custom ReactNode</DemoLabel>
               <Dropdown
+                aria-labelledby="dropdown-empty-custom"
                 options={[]}
                 placeholder="Custom empty..."
                 emptyContent={

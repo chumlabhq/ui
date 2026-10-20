@@ -59,6 +59,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <SearchableDropdown
+        label="Status"
         options={statusOptions}
         value={statusValue}
         onValueChange={(v) => setStatusValue(v)}

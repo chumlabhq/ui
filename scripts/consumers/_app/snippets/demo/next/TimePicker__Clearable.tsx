@@ -10,6 +10,7 @@ export default function TimePickerExample() {
     <>
       <div className="flex items-center gap-4">
         <TimePicker
+          label="Alarm time"
           value={clearableVal}
           onValueChange={(v) => setClearableVal(v)}
           clearable

@@ -8,6 +8,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, opens below (auto-flips)"
           value={forceBotDate}
           onValueChange={(d) => setForceBotDate(d)}
           dropdownSide="bottom"
@@ -32,6 +33,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, forced below"
           value={forceTopDate}
           onValueChange={(d) => setForceTopDate(d)}
           dropdownSide="bottom"
@@ -57,6 +59,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, forced above"
           dropdownSide="top"
           forceDropdownSide
           placeholder="Always opens above..."
@@ -80,6 +83,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, forced below with scroll locked"
           dropdownSide="bottom"
           forceDropdownSide
           lockScroll

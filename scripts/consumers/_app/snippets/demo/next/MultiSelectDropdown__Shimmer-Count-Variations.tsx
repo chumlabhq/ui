@@ -6,7 +6,9 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-72">
+        <p id="multi-select-dropdown-shimmer-3">3 shimmer items</p>
         <MultiSelectDropdown
+          aria-labelledby="multi-select-dropdown-shimmer-3"
           options={[]}
           value={[]}
           onValueChange={() => {}}
@@ -26,7 +28,9 @@ export default function MultiSelectDropdownExample() {
         />
       </div>
       <div className="w-full sm:max-w-72">
+        <p id="multi-select-dropdown-shimmer-8">8 shimmer items</p>
         <MultiSelectDropdown
+          aria-labelledby="multi-select-dropdown-shimmer-8"
           options={[]}
           value={[]}
           onValueChange={() => {}}

@@ -14,6 +14,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <Dropdown
+        label="Fruit"
         options={fruitOptions}
         defaultValue="cherry"
         placeholder="Select a fruit..."

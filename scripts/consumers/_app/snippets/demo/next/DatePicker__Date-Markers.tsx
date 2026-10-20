@@ -62,6 +62,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Marked date, dots only"
           placeholder="Dots only..."
           markers={markers}
           showMarkerIndicator
@@ -86,6 +87,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Marked date, custom colours"
           placeholder="Colored dots..."
           markers={
             [

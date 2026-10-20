@@ -21,6 +21,7 @@ export default function DropdownExample() {
         <p className="text-xs font-medium text-cl-text-tertiary">Fast timeout (200ms)</p>
         <div className="w-full sm:max-w-64 mt-2">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             value={customTimeoutValue}
             onValueChange={(v) => setCustomTimeoutValue(v)}
@@ -41,6 +42,7 @@ export default function DropdownExample() {
         <p className="text-xs font-medium text-cl-text-tertiary">Slow timeout (1500ms)</p>
         <div className="w-full sm:max-w-64 mt-2">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             placeholder="More time to type..."
             typeaheadTimeout={1500}

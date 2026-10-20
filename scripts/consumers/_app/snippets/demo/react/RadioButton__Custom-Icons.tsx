@@ -37,6 +37,7 @@ export default function RadioButtonExample() {
         <span className="text-xs font-medium text-cl-text-secondary">Checkmark icon</span>
         <RadioGroup
           name="icon-check"
+          aria-label="Checkmark icon"
           defaultValue="a"
           size="lg"
           classes={
@@ -81,6 +82,7 @@ export default function RadioButtonExample() {
         </span>
         <RadioGroup
           name="icon-heart"
+          aria-label="Heart icon with rose color"
           defaultValue="a"
           size="lg"
           classes={
@@ -123,6 +125,7 @@ export default function RadioButtonExample() {
         </span>
         <RadioGroup
           name="icon-star"
+          aria-label="Star icon with amber color"
           defaultValue="b"
           size="lg"
           classes={
@@ -165,6 +168,7 @@ export default function RadioButtonExample() {
         </span>
         <RadioGroup
           name="icon-thumb"
+          aria-label="Thumbs up icon with green color"
           defaultValue="yes"
           size="xl"
           classes={

@@ -21,6 +21,7 @@ export default function MultiSelectDropdownExample() {
       <div>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits"
             options={staticOptions}
             value={classNameDemoValue}
             onValueChange={setClassNameDemoValue}
@@ -43,6 +44,7 @@ export default function MultiSelectDropdownExample() {
       <div>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits"
             options={staticOptions}
             value={classNameStyleValue}
             onValueChange={setClassNameStyleValue}

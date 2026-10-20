@@ -21,6 +21,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full">
       <SearchableDropdown
+        label="Fruit"
         options={fruitOptions}
         value={fullWidthValue}
         onValueChange={(v) => setFullWidthValue(v)}

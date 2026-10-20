@@ -26,6 +26,7 @@ export default function MultiSelectDropdownExample() {
         <div>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={posBotValue}
               onValueChange={setPosBotValue}
@@ -48,6 +49,7 @@ export default function MultiSelectDropdownExample() {
         <div>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={posTopValue}
               onValueChange={setPosTopValue}
@@ -72,6 +74,7 @@ export default function MultiSelectDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={forceBotValue}
               onValueChange={setForceBotValue}
@@ -94,6 +97,7 @@ export default function MultiSelectDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={forceTopValue}
               onValueChange={setForceTopValue}
@@ -118,6 +122,7 @@ export default function MultiSelectDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={forceLockValue}
               onValueChange={setForceLockValue}

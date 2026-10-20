@@ -21,6 +21,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <SearchableDropdown
+        label="Fruit"
         options={fruitOptions}
         value={zIndexValue}
         onValueChange={(v) => setZIndexValue(v)}

@@ -10,6 +10,7 @@ export default function TimePickerExample() {
     <div className="flex flex-wrap gap-6">
       <div>
         <TimePicker
+          label="Reminder time"
           value={step1}
           onValueChange={(v) => setStep1(v)}
           minuteStep={1}
@@ -54,6 +55,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Reminder time"
           value={step5}
           onValueChange={(v) => setStep5(v)}
           minuteStep={5}
@@ -98,6 +100,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Reminder time"
           value={step15}
           onValueChange={(v) => setStep15(v)}
           minuteStep={15}
@@ -142,6 +145,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Reminder time"
           value={step30}
           onValueChange={(v) => setStep30(v)}
           minuteStep={30}

@@ -171,10 +171,12 @@ export const DemoWrapper: React.FC<DemoWrapperProps> = ({
 interface DemoLabelProps {
   children: React.ReactNode;
   isDarkMode?: boolean;
+  /** For a field the caption names, by `aria-labelledby`. The snippet keeps it as a `<p id>`. */
+  id?: string;
 }
 
-export const DemoLabel: React.FC<DemoLabelProps> = ({ children }) => (
-  <p className="eyebrow text-fg-tertiary mb-3">{children}</p>
+export const DemoLabel: React.FC<DemoLabelProps> = ({ children, id }) => (
+  <p id={id} className="eyebrow text-fg-tertiary mb-3">{children}</p>
 );
 
 interface ComponentHeaderProps {

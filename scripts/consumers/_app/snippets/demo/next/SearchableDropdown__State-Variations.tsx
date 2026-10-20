@@ -18,6 +18,7 @@ export default function SearchableDropdownExample() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div>
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Search fruits..."
           classes={
@@ -33,6 +34,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div>
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           defaultValue="banana"
           placeholder="Search fruits..."
@@ -49,6 +51,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div>
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           defaultValue="cherry"
           disabled
@@ -69,6 +72,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div>
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Search fruits..."
           error
@@ -89,6 +93,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div>
         <SearchableDropdown
+          label="Fruit"
           options={[]}
           placeholder="Loading..."
           loading={true}
@@ -106,6 +111,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div>
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           defaultValue="grape"
           clearable

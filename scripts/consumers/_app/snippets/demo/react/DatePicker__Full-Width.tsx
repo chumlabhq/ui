@@ -3,6 +3,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";
 export default function DatePickerExample() {
   return (
     <DatePicker
+      label="Date"
       placeholder="Full width date picker"
       fullWidth
       classes={

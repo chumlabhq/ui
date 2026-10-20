@@ -6,6 +6,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <TimePicker
+        label="Appointment time"
         value={customRender}
         onValueChange={(v) => setCustomRender(v)}
         format="12h"

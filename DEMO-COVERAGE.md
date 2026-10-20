@@ -12,10 +12,10 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 59 |
 | Library-authored props across the public surface | 1252 |
-| With no demo | 267 (21%) |
+| With no demo | 264 (21%) |
 | With no fixture | 692 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
-| Demonstrated but undocumented | 0 |
+| Demonstrated but undocumented | 3 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
 | Tier-A left undemonstrated with a recorded reason | 20 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |
@@ -46,7 +46,7 @@ when it rises, and when it falls without the record being lowered in the same ch
 | Left out | Props | Rule |
 | --- | --- | --- |
 | children | 6 | the component's content, passed between the tags (counted as demoed where a demo does) |
-| passthrough | 76 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
+| passthrough | 73 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
 | canonical | 53 | demonstrated once for the library; see below |
 | left | 20 | left undemonstrated with a reason, by name; see below |
 | **real** | **112** | everything else |
@@ -112,7 +112,7 @@ listed here with no demo anywhere fails the generator.
 | DrawerCloseButton | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerFooter | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerHeader | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
-| Dropdown | 51 | 2 | 4 | 0 | 26 | 0 | `unstyled` | — |
+| Dropdown | 51 | 2 | 3 | 0 | 26 | 0 | `unstyled` | — |
 | Input | 26 | 307 | 2 | 0 | 10 | 0 | `unstyled` | — |
 | InputLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |
 | InternationalPhoneInput | 49 | 296 | 10 | 5 | 33 | 0 | `unstyled`, `portalContainer` | `clearable`, `onClear`, `numberAriaLabel`, `dropdownZIndex`, `dropdownOffset` |
@@ -121,7 +121,7 @@ listed here with no demo anywhere fails the generator.
 | ModalBody | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalFooter | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalHeader | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
-| MultiSelectDropdown | 52 | 2 | 8 | 4 | 25 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
+| MultiSelectDropdown | 52 | 2 | 7 | 4 | 25 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
 | MultiSelectSearchableDropdown | 57 | 2 | 13 | 9 | 29 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
 | OtpInput | 29 | 277 | 3 | 1 | 13 | 0 | `unstyled` | `inputPattern` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | 0 | — | — |
@@ -130,7 +130,7 @@ listed here with no demo anywhere fails the generator.
 | RadioButton | 8 | 279 | 1 | 0 | 3 | 0 | `size` | — |
 | RadioGroup | 21 | 275 | 4 | 2 | 5 | 0 | `unstyled`, `reduceMotion` | `onFocus`, `onBlur` |
 | ResizablePanel | 14 | 279 | 2 | 0 | 11 | 0 | `reduceMotion`, `unstyled` | — |
-| SearchableDropdown | 58 | 2 | 6 | 2 | 30 | 0 | `unstyled` | `searchInputAriaLabel`, `typeaheadTimeout` |
+| SearchableDropdown | 58 | 2 | 5 | 2 | 30 | 0 | `unstyled` | `searchInputAriaLabel`, `typeaheadTimeout` |
 | Slider | 36 | 273 | 5 | 0 | 18 | 0 | `unstyled` | — |
 | Slot | 1 | 279 | 1 | 0 | 1 | 0 | — | — |
 | Stepper | 32 | 2 | 7 | 1 | 19 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |

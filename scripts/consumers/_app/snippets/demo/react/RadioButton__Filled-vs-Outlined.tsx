@@ -7,6 +7,7 @@ export default function RadioButtonExample() {
         <span className="text-xs font-medium text-cl-text-secondary">Filled (default)</span>
         <RadioGroup
           name="filled"
+          aria-label="Filled (default)"
           defaultValue="a"
           size="lg"
           classes={
@@ -45,6 +46,7 @@ export default function RadioButtonExample() {
         <span className="text-xs font-medium text-cl-text-secondary">Outlined</span>
         <RadioGroup
           name="outlined"
+          aria-label="Outlined"
           defaultValue="a"
           size="lg"
           classes={

@@ -80,6 +80,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <Dropdown
+        label="Country"
         options={countryOptions}
         value={countryValue}
         onValueChange={(v) => setCountryValue(v)}

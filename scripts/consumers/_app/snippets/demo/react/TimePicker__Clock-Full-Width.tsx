@@ -6,6 +6,7 @@ export default function TimePickerExample() {
   return (
     <>
       <TimePicker
+        label="Departure time"
         value={clockFullWidth}
         onValueChange={(v) => setClockFullWidth(v)}
         mode="clock"

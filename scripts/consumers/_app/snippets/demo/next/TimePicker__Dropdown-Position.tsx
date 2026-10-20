@@ -11,6 +11,7 @@ export default function TimePickerExample() {
   return (
     <>
       <TimePicker
+        label="Delivery time"
         value={dropdownTopVal}
         onValueChange={(v) => setDropdownTopVal(v)}
         dropdownSide="bottom"
@@ -50,6 +51,7 @@ export default function TimePickerExample() {
         }
       />
       <TimePicker
+        label="Delivery time"
         dropdownSide="top"
         placeholder="Opens above..."
         classes={
@@ -87,6 +89,7 @@ export default function TimePickerExample() {
         }
       />
       <TimePicker
+        label="Delivery time"
         value={forceBotVal}
         onValueChange={(v) => setForceBotVal(v)}
         dropdownSide="bottom"
@@ -127,6 +130,7 @@ export default function TimePickerExample() {
         }
       />
       <TimePicker
+        label="Delivery time"
         value={forceTopVal}
         onValueChange={(v) => setForceTopVal(v)}
         dropdownSide="top"
@@ -167,6 +171,7 @@ export default function TimePickerExample() {
         }
       />
       <TimePicker
+        label="Delivery time"
         value={forceLockVal}
         onValueChange={(v) => setForceLockVal(v)}
         dropdownSide="bottom"

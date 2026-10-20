@@ -17,6 +17,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
+        aria-label="Fruits (orange square checkboxes)"
         options={staticOptions}
         value={orangeCheckboxValue}
         onValueChange={(values) => setOrangeCheckboxValue(values)}

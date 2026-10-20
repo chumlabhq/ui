@@ -18,6 +18,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full">
       <Dropdown
+        label="Fruit"
         options={fruitOptions}
         value={fullWidthValue}
         onValueChange={(v) => setFullWidthValue(v)}

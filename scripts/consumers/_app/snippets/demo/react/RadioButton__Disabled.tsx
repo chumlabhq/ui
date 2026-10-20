@@ -4,9 +4,15 @@ export default function RadioButtonExample() {
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-xs font-medium mb-2 text-cl-text-secondary">Group disabled</p>
+        <p
+          id="disabled-group-label"
+          className="text-xs font-medium mb-2 text-cl-text-secondary"
+        >
+          Group disabled
+        </p>
         <RadioGroup
           name="disabled-group"
+          aria-labelledby="disabled-group-label"
           defaultValue="option-a"
           disabled
           size="md"
@@ -43,9 +49,15 @@ export default function RadioButtonExample() {
         </RadioGroup>
       </div>
       <div>
-        <p className="text-xs font-medium mb-2 text-cl-text-secondary">Individual disabled</p>
+        <p
+          id="individual-disabled-label"
+          className="text-xs font-medium mb-2 text-cl-text-secondary"
+        >
+          Individual disabled
+        </p>
         <RadioGroup
           name="disabled-individual"
+          aria-labelledby="individual-disabled-label"
           defaultValue="enabled"
           size="md"
           classes={

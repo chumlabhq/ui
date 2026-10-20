@@ -5,6 +5,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, default today style"
           placeholder="Clean calendar"
           classes={
             {
@@ -26,6 +27,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, today indicator set"
           placeholder="Indicator only"
           showTodayIndicator
           classes={
@@ -48,6 +50,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, today button"
           placeholder="Button only"
           showTodayButton
           classes={
@@ -70,6 +73,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, indicator and today button"
           placeholder="Both enabled"
           showTodayIndicator
           showTodayButton

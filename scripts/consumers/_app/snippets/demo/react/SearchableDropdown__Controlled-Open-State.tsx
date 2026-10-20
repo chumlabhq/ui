@@ -22,6 +22,7 @@ export default function SearchableDropdownExample() {
     <div className="flex items-end gap-4">
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           value={controlledValue}
           onValueChange={(v) => setControlledValue(v)}

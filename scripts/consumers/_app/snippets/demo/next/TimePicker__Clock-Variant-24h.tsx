@@ -8,6 +8,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <TimePicker
+        label="Start time"
         value={clock24}
         onValueChange={(v) => setClock24(v)}
         mode="clock"

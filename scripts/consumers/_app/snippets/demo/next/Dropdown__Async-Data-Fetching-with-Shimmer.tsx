@@ -108,6 +108,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-80">
       <Dropdown
+        label="Country"
         value={asyncCountryValue}
         onValueChange={(v) => setAsyncCountryValue(v)}
         placeholder="Select a country..."

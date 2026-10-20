@@ -15,6 +15,7 @@ export default function DropdownExample() {
     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select a fruit..."
           classes={
@@ -29,6 +30,7 @@ export default function DropdownExample() {
       </div>
       <div>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           defaultValue="banana"
           placeholder="Select a fruit..."
@@ -44,6 +46,7 @@ export default function DropdownExample() {
       </div>
       <div>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           defaultValue="cherry"
           disabled
@@ -63,6 +66,7 @@ export default function DropdownExample() {
       </div>
       <div>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select a fruit..."
           error
@@ -82,6 +86,7 @@ export default function DropdownExample() {
       </div>
       <div>
         <Dropdown
+          label="Fruit"
           options={[]}
           placeholder="Loading..."
           loading={true}
@@ -98,6 +103,7 @@ export default function DropdownExample() {
       </div>
       <div>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           defaultValue="grape"
           clearable

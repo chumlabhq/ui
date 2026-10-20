@@ -20,6 +20,7 @@ export default function DatePickerExample() {
       </Button>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, open controlled externally"
           value={openControlDate}
           onValueChange={(date) => setOpenControlDate(date)}
           open={calendarOpen}

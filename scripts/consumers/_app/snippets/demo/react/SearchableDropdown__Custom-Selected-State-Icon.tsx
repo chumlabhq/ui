@@ -36,6 +36,7 @@ export default function SearchableDropdownExample() {
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           value={customSelectedValue}
           onValueChange={(v) => setCustomSelectedValue(v)}
@@ -54,6 +55,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
+          label="Fruit"
           options={fruitOptions}
           value={noIconValue}
           onValueChange={(v) => setNoIconValue(v)}

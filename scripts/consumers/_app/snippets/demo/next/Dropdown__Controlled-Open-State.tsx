@@ -21,6 +21,7 @@ export default function DropdownExample() {
     <div className="w-full flex flex-col sm:flex-row sm:items-end gap-4">
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={controlledValue}
           onValueChange={(v) => setControlledValue(v)}

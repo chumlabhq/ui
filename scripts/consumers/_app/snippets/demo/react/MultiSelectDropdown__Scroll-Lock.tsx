@@ -19,6 +19,7 @@ export default function MultiSelectDropdownExample() {
     <>
       <div className="w-full sm:max-w-72">
         <MultiSelectDropdown
+          label="Fruits (page scrolls)"
           options={staticOptions}
           value={scrollUnlockedValue}
           onValueChange={setScrollUnlockedValue}
@@ -38,6 +39,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div className="w-full sm:max-w-72">
         <MultiSelectDropdown
+          label="Fruits (scroll locked)"
           options={staticOptions}
           value={scrollLockValue}
           onValueChange={setScrollLockValue}

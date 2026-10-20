@@ -8,6 +8,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <TimePicker
+        label="Appointment time"
         value={minMax}
         onValueChange={(v) => setMinMax(v)}
         minTime="09:00"

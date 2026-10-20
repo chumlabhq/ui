@@ -4,6 +4,7 @@ export default function RadioButtonExample() {
   return (
     <RadioGroup
       name="horizontal"
+      label="Text alignment"
       defaultValue="left"
       orientation="horizontal"
       size="md"

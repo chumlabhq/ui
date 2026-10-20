@@ -159,11 +159,11 @@ const KeepMountedExample = () => {
       <div className="grid gap-8 md:grid-cols-2">
         <div>
           <div className="eyebrow mb-2">default — unmounts when closed</div>
-          <Dropdown options={KEEP_OPTIONS} placeholder="Pick a fruit" />
+          <Dropdown aria-label="Fruit" options={KEEP_OPTIONS} placeholder="Pick a fruit" />
         </div>
         <div>
           <div className="eyebrow mb-2">keepMounted — stays, hidden</div>
-          <Dropdown options={KEEP_OPTIONS} placeholder="Pick a fruit" keepMounted />
+          <Dropdown aria-label="Fruit" options={KEEP_OPTIONS} placeholder="Pick a fruit" keepMounted />
         </div>
       </div>
       <button

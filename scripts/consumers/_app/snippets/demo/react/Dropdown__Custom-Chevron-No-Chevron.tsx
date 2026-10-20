@@ -44,6 +44,7 @@ export default function DropdownExample() {
     <div className="w-full flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={customChevronValue}
           onValueChange={(v) => setCustomChevronValue(v)}
@@ -61,6 +62,7 @@ export default function DropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={noChevronValue}
           onValueChange={(v) => setNoChevronValue(v)}

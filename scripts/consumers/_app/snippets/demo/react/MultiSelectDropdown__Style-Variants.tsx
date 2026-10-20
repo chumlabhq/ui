@@ -26,6 +26,7 @@ export default function MultiSelectDropdownExample() {
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Default (bordered)</p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits (default)"
             options={staticOptions}
             value={variantDefaultValue}
             onValueChange={setVariantDefaultValue}
@@ -48,6 +49,7 @@ export default function MultiSelectDropdownExample() {
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Borderless</p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits (borderless)"
             options={staticOptions}
             value={variantBorderlessValue}
             onValueChange={setVariantBorderlessValue}
@@ -75,6 +77,7 @@ export default function MultiSelectDropdownExample() {
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Bottom border only</p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits (bottom border)"
             options={staticOptions}
             value={variantBottomValue}
             onValueChange={setVariantBottomValue}
@@ -102,6 +105,7 @@ export default function MultiSelectDropdownExample() {
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Ghost</p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits (ghost)"
             options={staticOptions}
             value={variantGhostValue}
             onValueChange={setVariantGhostValue}
@@ -129,6 +133,7 @@ export default function MultiSelectDropdownExample() {
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Pill</p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            aria-label="Fruits (pill)"
             options={staticOptions}
             value={variantPillValue}
             onValueChange={setVariantPillValue}

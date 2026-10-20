@@ -20,6 +20,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <Dropdown
+        aria-label="Fruit"
         options={fruitOptions}
         value={renderTriggerValue}
         onValueChange={(v) => setRenderTriggerValue(v)}

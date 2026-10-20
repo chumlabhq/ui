@@ -19,6 +19,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <MultiSelectDropdown
+        label="Fruits"
         options={staticOptions}
         value={keyboardDemoValue}
         onValueChange={setKeyboardDemoValue}

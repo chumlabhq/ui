@@ -92,6 +92,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
+        label="Countries"
         options={countryOptions}
         value={countryValue}
         onValueChange={(values) => setCountryValue(values)}

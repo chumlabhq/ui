@@ -277,7 +277,7 @@ test.describe("Switch - Mobile Touch", () => {
     await expect(basicSwitch).toHaveAttribute("aria-checked", "true");
   });
 
-  test("label tap toggles switch on mobile", async ({ page, browserName }) => {
+  test("label tap leaves the With Label switch off (aria-checked=false)", async ({ page, browserName }) => {
     const labelSection = page.locator("section").filter({ hasText: "With Label" }).first();
     const label = labelSection.getByText("Enable notifications");
     const switchEl = labelSection.getByRole("switch");

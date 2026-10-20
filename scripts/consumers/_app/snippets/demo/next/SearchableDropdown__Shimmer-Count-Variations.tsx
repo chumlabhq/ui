@@ -4,7 +4,9 @@ export default function SearchableDropdownExample() {
   return (
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
+        <p id="searchable-dropdown-shimmer-3">3 shimmer items</p>
         <SearchableDropdown
+          aria-labelledby="searchable-dropdown-shimmer-3"
           options={[]}
           placeholder="Loading..."
           loading={true}
@@ -21,7 +23,9 @@ export default function SearchableDropdownExample() {
         />
       </div>
       <div className="w-full sm:max-w-64">
+        <p id="searchable-dropdown-shimmer-8">8 shimmer items</p>
         <SearchableDropdown
+          aria-labelledby="searchable-dropdown-shimmer-8"
           options={[]}
           placeholder="Loading..."
           loading={true}

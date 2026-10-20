@@ -68,6 +68,7 @@ export default function TimePickerExample() {
       </form>
       <div className="flex flex-wrap items-center gap-4">
         <TimePicker
+          label="Event time"
           value={eventsTime}
           onValueChange={(v) => setEventsTime(v)}
           mode="clock"

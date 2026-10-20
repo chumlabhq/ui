@@ -19,6 +19,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full">
       <MultiSelectDropdown
+        label="Fruits"
         options={staticOptions}
         value={fullWidthValue}
         onValueChange={(values) => setFullWidthValue(values)}

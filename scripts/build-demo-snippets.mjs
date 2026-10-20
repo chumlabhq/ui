@@ -1234,13 +1234,28 @@ function build(section, sf, symbols, classes, componentName) {
    * analysis. Filtering the nodes instead left the analysis looking at markup
    * the snippet would not carry, and 44 sections were rejected for depending
    * on a component that had already been removed from them.
+   *
+   * Except a caption with an `id`: something in the example names itself by
+   * it (`aria-labelledby`), so it is part of using the component after all.
+   * It ships as a plain `<p id>` holding the same text — the page's eyebrow
+   * styling stays on the page — instead of leaving the reference dangling.
    */
   const labelCuts = [];
   const findLabels = (n) => {
     const tag =
       ts.isJsxElement(n) ? n.openingElement.tagName.getText(sf) :
       ts.isJsxSelfClosingElement(n) ? n.tagName.getText(sf) : null;
-    if (tag === "DemoLabel") { labelCuts.push({ start: n.getStart(sf), end: n.getEnd() }); return; }
+    if (tag === "DemoLabel") {
+      const attributes = ts.isJsxElement(n) ? n.openingElement.attributes : n.attributes;
+      const id = attributes.properties.find((a) => ts.isJsxAttribute(a) && a.name.getText(sf) === "id");
+      const text = ts.isJsxElement(n) ? n.children.map((c) => c.getText(sf)).join("") : "";
+      labelCuts.push({
+        start: n.getStart(sf),
+        end: n.getEnd(),
+        keep: id && id.initializer ? `<p id=${id.initializer.getText(sf)}>${text}</p>` : "",
+      });
+      return;
+    }
     ts.forEachChild(n, findLabels);
   };
   section.body.forEach(findLabels);
@@ -1253,7 +1268,7 @@ function build(section, sf, symbols, classes, componentName) {
       .map(({ start, text }) => {
         let t = text;
         for (const cut of labelCuts.filter((c) => c.start >= start && c.end <= start + text.length).sort((a, b) => b.start - a.start)) {
-          t = t.slice(0, cut.start - start) + t.slice(cut.end - start);
+          t = t.slice(0, cut.start - start) + cut.keep + t.slice(cut.end - start);
         }
         return t;
       })

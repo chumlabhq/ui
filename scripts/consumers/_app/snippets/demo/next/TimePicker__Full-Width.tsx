@@ -8,6 +8,7 @@ export default function TimePickerExample() {
   return (
     <>
       <TimePicker
+        label="Departure time"
         value={fullWidthVal}
         onValueChange={(v) => setFullWidthVal(v)}
         fullWidth

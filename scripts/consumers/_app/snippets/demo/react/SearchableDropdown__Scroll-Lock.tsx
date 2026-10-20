@@ -17,6 +17,7 @@ export default function SearchableDropdownExample() {
   return (
     <>
       <SearchableDropdown
+        label="Fruit"
         options={fruitOptions}
         placeholder="Default (scrollable)"
         classes={
@@ -30,6 +31,7 @@ export default function SearchableDropdownExample() {
         }
       />
       <SearchableDropdown
+        label="Fruit"
         options={fruitOptions}
         placeholder="lockScroll enabled"
         lockScroll

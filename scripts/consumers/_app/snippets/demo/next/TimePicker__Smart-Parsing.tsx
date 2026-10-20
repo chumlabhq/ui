@@ -9,6 +9,7 @@ export default function TimePickerExample() {
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-4">
         <TimePicker
+          label="Meeting time"
           value={smartParse}
           onValueChange={(v) => setSmartParse(v)}
           format="12h"

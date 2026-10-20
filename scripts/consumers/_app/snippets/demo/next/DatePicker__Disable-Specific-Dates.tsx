@@ -8,6 +8,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, specific dates disabled"
           placeholder="Some dates blocked"
           disabledDates={
             {
@@ -38,6 +39,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, Tuesdays and Thursdays only"
           placeholder="Tue & Thu only"
           disabledDates={
             {

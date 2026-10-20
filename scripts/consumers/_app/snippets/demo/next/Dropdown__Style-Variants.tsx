@@ -16,6 +16,7 @@ export default function DropdownExample() {
       <div className="w-full sm:max-w-64">
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Default (bordered)</p>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select..."
           classes={
@@ -31,6 +32,7 @@ export default function DropdownExample() {
       <div className="w-full sm:max-w-64">
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Borderless</p>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select..."
           classes={
@@ -50,6 +52,7 @@ export default function DropdownExample() {
       <div className="w-full sm:max-w-64">
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Bottom border only</p>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select..."
           classes={
@@ -69,6 +72,7 @@ export default function DropdownExample() {
       <div className="w-full sm:max-w-64">
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Ghost</p>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select..."
           classes={
@@ -88,6 +92,7 @@ export default function DropdownExample() {
       <div className="w-full sm:max-w-64">
         <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Pill</p>
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Select..."
           fullWidth

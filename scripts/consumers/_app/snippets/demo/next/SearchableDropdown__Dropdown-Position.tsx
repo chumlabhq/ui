@@ -28,6 +28,7 @@ export default function SearchableDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={posBotValue}
               onValueChange={(v) => setPosBotValue(v)}
@@ -48,6 +49,7 @@ export default function SearchableDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={posTopValue}
               onValueChange={(v) => setPosTopValue(v)}
@@ -70,6 +72,7 @@ export default function SearchableDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={forceBotValue}
               onValueChange={(v) => setForceBotValue(v)}
@@ -91,6 +94,7 @@ export default function SearchableDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={forceTopValue}
               onValueChange={(v) => setForceTopValue(v)}
@@ -114,6 +118,7 @@ export default function SearchableDropdownExample() {
         <div>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={forceLockValue}
               onValueChange={(v) => setForceLockValue(v)}

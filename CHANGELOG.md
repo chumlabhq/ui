@@ -704,6 +704,7 @@ tables say.
 
 ### Fixed
 
+- Drawer warns about a missing name only once its panel is open, after its DrawerHeader has registered. It warned for every drawer at mount, closed, kept mounted or open, header or not; an open drawer with no DrawerHeader, `aria-label` or `aria-labelledby` still warns.
 - InternationalPhoneInput's country list fits a phone screen; a fixed 288 px wide, it ran 16 px past a 280 px viewport.
 - SearchableDropdown's list fits a phone screen, and its search input shrinks with it; sized to its content, it ran 7 px past a 280 px viewport in Firefox.
 - DatePicker's calendar fits a phone screen: below `sm` its days are 32 px, its week-number column 24 px, and its header and padding tighter. It ran 58 px past a 280 px viewport, and 18 px past a 320 px one with week numbers.
@@ -969,6 +970,7 @@ tables say.
 
 ### Fixed (documentation)
 
+- **Every demo field has a name.** The demo pages and phone previews rendered 303 fields with no accessible name; 278 now take one from their example's heading or purpose, and the other 25 were closed Drawers whose warning was Drawer's own defect (above). 18 of the names were revised to that rule, 14 of them to point at the visible caption above the field, which a field's snippet now carries as a `<p id>`. 0 warnings on 37 pages and 57 routes.
 - **Every attribute a component emits is documented, and every documented one is emitted.** Drawer, RadioButton, ResizablePanel and Slider gained a Data Attributes section; 123 attributes the code emitted and no doc listed are now listed, among them Table's row, cell and header states, TimePicker's clock states and the dropdowns' surfaces and options. Removed: TextArea's `data-auto-resize`, which never reached the DOM, and CountryFlag's mentions of `data-country` and `data-loaded`, which it never emitted. MultiSelectDropdown's and MultiSelectSearchableDropdown's documented `data-placeholder` is now emitted.
 - **The shipped docs describe the code as it stands.** README, ACCESSIBILITY, llms.txt,
   llms-full.txt, the site's llms.txt and FAQ, and the `.ai.md` files no longer name renamed

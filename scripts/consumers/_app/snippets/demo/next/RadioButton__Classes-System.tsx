@@ -7,6 +7,7 @@ export default function RadioButtonExample() {
         <span className="text-xs font-medium text-cl-text-secondary">Card-style selection</span>
         <RadioGroup
           name="classes-card"
+          aria-label="Card-style selection"
           defaultValue="monthly"
           size="md"
           classes={
@@ -45,6 +46,7 @@ export default function RadioButtonExample() {
         <span className="text-xs font-medium text-cl-text-secondary">Minimal / underline</span>
         <RadioGroup
           name="classes-minimal"
+          aria-label="Minimal / underline"
           defaultValue="light"
           size="sm"
           classes={

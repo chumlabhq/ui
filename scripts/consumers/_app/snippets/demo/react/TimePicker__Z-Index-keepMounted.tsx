@@ -8,6 +8,7 @@ export default function TimePickerExample() {
     <div className="w-full space-y-6">
       <div>
         <TimePicker
+          label="Booking time"
           value={zIndexVal}
           onValueChange={(v) => setZIndexVal(v)}
           dropdownZIndex={100}
@@ -53,6 +54,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Booking time"
           value={keepMountedVal}
           onValueChange={(v) => setKeepMountedVal(v)}
           keepMounted

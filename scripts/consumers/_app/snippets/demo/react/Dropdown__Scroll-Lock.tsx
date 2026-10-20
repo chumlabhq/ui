@@ -15,6 +15,7 @@ export default function DropdownExample() {
     <>
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="Default (scrollable)"
           classes={
@@ -29,6 +30,7 @@ export default function DropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           placeholder="lockScroll enabled"
           lockScroll

@@ -4,7 +4,9 @@ export default function DropdownExample() {
   return (
     <div className="w-full flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
+        <p id="dropdown-shimmer-3">3 shimmer items</p>
         <Dropdown
+          aria-labelledby="dropdown-shimmer-3"
           options={[]}
           placeholder="Loading..."
           loading={true}
@@ -20,7 +22,9 @@ export default function DropdownExample() {
         />
       </div>
       <div className="w-full sm:max-w-64">
+        <p id="dropdown-shimmer-8">8 shimmer items</p>
         <Dropdown
+          aria-labelledby="dropdown-shimmer-8"
           options={[]}
           placeholder="Loading..."
           loading={true}

@@ -16,6 +16,7 @@ export default function TimePickerExample() {
     <div className="flex flex-wrap gap-8">
       <div>
         <TimePicker
+          label="Lunch time"
           value={customCheckVal}
           onValueChange={(v) => setCustomCheckVal(v)}
           selectedIcon={<StarCheckIcon className="w-4 h-4 shrink-0 text-cl-text" />}
@@ -63,6 +64,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Lunch time"
           value={noCheckVal}
           onValueChange={(v) => setNoCheckVal(v)}
           showSelectedIcon={false}

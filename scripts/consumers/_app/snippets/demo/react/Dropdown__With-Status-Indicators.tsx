@@ -57,6 +57,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <Dropdown
+        label="Status"
         options={statusOptions}
         value={statusValue}
         onValueChange={(v) => setStatusValue(v)}

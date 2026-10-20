@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach, type MockInstance } from "vitest";
 import { render, screen, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createRef, useState } from "react";
@@ -600,6 +600,81 @@ describe("Drawer", () => {
         "aria-describedby",
         "desc-id",
       );
+    });
+  });
+
+  describe("Missing-name warning", () => {
+    const nameWarnings = (warn: MockInstance<typeof console.warn>) =>
+      warn.mock.calls.filter((call) =>
+        String(call[0]).startsWith("Drawer: rendered with no accessible name"),
+      ).length;
+    const nextFrame = () =>
+      act(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+
+    let warn: MockInstance<typeof console.warn>;
+    beforeEach(() => {
+      warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    });
+    afterEach(() => warn.mockRestore());
+
+    const Named = ({ open, keepMounted }: { open: boolean; keepMounted?: boolean }) => (
+      <Drawer open={open} onOpenChange={() => {}} keepMounted={keepMounted} animationDuration={0}>
+        <DrawerHeader>Settings</DrawerHeader>
+        Body
+      </Drawer>
+    );
+    const Unnamed = ({ open }: { open: boolean }) => (
+      <Drawer open={open} onOpenChange={() => {}} animationDuration={0}>
+        Body
+      </Drawer>
+    );
+
+    it("does not warn for a closed drawer whose DrawerHeader has not mounted yet", async () => {
+      render(<Named open={false} />);
+      await nextFrame();
+      await nextFrame();
+      expect(nameWarnings(warn)).toBe(0);
+    });
+
+    it("does not warn for a closed, kept-mounted drawer with a DrawerHeader", async () => {
+      render(<Named open={false} keepMounted />);
+      await nextFrame();
+      await nextFrame();
+      expect(nameWarnings(warn)).toBe(0);
+    });
+
+    it("does not warn for a drawer open at mount with a DrawerHeader", async () => {
+      render(<Named open />);
+      await nextFrame();
+      await nextFrame();
+      expect(screen.getByRole("dialog")).toHaveAttribute("aria-labelledby");
+      expect(nameWarnings(warn)).toBe(0);
+    });
+
+    it("does not warn when a closed drawer with a DrawerHeader opens", async () => {
+      const { rerender } = render(<Named open={false} />);
+      await nextFrame();
+      rerender(<Named open />);
+      await nextFrame();
+      await nextFrame();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      expect(nameWarnings(warn)).toBe(0);
+    });
+
+    it("warns once for a drawer open at mount with no DrawerHeader, aria-label or aria-labelledby", async () => {
+      render(<Unnamed open />);
+      await waitFor(() => expect(nameWarnings(warn)).toBe(1));
+      expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-labelledby");
+      expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-label");
+    });
+
+    it("warns when an unnamed drawer opens, not while it is closed", async () => {
+      const { rerender } = render(<Unnamed open={false} />);
+      await nextFrame();
+      await nextFrame();
+      expect(nameWarnings(warn)).toBe(0);
+      rerender(<Unnamed open />);
+      await waitFor(() => expect(nameWarnings(warn)).toBe(1));
     });
   });
 

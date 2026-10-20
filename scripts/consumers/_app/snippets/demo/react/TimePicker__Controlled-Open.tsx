@@ -16,6 +16,7 @@ export default function TimePickerExample() {
         Dropdown
       </Button>
       <TimePicker
+        label="Call time"
         value={controlled}
         onValueChange={(v) => setControlled(v)}
         open={controlledOpen}

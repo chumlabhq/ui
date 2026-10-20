@@ -290,6 +290,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           {}
           <TimePicker
+            label="Start time"
             value={basic24}
             onValueChange={(v) => setBasic24(v)}
           />
@@ -304,6 +305,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Pickup time"
               value={twelve}
               onValueChange={(v) => setTwelve(v)}
               format="12h"
@@ -327,6 +329,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>1 min steps</DemoLabel>
               <TimePicker
+                label="Reminder time"
                 value={step1}
                 onValueChange={(v) => setStep1(v)}
                 minuteStep={1}
@@ -337,6 +340,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>5 min steps</DemoLabel>
               <TimePicker
+                label="Reminder time"
                 value={step5}
                 onValueChange={(v) => setStep5(v)}
                 minuteStep={5}
@@ -347,6 +351,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>15 min steps</DemoLabel>
               <TimePicker
+                label="Reminder time"
                 value={step15}
                 onValueChange={(v) => setStep15(v)}
                 minuteStep={15}
@@ -357,6 +362,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>30 min steps</DemoLabel>
               <TimePicker
+                label="Reminder time"
                 value={step30}
                 onValueChange={(v) => setStep30(v)}
                 minuteStep={30}
@@ -377,6 +383,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Appointment time"
               value={minMax}
               onValueChange={(v) => setMinMax(v)}
               minTime="09:00"
@@ -399,6 +406,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Alarm time"
               value={clearableVal}
               onValueChange={(v) => setClearableVal(v)}
               clearable
@@ -494,6 +502,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Check-in time"
               value={disabledVal}
               onValueChange={() => {}}
               disabled
@@ -514,6 +523,7 @@ const TimePickerDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <TimePicker
+            label="Departure time"
             value={fullWidthVal}
             onValueChange={(v) => setFullWidthVal(v)}
             fullWidth
@@ -534,6 +544,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>defaultValue=&quot;09:30&quot;</DemoLabel>
               <TimePicker
+                label="Wake-up time"
                 defaultValue="09:30"
                 classes={c.timepicker}
               />
@@ -541,6 +552,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>No default (empty)</DemoLabel>
               <TimePicker
+                label="Wake-up time"
                 classes={c.timepicker}
               />
             </div>
@@ -564,6 +576,7 @@ const TimePickerDemo = () => {
               {controlledOpen ? "Close" : "Open"} Dropdown
             </Button>
             <TimePicker
+              label="Call time"
               value={controlled}
               onValueChange={(v) => setControlled(v)}
               open={controlledOpen}
@@ -588,6 +601,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Custom icon (clock)</DemoLabel>
               <TimePicker
+                label="Arrival time"
                 value={customEndIconVal}
                 onValueChange={(v) => setCustomEndIconVal(v)}
                 endIcon={<ClockEndIcon className={`w-4 h-4 text-cl-accent`} />}
@@ -598,6 +612,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>No end icon</DemoLabel>
               <TimePicker
+                label="Arrival time"
                 value={noEndIconVal}
                 onValueChange={(v) => setNoEndIconVal(v)}
                 showEndIcon={false}
@@ -620,6 +635,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Star icon</DemoLabel>
               <TimePicker
+                label="Lunch time"
                 value={customCheckVal}
                 onValueChange={(v) => setCustomCheckVal(v)}
                 selectedIcon={<StarCheckIcon className={`w-4 h-4 shrink-0 text-cl-text`} />}
@@ -633,6 +649,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>No check icon</DemoLabel>
               <TimePicker
+                label="Lunch time"
                 value={noCheckVal}
                 onValueChange={(v) => setNoCheckVal(v)}
                 showSelectedIcon={false}
@@ -655,6 +672,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Dark</DemoLabel>
               <TimePicker
+                aria-label="Time, dark theme"
                 value={darkThemeVal}
                 onValueChange={(v) => setDarkThemeVal(v)}
                 placeholder="Select time..."
@@ -665,6 +683,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Warm</DemoLabel>
               <TimePicker
+                aria-label="Time, warm theme"
                 value={warmThemeVal}
                 onValueChange={(v) => setWarmThemeVal(v)}
                 placeholder="Select time..."
@@ -675,6 +694,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Cool</DemoLabel>
               <TimePicker
+                aria-label="Time, cool theme"
                 value={coolThemeVal}
                 onValueChange={(v) => setCoolThemeVal(v)}
                 placeholder="Select time..."
@@ -685,6 +705,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Minimal</DemoLabel>
               <TimePicker
+                aria-label="Time, minimal theme"
                 value={minimalThemeVal}
                 onValueChange={(v) => setMinimalThemeVal(v)}
                 placeholder="Select time..."
@@ -710,6 +731,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Start time"
               value={clock24}
               onValueChange={(v) => setClock24(v)}
               mode="clock"
@@ -731,6 +753,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Pickup time"
               value={clock12}
               onValueChange={(v) => setClock12(v)}
               mode="clock"
@@ -755,6 +778,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>1 min steps</DemoLabel>
               <TimePicker
+                label="Reminder time"
                 value={clockStep1}
                 onValueChange={(v) => setClockStep1(v)}
                 mode="clock"
@@ -766,6 +790,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>5 min steps</DemoLabel>
               <TimePicker
+                label="Reminder time"
                 value={clockStep5}
                 onValueChange={(v) => setClockStep5(v)}
                 mode="clock"
@@ -787,6 +812,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Appointment time"
               value={clockMinMax}
               onValueChange={(v) => setClockMinMax(v)}
               mode="clock"
@@ -847,6 +873,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Check-in time"
               value={clockDisabled}
               onValueChange={() => {}}
               mode="clock"
@@ -866,6 +893,7 @@ const TimePickerDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <TimePicker
+            label="Departure time"
             value={clockFullWidth}
             onValueChange={(v) => setClockFullWidth(v)}
             mode="clock"
@@ -887,6 +915,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Emerald</DemoLabel>
               <TimePicker
+                aria-label="Time, emerald clock theme"
                 value={clockEmerald}
                 onValueChange={(v) => setClockEmerald(v)}
                 mode="clock"
@@ -898,6 +927,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Rose</DemoLabel>
               <TimePicker
+                aria-label="Time, rose clock theme"
                 value={clockRose}
                 onValueChange={(v) => setClockRose(v)}
                 mode="clock"
@@ -909,6 +939,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Violet</DemoLabel>
               <TimePicker
+                aria-label="Time, violet clock theme"
                 value={clockViolet}
                 onValueChange={(v) => setClockViolet(v)}
                 mode="clock"
@@ -930,6 +961,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              aria-label="Time, unstyled clock"
               value={clockUnstyled}
               onValueChange={(v) => setClockUnstyled(v)}
               mode="clock"
@@ -973,6 +1005,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Start time"
               value={clockI18n}
               onValueChange={(v) => setClockI18n(v)}
               mode="clock"
@@ -1002,6 +1035,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Default — dropdown repositions on scroll</DemoLabel>
               <TimePicker
+                label="Delivery time"
                 value={scrollLockDefault}
                 onValueChange={(v) => setScrollLockDefault(v)}
                 placeholder="Scroll the page..."
@@ -1012,6 +1046,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>lockScroll=true — body scroll disabled while open</DemoLabel>
               <TimePicker
+                label="Delivery time"
                 value={scrollLockEnabled}
                 onValueChange={(v) => setScrollLockEnabled(v)}
                 placeholder="Open me, then try scrolling..."
@@ -1035,6 +1070,7 @@ const TimePickerDemo = () => {
             <DemoLabel isDarkMode={dark}>dropdownSide=&quot;bottom&quot; (default, auto-flips)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
+                label="Delivery time"
                 value={dropdownTopVal}
                 onValueChange={(v) => setDropdownTopVal(v)}
                 dropdownSide="bottom"
@@ -1047,6 +1083,7 @@ const TimePickerDemo = () => {
             <DemoLabel isDarkMode={dark}>dropdownSide=&quot;top&quot; (auto-flips)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
+                label="Delivery time"
                 dropdownSide="top"
                 placeholder="Opens above..."
                 classes={c.timepicker}
@@ -1057,6 +1094,7 @@ const TimePickerDemo = () => {
             <DemoLabel isDarkMode={dark}>forceDropdownSide (forced bottom, no auto-flip)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
+                label="Delivery time"
                 value={forceBotVal}
                 onValueChange={(v) => setForceBotVal(v)}
                 dropdownSide="bottom"
@@ -1070,6 +1108,7 @@ const TimePickerDemo = () => {
             <DemoLabel isDarkMode={dark}>forceDropdownSide (forced top, no auto-flip)</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
+                label="Delivery time"
                 value={forceTopVal}
                 onValueChange={(v) => setForceTopVal(v)}
                 dropdownSide="top"
@@ -1086,6 +1125,7 @@ const TimePickerDemo = () => {
             <DemoLabel isDarkMode={dark}>forceDropdownSide + lockScroll</DemoLabel>
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <TimePicker
+                label="Delivery time"
                 value={forceLockVal}
                 onValueChange={(v) => setForceLockVal(v)}
                 dropdownSide="bottom"
@@ -1113,6 +1153,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>dropdownZIndex=100</DemoLabel>
               <TimePicker
+                label="Booking time"
                 value={zIndexVal}
                 onValueChange={(v) => setZIndexVal(v)}
                 dropdownZIndex={100}
@@ -1124,6 +1165,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>keepMounted — list stays in DOM when closed</DemoLabel>
               <TimePicker
+                label="Booking time"
                 value={keepMountedVal}
                 onValueChange={(v) => setKeepMountedVal(v)}
                 keepMounted
@@ -1147,6 +1189,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>No gap (0px)</DemoLabel>
               <TimePicker
+                label="Booking time"
                 defaultValue={null}
                 dropdownOffset={0}
                 placeholder="No gap..."
@@ -1156,6 +1199,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Large gap (16px)</DemoLabel>
               <TimePicker
+                label="Booking time"
                 value={gapLargeVal}
                 onValueChange={(v) => setGapLargeVal(v)}
                 dropdownOffset={16}
@@ -1205,6 +1249,7 @@ const TimePickerDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
               <div className="flex flex-wrap items-center gap-4">
                 <TimePicker
+                  label="Event time"
                   value={eventsTime}
                   onValueChange={(v) => setEventsTime(v)}
                   mode="clock"
@@ -1237,6 +1282,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Reminder time"
               value={blurFocusVal}
               onValueChange={(v) => setBlurFocusVal(v)}
               placeholder="Focus, then blur me..."
@@ -1266,6 +1312,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>className (opacity override)</DemoLabel>
               <TimePicker
+                aria-label="Time, className override"
                 defaultValue={null}
                 placeholder="Select a time..."
                 className={`opacity-90`}
@@ -1275,6 +1322,7 @@ const TimePickerDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>style (inline styles on root)</DemoLabel>
               <TimePicker
+                aria-label="Time, inline style"
                 value={styleVal}
                 onValueChange={(v) => setStyleVal(v)}
                 placeholder="Select a time..."
@@ -1306,6 +1354,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Start time"
               value={reduceMotionVal}
               onValueChange={(v) => setReduceMotionVal(v)}
               reduceMotion
@@ -1327,6 +1376,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              label="Appointment time"
               value={customRender}
               onValueChange={(v) => setCustomRender(v)}
               format="12h"
@@ -1369,6 +1419,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
+              aria-label="Time, custom classes"
               value={classesVal}
               onValueChange={(v) => setClassesVal(v)}
               classes={{
@@ -1393,6 +1444,7 @@ const TimePickerDemo = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-4">
               <TimePicker
+                label="Meeting time"
                 value={smartParse}
                 onValueChange={(v) => setSmartParse(v)}
                 format="12h"

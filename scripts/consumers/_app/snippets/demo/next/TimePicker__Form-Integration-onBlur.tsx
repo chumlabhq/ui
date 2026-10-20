@@ -10,6 +10,7 @@ export default function TimePickerExample() {
     <>
       <div className="flex items-center gap-4">
         <TimePicker
+          label="Reminder time"
           value={blurFocusVal}
           onValueChange={(v) => setBlurFocusVal(v)}
           placeholder="Focus, then blur me..."

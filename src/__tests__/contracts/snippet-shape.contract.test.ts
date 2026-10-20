@@ -409,6 +409,53 @@ describe("snippet shape contract", () => {
   });
 
   /**
+   * A name or description a snippet points at is in the snippet.
+   *
+   * `aria-labelledby` and `aria-describedby` name an element by id, and the
+   * reader pastes the snippet alone, so the element has to travel with it. A3b
+   * named twelve dropdowns by the caption above them, which is a `DemoLabel`,
+   * and the generator strips `DemoLabel`: on the page each field had a name,
+   * and every snippet shipped a reference to an id that was not there — the
+   * unnamed field A3 had just removed, in the code a reader copies. Both
+   * variants are read, since both are shipped. A reference written as an
+   * expression cannot be resolved by reading, so it is counted, not judged.
+   */
+  it("resolves every aria-labelledby and aria-describedby inside the snippet", () => {
+    const FLOOR = 30;
+    const literal = /\baria-(labelledby|describedby)=(?:"([^"]*)"|\{\s*"([^"]*)"\s*\})/g;
+    const expression = /\baria-(labelledby|describedby)=\{(?!\s*")/g;
+    const ids = /\bid=(?:"([^"]*)"|\{\s*"([^"]*)"\s*\})/g;
+    let references = 0;
+    let unread = 0;
+    const dangling: string[] = [];
+    for (const [component, sections] of Object.entries(DEMO_SNIPPETS)) {
+      for (const [title, snippet] of Object.entries(sections)) {
+        for (const variant of ["react", "next"] as const) {
+          const code = snippet[variant];
+          const present = new Set([...code.matchAll(ids)].map((m) => m[1] ?? m[2]));
+          unread += [...code.matchAll(expression)].length;
+          for (const m of code.matchAll(literal)) {
+            for (const id of (m[2] ?? m[3]).split(/\s+/).filter(Boolean)) {
+              references += 1;
+              if (!present.has(id)) dangling.push(`${component}/${title} (${variant}): aria-${m[1]}="${id}"`);
+            }
+          }
+        }
+      }
+    }
+    console.log(
+      `SNIPPET_ID_REFS references=${references} (floor ${FLOOR}) dangling=${dangling.length} ` +
+        `expressions=${unread} — ${dangling.length ? "FAIL" : "every reference resolves"}`,
+    );
+    expect(references, "the walk found fewer id references than recorded: it read less, or a name moved out of a snippet").toBeGreaterThanOrEqual(FLOOR);
+    expect(
+      dangling.sort(),
+      "a snippet points aria-labelledby or aria-describedby at an id it does not carry. Pasted alone, " +
+        "the reference resolves to nothing; the element it names has to ship in the snippet",
+    ).toEqual([]);
+  });
+
+  /**
    * A snippet carries every library component its section renders.
    *
    * "Names the component" passes once one tag of the page's component appears.

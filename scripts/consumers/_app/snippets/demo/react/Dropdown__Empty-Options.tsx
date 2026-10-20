@@ -4,7 +4,9 @@ export default function DropdownExample() {
   return (
     <div className="w-full flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
+        <p id="dropdown-empty-default">Default text</p>
         <Dropdown
+          aria-labelledby="dropdown-empty-default"
           options={[]}
           placeholder="No options..."
           classes={
@@ -18,7 +20,9 @@ export default function DropdownExample() {
         />
       </div>
       <div className="w-full sm:max-w-64">
+        <p id="dropdown-empty-custom">Custom ReactNode</p>
         <Dropdown
+          aria-labelledby="dropdown-empty-custom"
           options={[]}
           placeholder="Custom empty..."
           emptyContent={

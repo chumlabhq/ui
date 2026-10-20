@@ -98,6 +98,7 @@ export default function DropdownExample() {
     <div className="w-full flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={darkThemeValue}
           onValueChange={(v) => setDarkThemeValue(v)}
@@ -107,6 +108,7 @@ export default function DropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={warmThemeValue}
           onValueChange={(v) => setWarmThemeValue(v)}
@@ -116,6 +118,7 @@ export default function DropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={coolThemeValue}
           onValueChange={(v) => setCoolThemeValue(v)}
@@ -125,6 +128,7 @@ export default function DropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <Dropdown
+          label="Fruit"
           options={fruitOptions}
           value={minimalThemeValue}
           onValueChange={(v) => setMinimalThemeValue(v)}

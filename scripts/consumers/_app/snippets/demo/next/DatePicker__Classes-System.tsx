@@ -9,6 +9,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          aria-label="Date, pink accent"
           placeholder="Pink theme"
           classes={
             {
@@ -67,6 +68,7 @@ export default function DatePickerExample() {
       </div>
       <div className="max-w-[220px]">
         <DatePicker
+          aria-label="Date, compact"
           placeholder="Compact"
           classes={
             {
@@ -103,6 +105,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          aria-label="Date, custom nav buttons"
           placeholder="Custom nav"
           classes={
             {
@@ -130,6 +133,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          aria-label="Date range, styled presets"
           selectionMode="range"
           value={classesRange}
           onValueChange={(range) => setClassesRange(range)}

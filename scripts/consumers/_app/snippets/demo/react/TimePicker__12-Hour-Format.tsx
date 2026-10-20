@@ -6,6 +6,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <TimePicker
+        label="Pickup time"
         value={twelve}
         onValueChange={(v) => setTwelve(v)}
         format="12h"

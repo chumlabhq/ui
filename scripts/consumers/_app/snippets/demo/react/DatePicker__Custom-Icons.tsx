@@ -4,6 +4,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
+        aria-label="Date, custom icons"
         placeholder="Custom icons"
         calendarIcon={<span className="text-lg">📅</span>}
         clearIcon={<span className="text-sm">✕</span>}

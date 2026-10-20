@@ -5,6 +5,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, outside days selectable"
           placeholder="Outside days visible & selectable"
           showOutsideDays
           outsideDaysSelectable
@@ -28,6 +29,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, outside days hidden"
           placeholder="Outside days hidden"
           showOutsideDays={false}
           classes={

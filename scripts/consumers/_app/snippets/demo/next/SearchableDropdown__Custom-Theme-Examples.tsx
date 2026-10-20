@@ -69,6 +69,7 @@ export default function SearchableDropdownExample() {
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
+          aria-label="Fruit"
           options={fruitOptions}
           value={darkThemeValue}
           onValueChange={(v) => setDarkThemeValue(v)}
@@ -78,6 +79,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
+          aria-label="Fruit"
           options={fruitOptions}
           value={warmThemeValue}
           onValueChange={(v) => setWarmThemeValue(v)}

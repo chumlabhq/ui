@@ -6,6 +6,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, French locale"
           placeholder="Choisir une date..."
           locale={fr}
           weekStartsOn={1}
@@ -29,6 +30,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, German locale"
           placeholder="Datum auswählen..."
           locale={de}
           weekStartsOn={1}

@@ -4,7 +4,9 @@ export default function SearchableDropdownExample() {
   return (
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-64">
+        <p id="searchable-dropdown-empty-default">Default text</p>
         <SearchableDropdown
+          aria-labelledby="searchable-dropdown-empty-default"
           options={[]}
           placeholder="No options..."
           classes={
@@ -19,7 +21,9 @@ export default function SearchableDropdownExample() {
         />
       </div>
       <div className="w-full sm:max-w-64">
+        <p id="searchable-dropdown-empty-custom">Custom ReactNode</p>
         <SearchableDropdown
+          aria-labelledby="searchable-dropdown-empty-custom"
           options={[]}
           placeholder="Custom empty..."
           emptyContent={

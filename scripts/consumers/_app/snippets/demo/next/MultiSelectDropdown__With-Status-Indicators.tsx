@@ -59,6 +59,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
+        label="Statuses"
         options={statusOptions}
         value={statusValue}
         onValueChange={(values) => setStatusValue(values)}

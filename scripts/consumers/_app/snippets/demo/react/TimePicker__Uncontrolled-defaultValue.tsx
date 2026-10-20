@@ -5,6 +5,7 @@ export default function TimePickerExample() {
     <div className="flex flex-wrap gap-6">
       <div>
         <TimePicker
+          label="Wake-up time"
           defaultValue="09:30"
           classes={
             {
@@ -43,6 +44,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Wake-up time"
           classes={
             {
                root: "inline-flex flex-col gap-1 text-cl-text",

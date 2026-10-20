@@ -178,6 +178,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-80">
       <SearchableDropdown
+        label="Country"
         value={asyncStaticInitialValue}
         onValueChange={(v) => setAsyncStaticInitialValue(v)}
         placeholder="Select or search countries..."

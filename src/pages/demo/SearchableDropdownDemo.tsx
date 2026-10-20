@@ -440,6 +440,7 @@ const SearchableDropdownDemo = () => {
           <div className="w-full sm:max-w-64">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={basicValue}
               onValueChange={(value) => setBasicValue(value)}
@@ -460,6 +461,7 @@ const SearchableDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Default (empty)</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 placeholder="Search fruits..."
                 classes={c.dropdown}
@@ -468,6 +470,7 @@ const SearchableDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Selected</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 defaultValue="banana"
                 placeholder="Search fruits..."
@@ -477,6 +480,7 @@ const SearchableDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Disabled</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 defaultValue="cherry"
                 disabled
@@ -490,6 +494,7 @@ const SearchableDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Error state</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 placeholder="Search fruits..."
                 error
@@ -503,6 +508,7 @@ const SearchableDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Loading state</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={[]}
                 placeholder="Loading..."
                 loading={true}
@@ -513,6 +519,7 @@ const SearchableDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Clearable (selected)</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 defaultValue="grape"
                 clearable
@@ -533,6 +540,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               defaultValue="cherry"
               placeholder="Search fruits..."
@@ -552,6 +560,7 @@ const SearchableDropdownDemo = () => {
           <div className="flex items-end gap-4">
             <div className="w-full sm:max-w-64">
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={controlledValue}
                 onValueChange={(v) => setControlledValue(v)}
@@ -591,6 +600,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={clearableValue}
               onValueChange={(v) => setClearableValue(v)}
@@ -618,6 +628,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <SearchableDropdown
+              aria-label="Fruit"
               options={fruitOptions}
               value={renderTriggerValue}
               onValueChange={(v) => setRenderTriggerValue(v)}
@@ -671,6 +682,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Country"
               options={countryOptions}
               value={countryValue}
               onValueChange={(v) => setCountryValue(v)}
@@ -690,6 +702,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-80">
             <SearchableDropdown
+              label="Country"
               value={asyncCountryValue}
               onValueChange={(v) => setAsyncCountryValue(v)}
               placeholder="Search countries..."
@@ -717,6 +730,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-80">
             <SearchableDropdown
+              label="Country"
               value={asyncStaticInitialValue}
               onValueChange={(v) => setAsyncStaticInitialValue(v)}
               placeholder="Select or search countries..."
@@ -745,6 +759,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-80">
             <SearchableDropdown
+              label="Country"
               value={asyncPrefetchValue}
               onValueChange={(v) => setAsyncPrefetchValue(v)}
               placeholder="Select or search countries..."
@@ -777,6 +792,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Status"
               options={statusOptions}
               value={statusValue}
               onValueChange={(v) => setStatusValue(v)}
@@ -798,6 +814,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Star icon</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={customSelectedValue}
                 onValueChange={(v) => setCustomSelectedValue(v)}
@@ -813,6 +830,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>No icon</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={noIconValue}
                 onValueChange={(v) => setNoIconValue(v)}
@@ -836,6 +854,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={noSearchValue}
               onValueChange={(v) => setNoSearchValue(v)}
@@ -858,6 +877,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Dark Theme</DemoLabel>
               <SearchableDropdown
+                aria-label="Fruit"
                 options={fruitOptions}
                 value={darkThemeValue}
                 onValueChange={(v) => setDarkThemeValue(v)}
@@ -868,6 +888,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Warm Theme</DemoLabel>
               <SearchableDropdown
+                aria-label="Fruit"
                 options={fruitOptions}
                 value={warmThemeValue}
                 onValueChange={(v) => setWarmThemeValue(v)}
@@ -888,6 +909,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Available option"
               options={disabledItemOptions}
               value={disabledItemValue}
               onValueChange={(v) => setDisabledItemValue(v)}
@@ -975,6 +997,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={disabledValue}
               disabled
@@ -1071,6 +1094,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>Custom chevron</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={customChevronValue}
                 onValueChange={(v) => setCustomChevronValue(v)}
@@ -1082,6 +1106,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <DemoLabel isDarkMode={dark}>No chevron</DemoLabel>
               <SearchableDropdown
+                label="Fruit"
                 options={fruitOptions}
                 value={noChevronValue}
                 onValueChange={(v) => setNoChevronValue(v)}
@@ -1103,6 +1128,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={fullWidthValue}
               onValueChange={(v) => setFullWidthValue(v)}
@@ -1122,11 +1148,13 @@ const SearchableDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark}>
           <SearchableDropdown
+            label="Fruit"
             options={fruitOptions}
             placeholder="Default (scrollable)"
             classes={c.dropdown}
           />
           <SearchableDropdown
+            label="Fruit"
             options={fruitOptions}
             placeholder="lockScroll enabled"
             lockScroll
@@ -1149,6 +1177,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={posBotValue}
                   onValueChange={(v) => setPosBotValue(v)}
@@ -1164,6 +1193,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={posTopValue}
                   onValueChange={(v) => setPosTopValue(v)}
@@ -1190,6 +1220,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={forceBotValue}
                   onValueChange={(v) => setForceBotValue(v)}
@@ -1206,6 +1237,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={forceTopValue}
                   onValueChange={(v) => setForceTopValue(v)}
@@ -1230,6 +1262,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={forceLockValue}
                   onValueChange={(v) => setForceLockValue(v)}
@@ -1294,6 +1327,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={keepMountedValue}
               onValueChange={(v) => setKeepMountedValue(v)}
@@ -1317,6 +1351,7 @@ const SearchableDropdownDemo = () => {
               <DemoLabel isDarkMode={dark}>No gap (0px)</DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   dropdownOffset={0}
                   placeholder="No gap..."
@@ -1328,6 +1363,7 @@ const SearchableDropdownDemo = () => {
               <DemoLabel isDarkMode={dark}>Large gap (16px)</DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  label="Fruit"
                   options={fruitOptions}
                   value={customGapValue}
                   onValueChange={(v) => setCustomGapValue(v)}
@@ -1350,6 +1386,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={zIndexValue}
               onValueChange={(v) => setZIndexValue(v)}
@@ -1374,6 +1411,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={customClearIconValue}
               onValueChange={(v) => setCustomClearIconValue(v)}
@@ -1408,6 +1446,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={customCheckIconValue}
               onValueChange={(v) => setCustomCheckIconValue(v)}
@@ -1441,6 +1480,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               placeholder="Custom search icon..."
               searchIcon={
@@ -1472,6 +1512,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={focusBlurValue}
               onValueChange={(v) => setFocusBlurValue(v)}
@@ -1505,6 +1546,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
+              label="Fruit"
               options={fruitOptions}
               value={customKeyDownValue}
               onValueChange={(v) => setCustomKeyDownValue(v)}
@@ -1545,6 +1587,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  aria-label="Fruit"
                   options={fruitOptions}
                   placeholder="Search fruits..."
                   className={`opacity-90`}
@@ -1558,6 +1601,7 @@ const SearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <SearchableDropdown
+                  aria-label="Fruit"
                   options={fruitOptions}
                   value={classNameStyleValue}
                   onValueChange={(v) => setClassNameStyleValue(v)}
@@ -1593,8 +1637,9 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap gap-8">
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>3 shimmer items</DemoLabel>
+              <DemoLabel id="searchable-dropdown-shimmer-3" isDarkMode={dark}>3 shimmer items</DemoLabel>
               <SearchableDropdown
+                aria-labelledby="searchable-dropdown-shimmer-3"
                 options={[]}
                 placeholder="Loading..."
                 loading={true}
@@ -1603,8 +1648,9 @@ const SearchableDropdownDemo = () => {
               />
             </div>
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>8 shimmer items</DemoLabel>
+              <DemoLabel id="searchable-dropdown-shimmer-8" isDarkMode={dark}>8 shimmer items</DemoLabel>
               <SearchableDropdown
+                aria-labelledby="searchable-dropdown-shimmer-8"
                 options={[]}
                 placeholder="Loading..."
                 loading={true}
@@ -1625,16 +1671,18 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap gap-8">
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>Default text</DemoLabel>
+              <DemoLabel id="searchable-dropdown-empty-default" isDarkMode={dark}>Default text</DemoLabel>
               <SearchableDropdown
+                aria-labelledby="searchable-dropdown-empty-default"
                 options={[]}
                 placeholder="No options..."
                 classes={c.dropdown}
               />
             </div>
             <div className="w-full sm:max-w-64">
-              <DemoLabel isDarkMode={dark}>Custom ReactNode</DemoLabel>
+              <DemoLabel id="searchable-dropdown-empty-custom" isDarkMode={dark}>Custom ReactNode</DemoLabel>
               <SearchableDropdown
+                aria-labelledby="searchable-dropdown-empty-custom"
                 options={[]}
                 placeholder="Custom empty..."
                 emptyContent={

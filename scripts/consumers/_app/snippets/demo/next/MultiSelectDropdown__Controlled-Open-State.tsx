@@ -22,6 +22,7 @@ export default function MultiSelectDropdownExample() {
     <div className="flex items-end gap-4">
       <div className="w-full sm:max-w-72">
         <MultiSelectDropdown
+          label="Fruits"
           options={staticOptions}
           value={controlledValue}
           onValueChange={setControlledValue}

@@ -8,6 +8,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, past dates disabled"
           placeholder="No past dates"
           disabledDates={{ disablePast: true }}
           classes={
@@ -30,6 +31,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, weekends disabled"
           placeholder="No weekends"
           disabledDates={{ daysOfWeek: [0, 6] }}
           classes={
@@ -52,6 +54,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
+          label="Date, min/max range"
           placeholder="Limited range"
           minDate={subDays(today, 7)}
           maxDate={addDays(today, 30)}

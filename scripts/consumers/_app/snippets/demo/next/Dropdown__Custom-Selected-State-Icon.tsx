@@ -24,6 +24,7 @@ export default function DropdownExample() {
       <div>
         <div className="w-full sm:max-w-64">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             value={customSelectedValue}
             onValueChange={(v) => setCustomSelectedValue(v)}
@@ -45,6 +46,7 @@ export default function DropdownExample() {
       <div>
         <div className="w-full sm:max-w-64">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             value={customIconValue}
             onValueChange={(v) => setCustomIconValue(v)}
@@ -75,6 +77,7 @@ export default function DropdownExample() {
       <div>
         <div className="w-full sm:max-w-64">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             placeholder="Select a fruit..."
             selectedIcon={<span className="w-2 h-2 rounded-full shrink-0 bg-cl-accent" />}
@@ -92,6 +95,7 @@ export default function DropdownExample() {
       <div>
         <div className="w-full sm:max-w-64">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             value={noIconValue}
             onValueChange={(v) => setNoIconValue(v)}

@@ -4,7 +4,9 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-72">
+        <p id="multi-select-dropdown-empty-default">Default emptyContent</p>
         <MultiSelectDropdown
+          aria-labelledby="multi-select-dropdown-empty-default"
           options={[]}
           value={[]}
           onValueChange={() => {}}
@@ -22,7 +24,9 @@ export default function MultiSelectDropdownExample() {
         />
       </div>
       <div className="w-full sm:max-w-72">
+        <p id="multi-select-dropdown-empty-custom">Custom emptyContent</p>
         <MultiSelectDropdown
+          aria-labelledby="multi-select-dropdown-empty-custom"
           options={[]}
           value={[]}
           onValueChange={() => {}}

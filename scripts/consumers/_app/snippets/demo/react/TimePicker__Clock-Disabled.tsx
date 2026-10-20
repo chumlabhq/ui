@@ -6,6 +6,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <TimePicker
+        label="Check-in time"
         value={clockDisabled}
         onValueChange={() => {}}
         mode="clock"

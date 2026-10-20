@@ -572,6 +572,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={posBotValue}
                   onValueChange={setPosBotValue}
@@ -587,6 +588,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={posTopValue}
                   onValueChange={setPosTopValue}
@@ -613,6 +615,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={forceBotValue}
                   onValueChange={setForceBotValue}
@@ -629,6 +632,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={forceTopValue}
                   onValueChange={setForceTopValue}
@@ -653,6 +657,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectSearchableDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={forceLockValue}
                   onValueChange={setForceLockValue}

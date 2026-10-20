@@ -21,6 +21,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <SearchableDropdown
+        aria-label="Fruit"
         options={fruitOptions}
         value={renderTriggerValue}
         onValueChange={(v) => setRenderTriggerValue(v)}

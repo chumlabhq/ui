@@ -28,6 +28,7 @@ export default function MultiSelectDropdownExample() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <div>
         <MultiSelectDropdown
+          label="Fruits"
           options={staticOptions}
           value={stateDefaultValue}
           onValueChange={setStateDefaultValue}
@@ -47,6 +48,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div>
         <MultiSelectDropdown
+          label="Fruits"
           options={staticOptions}
           value={stateSelectedValue}
           onValueChange={setStateSelectedValue}
@@ -66,6 +68,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div>
         <MultiSelectDropdown
+          label="Fruits"
           options={staticOptions}
           value={["apple", "banana"]}
           onValueChange={() => {}}
@@ -89,6 +92,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div>
         <MultiSelectDropdown
+          label="Fruits"
           options={staticOptions}
           value={stateErrorValue}
           onValueChange={setStateErrorValue}
@@ -112,6 +116,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div>
         <MultiSelectDropdown
+          label="Fruits"
           options={[]}
           value={[]}
           onValueChange={() => {}}
@@ -132,6 +137,7 @@ export default function MultiSelectDropdownExample() {
       </div>
       <div>
         <MultiSelectDropdown
+          label="Fruits"
           options={staticOptions}
           value={stateNoChipsValue}
           onValueChange={setStateNoChipsValue}

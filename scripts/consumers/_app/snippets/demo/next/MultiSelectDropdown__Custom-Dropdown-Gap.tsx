@@ -21,6 +21,7 @@ export default function MultiSelectDropdownExample() {
       <div>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            label="Fruits"
             options={staticOptions}
             value={[]}
             onValueChange={() => {}}
@@ -42,6 +43,7 @@ export default function MultiSelectDropdownExample() {
       <div>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
+            label="Fruits"
             options={staticOptions}
             value={customGapValue}
             onValueChange={setCustomGapValue}

@@ -8,6 +8,7 @@ export default function RadioButtonExample() {
           <div key={s} className="text-center">
             <RadioGroup
               name={`size-${s}`}
+              aria-label={`Size ${s}`}
               defaultValue="selected"
               size={s}
               classes={
@@ -38,6 +39,7 @@ export default function RadioButtonExample() {
       <div className="text-center">
         <RadioGroup
           name="size-custom"
+          aria-label="Size 28px"
           defaultValue="selected"
           size={28}
           classes={

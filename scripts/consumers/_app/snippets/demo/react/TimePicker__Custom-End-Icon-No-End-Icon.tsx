@@ -14,6 +14,7 @@ export default function TimePickerExample() {
     <div className="flex flex-wrap gap-8">
       <div>
         <TimePicker
+          label="Arrival time"
           value={customEndIconVal}
           onValueChange={(v) => setCustomEndIconVal(v)}
           endIcon={<ClockEndIcon className="w-4 h-4 text-cl-accent" />}
@@ -58,6 +59,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Arrival time"
           value={noEndIconVal}
           onValueChange={(v) => setNoEndIconVal(v)}
           showEndIcon={false}

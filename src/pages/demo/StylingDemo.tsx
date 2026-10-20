@@ -237,7 +237,7 @@ const PortalContainerExample = () => {
       <div className="grid gap-8 md:grid-cols-2">
         <div>
           <div className="eyebrow mb-2">default — portals to body</div>
-          <Dropdown options={PORTAL_OPTIONS} placeholder="Pick a fruit" />
+          <Dropdown aria-label="Fruit" options={PORTAL_OPTIONS} placeholder="Pick a fruit" />
         </div>
         <div>
           <div className="eyebrow mb-2">portalContainer — renders in this box</div>
@@ -246,6 +246,7 @@ const PortalContainerExample = () => {
             className="relative isolate rounded-cl-md border border-border-faint p-3"
           >
             <Dropdown
+              aria-label="Fruit"
               options={PORTAL_OPTIONS}
               placeholder="Pick a fruit"
               portalContainer={container}

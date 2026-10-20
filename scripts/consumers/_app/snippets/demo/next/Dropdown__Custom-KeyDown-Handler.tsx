@@ -21,6 +21,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <Dropdown
+        label="Fruit"
         options={fruitOptions}
         value={customKeyDownValue}
         onValueChange={(v) => setCustomKeyDownValue(v)}

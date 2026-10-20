@@ -8,6 +8,7 @@ export default function TimePickerExample() {
     <div className="w-full space-y-6">
       <div>
         <TimePicker
+          label="Delivery time"
           value={scrollLockDefault}
           onValueChange={(v) => setScrollLockDefault(v)}
           placeholder="Scroll the page..."
@@ -52,6 +53,7 @@ export default function TimePickerExample() {
       </div>
       <div>
         <TimePicker
+          label="Delivery time"
           value={scrollLockEnabled}
           onValueChange={(v) => setScrollLockEnabled(v)}
           placeholder="Open me, then try scrolling..."

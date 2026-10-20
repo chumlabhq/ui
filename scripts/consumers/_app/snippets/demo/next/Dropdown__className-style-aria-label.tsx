@@ -25,6 +25,7 @@ export default function DropdownExample() {
         </p>
         <div className="w-full sm:max-w-64 mt-2">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             placeholder="Select a fruit..."
             className="opacity-90"
@@ -45,6 +46,7 @@ export default function DropdownExample() {
         </p>
         <div className="w-full sm:max-w-64 mt-2">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             value={classNameStyleValue}
             onValueChange={(v) => setClassNameStyleValue(v)}

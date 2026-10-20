@@ -368,6 +368,7 @@ const MultiSelectDropdownDemo = () => {
           <div className="w-full sm:max-w-72">
             {/* Basic usage — works out-of-the-box with built-in styles */}
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={basicValue}
               onValueChange={(values) => setBasicValue(values)}
@@ -388,6 +389,7 @@ const MultiSelectDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Default (empty)</DemoLabel>
               <MultiSelectDropdown
+                label="Fruits"
                 options={staticOptions}
                 value={stateDefaultValue}
                 onValueChange={setStateDefaultValue}
@@ -399,6 +401,7 @@ const MultiSelectDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Selected (with chips)</DemoLabel>
               <MultiSelectDropdown
+                label="Fruits"
                 options={staticOptions}
                 value={stateSelectedValue}
                 onValueChange={setStateSelectedValue}
@@ -410,6 +413,7 @@ const MultiSelectDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Disabled</DemoLabel>
               <MultiSelectDropdown
+                label="Fruits"
                 options={staticOptions}
                 value={["apple", "banana"]}
                 onValueChange={() => {}}
@@ -425,6 +429,7 @@ const MultiSelectDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Error state</DemoLabel>
               <MultiSelectDropdown
+                label="Fruits"
                 options={staticOptions}
                 value={stateErrorValue}
                 onValueChange={setStateErrorValue}
@@ -440,6 +445,7 @@ const MultiSelectDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Loading state</DemoLabel>
               <MultiSelectDropdown
+                label="Fruits"
                 options={[]}
                 value={[]}
                 onValueChange={() => {}}
@@ -452,6 +458,7 @@ const MultiSelectDropdownDemo = () => {
             <div>
               <DemoLabel isDarkMode={dark}>Count only (no chips)</DemoLabel>
               <MultiSelectDropdown
+                label="Fruits"
                 options={staticOptions}
                 value={stateNoChipsValue}
                 onValueChange={setStateNoChipsValue}
@@ -473,6 +480,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Countries"
               options={countryOptions}
               value={countryValue}
               onValueChange={(values) => setCountryValue(values)}
@@ -493,6 +501,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Statuses"
               options={statusOptions}
               value={statusValue}
               onValueChange={(values) => setStatusValue(values)}
@@ -513,6 +522,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-80">
             <MultiSelectDropdown
+              label="Countries"
               value={asyncValue}
               onValueChange={(values) => setAsyncValue(values)}
               placeholder="Select countries..."
@@ -539,6 +549,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Available options"
               options={disabledItemOptions}
               value={disabledItemValue}
               onValueChange={(values) => setDisabledItemValue(values)}
@@ -582,6 +593,7 @@ const MultiSelectDropdownDemo = () => {
           <div className="flex items-end gap-4">
             <div className="w-full sm:max-w-72">
               <MultiSelectDropdown
+                label="Fruits"
                 options={staticOptions}
                 value={controlledValue}
                 onValueChange={setControlledValue}
@@ -623,6 +635,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={noChipsValue}
               onValueChange={(values) => setNoChipsValue(values)}
@@ -643,6 +656,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={disabledValue}
               onValueChange={(values) => setDisabledValue(values)}
@@ -781,6 +795,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={noChevronValue}
               onValueChange={(values) => setNoChevronValue(values)}
@@ -802,6 +817,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={fullWidthValue}
               onValueChange={(values) => setFullWidthValue(values)}
@@ -823,6 +839,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits (page scrolls)"
               options={staticOptions}
               value={scrollUnlockedValue}
               onValueChange={setScrollUnlockedValue}
@@ -833,6 +850,7 @@ const MultiSelectDropdownDemo = () => {
           </div>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits (scroll locked)"
               options={staticOptions}
               value={scrollLockValue}
               onValueChange={setScrollLockValue}
@@ -856,6 +874,7 @@ const MultiSelectDropdownDemo = () => {
             <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectDropdown
+                aria-label="Fruits (default)"
                 options={staticOptions}
                 value={variantDefaultValue}
                 onValueChange={setVariantDefaultValue}
@@ -869,6 +888,7 @@ const MultiSelectDropdownDemo = () => {
             <p className={`mb-2 ${c.label}`}>Borderless</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectDropdown
+                aria-label="Fruits (borderless)"
                 options={staticOptions}
                 value={variantBorderlessValue}
                 onValueChange={setVariantBorderlessValue}
@@ -887,6 +907,7 @@ const MultiSelectDropdownDemo = () => {
             <p className={`mb-2 ${c.label}`}>Bottom border only</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectDropdown
+                aria-label="Fruits (bottom border)"
                 options={staticOptions}
                 value={variantBottomValue}
                 onValueChange={setVariantBottomValue}
@@ -905,6 +926,7 @@ const MultiSelectDropdownDemo = () => {
             <p className={`mb-2 ${c.label}`}>Ghost</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectDropdown
+                aria-label="Fruits (ghost)"
                 options={staticOptions}
                 value={variantGhostValue}
                 onValueChange={setVariantGhostValue}
@@ -923,6 +945,7 @@ const MultiSelectDropdownDemo = () => {
             <p className={`mb-2 ${c.label}`}>Pill</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectDropdown
+                aria-label="Fruits (pill)"
                 options={staticOptions}
                 value={variantPillValue}
                 onValueChange={setVariantPillValue}
@@ -954,6 +977,7 @@ const MultiSelectDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={posBotValue}
                   onValueChange={setPosBotValue}
@@ -970,6 +994,7 @@ const MultiSelectDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={posTopValue}
                   onValueChange={setPosTopValue}
@@ -997,6 +1022,7 @@ const MultiSelectDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={forceBotValue}
                   onValueChange={setForceBotValue}
@@ -1013,6 +1039,7 @@ const MultiSelectDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={forceTopValue}
                   onValueChange={setForceTopValue}
@@ -1037,6 +1064,7 @@ const MultiSelectDropdownDemo = () => {
               </DemoLabel>
               <div className="w-full sm:max-w-64">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={forceLockValue}
                   onValueChange={setForceLockValue}
@@ -1099,6 +1127,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={keepMountedValue}
               onValueChange={setKeepMountedValue}
@@ -1123,6 +1152,7 @@ const MultiSelectDropdownDemo = () => {
               <DemoLabel isDarkMode={dark}>No gap (0px)</DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={[]}
                   onValueChange={() => {}}
@@ -1136,6 +1166,7 @@ const MultiSelectDropdownDemo = () => {
               <DemoLabel isDarkMode={dark}>Large gap (16px)</DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
+                  label="Fruits"
                   options={staticOptions}
                   value={customGapValue}
                   onValueChange={setCustomGapValue}
@@ -1159,6 +1190,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={zIndexValue}
               onValueChange={setZIndexValue}
@@ -1180,6 +1212,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={[]}
               onValueChange={() => {}}
@@ -1210,6 +1243,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={customKeyDownValue}
               onValueChange={setCustomKeyDownValue}
@@ -1247,6 +1281,7 @@ const MultiSelectDropdownDemo = () => {
               <DemoLabel isDarkMode={dark}>className (root)</DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
+                  aria-label="Fruits"
                   options={staticOptions}
                   value={classNameDemoValue}
                   onValueChange={setClassNameDemoValue}
@@ -1261,6 +1296,7 @@ const MultiSelectDropdownDemo = () => {
               <DemoLabel isDarkMode={dark}>style (inline on root)</DemoLabel>
               <div className="w-full sm:max-w-72">
                 <MultiSelectDropdown
+                  aria-label="Fruits"
                   options={staticOptions}
                   value={classNameStyleValue}
                   onValueChange={setClassNameStyleValue}
@@ -1300,6 +1336,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              aria-label="Fruits (dark theme)"
               options={staticOptions}
               value={darkThemeValue}
               onValueChange={(values) => setDarkThemeValue(values)}
@@ -1337,6 +1374,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              aria-label="Fruits (blue theme)"
               options={staticOptions}
               value={purpleThemeValue}
               onValueChange={(values) => setPurpleThemeValue(values)}
@@ -1371,6 +1409,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              aria-label="Fruits (green rounded checkboxes)"
               options={staticOptions}
               value={greenCheckboxValue}
               onValueChange={(values) => setGreenCheckboxValue(values)}
@@ -1394,6 +1433,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              aria-label="Fruits (orange square checkboxes)"
               options={staticOptions}
               value={orangeCheckboxValue}
               onValueChange={(values) => setOrangeCheckboxValue(values)}
@@ -1418,6 +1458,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectDropdown
+              aria-label="Fruits (star checkboxes)"
               options={staticOptions}
               value={customIconValue}
               onValueChange={(values) => setCustomIconValue(values)}
@@ -1452,8 +1493,9 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap gap-8">
             <div className="w-full sm:max-w-72">
-              <DemoLabel isDarkMode={dark}>3 shimmer items</DemoLabel>
+              <DemoLabel id="multi-select-dropdown-shimmer-3" isDarkMode={dark}>3 shimmer items</DemoLabel>
               <MultiSelectDropdown
+                aria-labelledby="multi-select-dropdown-shimmer-3"
                 options={[]}
                 value={[]}
                 onValueChange={() => {}}
@@ -1464,8 +1506,9 @@ const MultiSelectDropdownDemo = () => {
               />
             </div>
             <div className="w-full sm:max-w-72">
-              <DemoLabel isDarkMode={dark}>8 shimmer items</DemoLabel>
+              <DemoLabel id="multi-select-dropdown-shimmer-8" isDarkMode={dark}>8 shimmer items</DemoLabel>
               <MultiSelectDropdown
+                aria-labelledby="multi-select-dropdown-shimmer-8"
                 options={[]}
                 value={[]}
                 onValueChange={() => {}}
@@ -1488,8 +1531,9 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex flex-wrap gap-8">
             <div className="w-full sm:max-w-72">
-              <DemoLabel isDarkMode={dark}>Default emptyContent</DemoLabel>
+              <DemoLabel id="multi-select-dropdown-empty-default" isDarkMode={dark}>Default emptyContent</DemoLabel>
               <MultiSelectDropdown
+                aria-labelledby="multi-select-dropdown-empty-default"
                 options={[]}
                 value={[]}
                 onValueChange={() => {}}
@@ -1498,8 +1542,9 @@ const MultiSelectDropdownDemo = () => {
               />
             </div>
             <div className="w-full sm:max-w-72">
-              <DemoLabel isDarkMode={dark}>Custom emptyContent</DemoLabel>
+              <DemoLabel id="multi-select-dropdown-empty-custom" isDarkMode={dark}>Custom emptyContent</DemoLabel>
               <MultiSelectDropdown
+                aria-labelledby="multi-select-dropdown-empty-custom"
                 options={[]}
                 value={[]}
                 onValueChange={() => {}}
@@ -1561,6 +1606,7 @@ const MultiSelectDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <MultiSelectDropdown
+              label="Fruits"
               options={staticOptions}
               value={keyboardDemoValue}
               onValueChange={setKeyboardDemoValue}

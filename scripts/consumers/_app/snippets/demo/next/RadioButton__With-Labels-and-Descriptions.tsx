@@ -4,6 +4,7 @@ export default function RadioButtonExample() {
   return (
     <RadioGroup
       name="with-desc"
+      label="Notifications"
       defaultValue="email"
       size="md"
       classes={

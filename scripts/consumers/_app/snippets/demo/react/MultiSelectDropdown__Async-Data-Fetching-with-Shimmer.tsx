@@ -93,6 +93,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-80">
       <MultiSelectDropdown
+        label="Countries"
         value={asyncValue}
         onValueChange={(values) => setAsyncValue(values)}
         placeholder="Select countries..."

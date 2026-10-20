@@ -19,6 +19,7 @@ export default function DropdownExample() {
         <p className="text-xs font-medium text-cl-text-tertiary">No gap (0px)</p>
         <div className="w-full sm:max-w-64 mt-2">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             dropdownOffset={0}
             placeholder="No gap..."
@@ -37,6 +38,7 @@ export default function DropdownExample() {
         <p className="text-xs font-medium text-cl-text-tertiary">Large gap (16px)</p>
         <div className="w-full sm:max-w-64 mt-2">
           <Dropdown
+            label="Fruit"
             options={fruitOptions}
             value={customGapValue}
             onValueChange={(v) => setCustomGapValue(v)}

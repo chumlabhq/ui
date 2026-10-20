@@ -23,6 +23,7 @@ export default function SearchableDropdownExample() {
       <div>
         <div className="w-full sm:max-w-64">
           <SearchableDropdown
+            aria-label="Fruit"
             options={fruitOptions}
             placeholder="Search fruits..."
             className="opacity-90"
@@ -41,6 +42,7 @@ export default function SearchableDropdownExample() {
       <div>
         <div className="w-full sm:max-w-64">
           <SearchableDropdown
+            aria-label="Fruit"
             options={fruitOptions}
             value={classNameStyleValue}
             onValueChange={(v) => setClassNameStyleValue(v)}
