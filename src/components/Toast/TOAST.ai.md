@@ -159,7 +159,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `onDismiss` | object | — | (id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
 | `style` | object | — | Inline styles applied to the toast element. |
-| `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
+| `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. Focus inside the toast pauses it whatever this is set to. |
 | `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
 | `aria-label` | string | — | Accessible name of the toast's status region. |
 | `aria-labelledby` | string | — | Ids of the elements that name the toast's status region. |

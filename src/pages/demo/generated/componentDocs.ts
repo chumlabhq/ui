@@ -18118,7 +18118,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "boolean",
         "required": false,
         "default": "true",
-        "description": "Whether to pause the auto-dismiss timer on hover."
+        "description": "Whether to pause the auto-dismiss timer on hover. Focus inside the toast pauses it whatever this is set to."
       },
       {
         "name": "closeAriaLabel",

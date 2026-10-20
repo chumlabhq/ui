@@ -2005,6 +2005,8 @@ DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > sub
 | `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
 | `submenuSearchAriaLabel` | string | `"Search submenu"` | Accessible label for the submenu search input. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 
 ### Styling Guide
 
@@ -3438,6 +3440,8 @@ export default function Example() {
 | `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
@@ -4894,6 +4898,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `dropdownOffset` | number | `4` | Gap in pixels between trigger and dropdown popup. |
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
@@ -5201,6 +5207,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `typeaheadTimeout` | number | `500` | Timeout in milliseconds for keyboard typeahead matching. |
 | `keepMounted` | boolean | `false` | Keeps the dropdown DOM mounted when closed. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void - Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void - Fires on keydown events. |
@@ -6244,6 +6252,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `lockScroll` | boolean | `false` | Whether to lock body scroll when the dropdown is open. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void — Callback fired on keydown events. |
@@ -6534,6 +6544,7 @@ Each is written or absent, never `"false"`.
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `aria-label` | string | — | Accessible label for the slider. |
 | `aria-labelledby` | string | — | ID of the element that labels the slider. |
+| `aria-describedby` | string | — | Lands on the thumbs, joined with the description and the error message. |
 | `aria-valuetext` | string | — | Human-readable text alternative for the current value. |
 
 ### Class overrides
@@ -8249,7 +8260,7 @@ A toast takes focus only when it has an action; otherwise it announces itself an
 | `onDismiss` | object | — | (id: string) => void — Fires with the toast's `id` when it is dismissed: its close button, Escape, or its duration running out. |
 | `role` | `"alert"` \| `"status"` | — | ARIA role for the toast element. |
 | `style` | object | — | Inline styles applied to the toast element. |
-| `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. |
+| `pauseOnHover` | boolean | `true` | Whether to pause the auto-dismiss timer on hover. Focus inside the toast pauses it whatever this is set to. |
 | `closeAriaLabel` | string | `"Close notification"` | Accessible label for the close button. |
 | `aria-label` | string | — | Accessible name of the toast's status region. |
 | `aria-labelledby` | string | — | Ids of the elements that name the toast's status region. |

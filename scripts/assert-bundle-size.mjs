@@ -1424,6 +1424,26 @@ const LIBRARY_TOTAL_HISTORY = [
       "(below). No comments added to src/components or src/utils. Measured " +
       "against a build of cfa00fec.",
   },
+  {
+    kb: 160.33,
+    commit: "(uncommitted)",
+    date: "2026-10-21",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.04 KB (164,138 -> 164,182 B gzipped, +44 B on a build of " +
+      "0ea7d77c), 83 files held. M1-L1: Table's pin control shows while its " +
+      "header cell has focus within and always on a screen without hover, and " +
+      "Toast pauses while focus is inside it. Per chunk: ToastProvider +40 B " +
+      "(the pause is two booleans, hovered and focused, either of which holds " +
+      "it; onFocus and an onBlur that ignores focus moving within the toast; " +
+      "the remaining time is read in the timer effect's cleanup, which " +
+      "replaces the two mouse handlers); Table +27 B (two classes on an " +
+      "unpinned column's pin control: group-focus-within/header:opacity-100 " +
+      "and [@media(hover:none)]:opacity-100). The rest, -1 to +1 B on an " +
+      "entry, is Table's chunk's new hashed name in import strings. Table's " +
+      "declared breach moved with it (below). No comments added to " +
+      "src/components or src/utils. Measured against a build of 0ea7d77c.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1477,8 +1497,13 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.39,
-      why: "2026-10-20, G1: 16.40 -> 16.39 (exclusive 16,794 -> 16,780 B gzipped, -14 B), " +
+      kb: 16.42,
+      why: "2026-10-21, M1-L1: 16.39 -> 16.42 (exclusive 16,780 -> 16,809 B gzipped, +29 B), " +
+        "measured on a build of 0ea7d77c: an unpinned column's pin control takes " +
+        "group-focus-within/header:opacity-100 and [@media(hover:none)]:opacity-100, so it " +
+        "shows while its header cell has focus within and always on a screen without hover, " +
+        "where hover never revealed it. " +
+        "2026-10-20, G1: 16.40 -> 16.39 (exclusive 16,794 -> 16,780 B gzipped, -14 B), " +
         "lowered by hand to the measured value, all of it S4 14b8cacf (the search reports through " +
         "TanStack's one handler, so typing and Clear search report once, not twice), measured on " +
         "archived builds of 1aee7467 and 14b8cacf; unchanged since. It sat under its record inside " +

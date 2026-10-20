@@ -36,9 +36,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * 4749 from 2026-09-08 (032eb67f) to 2026-10-20, while the suite grew to 5497:
  * 748 tests could have stopped being collected without this noticing. Raised
  * to the measured count in G1; the per-file basis is the `unit+contracts` row
- * of docs/adr/002-gate-populations.json's `$basisChanges`.
+ * of docs/adr/002-gate-populations.json's `$basisChanges`. 5502 at M1-L1:
+ * Toast's five Pause on Focus tests.
  */
-const SUITE_FLOOR = { tests: 5497 };
+const SUITE_FLOOR = { tests: 5502 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");

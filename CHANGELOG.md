@@ -704,6 +704,8 @@ tables say.
 
 ### Fixed
 
+- Table's pin control for an unpinned column shows while its header cell has focus, and always on a screen without hover. It was revealed only by hover, so a keyboard user focused an invisible button and a touch user could hit it only by luck; on a screen with hover it still appears on hover.
+- Toast pauses its countdown while focus is inside it and resumes when focus leaves, as it does for the pointer, and the two combine: the toast resumes only once both have left. The focus pause holds whatever `pauseOnHover` is set to. It went on counting with focus on its close button, gone at 2.82 s against 2.83 s untouched, so a keyboard or screen-reader user could lose it while reading (WCAG 2.2.1).
 - Drawer warns about a missing name only once its panel is open, after its DrawerHeader has registered. It warned for every drawer at mount, closed, kept mounted or open, header or not; an open drawer with no DrawerHeader, `aria-label` or `aria-labelledby` still warns.
 - InternationalPhoneInput's country list fits a phone screen; a fixed 288 px wide, it ran 16 px past a 280 px viewport.
 - SearchableDropdown's list fits a phone screen, and its search input shrinks with it; sized to its content, it ran 7 px past a 280 px viewport in Firefox.

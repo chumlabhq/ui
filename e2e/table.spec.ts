@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import ts from "typescript";
 import { test, expect, type Page, type Locator } from "./_test";
 import { gotoFixture } from "./_nav";
-import { caretKeys, caretToEnd, caretToStart, skipWithoutTabTraversal } from "./_helpers";
+import { caretKeys, caretToEnd, caretToStart, skipWithoutTabTraversal, skipWithoutTouchEvents } from "./_helpers";
 import { demoPages } from "./_demo-routes";
 
 /**
@@ -37,6 +37,46 @@ test.describe("Table (fixtures)", () => {
       Number(opacity),
       "the pin control reports active but is still transparent",
     ).toBeGreaterThan(0);
+  });
+
+  /**
+   * An unpinned column's pin control is revealed by hover, which a keyboard and
+   * a touch screen never produce. It is shown while its header cell has focus
+   * within, in every engine, and always on a screen without hover. Visible means
+   * painted and reachable: opacity 1, and its centre hit-tests to the control.
+   */
+  const pinControl = (page: Page) => page.locator('[data-fixture] button[aria-label="Pin role column"]');
+  const shown = (control: Locator) =>
+    control.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return { opacity: getComputedStyle(el).opacity, hit: !!hit && (hit === el || el.contains(hit)) };
+    });
+
+  test("shows an unpinned column's pin control while its header has focus", async ({ page }) => {
+    await gotoFixture(page, "Table", "pinned-column");
+    const control = pinControl(page);
+    await expect(control).toBeAttached();
+    const hoverless = await page.evaluate(() => matchMedia("(hover: none)").matches);
+    if (!hoverless) {
+      expect((await shown(control)).opacity, "on a hover screen it waits for hover or focus").toBe("0");
+    }
+    await control.focus();
+    expect(await shown(control), "focused, the control must be painted and reachable").toEqual({ opacity: "1", hit: true });
+  });
+
+  test("shows an unpinned column's pin control on a screen without hover", async ({ page }) => {
+    await skipWithoutTouchEvents(test, page);
+    const hoverless = await page.evaluate(() => matchMedia("(hover: none)").matches);
+    test.skip(!hoverless, "this project's screen has hover (a desktop engine); the touch path is Mobile Chrome and Mobile Safari");
+    await gotoFixture(page, "Table", "pinned-column");
+    const control = pinControl(page);
+    await expect(control).toBeAttached();
+    expect(await shown(control), "at rest, before any touch").toEqual({ opacity: "1", hit: true });
+    const header = page.locator("[data-fixture] th", { has: page.locator('button[aria-label="Pin role column"]') });
+    const box = await header.boundingBox();
+    await page.touchscreen.tap(box!.x + 8, box!.y + box!.height / 2);
+    expect(await shown(control), "after a tap on its header").toEqual({ opacity: "1", hit: true });
   });
 
   /**

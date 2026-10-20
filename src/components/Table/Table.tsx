@@ -1348,7 +1348,7 @@ function TableInner<TData>(
                 className={`${
                   isPinned
                     ? `opacity-100 ${pinButtonClassName}`
-                    : `opacity-0 group-hover/header:opacity-100 ${pinButtonClassName} ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`
+                    : `opacity-0 group-hover/header:opacity-100 group-focus-within/header:opacity-100 [@media(hover:none)]:opacity-100 ${pinButtonClassName} ${isDisabled ? "cursor-not-allowed opacity-50" : ""}`
                 }`}
                 aria-label={
                   isPinned

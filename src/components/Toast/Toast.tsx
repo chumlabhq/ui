@@ -57,7 +57,9 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   useEffect(() => {
     onDismissRef.current = onDismiss;
   }, [onDismiss]);
-  const [isPaused, setIsPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const isPaused = hovered || focused;
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
   const prefersReducedMotion = useReducedMotion();
@@ -108,6 +110,7 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
+      remainingRef.current = Math.max(0, deadlineRef.current - Date.now());
     };
   }, [duration, handleClose, isPaused]);
 
@@ -117,20 +120,6 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
       setProgressPercent((remainingRef.current / duration) * 100);
     }
   }, [isPaused, duration]);
-
-  const handleMouseEnter = useCallback(() => {
-    if (pauseOnHover && duration !== Infinity && duration > 0) {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      remainingRef.current = Math.max(0, deadlineRef.current - Date.now());
-      setIsPaused(true);
-    }
-  }, [pauseOnHover, duration]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (pauseOnHover && duration !== Infinity && duration > 0) {
-      setIsPaused(false);
-    }
-  }, [pauseOnHover, duration]);
 
   const hasFiniteDuration = duration !== Infinity && duration > 0;
   const progressAnimationStyle: React.CSSProperties | undefined =
@@ -164,8 +153,12 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
         className,
       )}
       style={style}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={pauseOnHover ? () => setHovered(true) : undefined}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
+      }}
       data-toast-id={id}
       data-variant={variant}
     >

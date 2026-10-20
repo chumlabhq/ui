@@ -78,7 +78,7 @@
     },
     "pauseOnHover": {
       "type": "boolean",
-      "description": "Whether to pause the auto-dismiss timer on hover.",
+      "description": "Whether to pause the auto-dismiss timer on hover. Focus inside the toast pauses it whatever this is set to.",
       "default": true
     },
     "closeAriaLabel": {

@@ -406,6 +406,80 @@ describe("Toast", () => {
     });
   });
 
+  // WCAG 2.2.1: a keyboard or screen-reader user reading the toast holds it the
+  // way a pointer over it does, and the two holds combine.
+  describe("Pause on Focus", () => {
+    const showToast = async (options?: { pauseOnHover?: boolean }) => {
+      let toastApi: ReturnType<typeof useToast>;
+      renderWithProvider(<TestConsumer onMount={(api) => (toastApi = api)} />);
+      await act(async () => {
+        toastApi.info("Message", { duration: 2000, ...options });
+      });
+      const toast = screen.getByRole("status");
+      const close = screen.getByRole("button", { name: "Close notification" });
+      return { toast, close };
+    };
+    const advance = async (ms: number) => {
+      await act(async () => {
+        vi.advanceTimersByTime(ms);
+      });
+    };
+    const gone = () =>
+      waitFor(() => {
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      });
+
+    it("pauses while focus is inside", async () => {
+      const { close } = await showToast();
+      act(() => close.focus());
+      await advance(3000);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+    });
+
+    it("resumes when focus leaves", async () => {
+      const { close } = await showToast();
+      act(() => close.focus());
+      await advance(3000);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      act(() => close.blur());
+      await advance(2500);
+      await gone();
+    });
+
+    it("stays paused when the pointer leaves while focus is still inside", async () => {
+      const { toast, close } = await showToast();
+      fireEvent.mouseEnter(toast);
+      act(() => close.focus());
+      fireEvent.mouseLeave(toast);
+      await advance(3000);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      act(() => close.blur());
+      await advance(2500);
+      await gone();
+    });
+
+    it("stays paused when focus leaves while the pointer is still over it", async () => {
+      const { toast, close } = await showToast();
+      act(() => close.focus());
+      await advance(3000);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      fireEvent.mouseEnter(toast);
+      act(() => close.blur());
+      await advance(3000);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      fireEvent.mouseLeave(toast);
+      await advance(2500);
+      await gone();
+    });
+
+    it("pauses on focus when pauseOnHover is false", async () => {
+      const { close } = await showToast({ pauseOnHover: false });
+      act(() => close.focus());
+      await advance(3000);
+      expect(screen.getByRole("status")).toBeInTheDocument();
+    });
+  });
+
   describe("Programmatic Dismiss", () => {
     it("dismisses specific toast by id", async () => {
       let toastApi: ReturnType<typeof useToast>;

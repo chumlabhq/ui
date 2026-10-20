@@ -187,6 +187,29 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
     });
   });
 
+  // WCAG 2.2.1: a keyboard or screen-reader user reading the toast holds it as
+  // a pointer over it does. Measured before the fix: focus on the close button
+  // left a 2 s toast to go at 2.82 s, against 2.83 s untouched.
+  test.describe("Pause on Focus", () => {
+    test("holds the toast while focus is inside it and releases it when focus leaves", async ({ page }) => {
+      const quickButton = page.locator('button:has-text("2 Seconds")').first();
+      await expect(quickButton).toBeVisible();
+      await quickButton.scrollIntoViewIfNeeded();
+      await quickButton.click();
+      await waitForToastVisible(page);
+
+      const toast = page.locator(TOAST_SELECTOR).first();
+      const close = toast.getByRole("button", { name: "Close notification" });
+      await close.focus();
+
+      await page.waitForTimeout(3000);
+      await expect(toast, "focus inside should hold the toast past its 2 s").toBeVisible();
+
+      await close.evaluate((el) => (el as HTMLElement).blur());
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0, { timeout: 5000 });
+    });
+  });
+
   test.describe("Progress Bar", () => {
     test("should display progress bar by default", async ({ page }) => {
       await triggerToast(page, "success");
