@@ -1,6 +1,6 @@
 import ts from "typescript";
 import { readFileSync } from "node:fs";
-import { test, expect, type Frame } from "./_test";
+import { test, expect, type Frame, type Locator } from "./_test";
 import { demoPages } from "./_demo-routes";
 
 /**
@@ -8,15 +8,18 @@ import { demoPages } from "./_demo-routes";
  *
  * A `PhoneFrame` loads `/preview/<Component>/<example>` in a 360 px iframe,
  * because popovers place themselves against the viewport and only a document
- * that narrow shows where they land on a phone. The demo-scenarios contract
- * proves from the AST that the frame is there and names a registered preview;
- * this proves what a reader sees in it, per frame:
+ * that narrow shows where they land on a phone. On a page narrower than that
+ * the frame takes the width it has: 351 px on a Pixel 5, inside a 393 px page.
+ * The demo-scenarios contract proves from the AST that the frame is there and
+ * names a registered preview; this proves what a reader sees in it, per frame:
  *
  *   - it loads that preview, not the not-found page, and its document is 360
- *     px wide;
+ *     px wide, or as wide as the figure leaves room for inside the wrapper's
+ *     border when that is less: read from the page, so a frame narrower than
+ *     both still fails;
  *   - nothing in it scrolls the document sideways;
  *   - the component is visible, and every popup it has open lies inside the
- *     360 px viewport: getBoundingClientRect, not scrollWidth, since a fixed
+ *     frame's viewport: getBoundingClientRect, not scrollWidth, since a fixed
  *     popup adds nothing to scrollWidth and clips unseen. That is how
  *     CascadingDropdown's menu, 8 px wider than the viewport, went unnoticed
  *     until L24 fixed it and gave it a frame;
@@ -94,6 +97,20 @@ const MODAL_TALL = "The dialog scrolls inside the overlay, and the last control 
 const FLOOR = 20;
 const WIDTH = 360;
 
+/**
+ * The width the frame's document should have: 360 px, or the room its figure
+ * gives the iframe when that is less, which is the figure's content box less
+ * the wrapper's border.
+ */
+const widthFor = (figure: Locator) =>
+  figure.evaluate((fig, most) => {
+    const wrap = fig.querySelector("iframe")!.parentElement!;
+    const [f, w] = [getComputedStyle(fig), getComputedStyle(wrap)];
+    const room =
+      fig.clientWidth - parseFloat(f.paddingLeft) - parseFloat(f.paddingRight) - parseFloat(w.borderLeftWidth) - parseFloat(w.borderRightWidth);
+    return { room, want: Math.min(most, room) };
+  }, WIDTH);
+
 /** Popups open in the frame, with their boxes; dialogs may run past the bottom, since the tall ones scroll. */
 const popupsOf = (frame: Frame) =>
   frame.evaluate(() =>
@@ -131,7 +148,7 @@ const inView = (frame: Frame, name: string) =>
     return r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth;
   });
 
-test("every phone-width frame loads its preview at 360 px, inside the screen", async ({ page }) => {
+test("every phone-width frame loads its preview at 360 px or the page's width, inside the screen", async ({ page }) => {
   test.setTimeout(300_000);
   const frames = phoneFrames();
   const counts = { frames: frames.length, loaded: 0, overflow: 0, outside: 0, reachable: 0, focusTaken: 0 };
@@ -147,7 +164,9 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
     await expect(figure, `${f.page}: no frame for ${f.route}`).toHaveCount(1);
     await figure.scrollIntoViewIfNeeded();
     await expect(page.locator("section").filter({ has: figure }).getByRole("heading", { level: 2 })).toHaveText(f.section);
-    await expect(figure.locator("figcaption")).toHaveText(`At phone width (360 px). ${f.lookFor}`);
+    await expect(figure.locator("figcaption")).toHaveText(`At phone width. ${f.lookFor}`);
+    const [component, example] = id.split("/");
+    await expect(figure.locator("iframe")).toHaveAttribute("title", `${component}, ${example.replace(/-/g, " ")}, at phone width`);
     if (id === "Modal/tall") {
       expect(f.section).toBe("Taller than the screen");
       expect(f.lookFor).toBe(MODAL_TALL);
@@ -166,8 +185,9 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
       problems.push(`${f.route}: loading the frame moved the docs page's focus into it`);
     }
 
+    const { room, want: wide } = await widthFor(figure);
     const width = await inner.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
-    if (width.client !== WIDTH) problems.push(`${f.route}: the document is ${width.client} px wide, not ${WIDTH}`);
+    if (width.client !== wide) problems.push(`${f.route}: the document is ${width.client} px wide, not ${wide} (the figure leaves ${room})`);
     if (width.scroll > width.client) {
       counts.overflow += 1;
       problems.push(`${f.route}: the document scrolls sideways (${width.scroll} > ${width.client})`);
@@ -180,11 +200,11 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
     await settled(inner);
     const popups = await popupsOf(inner);
     for (const p of popups) {
-      const across = p.left >= -0.5 && p.right <= WIDTH + 0.5;
+      const across = p.left >= -0.5 && p.right <= width.client + 0.5;
       const down = p.role === "dialog" || (p.top >= -0.5 && p.bottom <= p.height + 0.5);
       if (!across || !down) {
         counts.outside += 1;
-        problems.push(`${f.route}: the ${p.role} lies at x ${Math.round(p.left)}..${Math.round(p.right)}, y ${Math.round(p.top)}..${Math.round(p.bottom)}, outside the ${WIDTH} x ${p.height} viewport`);
+        problems.push(`${f.route}: the ${p.role} lies at x ${Math.round(p.left)}..${Math.round(p.right)}, y ${Math.round(p.top)}..${Math.round(p.bottom)}, outside the ${width.client} x ${p.height} viewport`);
       }
     }
 
@@ -241,9 +261,9 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
     }
 
     console.log(
-      `DEMO_PHONE_FRAME ${f.route} page=/${f.page} section="${f.section}" width=${width.client} ` +
+      `DEMO_PHONE_FRAME ${f.route} page=/${f.page} section="${f.section}" width=${width.client} want=${wide} room=${room} ` +
         `overflow=${width.scroll > width.client ? width.scroll - width.client : 0} shows=${want.shows} ` +
-        `popups=${popups.length} outside=${popups.filter((p) => p.left < -0.5 || p.right > WIDTH + 0.5).length} reach=${reach}`,
+        `popups=${popups.length} outside=${popups.filter((p) => p.left < -0.5 || p.right > width.client + 0.5).length} reach=${reach}`,
     );
   }
 
