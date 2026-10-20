@@ -105,6 +105,25 @@ const popupsOf = (frame: Frame) =>
       }),
   );
 
+/**
+ * Resolves when every finite animation in the frame has finished: what the
+ * popups' boxes are read against is where they come to rest. The Drawer slides
+ * in with a transform transition started on the frame after it mounts, and is
+ * visible from its first frame, so a read straight after `toBeVisible` caught
+ * it in flight: at 4x CPU throttle, x -13.8..286 with the transition at 149 ms,
+ * and -0.39 px in Firefox under load. Two frames first, so a transition queued
+ * by that frame's state change exists before the list is taken.
+ */
+const settled = (frame: Frame) =>
+  frame.evaluate(async () => {
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const finite = document
+      .getAnimations()
+      .filter((a) => Number.isFinite(a.effect?.getComputedTiming().endTime ?? Infinity))
+      .map((a) => a.finished.catch(() => undefined));
+    await Promise.all(finite);
+  });
+
 /** Whether `name`'s button is inside the frame's viewport. */
 const inView = (frame: Frame, name: string) =>
   frame.getByRole("button", { name, exact: true }).evaluate((el) => {
@@ -158,6 +177,7 @@ test("every phone-width frame loads its preview at 360 px, inside the screen", a
       await inner.locator(want.open).first().click();
       await inner.waitForTimeout(400);
     }
+    await settled(inner);
     const popups = await popupsOf(inner);
     for (const p of popups) {
       const across = p.left >= -0.5 && p.right <= WIDTH + 0.5;

@@ -1,6 +1,14 @@
 import { gotoFixture } from "./_nav";
 import { skipWithoutTabTraversal } from "./_helpers";
-import { test, expect } from "./_test";
+import { test, expect, type Page } from "./_test";
+
+/**
+ * An example on /tooltip, found by its own heading. The first section whose
+ * text holds the title is not it: "Arrow" first matched Anatomy, which names
+ * the arrow part, once the page gained that section.
+ */
+const sectionOf = (page: Page, title: string) =>
+  page.locator("section").filter({ has: page.getByRole("heading", { name: title, exact: true }) });
 
 test.describe("Tooltip Component - Cross-Browser Tests", () => {
   test.beforeEach(async ({ page }) => {
@@ -23,7 +31,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
 
     test("should show tooltip with arrow", async ({ page }) => {
-      const arrowSection = page.locator("section").filter({ hasText: "Arrow" }).first();
+      const arrowSection = sectionOf(page, "Arrow");
       const trigger = arrowSection.locator("button").filter({ hasText: "With Arrow" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -39,7 +47,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
     });
 
     test("should show tooltip without arrow when configured", async ({ page }) => {
-      const arrowSection = page.locator("section").filter({ hasText: "Arrow" }).first();
+      const arrowSection = sectionOf(page, "Arrow");
       const trigger = arrowSection.locator("button").filter({ hasText: "No Arrow" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -56,7 +64,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Positioning", () => {
     test("should position tooltip on top", async ({ page }) => {
-      const positionsSection = page.locator("section").filter({ hasText: "Positions" }).first();
+      const positionsSection = sectionOf(page, "Positions");
       const trigger = positionsSection.locator("button").filter({ hasText: /^Top$/ });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -76,7 +84,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
 
     test("should position tooltip on right", async ({ page, isMobile }) => {
-      const positionsSection = page.locator("section").filter({ hasText: "Positions" }).first();
+      const positionsSection = sectionOf(page, "Positions");
       const trigger = positionsSection.locator("button").filter({ hasText: /^Right$/ });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -100,7 +108,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
     });
 
     test("should position tooltip on left", async ({ page }) => {
-      const positionsSection = page.locator("section").filter({ hasText: "Positions" }).first();
+      const positionsSection = sectionOf(page, "Positions");
       const trigger = positionsSection.locator("button").filter({ hasText: /^Left$/ });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -135,7 +143,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Disabled State", () => {
     test("should not show tooltip when disabled", async ({ page }) => {
-      const disabledSection = page.locator("section").filter({ hasText: "Disabled" }).first();
+      const disabledSection = sectionOf(page, "Disabled");
       const trigger = disabledSection.locator("button").filter({ hasText: "Disabled Tooltip" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -149,7 +157,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Delay Duration", () => {
     test("should show tooltip instantly when delay is 0", async ({ page }) => {
-      const delaySection = page.locator("section").filter({ hasText: "Delay Duration" }).first();
+      const delaySection = sectionOf(page, "Delay Duration");
       const trigger = delaySection.locator("button").filter({ hasText: "Instant" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -170,7 +178,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
     });
 
     test("should show tooltip after configured delay", async ({ page }) => {
-      const delaySection = page.locator("section").filter({ hasText: "Delay Duration" }).first();
+      const delaySection = sectionOf(page, "Delay Duration");
       const trigger = delaySection.locator("button").filter({ hasText: "Slow (1s)" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -188,7 +196,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Controlled State", () => {
     test("should toggle controlled tooltip via button", async ({ page }) => {
-      const controlledSection = page.locator("section").filter({ hasText: "Controlled State" }).first();
+      const controlledSection = sectionOf(page, "Controlled State");
       const toggleButton = controlledSection.locator("button").filter({ hasText: /^Toggle:/ });
       await toggleButton.scrollIntoViewIfNeeded();
 
@@ -205,7 +213,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Hoverable Content", () => {
     test("should keep tooltip open when hovering tooltip content", async ({ page }) => {
-      const hoverableSection = page.locator("section").filter({ hasText: "Hoverable Content" }).first();
+      const hoverableSection = sectionOf(page, "Hoverable Content");
       const trigger = hoverableSection.locator("button").filter({ hasText: "Hoverable (default)" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -222,7 +230,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
     });
 
     test("should close tooltip when leaving trigger with hoverableContent={false}", async ({ page }) => {
-      const hoverableSection = page.locator("section").filter({ hasText: "Hoverable Content" }).first();
+      const hoverableSection = sectionOf(page, "Hoverable Content");
       const trigger = hoverableSection.locator("button").filter({ hasText: "Not Hoverable" });
       await trigger.scrollIntoViewIfNeeded();
 
@@ -241,7 +249,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
   test.describe("Rich Content", () => {
     test("should display rich HTML content in tooltip", async ({ page }) => {
-      const richSection = page.locator("section").filter({ hasText: "Rich HTML Content" }).first();
+      const richSection = sectionOf(page, "Rich HTML Content");
       const trigger = richSection.locator("button").filter({ hasText: "Rich Content" });
       await trigger.scrollIntoViewIfNeeded();
 
