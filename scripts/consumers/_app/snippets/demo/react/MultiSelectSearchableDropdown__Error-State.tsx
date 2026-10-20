@@ -17,7 +17,7 @@ export default function MultiSelectSearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectSearchableDropdown
-        label="Required Field"
+        label="Fruits"
         options={staticOptions}
         value={errorValue}
         onValueChange={(values) => setErrorValue(values)}

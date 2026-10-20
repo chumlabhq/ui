@@ -4,7 +4,7 @@ export default function OtpInputExample() {
   return (
     <OtpInput
       defaultValue="42"
-      label="Pre-filled (uncontrolled)"
+      label="Verification code"
       classes={
         {
           group: "flex items-center gap-2",

@@ -62,8 +62,9 @@ export default function TimePickerExample() {
   return (
     <div className="flex flex-wrap gap-6">
       <div>
+        <p id="time-picker-theme-dark">Dark</p>
         <TimePicker
-          aria-label="Time, dark theme"
+          aria-labelledby="time-picker-theme-dark"
           value={darkThemeVal}
           onValueChange={(v) => setDarkThemeVal(v)}
           placeholder="Select time..."
@@ -75,8 +76,9 @@ export default function TimePickerExample() {
         </span>
       </div>
       <div>
+        <p id="time-picker-theme-warm">Warm</p>
         <TimePicker
-          aria-label="Time, warm theme"
+          aria-labelledby="time-picker-theme-warm"
           value={warmThemeVal}
           onValueChange={(v) => setWarmThemeVal(v)}
           placeholder="Select time..."
@@ -88,8 +90,9 @@ export default function TimePickerExample() {
         </span>
       </div>
       <div>
+        <p id="time-picker-theme-cool">Cool</p>
         <TimePicker
-          aria-label="Time, cool theme"
+          aria-labelledby="time-picker-theme-cool"
           value={coolThemeVal}
           onValueChange={(v) => setCoolThemeVal(v)}
           placeholder="Select time..."
@@ -101,8 +104,9 @@ export default function TimePickerExample() {
         </span>
       </div>
       <div>
+        <p id="time-picker-theme-minimal">Minimal</p>
         <TimePicker
-          aria-label="Time, minimal theme"
+          aria-labelledby="time-picker-theme-minimal"
           value={minimalThemeVal}
           onValueChange={(v) => setMinimalThemeVal(v)}
           placeholder="Select time..."

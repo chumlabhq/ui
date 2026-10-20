@@ -35,7 +35,7 @@ export default function DropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <Dropdown
-          label="Required Field"
+          label="Fruit"
           required
           options={fruitOptions}
           value={requiredValue}

@@ -38,7 +38,7 @@ export default function MultiSelectSearchableDropdownExample() {
             chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
           }
         }
-        aria-label="Uncontrolled fruits"
+        aria-label="Fruits"
       />
       <div
         className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"

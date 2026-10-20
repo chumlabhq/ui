@@ -5,12 +5,13 @@ export default function TextAreaExample() {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
       <div className="space-y-1.5">
         <span
+          id="textarea-loading-default"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Default loader
         </span>
         <TextArea
-          aria-label="Loading"
+          aria-labelledby="textarea-loading-default"
           placeholder="Loading..."
           loading
           classes={
@@ -31,12 +32,13 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-loading-custom"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Custom loader
         </span>
         <TextArea
-          aria-label="Saving"
+          aria-labelledby="textarea-loading-custom"
           placeholder="Saving..."
           loading
           loader={
@@ -62,12 +64,13 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-loading-size"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Custom loader size (24px)
         </span>
         <TextArea
-          aria-label="Loading large"
+          aria-labelledby="textarea-loading-size"
           placeholder="Loading..."
           loading
           loaderSize={24}

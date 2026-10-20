@@ -6,7 +6,7 @@ export default function InputExample() {
   return (
     <div className="w-full sm:max-w-sm space-y-3">
       <Input
-        label="Type anything"
+        label="Name"
         placeholder="Watch the value below..."
         value={callbackValue}
         onValueChange={setCallbackValue}

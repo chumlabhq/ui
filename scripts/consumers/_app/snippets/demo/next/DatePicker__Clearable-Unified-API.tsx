@@ -8,7 +8,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        label="Clearable Date"
+        label="Date"
         value={clearableDate}
         onValueChange={(d) => setClearableDate(d)}
         clearable

@@ -20,7 +20,7 @@ export default function DatePickerExample() {
       <DatePicker
         value={singlePresetDate}
         onValueChange={(date) => setSinglePresetDate(date)}
-        label="Custom presets"
+        label="Date"
         placeholder="Pick a date..."
         showPresets
         presets={customPresets}

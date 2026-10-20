@@ -4,7 +4,7 @@ export default function RadioButtonExample() {
   return (
     <RadioGroup
       name="loading"
-      aria-label="Loading state"
+      aria-label="Option"
       defaultValue="option-a"
       loading
       size="md"

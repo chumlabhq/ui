@@ -34,10 +34,12 @@ export default function RadioButtonExample() {
   return (
     <div className="space-y-4">
       <div>
-        <span className="text-xs font-medium text-cl-text-secondary">Checkmark icon</span>
+        <span id="radio-icon-checkmark" className="text-xs font-medium text-cl-text-secondary">
+          Checkmark icon
+        </span>
         <RadioGroup
           name="icon-check"
-          aria-label="Checkmark icon"
+          aria-labelledby="radio-icon-checkmark"
           defaultValue="a"
           size="lg"
           classes={
@@ -77,12 +79,12 @@ export default function RadioButtonExample() {
         </RadioGroup>
       </div>
       <div>
-        <span className="text-xs font-medium text-cl-text-secondary">
+        <span id="radio-icon-heart" className="text-xs font-medium text-cl-text-secondary">
           Heart icon with rose color
         </span>
         <RadioGroup
           name="icon-heart"
-          aria-label="Heart icon with rose color"
+          aria-labelledby="radio-icon-heart"
           defaultValue="a"
           size="lg"
           classes={
@@ -120,12 +122,12 @@ export default function RadioButtonExample() {
         </RadioGroup>
       </div>
       <div>
-        <span className="text-xs font-medium text-cl-text-secondary">
+        <span id="radio-icon-star" className="text-xs font-medium text-cl-text-secondary">
           Star icon with amber color
         </span>
         <RadioGroup
           name="icon-star"
-          aria-label="Star icon with amber color"
+          aria-labelledby="radio-icon-star"
           defaultValue="b"
           size="lg"
           classes={
@@ -163,12 +165,12 @@ export default function RadioButtonExample() {
         </RadioGroup>
       </div>
       <div>
-        <span className="text-xs font-medium text-cl-text-secondary">
+        <span id="radio-icon-thumbs-up" className="text-xs font-medium text-cl-text-secondary">
           Thumbs up icon with green color
         </span>
         <RadioGroup
           name="icon-thumb"
-          aria-label="Thumbs up icon with green color"
+          aria-labelledby="radio-icon-thumbs-up"
           defaultValue="yes"
           size="xl"
           classes={

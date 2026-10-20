@@ -144,14 +144,14 @@ const StylingDemo = () => {
             <div className="flex items-center gap-6">
               <span className="w-24 text-[12px] text-fg-tertiary">styled</span>
               <Button>Save</Button>
-              <Switch defaultChecked aria-label="Styled switch" />
-              <Checkbox defaultChecked label="Styled" />
+              <Switch defaultChecked aria-label="Notifications" />
+              <Checkbox defaultChecked label="Remember me" />
             </div>
             <div className="flex items-center gap-6">
               <span className="w-24 text-[12px] text-fg-tertiary">unstyled</span>
               <Button unstyled>Save</Button>
-              <Switch unstyled defaultChecked aria-label="Unstyled switch" />
-              <Checkbox unstyled defaultChecked label="Unstyled" />
+              <Switch unstyled defaultChecked aria-label="Notifications" />
+              <Checkbox unstyled defaultChecked label="Remember me" />
             </div>
           </div>
         </DemoWrapper>

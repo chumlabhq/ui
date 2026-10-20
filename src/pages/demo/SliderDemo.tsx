@@ -563,7 +563,7 @@ const SliderDemo = () => {
 
       <Section title="Loading State" description="Show a loading state while the value is being saved." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <Slider label="Saving preference..." defaultValue={50} loading classes={c.slider} />
+          <Slider label="Volume" defaultValue={50} loading classes={c.slider} />
         </DemoWrapper>
       </Section>
 

@@ -4,7 +4,7 @@ export default function TextAreaExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
       <TextArea
-        label="Spellcheck disabled"
+        label="Code snippet"
         placeholder="Code snippets, IDs..."
         spellCheck={false}
         autoCapitalize="off"
@@ -30,7 +30,7 @@ export default function TextAreaExample() {
         className="flex flex-col"
       />
       <TextArea
-        label="Hard wrap"
+        label="Message"
         placeholder="Text wraps at width..."
         wrap="hard"
         cols={40}

@@ -10,7 +10,7 @@ export default function SwitchExample() {
   return (
     <div className="space-y-4">
       <Switch
-        label="Small switch"
+        label="Notifications"
         checked={sizeSwitchSmall}
         onCheckedChange={setSizeSwitchSmall}
         classes={
@@ -29,7 +29,7 @@ export default function SwitchExample() {
         }
       />
       <Switch
-        label="Default switch"
+        label="Notifications"
         checked={sizeSwitch}
         onCheckedChange={setSizeSwitch}
         classes={
@@ -42,7 +42,7 @@ export default function SwitchExample() {
         }
       />
       <Switch
-        label="Large switch"
+        label="Notifications"
         checked={sizeSwitchLarge}
         onCheckedChange={setSizeSwitchLarge}
         classes={

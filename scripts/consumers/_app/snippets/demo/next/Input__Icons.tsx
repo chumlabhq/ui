@@ -112,6 +112,7 @@ export default function InputExample() {
       }
       <div className="space-y-1.5">
         <span
+          id="input-icons-clickable"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Clickable icons
@@ -123,7 +124,7 @@ export default function InputExample() {
           {lastAction}
         </span>
         <Input
-          aria-label="Search with clear"
+          aria-labelledby="input-icons-clickable"
           placeholder="Type to search..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}

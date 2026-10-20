@@ -17,7 +17,7 @@ export default function MultiSelectSearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectSearchableDropdown
-        label="Required Fruits"
+        label="Fruits"
         options={staticOptions}
         value={successValue}
         onValueChange={(values) => setSuccessValue(values)}

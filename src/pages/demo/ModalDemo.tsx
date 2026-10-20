@@ -1215,16 +1215,18 @@ const ModalDemo = () => {
         >
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-cl-text mb-1">Name</label>
+              <label htmlFor="initial-focus-name" className="block text-sm font-medium text-cl-text mb-1">Name</label>
               <input
+                id="initial-focus-name"
                 type="text"
                 placeholder="Your name"
                 className="w-full px-3 py-2 border border-cl-border rounded-cl-md outline-none focus:ring-2 focus:ring-cl-accent"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-cl-text mb-1">Email (auto-focused)</label>
+              <label htmlFor="initial-focus-email" className="block text-sm font-medium text-cl-text mb-1">Email</label>
               <input
+                id="initial-focus-email"
                 ref={initialFocusRef}
                 type="email"
                 placeholder="you@example.com"

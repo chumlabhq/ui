@@ -34,7 +34,7 @@ export default function DatePickerExample() {
         <DatePicker
           value={controlledDate}
           onValueChange={(date) => setControlledDate(date)}
-          label="Controlled"
+          label="Date"
           placeholder="Pick a date..."
           clearable
           classes={

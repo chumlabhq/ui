@@ -6,7 +6,7 @@ export default function SwitchExample() {
   return (
     <div className="space-y-4">
       <Switch
-        label="Purple theme"
+        label="Notifications"
         checked={colorSwitch}
         onCheckedChange={setColorSwitch}
         classes={
@@ -22,7 +22,7 @@ export default function SwitchExample() {
         }
       />
       <Switch
-        label="Green theme"
+        label="Auto-save"
         checked={!colorSwitch}
         onCheckedChange={(checked) => setColorSwitch(!checked)}
         classes={

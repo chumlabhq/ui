@@ -17,7 +17,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
-        label="Required Field"
+        label="Fruits"
         options={staticOptions}
         value={errorValue}
         onValueChange={(values) => setErrorValue(values)}

@@ -3,7 +3,7 @@ import { Slider } from "@chumlab/ui/slider";
 export default function SliderExample() {
   return (
     <Slider
-      label="Saving preference..."
+      label="Volume"
       defaultValue={50}
       loading
       classes={

@@ -10,7 +10,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          label="Watch the log below"
+          label="Date"
           placeholder="Interact with me..."
           clearable
           onOpenChange={

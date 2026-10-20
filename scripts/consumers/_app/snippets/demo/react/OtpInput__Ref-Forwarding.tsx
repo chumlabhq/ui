@@ -14,7 +14,7 @@ export default function OtpInputExample() {
       </Button>
       <OtpInput
         ref={otpRef}
-        label="Ref demo"
+        label="Verification code"
         classes={
           {
             group: "flex items-center gap-2",

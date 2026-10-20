@@ -5,12 +5,13 @@ export default function InputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <div className="space-y-1.5">
         <span
+          id="input-size-sm"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Small
         </span>
         <Input
-          aria-label="Small"
+          aria-labelledby="input-size-sm"
           placeholder="Small size"
           size="sm"
           classes={
@@ -28,12 +29,13 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="input-size-md"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Medium (default)
         </span>
         <Input
-          aria-label="Medium"
+          aria-labelledby="input-size-md"
           placeholder="Medium size"
           size="md"
           classes={
@@ -51,12 +53,13 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="input-size-lg"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Large
         </span>
         <Input
-          aria-label="Large"
+          aria-labelledby="input-size-lg"
           placeholder="Large size"
           size="lg"
           classes={

@@ -6,7 +6,7 @@ export default function TimePickerExample() {
   return (
     <div className="flex items-center gap-4">
       <TimePicker
-        aria-label="Time, unstyled clock"
+        aria-label="Time"
         value={clockUnstyled}
         onValueChange={(v) => setClockUnstyled(v)}
         mode="clock"

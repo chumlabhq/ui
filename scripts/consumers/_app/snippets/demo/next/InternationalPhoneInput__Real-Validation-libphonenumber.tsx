@@ -135,7 +135,7 @@ export default function InternationalPhoneInputExample() {
         <div className="grid gap-6 sm:grid-cols-3">
           <div>
             <InternationalPhoneInput
-              label="India landline → rejected"
+              label="India landline"
               validate={mobilePhoneValidator}
               value={libMobileFixedValue}
               onValueChange={setLibMobileFixedValue}
@@ -175,7 +175,7 @@ export default function InternationalPhoneInputExample() {
           </div>
           <div>
             <InternationalPhoneInput
-              label="India mobile → accepted"
+              label="India mobile"
               validate={mobilePhoneValidator}
               value={libMobileMobileValue}
               onValueChange={setLibMobileMobileValue}
@@ -215,7 +215,7 @@ export default function InternationalPhoneInputExample() {
           </div>
           <div>
             <InternationalPhoneInput
-              label="US number → accepted"
+              label="US number"
               validate={mobilePhoneValidator}
               value={libMobileUsValue}
               onValueChange={setLibMobileUsValue}

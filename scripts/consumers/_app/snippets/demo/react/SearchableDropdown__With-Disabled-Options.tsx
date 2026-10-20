@@ -16,7 +16,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <SearchableDropdown
-        label="Available option"
+        label="Option"
         options={disabledItemOptions}
         value={disabledItemValue}
         onValueChange={(v) => setDisabledItemValue(v)}

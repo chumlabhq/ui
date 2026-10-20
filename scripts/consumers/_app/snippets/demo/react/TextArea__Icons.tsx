@@ -61,12 +61,13 @@ export default function TextAreaExample() {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
       <div className="space-y-1.5">
         <span
+          id="textarea-icon-start"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Start icon
         </span>
         <TextArea
-          aria-label="With start icon"
+          aria-labelledby="textarea-icon-start"
           placeholder="Write a message..."
           startIcon={<MessageIcon className="text-cl-text-tertiary" />}
           classes={
@@ -87,6 +88,7 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-icon-end"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Clickable end icon
@@ -98,7 +100,7 @@ export default function TextAreaExample() {
           {lastAction}
         </span>
         <TextArea
-          aria-label="With send button"
+          aria-labelledby="textarea-icon-end"
           placeholder="Type and send..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -128,12 +130,13 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-icon-attach"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Clickable start icon
         </span>
         <TextArea
-          aria-label="With attach button"
+          aria-labelledby="textarea-icon-attach"
           placeholder="Click the icon to attach..."
           startIcon={<FileIcon className="text-cl-text-tertiary hover:text-cl-text-secondary" />}
           onStartIconClick={() => setLastAction("Attach file clicked")}

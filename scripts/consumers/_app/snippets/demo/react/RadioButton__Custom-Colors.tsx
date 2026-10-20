@@ -6,7 +6,7 @@ export default function RadioButtonExample() {
       <div className="space-y-1.5 text-center">
         <RadioGroup
           name="color-green"
-          aria-label="Green color"
+          aria-label="Color"
           defaultValue="a"
           size="lg"
           classes={
@@ -33,7 +33,7 @@ export default function RadioButtonExample() {
       <div className="space-y-1.5 text-center">
         <RadioGroup
           name="color-amber"
-          aria-label="Amber color"
+          aria-label="Color"
           defaultValue="a"
           size="lg"
           classes={
@@ -60,7 +60,7 @@ export default function RadioButtonExample() {
       <div className="space-y-1.5 text-center">
         <RadioGroup
           name="color-rose"
-          aria-label="Rose color"
+          aria-label="Color"
           defaultValue="a"
           size="lg"
           classes={
@@ -87,7 +87,7 @@ export default function RadioButtonExample() {
       <div className="space-y-1.5 text-center">
         <RadioGroup
           name="color-purple"
-          aria-label="Purple color"
+          aria-label="Color"
           defaultValue="a"
           size="lg"
           classes={
@@ -114,7 +114,7 @@ export default function RadioButtonExample() {
       <div className="space-y-1.5 text-center">
         <RadioGroup
           name="color-default"
-          aria-label="Indigo color"
+          aria-label="Color"
           defaultValue="a"
           size="lg"
           classes={

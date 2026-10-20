@@ -4,7 +4,7 @@ export default function InputExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
       <Input
-        label="Zip code (pattern)"
+        label="Zip code"
         placeholder="12345"
         pattern="[0-9]{5}"
         title="Five digit zip code"
@@ -21,7 +21,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Age (min/max)"
+        label="Age"
         type="number"
         placeholder="18-99"
         min={18}
@@ -39,7 +39,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="With autoComplete"
+        label="First name"
         placeholder="Start typing..."
         autoComplete="given-name"
         classes={
@@ -55,7 +55,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Spellcheck disabled"
+        label="Reference code"
         placeholder="Code or IDs..."
         spellCheck={false}
         autoCapitalize="off"

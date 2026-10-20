@@ -153,6 +153,8 @@ DOM nesting: `root > label + description + wrapper > trigger(combobox) + content
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `lockScroll` | boolean | `false` | Whether to lock body scroll when the dropdown is open. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 | `onBlur` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger loses focus, with the native focus event. |
 | `onFocus` | object | — | (event: FocusEvent<HTMLElement>) => void — Fires when the trigger takes focus, with the native focus event. |
 | `onKeyDown` | object | — | (event: React.KeyboardEvent) => void — Callback fired on keydown events. |

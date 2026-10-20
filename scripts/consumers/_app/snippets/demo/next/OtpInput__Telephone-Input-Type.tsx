@@ -4,7 +4,7 @@ export default function OtpInputExample() {
   return (
     <OtpInput
       inputType="tel"
-      label="Phone OTP (tel)"
+      label="SMS code"
       classes={
         {
           group: "flex items-center gap-2",

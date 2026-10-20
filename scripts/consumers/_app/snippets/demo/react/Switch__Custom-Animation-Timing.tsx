@@ -7,7 +7,7 @@ export default function SwitchExample() {
   return (
     <div className="space-y-4">
       <Switch
-        label="Slow transition (500ms)"
+        label="Notifications"
         checked={animationSwitch}
         onCheckedChange={setAnimationSwitch}
         animationDuration={500}
@@ -22,7 +22,7 @@ export default function SwitchExample() {
         }
       />
       <Switch
-        label="Bouncy transition"
+        label="Auto-save"
         checked={animationSwitchBouncy}
         onCheckedChange={setAnimationSwitchBouncy}
         animationDuration={300}

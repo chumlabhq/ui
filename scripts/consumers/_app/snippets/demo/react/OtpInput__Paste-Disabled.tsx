@@ -4,7 +4,7 @@ export default function OtpInputExample() {
   return (
     <OtpInput
       allowPaste={false}
-      label="No paste"
+      label="Verification code"
       classes={
         {
           group: "flex items-center gap-2",

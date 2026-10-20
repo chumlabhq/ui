@@ -487,6 +487,7 @@ const tierAGaps = [];
 const canonical = [];
 const left = [];
 const phantoms = [];
+const undocumentedDemos = [];
 
 for (const component of components) {
   const props = surface.get(component);
@@ -532,6 +533,7 @@ for (const component of components) {
     else tierAGaps.push({ component, prop: name });
   }
   for (const name of componentPhantoms) phantoms.push({ component, prop: name });
+  for (const [name] of undocumented) undocumentedDemos.push({ component, prop: name });
 
   rows.push({
     component,
@@ -564,7 +566,7 @@ const canonicalUnproven = [...CANONICAL.keys()].filter(
 
 const derivation = {
   generatedFrom: components.length,
-  totals, excludedTotals, rows, tierAGaps, canonical, left, phantoms, tierConflicts, canonicalUnproven,
+  totals, excludedTotals, rows, tierAGaps, canonical, left, phantoms, undocumentedDemos, tierConflicts, canonicalUnproven,
 };
 if (canonicalUnproven.length > 0 && !JSON_ONLY) {
   process.stderr.write(
@@ -703,6 +705,44 @@ const rendered = `${lines.join("\n")}\n`;
 
 if (CHECK) {
   /**
+   * A prop a demo shows and no doc lists is one a reader copies with nothing to
+   * look it up in. The count is held at zero, not ratcheted: L25 brought it to
+   * 0, and three `aria-labelledby`s came back in the next slice with nothing
+   * reading the number.
+   *
+   * It counts library-authored props passed on a src/pages/demo/*.tsx page,
+   * against the rows of `## All Props`, `## Prop Constraints` and
+   * `## Sub-component Props`. It leaves out inherited DOM props, which no
+   * `.ai.md` lists by design, and the phone previews in previews/, which the
+   * page read does not descend into: each is one example on a route of its
+   * own, framed at phone width on its docs page. The floor is read from the
+   * directory, not the scan: every page named for an audited component must
+   * have given that component at least one demonstrated prop, or the scan read
+   * less than is there and a zero would mean nothing.
+   */
+  const demonstrated = rows.reduce((sum, row) => sum + row.props - row.noDemo, 0);
+  const pages = readdirSync(demoDir)
+    .filter((f) => f.endsWith("Demo.tsx"))
+    .map((f) => f.slice(0, -"Demo.tsx".length))
+    .filter((name) => rows.some((row) => row.component === name));
+  const read = pages.filter((name) => rows.some((row) => row.component === name && row.props > row.noDemo));
+  const population = `checked ${demonstrated} demonstrated props; ${read.length}/${pages.length} component pages read, floor ${pages.length} from src/pages/demo/*Demo.tsx`;
+  if (read.length < pages.length) {
+    process.stderr.write(
+      `✗ demonstrated but undocumented cannot be read: ${population}. ` +
+        `No prop counted as demonstrated on ${pages.filter((name) => !read.includes(name)).join(", ")}.\n`,
+    );
+    process.exit(1);
+  }
+  if (totals.demoedUndocumented > 0) {
+    process.stderr.write(
+      `✗ demonstrated but undocumented: ${totals.demoedUndocumented} (must be 0; ${population}). ` +
+        "Document each in <Name>.schema.json and regenerate All Props with `node scripts/generate-ai-md-props.mjs <Name>`.\n" +
+        `  ${undocumentedDemos.map((u) => `${u.component}.${u.prop}`).join(", ")}\n`,
+    );
+    process.exit(1);
+  }
+  /**
    * The ratchet holds both ways, as the bundle ledger does. A rise is a prop a
    * demo now owes. A fall that leaves the record where it was is slack the next
    * rise spends without anyone seeing it, so the record is lowered in the same
@@ -733,6 +773,7 @@ if (CHECK) {
   if (committed === rendered) {
     process.stdout.write(
       `✓ DEMO-COVERAGE.md matches the source (${totals.props} props, ${tierAGaps.length} tier-A gaps)\n` +
+        `✓ demonstrated but undocumented: ${totals.demoedUndocumented} (${population})\n` +
         `✓ ${RATCHET} (real) holds at ${totals.realNoDemo}, recorded ${recorded}\n`,
     );
     process.exit(0);

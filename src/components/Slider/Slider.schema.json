@@ -241,6 +241,10 @@
       "type": "string",
       "description": "ID of the element that labels the slider."
     },
+    "aria-describedby": {
+      "type": "string",
+      "description": "Lands on the thumbs, joined with the description and the error message."
+    },
     "aria-valuetext": {
       "type": "string",
       "description": "Human-readable text alternative for the current value."

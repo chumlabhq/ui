@@ -968,7 +968,7 @@ const CascadingDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <CascadingDropdown
-              label="Required Category"
+              label="Product Category"
               required
               options={categoryOptions}
               value={errorValue}

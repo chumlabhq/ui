@@ -22,7 +22,7 @@ export default function InputExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <Input
-        label="Disabled"
+        label="Username"
         value="Cannot edit"
         disabled
         startIcon={<LockIcon className="text-cl-text-secondary" />}
@@ -43,7 +43,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Disabled empty"
+        label="Nickname"
         placeholder="Disabled placeholder"
         disabled
         classes={
@@ -63,7 +63,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Read-only"
+        label="Account ID"
         value="Read-only value"
         readOnly
         classes={

@@ -21,7 +21,7 @@ export default function TextAreaExample() {
   return (
     <div className="w-full space-y-4">
       <TextArea
-        label="Full width with all features"
+        label="Message"
         placeholder="Enter your message..."
         fullWidth
         clearable

@@ -4,7 +4,7 @@ export default function SwitchExample() {
   return (
     <div className="space-y-4">
       <Switch
-        label="Disabled (off)"
+        label="Location sharing"
         checked={false}
         disabled
         classes={
@@ -17,7 +17,7 @@ export default function SwitchExample() {
         }
       />
       <Switch
-        label="Disabled (on)"
+        label="Two-factor authentication"
         checked={true}
         disabled
         classes={

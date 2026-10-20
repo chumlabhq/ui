@@ -8,7 +8,7 @@ export default function InternationalPhoneInputExample() {
   return (
     <div className="w-full sm:max-w-md">
       <InternationalPhoneInput
-        aria-label="Phone with green highlight"
+        aria-label="Phone number"
         value={customSelectedValue}
         onValueChange={setCustomSelectedValue}
         placeholder="Enter phone number"

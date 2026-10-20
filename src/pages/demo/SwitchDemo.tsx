@@ -163,7 +163,7 @@ const SwitchDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Switch
-            label="Uncontrolled switch"
+            label="Auto-save"
             defaultChecked
             classes={c.switch}
           />
@@ -257,13 +257,13 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
-              label="Disabled (off)"
+              label="Location sharing"
               checked={false}
               disabled
               classes={c.switch}
             />
             <Switch
-              label="Disabled (on)"
+              label="Two-factor authentication"
               checked={true}
               disabled
               classes={c.switch}
@@ -326,9 +326,9 @@ const SwitchDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-4">
-            <Switch label="Sync in progress" loading checked classes={c.switch} />
+            <Switch label="Sync" loading checked classes={c.switch} />
             {/* The comparison: an idle switch toggles; the one above, loading, does not. */}
-            <Switch label="Not loading" defaultChecked classes={c.switch} />
+            <Switch label="Backups" defaultChecked classes={c.switch} />
           </div>
         </DemoWrapper>
       </Section>
@@ -340,7 +340,7 @@ const SwitchDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-2">
-            <Switch label="Using onCheckedChange" onCheckedChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
+            <Switch label="Notifications" onCheckedChange={setCallbackSwitch} checked={callbackSwitch} classes={c.switch} />
             <p className={`text-sm text-cl-text-chrome-quiet`} data-demo-action>Value: {String(callbackSwitch)}</p>
           </div>
         </DemoWrapper>
@@ -354,7 +354,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
-              label="Purple theme"
+              label="Notifications"
               checked={colorSwitch}
               onCheckedChange={setColorSwitch}
               classes={{
@@ -363,7 +363,7 @@ const SwitchDemo = () => {
               }}
             />
             <Switch
-              label="Green theme"
+              label="Auto-save"
               checked={!colorSwitch}
               onCheckedChange={(checked) => setColorSwitch(!checked)}
               classes={{
@@ -383,7 +383,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
-              label="Small switch"
+              label="Notifications"
               checked={sizeSwitchSmall}
               onCheckedChange={setSizeSwitchSmall}
               classes={{
@@ -395,13 +395,13 @@ const SwitchDemo = () => {
               }}
             />
             <Switch
-              label="Default switch"
+              label="Notifications"
               checked={sizeSwitch}
               onCheckedChange={setSizeSwitch}
               classes={c.switch}
             />
             <Switch
-              label="Large switch"
+              label="Notifications"
               checked={sizeSwitchLarge}
               onCheckedChange={setSizeSwitchLarge}
               classes={{
@@ -431,7 +431,7 @@ const SwitchDemo = () => {
               }}
             >
               <Switch
-                label="Purple theme via CSS vars"
+                label="Notifications"
                 checked={cssVarSwitch}
                 onCheckedChange={setCssVarSwitch}
                 classes={{
@@ -448,7 +448,7 @@ const SwitchDemo = () => {
               }}
             >
               <Switch
-                label="Green theme via CSS vars"
+                label="Auto-save"
                 checked={!cssVarSwitch}
                 onCheckedChange={(checked) => setCssVarSwitch(!checked)}
                 classes={{
@@ -469,7 +469,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
-              label="Slow transition (500ms)"
+              label="Notifications"
               checked={animationSwitch}
               onCheckedChange={setAnimationSwitch}
               animationDuration={500}
@@ -477,7 +477,7 @@ const SwitchDemo = () => {
               classes={c.switch}
             />
             <Switch
-              label="Bouncy transition"
+              label="Auto-save"
               checked={animationSwitchBouncy}
               onCheckedChange={setAnimationSwitchBouncy}
               animationDuration={300}
@@ -526,7 +526,7 @@ const SwitchDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-4">
             <Switch
-              label="Focus me to see events"
+              label="Notifications"
               checked={focusBlurSwitch}
               onCheckedChange={setFocusBlurSwitch}
               onFocus={() =>
@@ -605,7 +605,7 @@ const SwitchDemo = () => {
           <div className="space-y-4">
             <Switch
               ref={switchRef}
-              label="Click the buttons below to control me"
+              label="Notifications"
               checked={refSwitch}
               onCheckedChange={setRefSwitch}
               classes={c.switch}

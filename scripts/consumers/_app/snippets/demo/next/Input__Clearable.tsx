@@ -26,7 +26,7 @@ export default function InputExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
       <Input
-        label="Controlled"
+        label="Search"
         placeholder="Type something..."
         value={search2}
         onChange={(e) => setSearch2(e.target.value)}
@@ -46,7 +46,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Uncontrolled"
+        label="Note"
         placeholder="Type and clear..."
         clearable
         defaultValue=""

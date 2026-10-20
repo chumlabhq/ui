@@ -20,7 +20,7 @@ export default function InternationalPhoneInputExample() {
   return (
     <div className="w-full sm:max-w-md">
       <InternationalPhoneInput
-        label="Singapore (custom format: XXXX-XXXX)"
+        label="Singapore number"
         defaultCountry="sg"
         preferredCountries={["sg"]}
         value={customPatternValue}

@@ -4,7 +4,7 @@ export default function TextAreaExample() {
   return (
     <div className="w-full max-w-md space-y-3">
       <TextArea
-        label="Auto-resizing textarea"
+        label="Message"
         placeholder="Start typing — the textarea grows as you type..."
         autoResize
         rows={2}
@@ -24,7 +24,7 @@ export default function TextAreaExample() {
         }
       />
       <TextArea
-        label="Auto-resize with max length"
+        label="Summary"
         placeholder="Grows up to 200 characters..."
         autoResize
         rows={2}

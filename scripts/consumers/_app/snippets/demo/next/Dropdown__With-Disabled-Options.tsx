@@ -18,7 +18,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <Dropdown
-        label="Available option"
+        label="Option"
         options={disabledItemOptions}
         value={disabledItemValue}
         onValueChange={(v) => setDisabledItemValue(v)}

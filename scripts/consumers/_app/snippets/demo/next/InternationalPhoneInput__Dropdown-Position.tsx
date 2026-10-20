@@ -13,9 +13,10 @@ export default function InternationalPhoneInputExample() {
     <>
       <div className="w-full space-y-8">
         <div>
+          <p id="phone-position-bottom">dropdownSide=&quot;bottom&quot; (default)</p>
           <div className="w-full sm:max-w-md">
             <InternationalPhoneInput
-              aria-label="Position bottom"
+              aria-labelledby="phone-position-bottom"
               value={posBotValue}
               onValueChange={setPosBotValue}
               dropdownSide="bottom"
@@ -43,9 +44,10 @@ export default function InternationalPhoneInputExample() {
           </div>
         </div>
         <div>
+          <p id="phone-position-top">dropdownSide=&quot;top&quot;</p>
           <div className="w-full sm:max-w-md">
             <InternationalPhoneInput
-              aria-label="Position top"
+              aria-labelledby="phone-position-top"
               value={posTopValue}
               onValueChange={setPosTopValue}
               dropdownSide="top"
@@ -75,9 +77,10 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full space-y-8">
         <div>
+          <p id="phone-force-bottom">forceDropdownSide (forced bottom)</p>
           <div className="w-full sm:max-w-md">
             <InternationalPhoneInput
-              aria-label="Force bottom"
+              aria-labelledby="phone-force-bottom"
               value={forceBottomValue}
               onValueChange={setForceBottomValue}
               dropdownSide="bottom"
@@ -106,9 +109,10 @@ export default function InternationalPhoneInputExample() {
           </div>
         </div>
         <div>
+          <p id="phone-force-top">forceDropdownSide (forced top)</p>
           <div className="w-full sm:max-w-md">
             <InternationalPhoneInput
-              aria-label="Force top"
+              aria-labelledby="phone-force-top"
               value={forceTopValue}
               onValueChange={setForceTopValue}
               dropdownSide="top"
@@ -139,9 +143,10 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full space-y-8">
         <div>
+          <p id="phone-force-lock">forceDropdownSide + lockScroll</p>
           <div className="w-full sm:max-w-md">
             <InternationalPhoneInput
-              aria-label="Force bottom with scroll lock"
+              aria-labelledby="phone-force-lock"
               value={forceLockScrollValue}
               onValueChange={setForceLockScrollValue}
               dropdownSide="bottom"

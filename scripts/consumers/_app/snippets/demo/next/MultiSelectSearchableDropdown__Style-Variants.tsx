@@ -25,7 +25,12 @@ export default function MultiSelectSearchableDropdownExample() {
   return (
     <>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Default (bordered)</p>
+        <p
+          id="multi-select-searchable-dropdown-style-default"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Default (bordered)
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectSearchableDropdown
             options={staticOptions}
@@ -46,12 +51,17 @@ export default function MultiSelectSearchableDropdownExample() {
                 chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }
             }
-            aria-label="Default variant"
+            aria-labelledby="multi-select-searchable-dropdown-style-default"
           />
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Borderless</p>
+        <p
+          id="multi-select-searchable-dropdown-style-borderless"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Borderless
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectSearchableDropdown
             options={staticOptions}
@@ -77,12 +87,17 @@ export default function MultiSelectSearchableDropdownExample() {
                                 "flex-1 flex items-center gap-1.5 flex-wrap min-w-0"
                             }
             }
-            aria-label="Borderless variant"
+            aria-labelledby="multi-select-searchable-dropdown-style-borderless"
           />
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Bottom border only</p>
+        <p
+          id="multi-select-searchable-dropdown-style-bottom-border"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Bottom border only
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectSearchableDropdown
             options={staticOptions}
@@ -108,12 +123,17 @@ export default function MultiSelectSearchableDropdownExample() {
                                 "flex-1 flex items-center gap-1.5 flex-wrap min-w-0"
                             }
             }
-            aria-label="Bottom border variant"
+            aria-labelledby="multi-select-searchable-dropdown-style-bottom-border"
           />
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Ghost</p>
+        <p
+          id="multi-select-searchable-dropdown-style-ghost"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Ghost
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectSearchableDropdown
             options={staticOptions}
@@ -139,12 +159,17 @@ export default function MultiSelectSearchableDropdownExample() {
                                 "flex-1 flex items-center gap-1.5 flex-wrap min-w-0"
                             }
             }
-            aria-label="Ghost variant"
+            aria-labelledby="multi-select-searchable-dropdown-style-ghost"
           />
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Pill</p>
+        <p
+          id="multi-select-searchable-dropdown-style-pill"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Pill
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectSearchableDropdown
             options={staticOptions}
@@ -170,7 +195,7 @@ export default function MultiSelectSearchableDropdownExample() {
                                  "flex-1 flex items-center gap-1.5 flex-wrap min-w-0"
                              }
             }
-            aria-label="Pill variant"
+            aria-labelledby="multi-select-searchable-dropdown-style-pill"
           />
         </div>
       </div>

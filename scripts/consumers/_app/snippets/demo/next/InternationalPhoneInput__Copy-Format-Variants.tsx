@@ -11,13 +11,14 @@ export default function InternationalPhoneInputExample() {
     <div className="space-y-6 w-full sm:max-w-md">
       <div>
         <span
+          id="phone-format-e164"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           E.164
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="E164 format"
+            aria-labelledby="phone-format-e164"
             value={copyFormatE164}
             onValueChange={setCopyFormatE164}
             copyFormat="e164"
@@ -46,13 +47,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div>
         <span
+          id="phone-format-international"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           International
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="International format"
+            aria-labelledby="phone-format-international"
             value={copyFormatIntl}
             onValueChange={setCopyFormatIntl}
             copyFormat="international"
@@ -81,13 +83,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div>
         <span
+          id="phone-format-national"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           National
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="National format"
+            aria-labelledby="phone-format-national"
             value={copyFormatNational}
             onValueChange={setCopyFormatNational}
             copyFormat="national"

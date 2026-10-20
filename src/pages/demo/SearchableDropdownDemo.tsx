@@ -909,7 +909,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
-              label="Available option"
+              label="Option"
               options={disabledItemOptions}
               value={disabledItemValue}
               onValueChange={(v) => setDisabledItemValue(v)}
@@ -940,7 +940,7 @@ const SearchableDropdownDemo = () => {
             </div>
             <div className="w-full sm:max-w-64">
               <SearchableDropdown
-                label="Required Field"
+                label="Fruit"
                 required
                 options={fruitOptions}
                 value={requiredValue}
@@ -970,7 +970,7 @@ const SearchableDropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <SearchableDropdown
                 name="fruit"
-                label="Fruit (in form)"
+                label="Fruit"
                 options={fruitOptions}
                 value={formIntegrationValue}
                 onValueChange={(v) => setFormIntegrationValue(v)}
@@ -1020,7 +1020,7 @@ const SearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <SearchableDropdown
-              label="Required Field"
+              label="Fruit"
               options={fruitOptions}
               value={errorValue}
               onValueChange={(v) => setErrorValue(v)}
@@ -1297,7 +1297,7 @@ const SearchableDropdownDemo = () => {
                 placeholder="Custom portal target..."
                 portalContainer={portalEl}
                 classes={c.dropdown}
-                aria-label="Portal container demo"
+                aria-label="Fruit"
               />
             </div>
             <div

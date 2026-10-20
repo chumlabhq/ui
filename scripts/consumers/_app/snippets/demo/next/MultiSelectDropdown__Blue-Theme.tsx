@@ -19,7 +19,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
-        aria-label="Fruits (blue theme)"
+        aria-label="Fruits"
         options={staticOptions}
         value={purpleThemeValue}
         onValueChange={(values) => setPurpleThemeValue(values)}

@@ -3,7 +3,7 @@ import { OtpInput } from "@chumlab/ui/otp-input";
 export default function OtpInputExample() {
   return (
     <OtpInput
-      label="Verifying..."
+      label="Verification code"
       value="123456"
       loading
       length={6}

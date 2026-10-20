@@ -6,7 +6,7 @@ export default function CheckboxExample() {
   return (
     <div className="flex flex-col gap-2">
       <Checkbox
-        label="Using onCheckedChange"
+        label="Subscribe to newsletter"
         onCheckedChange={setOnCheckedChangeDemo}
         checked={onCheckedChangeDemo}
         size="md"

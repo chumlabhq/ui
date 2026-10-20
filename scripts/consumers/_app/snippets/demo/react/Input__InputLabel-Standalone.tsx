@@ -5,7 +5,7 @@ export default function InputExample() {
     <div className="space-y-4 w-full sm:max-w-md">
       <div className="flex items-center gap-3">
         <InputLabel
-          label="Custom Layout"
+          label="Display name"
           htmlFor="custom-input"
           className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary mb-0 shrink-0 w-32"
         />
@@ -18,7 +18,7 @@ export default function InputExample() {
       </div>
       <div className="flex items-center gap-3">
         <InputLabel
-          label="Required Field"
+          label="Company"
           htmlFor="req"
           required
           className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary mb-0 shrink-0 w-32"

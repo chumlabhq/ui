@@ -6,7 +6,7 @@ export default function SwitchExample() {
   return (
     <div className="flex flex-col gap-2">
       <Switch
-        label="Using onCheckedChange"
+        label="Notifications"
         onCheckedChange={setCallbackSwitch}
         checked={callbackSwitch}
         classes={

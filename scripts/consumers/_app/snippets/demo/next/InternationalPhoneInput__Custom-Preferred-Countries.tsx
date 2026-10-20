@@ -4,7 +4,7 @@ export default function InternationalPhoneInputExample() {
   return (
     <div className="w-full sm:max-w-md">
       <InternationalPhoneInput
-        label="Phone Number (UK, DE, FR first)"
+        label="Phone Number"
         preferredCountries={["gb", "de", "fr"]}
         defaultCountry="gb"
         placeholder="Enter phone number"

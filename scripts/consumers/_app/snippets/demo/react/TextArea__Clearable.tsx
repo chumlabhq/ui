@@ -6,7 +6,7 @@ export default function TextAreaExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
       <TextArea
-        label="Controlled"
+        label="Message"
         placeholder="Type something..."
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
@@ -29,7 +29,7 @@ export default function TextAreaExample() {
         className="flex flex-col"
       />
       <TextArea
-        label="Uncontrolled"
+        label="Note"
         placeholder="Type and clear..."
         clearable
         defaultValue=""

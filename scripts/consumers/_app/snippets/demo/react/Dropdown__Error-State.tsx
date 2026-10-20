@@ -16,7 +16,7 @@ export default function DropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <Dropdown
-        label="Required Field"
+        label="Fruit"
         options={fruitOptions}
         value={errorValue}
         onValueChange={(v) => setErrorValue(v)}

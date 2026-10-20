@@ -4,7 +4,7 @@ export default function CheckboxExample() {
   return (
     <>
       <Checkbox
-        label="Disabled unchecked"
+        label="Email notifications"
         disabled
         size="md"
         shape="rounded"
@@ -17,7 +17,7 @@ export default function CheckboxExample() {
         }
       />
       <Checkbox
-        label="Disabled checked"
+        label="SMS notifications"
         disabled
         checked
         size="md"

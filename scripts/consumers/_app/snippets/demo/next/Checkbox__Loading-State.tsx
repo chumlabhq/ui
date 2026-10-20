@@ -4,7 +4,7 @@ export default function CheckboxExample() {
   return (
     <div className="flex flex-col gap-4">
       <Checkbox
-        label="Processing..."
+        label="Email notifications"
         loading
         checked
         size="md"
@@ -18,7 +18,7 @@ export default function CheckboxExample() {
         }
       />
       <Checkbox
-        label="Normal checkbox"
+        label="SMS notifications"
         checked
         size="md"
         shape="rounded"

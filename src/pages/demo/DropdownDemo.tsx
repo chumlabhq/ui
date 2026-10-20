@@ -957,7 +957,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
-              label="Available option"
+              label="Option"
               options={disabledItemOptions}
               value={disabledItemValue}
               onValueChange={(v) => setDisabledItemValue(v)}
@@ -988,7 +988,7 @@ const DropdownDemo = () => {
             </div>
             <div className="w-full sm:max-w-64">
               <Dropdown
-                label="Required Field"
+                label="Fruit"
                 required
                 options={fruitOptions}
                 value={requiredValue}
@@ -1018,7 +1018,7 @@ const DropdownDemo = () => {
             <div className="w-full sm:max-w-64">
               <Dropdown
                 name="fruit"
-                label="Fruit (in form)"
+                label="Fruit"
                 options={fruitOptions}
                 placeholder="Select a fruit..."
                 classes={c.dropdown}
@@ -1066,7 +1066,7 @@ const DropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-64">
             <Dropdown
-              label="Required Field"
+              label="Fruit"
               options={fruitOptions}
               value={errorValue}
               onValueChange={(v) => setErrorValue(v)}
@@ -1413,7 +1413,7 @@ const DropdownDemo = () => {
                 placeholder="Custom portal target..."
                 portalContainer={portalEl}
                 classes={c.dropdown}
-                aria-label="Portal container demo"
+                aria-label="Fruit"
               />
             </div>
             <div

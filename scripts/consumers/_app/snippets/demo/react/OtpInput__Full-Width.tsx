@@ -4,7 +4,7 @@ export default function OtpInputExample() {
   return (
     <OtpInput
       fullWidth
-      label="Full width OTP"
+      label="Verification code"
       classes={
         {
           group: "flex items-center gap-2",

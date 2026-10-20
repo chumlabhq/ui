@@ -5,7 +5,7 @@ export default function CheckboxExample() {
   const [controlled, setControlled] = useState(false);
   return (
     <Checkbox
-      label="Controlled checkbox"
+      label="Remember me"
       checked={controlled}
       onCheckedChange={setControlled}
       size="md"

@@ -4,7 +4,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        label="Date, week starts Monday"
+        label="Date"
         placeholder="Monday start"
         weekStartsOn={1}
         classes={

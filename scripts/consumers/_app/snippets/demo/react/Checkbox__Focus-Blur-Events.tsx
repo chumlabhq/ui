@@ -6,7 +6,7 @@ export default function CheckboxExample() {
   return (
     <>
       <Checkbox
-        label="Focus me and check the log"
+        label="Remember me"
         size="md"
         shape="rounded"
         classes={

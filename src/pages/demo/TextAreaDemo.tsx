@@ -235,7 +235,7 @@ const TextAreaDemo = () => {
                 <div key={s} className="space-y-1.5">
                   <span className={c.sectionLabel}>{s}</span>
                   <TextArea
-                    aria-label={`Size ${s}`}
+                    aria-label={s}
                     placeholder={`Size ${s}...`}
                     size={s}
                     classes={c.textarea}
@@ -310,9 +310,9 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Vertical only (resize-y)</span>
+                <span id="textarea-resize-vertical" className={c.sectionLabel}>Vertical only (resize-y)</span>
                 <TextArea
-                  aria-label="Resize vertical"
+                  aria-labelledby="textarea-resize-vertical"
                   placeholder="Drag the bottom edge..."
                   rows={3}
                   classes={{
@@ -322,11 +322,11 @@ const TextAreaDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>
+                <span id="textarea-resize-none" className={c.sectionLabel}>
                   Fixed height (resize-none)
                 </span>
                 <TextArea
-                  aria-label="Fixed height"
+                  aria-labelledby="textarea-resize-none"
                   placeholder="Cannot resize this..."
                   rows={3}
                   classes={{
@@ -336,9 +336,9 @@ const TextAreaDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Both axes (resize)</span>
+                <span id="textarea-resize-both" className={c.sectionLabel}>Both axes (resize)</span>
                 <TextArea
-                  aria-label="Resize both"
+                  aria-labelledby="textarea-resize-both"
                   placeholder="Drag any corner..."
                   rows={3}
                   classes={{
@@ -360,14 +360,14 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-md space-y-3">
               <TextArea
-                label="Auto-resizing textarea"
+                label="Message"
                 placeholder="Start typing — the textarea grows as you type..."
                 autoResize
                 rows={2}
                 classes={c.textarea}
               />
               <TextArea
-                label="Auto-resize with max length"
+                label="Summary"
                 placeholder="Grows up to 200 characters..."
                 autoResize
                 rows={2}
@@ -388,21 +388,21 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Start icon</span>
+                <span id="textarea-icon-start" className={c.sectionLabel}>Start icon</span>
                 <TextArea
-                  aria-label="With start icon"
+                  aria-labelledby="textarea-icon-start"
                   placeholder="Write a message..."
                   startIcon={<MessageIcon className={c.icon} />}
                   classes={c.textarea}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Clickable end icon</span>
+                <span id="textarea-icon-end" className={c.sectionLabel}>Clickable end icon</span>
                 <span className={c.sectionLabel} data-demo-action>
                   {lastAction}
                 </span>
                 <TextArea
-                  aria-label="With send button"
+                  aria-labelledby="textarea-icon-end"
                   placeholder="Type and send..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -416,9 +416,9 @@ const TextAreaDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Clickable start icon</span>
+                <span id="textarea-icon-attach" className={c.sectionLabel}>Clickable start icon</span>
                 <TextArea
-                  aria-label="With attach button"
+                  aria-labelledby="textarea-icon-attach"
                   placeholder="Click the icon to attach..."
                   startIcon={<FileIcon className={c.iconHover} />}
                   onStartIconClick={() => setLastAction("Attach file clicked")}
@@ -439,7 +439,7 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
               <TextArea
-                label="Controlled"
+                label="Message"
                 placeholder="Type something..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
@@ -449,7 +449,7 @@ const TextAreaDemo = () => {
                 className={c.container}
               />
               <TextArea
-                label="Uncontrolled"
+                label="Note"
                 placeholder="Type and clear..."
                 clearable
                 defaultValue=""
@@ -511,13 +511,13 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <TextArea
-                label="Default"
+                label="Description"
                 placeholder="Normal state"
                 classes={c.textarea}
                 className={c.container}
               />
               <TextArea
-                label="Error"
+                label="Description"
                 value="Too short"
                 error
                 errorMessage={
@@ -529,7 +529,7 @@ const TextAreaDemo = () => {
                 className={c.container}
               />
               <TextArea
-                label="Success"
+                label="Description"
                 value="This is a properly written description that meets the requirements."
                 success
                 successMessage={
@@ -589,7 +589,7 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full max-w-md space-y-3">
               <TextArea
-                label="Type anything"
+                label="Message"
                 placeholder="Watch the value below..."
                 value={feedback}
                 onValueChange={setFeedback}
@@ -617,18 +617,18 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Default loader</span>
+                <span id="textarea-loading-default" className={c.sectionLabel}>Default loader</span>
                 <TextArea
-                  aria-label="Loading"
+                  aria-labelledby="textarea-loading-default"
                   placeholder="Loading..."
                   loading
                   classes={c.textarea}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Custom loader</span>
+                <span id="textarea-loading-custom" className={c.sectionLabel}>Custom loader</span>
                 <TextArea
-                  aria-label="Saving"
+                  aria-labelledby="textarea-loading-custom"
                   placeholder="Saving..."
                   loading
                   loader={
@@ -642,11 +642,11 @@ const TextAreaDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>
+                <span id="textarea-loading-size" className={c.sectionLabel}>
                   Custom loader size (24px)
                 </span>
                 <TextArea
-                  aria-label="Loading large"
+                  aria-labelledby="textarea-loading-size"
                   placeholder="Loading..."
                   loading
                   loaderSize={24}
@@ -666,7 +666,7 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <TextArea
-                label="Disabled"
+                label="Description"
                 value="Cannot edit this content"
                 disabled
                 startIcon={
@@ -682,7 +682,7 @@ const TextAreaDemo = () => {
                 className={c.container}
               />
               <TextArea
-                label="Disabled empty"
+                label="Notes"
                 placeholder="Disabled placeholder"
                 disabled
                 classes={{
@@ -693,7 +693,7 @@ const TextAreaDemo = () => {
                 className={c.container}
               />
               <TextArea
-                label="Read-only"
+                label="Terms"
                 value="This content can be selected and copied but not edited."
                 readOnly
                 classes={{
@@ -715,7 +715,7 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
               <TextArea
-                label="Spellcheck disabled"
+                label="Code snippet"
                 placeholder="Code snippets, IDs..."
                 spellCheck={false}
                 autoCapitalize="off"
@@ -728,7 +728,7 @@ const TextAreaDemo = () => {
                 className={c.container}
               />
               <TextArea
-                label="Hard wrap"
+                label="Message"
                 placeholder="Text wraps at width..."
                 wrap="hard"
                 cols={40}
@@ -752,7 +752,7 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full space-y-4">
               <TextArea
-                label="Full width with all features"
+                label="Message"
                 placeholder="Enter your message..."
                 fullWidth
                 clearable
@@ -776,7 +776,7 @@ const TextAreaDemo = () => {
             <div className="space-y-4 w-full max-w-md">
               <TextArea
                 ref={textAreaRef}
-                aria-label="Ref demo"
+                aria-label="Note"
                 placeholder="Click buttons below"
                 classes={c.textarea}
               />
@@ -820,7 +820,7 @@ const TextAreaDemo = () => {
                   `TextArea` you would pass `label` and never reach for this. */}
               <div className="flex items-start gap-3">
                 <TextAreaLabel
-                  label="Custom Layout"
+                  label="Notes"
                   htmlFor="custom-ta"
                   className={`${c.textarea.label} mb-0 mt-2 shrink-0 w-32`}
                 />
@@ -833,7 +833,7 @@ const TextAreaDemo = () => {
               </div>
               <div className="flex items-start gap-3">
                 <TextAreaLabel
-                  label="Required Field"
+                  label="Reason"
                   htmlFor="req-ta"
                   required
                   className={`${c.textarea.label} mb-0 mt-2 shrink-0 w-32`}
@@ -859,9 +859,9 @@ const TextAreaDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Underline</span>
+                <span id="textarea-theme-underline" className={c.sectionLabel}>Underline</span>
                 <TextArea
-                  aria-label="Underline theme"
+                  aria-labelledby="textarea-theme-underline"
                   placeholder="Enter text..."
                   rows={3}
                   classes={{
@@ -871,9 +871,9 @@ const TextAreaDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Blue accent</span>
+                <span id="textarea-theme-blue" className={c.sectionLabel}>Blue accent</span>
                 <TextArea
-                  aria-label="Blue accent theme"
+                  aria-labelledby="textarea-theme-blue"
                   placeholder="Blue accent theme..."
                   rows={3}
                   classes={{

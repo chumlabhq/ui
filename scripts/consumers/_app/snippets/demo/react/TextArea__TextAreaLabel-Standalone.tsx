@@ -5,7 +5,7 @@ export default function TextAreaExample() {
     <div className="space-y-4 w-full max-w-xl">
       <div className="flex items-start gap-3">
         <TextAreaLabel
-          label="Custom Layout"
+          label="Notes"
           htmlFor="custom-ta"
           className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary mb-0 mt-2 shrink-0 w-32"
         />
@@ -18,7 +18,7 @@ export default function TextAreaExample() {
       </div>
       <div className="flex items-start gap-3">
         <TextAreaLabel
-          label="Required Field"
+          label="Reason"
           htmlFor="req-ta"
           required
           className="text-[13px] font-medium mb-1.5 block text-cl-text-secondary mb-0 mt-2 shrink-0 w-32"

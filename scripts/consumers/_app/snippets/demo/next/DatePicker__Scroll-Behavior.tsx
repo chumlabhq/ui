@@ -5,7 +5,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          label="Date, repositions on scroll"
+          label="Date"
           placeholder="Scroll the page..."
           clearable
           classes={
@@ -28,7 +28,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          label="Date, scroll locked while open"
+          label="Date"
           placeholder="Open me, then try scrolling..."
           lockScroll
           clearable

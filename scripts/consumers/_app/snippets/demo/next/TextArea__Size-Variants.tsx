@@ -12,7 +12,7 @@ export default function TextAreaExample() {
               {s}
             </span>
             <TextArea
-              aria-label={`Size ${s}`}
+              aria-label={s}
               placeholder={`Size ${s}...`}
               size={s}
               classes={

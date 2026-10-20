@@ -19,7 +19,7 @@ export default function SearchableDropdownExample() {
   return (
     <div className="w-full sm:max-w-64">
       <SearchableDropdown
-        label="Required Field"
+        label="Fruit"
         options={fruitOptions}
         value={errorValue}
         onValueChange={(v) => setErrorValue(v)}

@@ -41,7 +41,7 @@ export default function InputExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <Input
-        label="Default"
+        label="Email"
         placeholder="Normal state"
         classes={
           {
@@ -56,7 +56,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Error"
+        label="Email"
         value="invalid-email"
         error
         errorMessage={
@@ -78,7 +78,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Success"
+        label="Email"
         value="john@example.com"
         success
         successMessage={

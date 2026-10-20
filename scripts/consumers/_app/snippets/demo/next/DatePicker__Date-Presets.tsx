@@ -11,7 +11,7 @@ export default function DatePickerExample() {
         selectionMode="range"
         value={presetRange}
         onValueChange={(range) => setPresetRange(range)}
-        label="Date range with presets"
+        label="Date range"
         placeholder="Select range..."
         showPresets
         clearable

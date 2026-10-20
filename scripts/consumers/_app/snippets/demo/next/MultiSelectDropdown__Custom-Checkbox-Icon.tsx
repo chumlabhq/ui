@@ -19,7 +19,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
-        aria-label="Fruits (star checkboxes)"
+        aria-label="Fruits"
         options={staticOptions}
         value={customIconValue}
         onValueChange={(values) => setCustomIconValue(values)}

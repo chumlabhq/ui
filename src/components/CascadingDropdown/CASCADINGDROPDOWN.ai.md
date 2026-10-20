@@ -176,6 +176,8 @@ DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > sub
 | `menuSearchAriaLabel` | string | `"Search menu"` | Accessible label for the menu search input. |
 | `submenuSearchAriaLabel` | string | `"Search submenu"` | Accessible label for the submenu search input. |
 | `aria-label` | string | — | Accessible label for the dropdown. |
+| `aria-labelledby` | string | — | Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger. |
+| `aria-describedby` | string | — | Lands on the trigger, joined with the component's own error message. |
 
 ## Styling Guide
 

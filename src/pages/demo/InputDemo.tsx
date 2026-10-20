@@ -334,27 +334,27 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Small</span>
+                <span id="input-size-sm" className={c.sectionLabel}>Small</span>
                 <Input
-                  aria-label="Small"
+                  aria-labelledby="input-size-sm"
                   placeholder="Small size"
                   size="sm"
                   classes={c.input}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Medium (default)</span>
+                <span id="input-size-md" className={c.sectionLabel}>Medium (default)</span>
                 <Input
-                  aria-label="Medium"
+                  aria-labelledby="input-size-md"
                   placeholder="Medium size"
                   size="md"
                   classes={c.input}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Large</span>
+                <span id="input-size-lg" className={c.sectionLabel}>Large</span>
                 <Input
-                  aria-label="Large"
+                  aria-labelledby="input-size-lg"
                   placeholder="Large size"
                   size="lg"
                   classes={c.input}
@@ -429,12 +429,12 @@ const InputDemo = () => {
                 </div>
               ))}
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Clickable icons</span>
+                <span id="input-icons-clickable" className={c.sectionLabel}>Clickable icons</span>
                 <span className={c.sectionLabel} data-demo-action>
                   {lastAction}
                 </span>
                 <Input
-                  aria-label="Search with clear"
+                  aria-labelledby="input-icons-clickable"
                   placeholder="Type to search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -504,7 +504,7 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
-                label="Controlled"
+                label="Search"
                 placeholder="Type something..."
                 value={search2}
                 onChange={(e) => setSearch2(e.target.value)}
@@ -514,7 +514,7 @@ const InputDemo = () => {
                 classes={c.input}
               />
               <Input
-                label="Uncontrolled"
+                label="Note"
                 placeholder="Type and clear..."
                 clearable
                 defaultValue=""
@@ -572,12 +572,12 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <Input
-                label="Default"
+                label="Email"
                 placeholder="Normal state"
                 classes={c.input}
               />
               <Input
-                label="Error"
+                label="Email"
                 value="invalid-email"
                 error
                 errorMessage={
@@ -588,7 +588,7 @@ const InputDemo = () => {
                 classes={{ ...c.input, control: c.wrapperError }}
               />
               <Input
-                label="Success"
+                label="Email"
                 value="john@example.com"
                 success
                 successMessage={
@@ -672,7 +672,7 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full sm:max-w-sm space-y-3">
               <Input
-                label="Type anything"
+                label="Name"
                 placeholder="Watch the value below..."
                 value={callbackValue}
                 onValueChange={setCallbackValue}
@@ -698,18 +698,18 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 w-full">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Default</span>
+                <span id="input-loading-default" className={c.sectionLabel}>Default</span>
                 <Input
-                  aria-label="Loading"
+                  aria-labelledby="input-loading-default"
                   placeholder="Loading..."
                   loading
                   classes={c.input}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>With icon</span>
+                <span id="input-loading-icon" className={c.sectionLabel}>With icon</span>
                 <Input
-                  aria-label="Searching"
+                  aria-labelledby="input-loading-icon"
                   placeholder="Searching..."
                   loading
                   startIcon={<SearchIcon className={c.icon} />}
@@ -717,9 +717,9 @@ const InputDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Custom loader</span>
+                <span id="input-loading-custom" className={c.sectionLabel}>Custom loader</span>
                 <Input
-                  aria-label="Validating"
+                  aria-labelledby="input-loading-custom"
                   placeholder="Validating..."
                   loading
                   loader={
@@ -733,9 +733,9 @@ const InputDemo = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Custom loader size</span>
+                <span id="input-loading-size" className={c.sectionLabel}>Custom loader size</span>
                 <Input
-                  aria-label="Custom loader size"
+                  aria-labelledby="input-loading-size"
                   placeholder="Loading..."
                   loading
                   loaderSize={24}
@@ -755,7 +755,7 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <Input
-                label="Disabled"
+                label="Username"
                 value="Cannot edit"
                 disabled
                 startIcon={
@@ -770,7 +770,7 @@ const InputDemo = () => {
                 }}
               />
               <Input
-                label="Disabled empty"
+                label="Nickname"
                 placeholder="Disabled placeholder"
                 disabled
                 classes={{
@@ -780,7 +780,7 @@ const InputDemo = () => {
                 }}
               />
               <Input
-                label="Read-only"
+                label="Account ID"
                 value="Read-only value"
                 readOnly
                 classes={{
@@ -864,14 +864,14 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full sm:max-w-2xl">
               <Input
-                label="Zip code (pattern)"
+                label="Zip code"
                 placeholder="12345"
                 pattern="[0-9]{5}"
                 title="Five digit zip code"
                 classes={c.input}
               />
               <Input
-                label="Age (min/max)"
+                label="Age"
                 type="number"
                 placeholder="18-99"
                 min={18}
@@ -879,13 +879,13 @@ const InputDemo = () => {
                 classes={c.input}
               />
               <Input
-                label="With autoComplete"
+                label="First name"
                 placeholder="Start typing..."
                 autoComplete="given-name"
                 classes={c.input}
               />
               <Input
-                label="Spellcheck disabled"
+                label="Reference code"
                 placeholder="Code or IDs..."
                 spellCheck={false}
                 autoCapitalize="off"
@@ -905,13 +905,13 @@ const InputDemo = () => {
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full space-y-4">
               <Input
-                aria-label="Full width"
+                aria-label="Subject"
                 placeholder="Full width input"
                 fullWidth
                 classes={c.input}
               />
               <Input
-                label="Full width, all features"
+                label="Message"
                 placeholder="Enter your message..."
                 fullWidth
                 startIcon={<MailIcon className={c.icon} />}
@@ -934,7 +934,7 @@ const InputDemo = () => {
             <div className="space-y-4 w-full sm:max-w-sm">
               <Input
                 ref={inputRef}
-                aria-label="Ref demo"
+                aria-label="Note"
                 placeholder="Click buttons below"
                 classes={c.input}
               />
@@ -979,7 +979,7 @@ const InputDemo = () => {
                   all. */}
               <div className="flex items-center gap-3">
                 <InputLabel
-                  label="Custom Layout"
+                  label="Display name"
                   htmlFor="custom-input"
                   className={`${c.input.label} mb-0 shrink-0 w-32`}
                 />
@@ -992,7 +992,7 @@ const InputDemo = () => {
               </div>
               <div className="flex items-center gap-3">
                 <InputLabel
-                  label="Required Field"
+                  label="Company"
                   htmlFor="req"
                   required
                   className={`${c.input.label} mb-0 shrink-0 w-32`}

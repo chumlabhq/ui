@@ -3,7 +3,7 @@ import { Switch } from "@chumlab/ui/switch";
 export default function SwitchExample() {
   return (
     <Switch
-      label="Uncontrolled switch"
+      label="Auto-save"
       defaultChecked
       classes={
         {

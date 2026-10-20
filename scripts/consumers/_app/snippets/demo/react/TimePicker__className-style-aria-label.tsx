@@ -6,8 +6,9 @@ export default function TimePickerExample() {
   return (
     <div className="w-full space-y-6">
       <div>
+        <p id="time-picker-classname">className (opacity override)</p>
         <TimePicker
-          aria-label="Time, className override"
+          aria-labelledby="time-picker-classname"
           defaultValue={null}
           placeholder="Select a time..."
           className="opacity-90"
@@ -47,8 +48,9 @@ export default function TimePickerExample() {
         />
       </div>
       <div>
+        <p id="time-picker-style">style (inline styles on root)</p>
         <TimePicker
-          aria-label="Time, inline style"
+          aria-labelledby="time-picker-style"
           value={styleVal}
           onValueChange={(v) => setStyleVal(v)}
           placeholder="Select a time..."

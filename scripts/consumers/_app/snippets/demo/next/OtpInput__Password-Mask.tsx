@@ -4,7 +4,7 @@ export default function OtpInputExample() {
   return (
     <OtpInput
       inputType="password"
-      label="Masked PIN"
+      label="PIN"
       classes={
         {
           group: "flex items-center gap-2",

@@ -39,7 +39,7 @@ export default function MultiSelectSearchableDropdownExample() {
                           "w-5 h-5 shrink-0 border-2 border-cl-warning rounded-cl-sm flex items-center justify-center"
                       }
         }
-        aria-label="Orange checkbox fruits"
+        aria-label="Fruits"
       />
     </div>
   );

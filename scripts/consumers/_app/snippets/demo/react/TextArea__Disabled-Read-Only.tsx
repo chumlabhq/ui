@@ -22,7 +22,7 @@ export default function TextAreaExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <TextArea
-        label="Disabled"
+        label="Description"
         value="Cannot edit this content"
         disabled
         startIcon={<LockIcon className="text-cl-text-secondary" />}
@@ -47,7 +47,7 @@ export default function TextAreaExample() {
         className="flex flex-col"
       />
       <TextArea
-        label="Disabled empty"
+        label="Notes"
         placeholder="Disabled placeholder"
         disabled
         classes={
@@ -71,7 +71,7 @@ export default function TextAreaExample() {
         className="flex flex-col"
       />
       <TextArea
-        label="Read-only"
+        label="Terms"
         value="This content can be selected and copied but not edited."
         readOnly
         classes={

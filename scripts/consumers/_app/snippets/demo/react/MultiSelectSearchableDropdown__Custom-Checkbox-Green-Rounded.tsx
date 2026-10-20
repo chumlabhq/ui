@@ -38,7 +38,7 @@ export default function MultiSelectSearchableDropdownExample() {
                         itemControl: "w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input"
                       }
         }
-        aria-label="Green checkbox fruits"
+        aria-label="Fruits"
       />
     </div>
   );

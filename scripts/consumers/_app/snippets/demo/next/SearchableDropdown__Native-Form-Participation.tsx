@@ -36,7 +36,7 @@ export default function SearchableDropdownExample() {
         <div className="w-full sm:max-w-64">
           <SearchableDropdown
             name="fruit"
-            label="Fruit (in form)"
+            label="Fruit"
             options={fruitOptions}
             value={formIntegrationValue}
             onValueChange={(v) => setFormIntegrationValue(v)}

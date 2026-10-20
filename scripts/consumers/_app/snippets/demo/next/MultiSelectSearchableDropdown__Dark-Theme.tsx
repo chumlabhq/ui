@@ -59,7 +59,7 @@ export default function MultiSelectSearchableDropdownExample() {
                         empty: "px-3 py-4 text-sm text-white/60 text-center"
                       }
         }
-        aria-label="Dark theme fruits"
+        aria-label="Fruits"
       />
     </div>
   );

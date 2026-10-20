@@ -21,7 +21,7 @@ export default function CheckboxExample() {
         ].map(({ s, val, set }) => (
           <div key={s} className="text-center">
             <Checkbox
-              aria-label={`Size ${s}`}
+              aria-label={s}
               checked={val}
               onCheckedChange={set}
               size={s}
@@ -42,7 +42,7 @@ export default function CheckboxExample() {
       }
       <div className="text-center">
         <Checkbox
-          aria-label="Size 28px"
+          aria-labelledby="checkbox-size-custom"
           checked={true}
           size={28}
           shape="rounded"
@@ -54,7 +54,12 @@ export default function CheckboxExample() {
             }
           }
         />
-        <p className="text-xs mt-2 text-xs font-medium text-cl-text-tertiary">28px</p>
+        <p
+          id="checkbox-size-custom"
+          className="text-xs mt-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          28px
+        </p>
       </div>
     </>
   );

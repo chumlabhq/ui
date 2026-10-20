@@ -10,7 +10,7 @@ export default function DatePickerExample() {
     <>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          aria-label="Date range, emerald"
+          aria-label="Date range"
           selectionMode="range"
           value={rangeEmerald}
           onValueChange={(range) => setRangeEmerald(range)}
@@ -39,7 +39,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          aria-label="Date range, amber"
+          aria-label="Date range"
           selectionMode="range"
           value={rangeAmber}
           onValueChange={(range) => setRangeAmber(range)}
@@ -68,7 +68,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          aria-label="Date range, rose"
+          aria-label="Date range"
           selectionMode="range"
           value={rangeRose}
           onValueChange={(range) => setRangeRose(range)}
@@ -103,7 +103,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          aria-label="Date range, gradient"
+          aria-label="Date range"
           selectionMode="range"
           value={rangeGradient}
           onValueChange={(range) => setRangeGradient(range)}

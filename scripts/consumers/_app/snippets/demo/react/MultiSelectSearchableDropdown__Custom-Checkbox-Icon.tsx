@@ -45,7 +45,7 @@ export default function MultiSelectSearchableDropdownExample() {
                         itemControl: "w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-warning"
                       }
         }
-        aria-label="Custom icon fruits"
+        aria-label="Fruits"
       />
     </div>
   );

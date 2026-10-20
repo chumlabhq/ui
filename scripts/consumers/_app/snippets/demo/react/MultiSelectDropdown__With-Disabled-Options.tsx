@@ -14,7 +14,7 @@ export default function MultiSelectDropdownExample() {
   return (
     <div className="w-full sm:max-w-72">
       <MultiSelectDropdown
-        label="Available options"
+        label="Options"
         options={disabledItemOptions}
         value={disabledItemValue}
         onValueChange={(values) => setDisabledItemValue(values)}

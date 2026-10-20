@@ -44,7 +44,7 @@ export default function MultiSelectSearchableDropdownExample() {
                         trigger: `${"flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success"} opacity-50 cursor-not-allowed`
                       }
         }
-        aria-label="Disabled fruits"
+        aria-label="Fruits"
       />
     </div>
   );

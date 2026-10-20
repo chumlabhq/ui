@@ -33,13 +33,14 @@ export default function InternationalPhoneInputExample() {
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-md">
         <span
+          id="phone-icon-star"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Star icon
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Star icon demo"
+            aria-labelledby="phone-icon-star"
             value={customIconValue}
             onValueChange={setCustomIconValue}
             placeholder="Enter phone number"
@@ -68,13 +69,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
+          id="phone-icon-circle"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Circle check icon
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Circle check demo"
+            aria-labelledby="phone-icon-circle"
             value={circleCheckIconValue}
             onValueChange={setCircleCheckIconValue}
             placeholder="Enter phone number"
@@ -103,13 +105,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
+          id="phone-icon-dot"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Dot indicator
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Dot indicator demo"
+            aria-labelledby="phone-icon-dot"
             value={noIconValue}
             onValueChange={setNoIconValue}
             placeholder="Enter phone number"

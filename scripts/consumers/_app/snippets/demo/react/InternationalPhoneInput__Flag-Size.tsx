@@ -5,12 +5,13 @@ export default function InternationalPhoneInputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <div className="space-y-1.5">
         <span
+          id="phone-flag-small"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Small (16px)
         </span>
         <InternationalPhoneInput
-          aria-label="Small flag"
+          aria-labelledby="phone-flag-small"
           placeholder="Enter phone number"
           flagSize={16}
           classes={
@@ -36,12 +37,13 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="phone-flag-default"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Default (22px)
         </span>
         <InternationalPhoneInput
-          aria-label="Default flag"
+          aria-labelledby="phone-flag-default"
           placeholder="Enter phone number"
           classes={
             {
@@ -66,12 +68,13 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="phone-flag-large"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Large (32px)
         </span>
         <InternationalPhoneInput
-          aria-label="Large flag"
+          aria-labelledby="phone-flag-large"
           placeholder="Enter phone number"
           flagSize={32}
           classes={

@@ -12,10 +12,10 @@ recorded there because they belong next to the code that implements them.
 | --- | --- |
 | Components audited | 59 |
 | Library-authored props across the public surface | 1252 |
-| With no demo | 264 (21%) |
+| With no demo | 263 (21%) |
 | With no fixture | 692 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
-| Demonstrated but undocumented | 3 |
+| Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 53 |
 | Tier-A left undemonstrated with a recorded reason | 20 |
 | **Tier-A gaps (a whole mode, no demo, no reason)** | **0** |
@@ -46,7 +46,7 @@ when it rises, and when it falls without the record being lowered in the same ch
 | Left out | Props | Rule |
 | --- | --- | --- |
 | children | 6 | the component's content, passed between the tags (counted as demoed where a demo does) |
-| passthrough | 73 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
+| passthrough | 72 | `id`, `className`, `style`, `role` and `aria-*`, which reach the DOM as given |
 | canonical | 53 | demonstrated once for the library; see below |
 | left | 20 | left undemonstrated with a reason, by name; see below |
 | **real** | **112** | everything else |
@@ -122,7 +122,7 @@ listed here with no demo anywhere fails the generator.
 | ModalFooter | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalHeader | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | MultiSelectDropdown | 52 | 2 | 7 | 4 | 25 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
-| MultiSelectSearchableDropdown | 57 | 2 | 13 | 9 | 29 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
+| MultiSelectSearchableDropdown | 57 | 2 | 12 | 9 | 29 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
 | OtpInput | 29 | 277 | 3 | 1 | 13 | 0 | `unstyled` | `inputPattern` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | 0 | — | — |
 | Pagination | 31 | 278 | 5 | 1 | 20 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` | `dropdownOffset` |

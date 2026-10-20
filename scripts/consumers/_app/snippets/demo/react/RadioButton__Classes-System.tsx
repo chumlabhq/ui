@@ -4,10 +4,12 @@ export default function RadioButtonExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div className="space-y-1.5">
-        <span className="text-xs font-medium text-cl-text-secondary">Card-style selection</span>
+        <span id="radio-classes-card" className="text-xs font-medium text-cl-text-secondary">
+          Card-style selection
+        </span>
         <RadioGroup
           name="classes-card"
-          aria-label="Card-style selection"
+          aria-labelledby="radio-classes-card"
           defaultValue="monthly"
           size="md"
           classes={
@@ -43,10 +45,12 @@ export default function RadioButtonExample() {
         </RadioGroup>
       </div>
       <div className="space-y-1.5">
-        <span className="text-xs font-medium text-cl-text-secondary">Minimal / underline</span>
+        <span id="radio-classes-minimal" className="text-xs font-medium text-cl-text-secondary">
+          Minimal / underline
+        </span>
         <RadioGroup
           name="classes-minimal"
-          aria-label="Minimal / underline"
+          aria-labelledby="radio-classes-minimal"
           defaultValue="light"
           size="sm"
           classes={

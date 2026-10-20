@@ -5,13 +5,14 @@ export default function InternationalPhoneInputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
       <div>
         <span
+          id="phone-default-japan"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Japan
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Japan default"
+            aria-labelledby="phone-default-japan"
             defaultCountry="jp"
             preferredCountries={[]}
             placeholder="Enter phone number"
@@ -39,13 +40,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div>
         <span
+          id="phone-default-india"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           India
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="India default"
+            aria-labelledby="phone-default-india"
             defaultCountry="in"
             preferredCountries={[]}
             placeholder="Enter phone number"

@@ -80,8 +80,9 @@ export default function TimePickerExample() {
   return (
     <div className="flex flex-wrap gap-6">
       <div>
+        <p id="time-picker-clock-emerald">Emerald</p>
         <TimePicker
-          aria-label="Time, emerald clock theme"
+          aria-labelledby="time-picker-clock-emerald"
           value={clockEmerald}
           onValueChange={(v) => setClockEmerald(v)}
           mode="clock"
@@ -94,8 +95,9 @@ export default function TimePickerExample() {
         </span>
       </div>
       <div>
+        <p id="time-picker-clock-rose">Rose</p>
         <TimePicker
-          aria-label="Time, rose clock theme"
+          aria-labelledby="time-picker-clock-rose"
           value={clockRose}
           onValueChange={(v) => setClockRose(v)}
           mode="clock"
@@ -108,8 +110,9 @@ export default function TimePickerExample() {
         </span>
       </div>
       <div>
+        <p id="time-picker-clock-violet">Violet</p>
         <TimePicker
-          aria-label="Time, violet clock theme"
+          aria-labelledby="time-picker-clock-violet"
           value={clockViolet}
           onValueChange={(v) => setClockViolet(v)}
           mode="clock"

@@ -30,7 +30,7 @@ export default function DropdownExample() {
         <div className="w-full sm:max-w-64">
           <Dropdown
             name="fruit"
-            label="Fruit (in form)"
+            label="Fruit"
             options={fruitOptions}
             placeholder="Select a fruit..."
             classes={

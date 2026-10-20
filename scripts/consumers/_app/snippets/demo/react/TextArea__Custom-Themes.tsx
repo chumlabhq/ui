@@ -5,12 +5,13 @@ export default function TextAreaExample() {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
       <div className="space-y-1.5">
         <span
+          id="textarea-theme-underline"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Underline
         </span>
         <TextArea
-          aria-label="Underline theme"
+          aria-labelledby="textarea-theme-underline"
           placeholder="Enter text..."
           rows={3}
           classes={
@@ -34,12 +35,13 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-theme-blue"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Blue accent
         </span>
         <TextArea
-          aria-label="Blue accent theme"
+          aria-labelledby="textarea-theme-blue"
           placeholder="Blue accent theme..."
           rows={3}
           classes={

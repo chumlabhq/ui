@@ -12,7 +12,7 @@ export default function OtpInputExample() {
         showAutoFocus ? (
           <OtpInput
             autoFocusFirst
-            label="Auto-focused"
+            label="Verification code"
             classes={
               {
                 group: "flex items-center gap-2",

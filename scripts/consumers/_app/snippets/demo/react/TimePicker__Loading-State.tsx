@@ -3,7 +3,7 @@ import { TimePicker } from "@chumlab/ui/time-picker";
 export default function TimePickerExample() {
   return (
     <TimePicker
-      label="Checking slots..."
+      label="Appointment time"
       loading
       placeholder="Pick a time"
       classes={

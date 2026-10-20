@@ -6,7 +6,7 @@ export default function TextAreaExample() {
   return (
     <div className="w-full max-w-md space-y-3">
       <TextArea
-        label="Type anything"
+        label="Message"
         placeholder="Watch the value below..."
         value={feedback}
         onValueChange={setFeedback}

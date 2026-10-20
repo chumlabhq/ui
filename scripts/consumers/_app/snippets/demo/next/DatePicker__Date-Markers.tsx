@@ -36,7 +36,7 @@ export default function DatePickerExample() {
         <DatePicker
           value={markersDate}
           onValueChange={(date) => setMarkersDate(date)}
-          label="Calendar with markers"
+          label="Date"
           placeholder="Pick a date..."
           markers={markers}
           showMarkerIndicator
@@ -62,7 +62,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          label="Marked date, dots only"
+          label="Date"
           placeholder="Dots only..."
           markers={markers}
           showMarkerIndicator
@@ -87,7 +87,7 @@ export default function DatePickerExample() {
       </div>
       <div className="w-full sm:max-w-xs">
         <DatePicker
-          label="Marked date, custom colours"
+          label="Date"
           placeholder="Colored dots..."
           markers={
             [

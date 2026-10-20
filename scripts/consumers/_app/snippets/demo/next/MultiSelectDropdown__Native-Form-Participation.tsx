@@ -34,7 +34,7 @@ export default function MultiSelectDropdownExample() {
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
             name="fruits"
-            label="Fruits (in form)"
+            label="Fruits"
             options={staticOptions}
             value={formIntegrationValue}
             onValueChange={setFormIntegrationValue}

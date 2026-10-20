@@ -9,7 +9,7 @@ export default function TextAreaExample() {
     <div className="space-y-4 w-full max-w-md">
       <TextArea
         ref={textAreaRef}
-        aria-label="Ref demo"
+        aria-label="Note"
         placeholder="Click buttons below"
         classes={
           {

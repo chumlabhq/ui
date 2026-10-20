@@ -37,7 +37,7 @@ export default function MultiSelectSearchableDropdownExample() {
               chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
             }
           }
-          aria-label="Scroll unlocked dropdown"
+          aria-label="Fruits"
         />
       </div>
       <div className="w-full sm:max-w-72">
@@ -61,7 +61,7 @@ export default function MultiSelectSearchableDropdownExample() {
               chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
             }
           }
-          aria-label="Scroll locked dropdown"
+          aria-label="Fruits"
         />
       </div>
     </>

@@ -9,7 +9,7 @@ export default function SwitchExample() {
     <div className="space-y-4">
       <Switch
         ref={switchRef}
-        label="Click the buttons below to control me"
+        label="Notifications"
         checked={refSwitch}
         onCheckedChange={setRefSwitch}
         classes={

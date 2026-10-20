@@ -181,7 +181,7 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput inputType="password" label="Masked PIN" classes={c.otp} />
+          <OtpInput inputType="password" label="PIN" classes={c.otp} />
         </DemoWrapper>
       </Section>
 
@@ -293,7 +293,7 @@ const OtpInputDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <OtpInput
-            label="Verifying..."
+            label="Verification code"
             value="123456"
             loading
             length={6}
@@ -325,7 +325,7 @@ const OtpInputDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="block">
               <OtpInput
                 validate={(char) => /\d/.test(char)}
-                label="PIN (digits only)"
+                label="PIN"
                 classes={c.otp}
               />
             </DemoWrapper>
@@ -338,7 +338,7 @@ const OtpInputDemo = () => {
               <OtpInput
                 length={4}
                 validate={(char) => /[a-zA-Z]/.test(char)}
-                label="Code (letters only)"
+                label="Code"
                 classes={c.otp}
               />
             </DemoWrapper>
@@ -359,7 +359,7 @@ const OtpInputDemo = () => {
               `defaultOpen`. Behind a button the prop still demonstrates itself,
               at the moment a reader asks for it. */}
           {showAutoFocus ? (
-            <OtpInput autoFocusFirst label="Auto-focused" classes={c.otp} />
+            <OtpInput autoFocusFirst label="Verification code" classes={c.otp} />
           ) : (
             <Button
               type="button"
@@ -379,7 +379,7 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput allowPaste={false} label="No paste" classes={c.otp} />
+          <OtpInput allowPaste={false} label="Verification code" classes={c.otp} />
         </DemoWrapper>
       </Section>
 
@@ -398,7 +398,7 @@ const OtpInputDemo = () => {
           </Button>
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput ref={otpRef} label="Ref demo" classes={c.otp} />
+          <OtpInput ref={otpRef} label="Verification code" classes={c.otp} />
         </DemoWrapper>
       </Section>
 
@@ -518,7 +518,7 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput inputType="tel" label="Phone OTP (tel)" classes={c.otp} />
+          <OtpInput inputType="tel" label="SMS code" classes={c.otp} />
         </DemoWrapper>
       </Section>
 
@@ -549,7 +549,7 @@ const OtpInputDemo = () => {
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="block">
-          <OtpInput fullWidth label="Full width OTP" classes={c.otp} />
+          <OtpInput fullWidth label="Verification code" classes={c.otp} />
         </DemoWrapper>
       </Section>
 
@@ -566,7 +566,7 @@ const OtpInputDemo = () => {
               `Code field ${index + 1} out of ${len}`
             }
             aria-label="Verification code entry"
-            label="Custom a11y labels"
+            label="Verification code"
             classes={c.otp}
           />
         </DemoWrapper>
@@ -585,7 +585,7 @@ const OtpInputDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <OtpInput
             defaultValue="42"
-            label="Pre-filled (uncontrolled)"
+            label="Verification code"
             classes={c.otp}
           />
         </DemoWrapper>

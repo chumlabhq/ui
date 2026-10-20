@@ -419,6 +419,14 @@
     "aria-label": {
       "type": "string",
       "description": "Accessible label for the dropdown."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "description": "Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger."
+    },
+    "aria-describedby": {
+      "type": "string",
+      "description": "Lands on the trigger, joined with the component's own error message."
     }
   },
   "required": [

@@ -11,7 +11,7 @@ export default function InputExample() {
     <div className="space-y-4 w-full sm:max-w-sm">
       <Input
         ref={inputRef}
-        aria-label="Ref demo"
+        aria-label="Note"
         placeholder="Click buttons below"
         classes={
           {

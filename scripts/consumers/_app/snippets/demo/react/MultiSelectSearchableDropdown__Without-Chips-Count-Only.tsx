@@ -35,7 +35,7 @@ export default function MultiSelectSearchableDropdownExample() {
             chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
           }
         }
-        aria-label="Select fruits count only"
+        aria-label="Fruits"
       />
     </div>
   );

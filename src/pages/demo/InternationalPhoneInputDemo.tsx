@@ -504,7 +504,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 <div className="grid gap-6 sm:grid-cols-3">
                   <div>
                     <InternationalPhoneInput
-                      label="India landline → rejected"
+                      label="India landline"
                       validate={mobilePhoneValidator}
                       value={libMobileFixedValue}
                       onValueChange={setLibMobileFixedValue}
@@ -520,7 +520,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
 
                   <div>
                     <InternationalPhoneInput
-                      label="India mobile → accepted"
+                      label="India mobile"
                       validate={mobilePhoneValidator}
                       value={libMobileMobileValue}
                       onValueChange={setLibMobileMobileValue}
@@ -536,7 +536,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
 
                   <div>
                     <InternationalPhoneInput
-                      label="US number → accepted"
+                      label="US number"
                       validate={mobilePhoneValidator}
                       value={libMobileUsValue}
                       onValueChange={setLibMobileUsValue}
@@ -639,10 +639,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="space-y-6 w-full sm:max-w-md">
               <div>
-                <span className={c.sectionLabel}>E.164</span>
+                <span id="phone-format-e164" className={c.sectionLabel}>E.164</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="E164 format"
+                    aria-labelledby="phone-format-e164"
                     value={copyFormatE164}
                     onValueChange={setCopyFormatE164}
                     copyFormat="e164"
@@ -652,10 +652,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div>
-                <span className={c.sectionLabel}>International</span>
+                <span id="phone-format-international" className={c.sectionLabel}>International</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="International format"
+                    aria-labelledby="phone-format-international"
                     value={copyFormatIntl}
                     onValueChange={setCopyFormatIntl}
                     copyFormat="international"
@@ -665,10 +665,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div>
-                <span className={c.sectionLabel}>National</span>
+                <span id="phone-format-national" className={c.sectionLabel}>National</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="National format"
+                    aria-labelledby="phone-format-national"
                     value={copyFormatNational}
                     onValueChange={setCopyFormatNational}
                     copyFormat="national"
@@ -729,7 +729,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
-                label="Phone Number (UK, DE, FR first)"
+                label="Phone Number"
                 preferredCountries={["gb", "de", "fr"]}
                 defaultCountry="gb"
                 placeholder="Enter phone number"
@@ -747,7 +747,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
-                label="European Numbers Only"
+                label="Phone Number"
                 countries={EUROPEAN_COUNTRIES}
                 preferredCountries={["gb"]}
                 defaultCountry="gb"
@@ -766,10 +766,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
               <div>
-                <span className={c.sectionLabel}>Japan</span>
+                <span id="phone-default-japan" className={c.sectionLabel}>Japan</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Japan default"
+                    aria-labelledby="phone-default-japan"
                     defaultCountry="jp"
                     preferredCountries={[]}
                     placeholder="Enter phone number"
@@ -778,10 +778,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div>
-                <span className={c.sectionLabel}>India</span>
+                <span id="phone-default-india" className={c.sectionLabel}>India</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="India default"
+                    aria-labelledby="phone-default-india"
                     defaultCountry="in"
                     preferredCountries={[]}
                     placeholder="Enter phone number"
@@ -925,7 +925,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
-                aria-label="Phone with green highlight"
+                aria-label="Phone number"
                 value={customSelectedValue}
                 onValueChange={setCustomSelectedValue}
                 placeholder="Enter phone number"
@@ -948,10 +948,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="flex flex-wrap gap-8">
               <div className="w-full sm:max-w-md">
-                <span className={c.sectionLabel}>Star icon</span>
+                <span id="phone-icon-star" className={c.sectionLabel}>Star icon</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Star icon demo"
+                    aria-labelledby="phone-icon-star"
                     value={customIconValue}
                     onValueChange={setCustomIconValue}
                     placeholder="Enter phone number"
@@ -963,10 +963,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div className="w-full sm:max-w-md">
-                <span className={c.sectionLabel}>Circle check icon</span>
+                <span id="phone-icon-circle" className={c.sectionLabel}>Circle check icon</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Circle check demo"
+                    aria-labelledby="phone-icon-circle"
                     value={circleCheckIconValue}
                     onValueChange={setCircleCheckIconValue}
                     placeholder="Enter phone number"
@@ -978,10 +978,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div className="w-full sm:max-w-md">
-                <span className={c.sectionLabel}>Dot indicator</span>
+                <span id="phone-icon-dot" className={c.sectionLabel}>Dot indicator</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Dot indicator demo"
+                    aria-labelledby="phone-icon-dot"
                     value={noIconValue}
                     onValueChange={setNoIconValue}
                     placeholder="Enter phone number"
@@ -1006,10 +1006,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="flex flex-wrap gap-8">
               <div className="w-full sm:max-w-md">
-                <span className={c.sectionLabel}>Purple theme</span>
+                <span id="phone-theme-purple" className={c.sectionLabel}>Purple theme</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Purple theme"
+                    aria-labelledby="phone-theme-purple"
                     value={purpleFocusValue}
                     onValueChange={setPurpleFocusValue}
                     placeholder="Enter phone number"
@@ -1025,10 +1025,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div className="w-full sm:max-w-md">
-                <span className={c.sectionLabel}>Green theme</span>
+                <span id="phone-theme-green" className={c.sectionLabel}>Green theme</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Green theme"
+                    aria-labelledby="phone-theme-green"
                     value={greenFocusValue}
                     onValueChange={setGreenFocusValue}
                     placeholder="Enter phone number"
@@ -1044,10 +1044,10 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div className="w-full sm:max-w-md">
-                <span className={c.sectionLabel}>Orange theme</span>
+                <span id="phone-theme-orange" className={c.sectionLabel}>Orange theme</span>
                 <div className="mt-2">
                   <InternationalPhoneInput
-                    aria-label="Orange theme"
+                    aria-labelledby="phone-theme-orange"
                     value={orangeFocusValue}
                     onValueChange={setOrangeFocusValue}
                     placeholder="Enter phone number"
@@ -1124,26 +1124,26 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Small (16px)</span>
+                <span id="phone-flag-small" className={c.sectionLabel}>Small (16px)</span>
                 <InternationalPhoneInput
-                  aria-label="Small flag"
+                  aria-labelledby="phone-flag-small"
                   placeholder="Enter phone number"
                   flagSize={16}
                   classes={c.phone}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Default (22px)</span>
+                <span id="phone-flag-default" className={c.sectionLabel}>Default (22px)</span>
                 <InternationalPhoneInput
-                  aria-label="Default flag"
+                  aria-labelledby="phone-flag-default"
                   placeholder="Enter phone number"
                   classes={c.phone}
                 />
               </div>
               <div className="space-y-1.5">
-                <span className={c.sectionLabel}>Large (32px)</span>
+                <span id="phone-flag-large" className={c.sectionLabel}>Large (32px)</span>
                 <InternationalPhoneInput
-                  aria-label="Large flag"
+                  aria-labelledby="phone-flag-large"
                   placeholder="Enter phone number"
                   flagSize={32}
                   classes={c.phone}
@@ -1161,7 +1161,7 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
-                label="Singapore (custom format: XXXX-XXXX)"
+                label="Singapore number"
                 defaultCountry="sg"
                 preferredCountries={["sg"]}
                 value={customPatternValue}
@@ -1423,14 +1423,14 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark}>
             <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
-                aria-label="Default scrollable"
+                aria-label="Phone number"
                 placeholder="Default (scrollable)"
                 classes={c.phone}
               />
             </div>
             <div className="w-full sm:max-w-md">
               <InternationalPhoneInput
-                aria-label="Scroll lock enabled"
+                aria-label="Phone number"
                 value={scrollLockValue}
                 onValueChange={setScrollLockValue}
                 lockScroll
@@ -1450,12 +1450,12 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark} layout="flex-col">
             <div className="w-full space-y-8">
               <div>
-                <DemoLabel isDarkMode={dark}>
+                <DemoLabel id="phone-position-bottom" isDarkMode={dark}>
                   dropdownSide=&quot;bottom&quot; (default)
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
-                    aria-label="Position bottom"
+                    aria-labelledby="phone-position-bottom"
                     value={posBotValue}
                     onValueChange={setPosBotValue}
                     dropdownSide="bottom"
@@ -1465,12 +1465,12 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div>
-                <DemoLabel isDarkMode={dark}>
+                <DemoLabel id="phone-position-top" isDarkMode={dark}>
                   dropdownSide=&quot;top&quot;
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
-                    aria-label="Position top"
+                    aria-labelledby="phone-position-top"
                     value={posTopValue}
                     onValueChange={setPosTopValue}
                     dropdownSide="top"
@@ -1490,12 +1490,12 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark} layout="flex-col">
             <div className="w-full space-y-8">
               <div>
-                <DemoLabel isDarkMode={dark}>
+                <DemoLabel id="phone-force-bottom" isDarkMode={dark}>
                   forceDropdownSide (forced bottom)
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
-                    aria-label="Force bottom"
+                    aria-labelledby="phone-force-bottom"
                     value={forceBottomValue}
                     onValueChange={setForceBottomValue}
                     dropdownSide="bottom"
@@ -1506,12 +1506,12 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
                 </div>
               </div>
               <div>
-                <DemoLabel isDarkMode={dark}>
+                <DemoLabel id="phone-force-top" isDarkMode={dark}>
                   forceDropdownSide (forced top)
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
-                    aria-label="Force top"
+                    aria-labelledby="phone-force-top"
                     value={forceTopValue}
                     onValueChange={setForceTopValue}
                     dropdownSide="top"
@@ -1530,12 +1530,12 @@ import { createLibphonenumberValidator } from "@chumlab/ui/phone-validators";`}
           <DemoWrapper isDarkMode={dark} layout="flex-col">
             <div className="w-full space-y-8">
               <div>
-                <DemoLabel isDarkMode={dark}>
+                <DemoLabel id="phone-force-lock" isDarkMode={dark}>
                   forceDropdownSide + lockScroll
                 </DemoLabel>
                 <div className="w-full sm:max-w-md">
                   <InternationalPhoneInput
-                    aria-label="Force bottom with scroll lock"
+                    aria-labelledby="phone-force-lock"
                     value={forceLockScrollValue}
                     onValueChange={setForceLockScrollValue}
                     dropdownSide="bottom"

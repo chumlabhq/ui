@@ -28,7 +28,7 @@ export default function CheckboxExample() {
         }
       />
       <Checkbox
-        label="Third option (disabled)"
+        label="Third option"
         disabled
         classes={
           {

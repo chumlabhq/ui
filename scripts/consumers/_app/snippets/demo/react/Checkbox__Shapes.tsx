@@ -15,7 +15,7 @@ export default function CheckboxExample() {
         ].map(({ sh, val, set }) => (
           <div key={sh} className="text-center">
             <Checkbox
-              aria-label={`Shape ${sh}`}
+              aria-label={sh}
               checked={val}
               onCheckedChange={set}
               size="lg"

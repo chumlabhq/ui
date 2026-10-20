@@ -7,7 +7,7 @@ export default function InternationalPhoneInputExample() {
     <>
       <div className="w-full sm:max-w-md">
         <InternationalPhoneInput
-          aria-label="Default scrollable"
+          aria-label="Phone number"
           placeholder="Default (scrollable)"
           classes={
             {
@@ -32,7 +32,7 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <InternationalPhoneInput
-          aria-label="Scroll lock enabled"
+          aria-label="Phone number"
           value={scrollLockValue}
           onValueChange={setScrollLockValue}
           lockScroll

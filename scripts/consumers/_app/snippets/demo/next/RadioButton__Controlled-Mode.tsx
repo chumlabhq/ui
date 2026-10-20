@@ -32,7 +32,7 @@ export default function RadioButtonExample() {
       </div>
       <RadioGroup
         name="controlled"
-        aria-label="Controlled mode"
+        aria-label="Option"
         value={controlled}
         onValueChange={setControlled}
         size="md"

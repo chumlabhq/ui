@@ -23,10 +23,15 @@ export default function MultiSelectDropdownExample() {
   return (
     <>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Default (bordered)</p>
+        <p
+          id="multi-select-dropdown-style-default"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Default (bordered)
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
-            aria-label="Fruits (default)"
+            aria-labelledby="multi-select-dropdown-style-default"
             options={staticOptions}
             value={variantDefaultValue}
             onValueChange={setVariantDefaultValue}
@@ -46,10 +51,15 @@ export default function MultiSelectDropdownExample() {
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Borderless</p>
+        <p
+          id="multi-select-dropdown-style-borderless"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Borderless
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
-            aria-label="Fruits (borderless)"
+            aria-labelledby="multi-select-dropdown-style-borderless"
             options={staticOptions}
             value={variantBorderlessValue}
             onValueChange={setVariantBorderlessValue}
@@ -74,10 +84,15 @@ export default function MultiSelectDropdownExample() {
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Bottom border only</p>
+        <p
+          id="multi-select-dropdown-style-bottom-border"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Bottom border only
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
-            aria-label="Fruits (bottom border)"
+            aria-labelledby="multi-select-dropdown-style-bottom-border"
             options={staticOptions}
             value={variantBottomValue}
             onValueChange={setVariantBottomValue}
@@ -102,10 +117,15 @@ export default function MultiSelectDropdownExample() {
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Ghost</p>
+        <p
+          id="multi-select-dropdown-style-ghost"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Ghost
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
-            aria-label="Fruits (ghost)"
+            aria-labelledby="multi-select-dropdown-style-ghost"
             options={staticOptions}
             value={variantGhostValue}
             onValueChange={setVariantGhostValue}
@@ -130,10 +150,15 @@ export default function MultiSelectDropdownExample() {
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Pill</p>
+        <p
+          id="multi-select-dropdown-style-pill"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Pill
+        </p>
         <div className="w-full sm:max-w-72">
           <MultiSelectDropdown
-            aria-label="Fruits (pill)"
+            aria-labelledby="multi-select-dropdown-style-pill"
             options={staticOptions}
             value={variantPillValue}
             onValueChange={setVariantPillValue}

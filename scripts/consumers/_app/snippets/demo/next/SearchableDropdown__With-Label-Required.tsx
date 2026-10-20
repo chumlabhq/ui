@@ -41,7 +41,7 @@ export default function SearchableDropdownExample() {
       </div>
       <div className="w-full sm:max-w-64">
         <SearchableDropdown
-          label="Required Field"
+          label="Fruit"
           required
           options={fruitOptions}
           value={requiredValue}

@@ -23,12 +23,13 @@ export default function InputExample() {
     <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 w-full">
       <div className="space-y-1.5">
         <span
+          id="input-loading-default"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Default
         </span>
         <Input
-          aria-label="Loading"
+          aria-labelledby="input-loading-default"
           placeholder="Loading..."
           loading
           classes={
@@ -46,12 +47,13 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="input-loading-icon"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           With icon
         </span>
         <Input
-          aria-label="Searching"
+          aria-labelledby="input-loading-icon"
           placeholder="Searching..."
           loading
           startIcon={<SearchIcon className="text-cl-text-tertiary" />}
@@ -70,12 +72,13 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="input-loading-custom"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Custom loader
         </span>
         <Input
-          aria-label="Validating"
+          aria-labelledby="input-loading-custom"
           placeholder="Validating..."
           loading
           loader={
@@ -98,12 +101,13 @@ export default function InputExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="input-loading-size"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Custom loader size
         </span>
         <Input
-          aria-label="Custom loader size"
+          aria-labelledby="input-loading-size"
           placeholder="Loading..."
           loading
           loaderSize={24}

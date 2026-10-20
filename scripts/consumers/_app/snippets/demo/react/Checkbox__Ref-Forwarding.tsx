@@ -6,7 +6,7 @@ export default function CheckboxExample() {
   return (
     <Checkbox
       ref={checkboxRef}
-      label="Controlled via ref"
+      label="Accept terms"
       size="md"
       shape="rounded"
       classes={

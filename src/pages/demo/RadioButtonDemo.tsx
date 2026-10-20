@@ -221,7 +221,7 @@ const RadioButtonDemo = () => {
             <div key={s} className="text-center">
               <RadioGroup
                 name={`size-${s}`}
-                aria-label={`Size ${s}`}
+                aria-label={s}
                 defaultValue="selected"
                 size={s}
                 classes={c.group}
@@ -234,14 +234,14 @@ const RadioButtonDemo = () => {
           <div className="text-center">
             <RadioGroup
               name="size-custom"
-              aria-label="Size 28px"
+              aria-labelledby="radio-size-custom"
               defaultValue="selected"
               size={28}
               classes={c.group}
             >
               <RadioButton value="selected" classes={c.radio} />
             </RadioGroup>
-            <p className={`text-xs mt-2 ${c.label}`}>28px</p>
+            <p id="radio-size-custom" className={`text-xs mt-2 ${c.label}`}>28px</p>
           </div>
         </DemoWrapper>
       </Section>
@@ -255,10 +255,10 @@ const RadioButtonDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-1.5">
-              <span className={c.sectionLabel}>Filled (default)</span>
+              <span id="radio-style-filled" className={c.sectionLabel}>Filled (default)</span>
               <RadioGroup
                 name="filled"
-                aria-label="Filled (default)"
+                aria-labelledby="radio-style-filled"
                 defaultValue="a"
                 size="lg"
                 classes={c.group}
@@ -268,10 +268,10 @@ const RadioButtonDemo = () => {
               </RadioGroup>
             </div>
             <div className="space-y-1.5">
-              <span className={c.sectionLabel}>Outlined</span>
+              <span id="radio-style-outlined" className={c.sectionLabel}>Outlined</span>
               <RadioGroup
                 name="outlined"
-                aria-label="Outlined"
+                aria-labelledby="radio-style-outlined"
                 defaultValue="a"
                 size="lg"
                 classes={c.group}
@@ -312,27 +312,27 @@ const RadioButtonDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="space-y-1.5 text-center">
-            <RadioGroup name="color-green" aria-label="Green color" defaultValue="a" size="lg" classes={c.group}>
+            <RadioGroup name="color-green" aria-label="Color" defaultValue="a" size="lg" classes={c.group}>
               <RadioButton value="a" label="Green" classes={c.radioGreen} />
             </RadioGroup>
           </div>
           <div className="space-y-1.5 text-center">
-            <RadioGroup name="color-amber" aria-label="Amber color" defaultValue="a" size="lg" classes={c.group}>
+            <RadioGroup name="color-amber" aria-label="Color" defaultValue="a" size="lg" classes={c.group}>
               <RadioButton value="a" label="Amber" classes={c.radioAmber} />
             </RadioGroup>
           </div>
           <div className="space-y-1.5 text-center">
-            <RadioGroup name="color-rose" aria-label="Rose color" defaultValue="a" size="lg" classes={c.group}>
+            <RadioGroup name="color-rose" aria-label="Color" defaultValue="a" size="lg" classes={c.group}>
               <RadioButton value="a" label="Rose" classes={c.radioRose} />
             </RadioGroup>
           </div>
           <div className="space-y-1.5 text-center">
-            <RadioGroup name="color-purple" aria-label="Purple color" defaultValue="a" size="lg" classes={c.group}>
+            <RadioGroup name="color-purple" aria-label="Color" defaultValue="a" size="lg" classes={c.group}>
               <RadioButton value="a" label="Purple" classes={c.radioPurple} />
             </RadioGroup>
           </div>
           <div className="space-y-1.5 text-center">
-            <RadioGroup name="color-default" aria-label="Indigo color" defaultValue="a" size="lg" classes={c.group}>
+            <RadioGroup name="color-default" aria-label="Color" defaultValue="a" size="lg" classes={c.group}>
               <RadioButton value="a" label="Indigo" classes={c.radio} />
             </RadioGroup>
           </div>
@@ -348,10 +348,10 @@ const RadioButtonDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="space-y-4">
             <div>
-              <span className={c.sectionLabel}>Checkmark icon</span>
+              <span id="radio-icon-checkmark" className={c.sectionLabel}>Checkmark icon</span>
               <RadioGroup
                 name="icon-check"
-                aria-label="Checkmark icon"
+                aria-labelledby="radio-icon-checkmark"
                 defaultValue="a"
                 size="lg"
                 classes={c.group}
@@ -373,10 +373,10 @@ const RadioButtonDemo = () => {
               </RadioGroup>
             </div>
             <div>
-              <span className={c.sectionLabel}>Heart icon with rose color</span>
+              <span id="radio-icon-heart" className={c.sectionLabel}>Heart icon with rose color</span>
               <RadioGroup
                 name="icon-heart"
-                aria-label="Heart icon with rose color"
+                aria-labelledby="radio-icon-heart"
                 defaultValue="a"
                 size="lg"
                 classes={c.group}
@@ -396,10 +396,10 @@ const RadioButtonDemo = () => {
               </RadioGroup>
             </div>
             <div>
-              <span className={c.sectionLabel}>Star icon with amber color</span>
+              <span id="radio-icon-star" className={c.sectionLabel}>Star icon with amber color</span>
               <RadioGroup
                 name="icon-star"
-                aria-label="Star icon with amber color"
+                aria-labelledby="radio-icon-star"
                 defaultValue="b"
                 size="lg"
                 classes={c.group}
@@ -419,10 +419,10 @@ const RadioButtonDemo = () => {
               </RadioGroup>
             </div>
             <div>
-              <span className={c.sectionLabel}>Thumbs up icon with green color</span>
+              <span id="radio-icon-thumbs-up" className={c.sectionLabel}>Thumbs up icon with green color</span>
               <RadioGroup
                 name="icon-thumb"
-                aria-label="Thumbs up icon with green color"
+                aria-labelledby="radio-icon-thumbs-up"
                 defaultValue="yes"
                 size="xl"
                 classes={c.group}
@@ -460,10 +460,10 @@ const RadioButtonDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-1.5">
-              <span className={c.sectionLabel}>Card-style selection</span>
+              <span id="radio-classes-card" className={c.sectionLabel}>Card-style selection</span>
               <RadioGroup
                 name="classes-card"
-                aria-label="Card-style selection"
+                aria-labelledby="radio-classes-card"
                 defaultValue="monthly"
                 size="md"
                 classes={c.group}
@@ -489,10 +489,10 @@ const RadioButtonDemo = () => {
               </RadioGroup>
             </div>
             <div className="space-y-1.5">
-              <span className={c.sectionLabel}>Minimal / underline</span>
+              <span id="radio-classes-minimal" className={c.sectionLabel}>Minimal / underline</span>
               <RadioGroup
                 name="classes-minimal"
-                aria-label="Minimal / underline"
+                aria-labelledby="radio-classes-minimal"
                 defaultValue="light"
                 size="sm"
                 classes={c.group}
@@ -631,7 +631,7 @@ const RadioButtonDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <RadioGroup
             name="loading"
-            aria-label="Loading state"
+            aria-label="Option"
             defaultValue="option-a"
             loading
             size="md"
@@ -681,7 +681,7 @@ const RadioButtonDemo = () => {
           </div>
           <RadioGroup
             name="controlled"
-            aria-label="Controlled mode"
+            aria-label="Option"
             value={controlled}
             onValueChange={setControlled}
             size="md"

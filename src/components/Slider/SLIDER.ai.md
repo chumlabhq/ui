@@ -125,6 +125,7 @@ Each is written or absent, never `"false"`.
 | `unstyled` | boolean | `false` | When true, removes all default styling. |
 | `aria-label` | string | — | Accessible label for the slider. |
 | `aria-labelledby` | string | — | ID of the element that labels the slider. |
+| `aria-describedby` | string | — | Lands on the thumbs, joined with the description and the error message. |
 | `aria-valuetext` | string | — | Human-readable text alternative for the current value. |
 
 ## Class overrides

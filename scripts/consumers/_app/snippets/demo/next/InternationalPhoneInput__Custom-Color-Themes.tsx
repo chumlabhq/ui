@@ -11,13 +11,14 @@ export default function InternationalPhoneInputExample() {
     <div className="flex flex-wrap gap-8">
       <div className="w-full sm:max-w-md">
         <span
+          id="phone-theme-purple"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Purple theme
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Purple theme"
+            aria-labelledby="phone-theme-purple"
             value={purpleFocusValue}
             onValueChange={setPurpleFocusValue}
             placeholder="Enter phone number"
@@ -52,13 +53,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
+          id="phone-theme-green"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Green theme
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Green theme"
+            aria-labelledby="phone-theme-green"
             value={greenFocusValue}
             onValueChange={setGreenFocusValue}
             placeholder="Enter phone number"
@@ -93,13 +95,14 @@ export default function InternationalPhoneInputExample() {
       </div>
       <div className="w-full sm:max-w-md">
         <span
+          id="phone-theme-orange"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Orange theme
         </span>
         <div className="mt-2">
           <InternationalPhoneInput
-            aria-label="Orange theme"
+            aria-labelledby="phone-theme-orange"
             value={orangeFocusValue}
             onValueChange={setOrangeFocusValue}
             placeholder="Enter phone number"

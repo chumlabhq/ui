@@ -53,7 +53,7 @@ export default function MultiSelectSearchableDropdownExample() {
                         message: "text-sm mt-1 text-cl-accent"
                       }
         }
-        aria-label="Blue theme fruits"
+        aria-label="Fruits"
       />
     </div>
   );

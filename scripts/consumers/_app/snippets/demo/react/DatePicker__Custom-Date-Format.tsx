@@ -8,7 +8,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        label={`Date, ${fmt}`}
+        label="Date"
         value={formatDate}
         onValueChange={setFormatDate}
         dateFormat={fmt}

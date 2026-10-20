@@ -489,7 +489,7 @@ const TimePickerDemo = () => {
 
       <Section title="Loading State" description="Show a loading state while checking availability." isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
-          <TimePicker label="Checking slots..." loading placeholder="Pick a time" classes={c.timepicker} />
+          <TimePicker label="Appointment time" loading placeholder="Pick a time" classes={c.timepicker} />
         </DemoWrapper>
       </Section>
 
@@ -670,9 +670,9 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex flex-wrap gap-6">
             <div>
-              <DemoLabel isDarkMode={dark}>Dark</DemoLabel>
+              <DemoLabel id="time-picker-theme-dark" isDarkMode={dark}>Dark</DemoLabel>
               <TimePicker
-                aria-label="Time, dark theme"
+                aria-labelledby="time-picker-theme-dark"
                 value={darkThemeVal}
                 onValueChange={(v) => setDarkThemeVal(v)}
                 placeholder="Select time..."
@@ -681,9 +681,9 @@ const TimePickerDemo = () => {
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {darkThemeVal ?? "none"}</span>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>Warm</DemoLabel>
+              <DemoLabel id="time-picker-theme-warm" isDarkMode={dark}>Warm</DemoLabel>
               <TimePicker
-                aria-label="Time, warm theme"
+                aria-labelledby="time-picker-theme-warm"
                 value={warmThemeVal}
                 onValueChange={(v) => setWarmThemeVal(v)}
                 placeholder="Select time..."
@@ -692,9 +692,9 @@ const TimePickerDemo = () => {
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {warmThemeVal ?? "none"}</span>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>Cool</DemoLabel>
+              <DemoLabel id="time-picker-theme-cool" isDarkMode={dark}>Cool</DemoLabel>
               <TimePicker
-                aria-label="Time, cool theme"
+                aria-labelledby="time-picker-theme-cool"
                 value={coolThemeVal}
                 onValueChange={(v) => setCoolThemeVal(v)}
                 placeholder="Select time..."
@@ -703,9 +703,9 @@ const TimePickerDemo = () => {
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {coolThemeVal ?? "none"}</span>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>Minimal</DemoLabel>
+              <DemoLabel id="time-picker-theme-minimal" isDarkMode={dark}>Minimal</DemoLabel>
               <TimePicker
-                aria-label="Time, minimal theme"
+                aria-labelledby="time-picker-theme-minimal"
                 value={minimalThemeVal}
                 onValueChange={(v) => setMinimalThemeVal(v)}
                 placeholder="Select time..."
@@ -913,9 +913,9 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex flex-wrap gap-6">
             <div>
-              <DemoLabel isDarkMode={dark}>Emerald</DemoLabel>
+              <DemoLabel id="time-picker-clock-emerald" isDarkMode={dark}>Emerald</DemoLabel>
               <TimePicker
-                aria-label="Time, emerald clock theme"
+                aria-labelledby="time-picker-clock-emerald"
                 value={clockEmerald}
                 onValueChange={(v) => setClockEmerald(v)}
                 mode="clock"
@@ -925,9 +925,9 @@ const TimePickerDemo = () => {
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {clockEmerald ?? "none"}</span>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>Rose</DemoLabel>
+              <DemoLabel id="time-picker-clock-rose" isDarkMode={dark}>Rose</DemoLabel>
               <TimePicker
-                aria-label="Time, rose clock theme"
+                aria-labelledby="time-picker-clock-rose"
                 value={clockRose}
                 onValueChange={(v) => setClockRose(v)}
                 mode="clock"
@@ -937,9 +937,9 @@ const TimePickerDemo = () => {
               <span className={`text-xs mt-1 block ${c.text}`}>Selected: {clockRose ?? "none"}</span>
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>Violet</DemoLabel>
+              <DemoLabel id="time-picker-clock-violet" isDarkMode={dark}>Violet</DemoLabel>
               <TimePicker
-                aria-label="Time, violet clock theme"
+                aria-labelledby="time-picker-clock-violet"
                 value={clockViolet}
                 onValueChange={(v) => setClockViolet(v)}
                 mode="clock"
@@ -961,7 +961,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
-              aria-label="Time, unstyled clock"
+              aria-label="Time"
               value={clockUnstyled}
               onValueChange={(v) => setClockUnstyled(v)}
               mode="clock"
@@ -1310,9 +1310,9 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="flex-col" className="overflow-visible">
           <div className="w-full space-y-6">
             <div>
-              <DemoLabel isDarkMode={dark}>className (opacity override)</DemoLabel>
+              <DemoLabel id="time-picker-classname" isDarkMode={dark}>className (opacity override)</DemoLabel>
               <TimePicker
-                aria-label="Time, className override"
+                aria-labelledby="time-picker-classname"
                 defaultValue={null}
                 placeholder="Select a time..."
                 className={`opacity-90`}
@@ -1320,9 +1320,9 @@ const TimePickerDemo = () => {
               />
             </div>
             <div>
-              <DemoLabel isDarkMode={dark}>style (inline styles on root)</DemoLabel>
+              <DemoLabel id="time-picker-style" isDarkMode={dark}>style (inline styles on root)</DemoLabel>
               <TimePicker
-                aria-label="Time, inline style"
+                aria-labelledby="time-picker-style"
                 value={styleVal}
                 onValueChange={(v) => setStyleVal(v)}
                 placeholder="Select a time..."
@@ -1419,7 +1419,7 @@ const TimePickerDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block" className="overflow-visible">
           <div className="flex items-center gap-4">
             <TimePicker
-              aria-label="Time, custom classes"
+              aria-label="Time"
               value={classesVal}
               onValueChange={(v) => setClassesVal(v)}
               classes={{

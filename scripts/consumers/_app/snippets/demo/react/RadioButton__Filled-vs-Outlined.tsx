@@ -4,10 +4,12 @@ export default function RadioButtonExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       <div className="space-y-1.5">
-        <span className="text-xs font-medium text-cl-text-secondary">Filled (default)</span>
+        <span id="radio-style-filled" className="text-xs font-medium text-cl-text-secondary">
+          Filled (default)
+        </span>
         <RadioGroup
           name="filled"
-          aria-label="Filled (default)"
+          aria-labelledby="radio-style-filled"
           defaultValue="a"
           size="lg"
           classes={
@@ -43,10 +45,12 @@ export default function RadioButtonExample() {
         </RadioGroup>
       </div>
       <div className="space-y-1.5">
-        <span className="text-xs font-medium text-cl-text-secondary">Outlined</span>
+        <span id="radio-style-outlined" className="text-xs font-medium text-cl-text-secondary">
+          Outlined
+        </span>
         <RadioGroup
           name="outlined"
-          aria-label="Outlined"
+          aria-labelledby="radio-style-outlined"
           defaultValue="a"
           size="lg"
           classes={

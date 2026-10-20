@@ -4,7 +4,7 @@ export default function DatePickerExample() {
   return (
     <div className="w-full sm:max-w-xs">
       <DatePicker
-        label="Disabled picker"
+        label="Date"
         placeholder="Cannot select"
         disabled
         classes={

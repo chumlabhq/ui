@@ -5,12 +5,13 @@ export default function TextAreaExample() {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <div className="space-y-1.5">
         <span
+          id="textarea-resize-vertical"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Vertical only (resize-y)
         </span>
         <TextArea
-          aria-label="Resize vertical"
+          aria-labelledby="textarea-resize-vertical"
           placeholder="Drag the bottom edge..."
           rows={3}
           classes={
@@ -34,12 +35,13 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-resize-none"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Fixed height (resize-none)
         </span>
         <TextArea
-          aria-label="Fixed height"
+          aria-labelledby="textarea-resize-none"
           placeholder="Cannot resize this..."
           rows={3}
           classes={
@@ -63,12 +65,13 @@ export default function TextAreaExample() {
       </div>
       <div className="space-y-1.5">
         <span
+          id="textarea-resize-both"
           className="text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary"
         >
           Both axes (resize)
         </span>
         <TextArea
-          aria-label="Resize both"
+          aria-labelledby="textarea-resize-both"
           placeholder="Drag any corner..."
           rows={3}
           classes={

@@ -9,7 +9,7 @@ export default function SwitchExample() {
   return (
     <div className="space-y-4">
       <Switch
-        label="Focus me to see events"
+        label="Notifications"
         checked={focusBlurSwitch}
         onCheckedChange={setFocusBlurSwitch}
         onFocus={

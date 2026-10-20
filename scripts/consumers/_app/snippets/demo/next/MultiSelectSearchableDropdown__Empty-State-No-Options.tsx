@@ -4,7 +4,12 @@ export default function MultiSelectSearchableDropdownExample() {
   return (
     <div className="flex items-start gap-6">
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Default message</p>
+        <p
+          id="multi-select-searchable-dropdown-empty-default"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Default message
+        </p>
         <div className="w-56">
           <MultiSelectSearchableDropdown
             options={[]}
@@ -23,12 +28,17 @@ export default function MultiSelectSearchableDropdownExample() {
                 chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }
             }
-            aria-label="Empty default"
+            aria-labelledby="multi-select-searchable-dropdown-empty-default"
           />
         </div>
       </div>
       <div>
-        <p className="mb-2 text-xs font-medium text-cl-text-tertiary">Custom message</p>
+        <p
+          id="multi-select-searchable-dropdown-empty-custom"
+          className="mb-2 text-xs font-medium text-cl-text-tertiary"
+        >
+          Custom message
+        </p>
         <div className="w-56">
           <MultiSelectSearchableDropdown
             options={[]}
@@ -54,7 +64,7 @@ export default function MultiSelectSearchableDropdownExample() {
                 chipRemoveTrigger: "w-3 h-3 shrink-0 cursor-pointer hover:text-cl-accent"
               }
             }
-            aria-label="Empty custom message"
+            aria-labelledby="multi-select-searchable-dropdown-empty-custom"
           />
         </div>
       </div>

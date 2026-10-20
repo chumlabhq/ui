@@ -214,7 +214,7 @@ const CheckboxDemo = () => {
           ].map(({ s, val, set }) => (
             <div key={s} className="text-center">
               <Checkbox
-                aria-label={`Size ${s}`}
+                aria-label={s}
                 checked={val}
                 onCheckedChange={set}
                 size={s}
@@ -226,13 +226,13 @@ const CheckboxDemo = () => {
           ))}
           <div className="text-center">
             <Checkbox
-              aria-label="Size 28px"
+              aria-labelledby="checkbox-size-custom"
               checked={true}
               size={28}
               shape="rounded"
               classes={c.checkbox}
             />
-            <p className={`text-xs mt-2 ${c.label}`}>28px</p>
+            <p id="checkbox-size-custom" className={`text-xs mt-2 ${c.label}`}>28px</p>
           </div>
         </DemoWrapper>
       </Section>
@@ -251,7 +251,7 @@ const CheckboxDemo = () => {
           ].map(({ sh, val, set }) => (
             <div key={sh} className="text-center">
               <Checkbox
-                aria-label={`Shape ${sh}`}
+                aria-label={sh}
                 checked={val}
                 onCheckedChange={set}
                 size="lg"
@@ -319,14 +319,14 @@ const CheckboxDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Checkbox
-            label="Disabled unchecked"
+            label="Email notifications"
             disabled
             size="md"
             shape="rounded"
             classes={c.checkbox}
           />
           <Checkbox
-            label="Disabled checked"
+            label="SMS notifications"
             disabled
             checked
             size="md"
@@ -387,7 +387,7 @@ const CheckboxDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="inline">
           <div className="flex flex-col gap-4">
             <Checkbox
-              label="Processing..."
+              label="Email notifications"
               loading
               checked
               size="md"
@@ -395,7 +395,7 @@ const CheckboxDemo = () => {
               classes={c.checkbox}
             />
             <Checkbox
-              label="Normal checkbox"
+              label="SMS notifications"
               checked
               size="md"
               shape="rounded"
@@ -414,7 +414,7 @@ const CheckboxDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <div className="flex flex-col gap-2">
             <Checkbox
-              label="Using onCheckedChange"
+              label="Subscribe to newsletter"
               onCheckedChange={setOnCheckedChangeDemo}
               checked={onCheckedChangeDemo}
               size="md"
@@ -459,7 +459,7 @@ const CheckboxDemo = () => {
         </div>
         <DemoWrapper isDarkMode={dark} layout="block">
           <Checkbox
-            label="Controlled checkbox"
+            label="Remember me"
             checked={controlled}
             onCheckedChange={setControlled}
             size="md"
@@ -490,7 +490,7 @@ const CheckboxDemo = () => {
               classes={c.checkbox}
             />
             <Checkbox
-              label="Third option (disabled)"
+              label="Third option"
               disabled
               classes={c.checkbox}
             />
@@ -521,7 +521,7 @@ const CheckboxDemo = () => {
         <DemoWrapper isDarkMode={dark} layout="block">
           <Checkbox
             ref={checkboxRef}
-            label="Controlled via ref"
+            label="Accept terms"
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -537,7 +537,7 @@ const CheckboxDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="block">
           <Checkbox
-            label="Focus me and check the log"
+            label="Remember me"
             size="md"
             shape="rounded"
             classes={c.checkbox}
@@ -567,7 +567,7 @@ const CheckboxDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           <Checkbox
-            label="Green theme"
+            label="Mark as done"
             checked
             classes={{
               ...c.checkbox,
@@ -578,7 +578,7 @@ const CheckboxDemo = () => {
             shape="rounded"
           />
           <Checkbox
-            label="Accent theme"
+            label="Pin to top"
             checked
             classes={{
               ...c.checkbox,

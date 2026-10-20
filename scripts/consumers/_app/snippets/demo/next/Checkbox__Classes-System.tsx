@@ -4,7 +4,7 @@ export default function CheckboxExample() {
   return (
     <>
       <Checkbox
-        label="Green theme"
+        label="Mark as done"
         checked
         classes={
           {
@@ -21,7 +21,7 @@ export default function CheckboxExample() {
         shape="rounded"
       />
       <Checkbox
-        label="Accent theme"
+        label="Pin to top"
         checked
         classes={
           {

@@ -22,7 +22,7 @@ export default function InputExample() {
   return (
     <div className="w-full space-y-4">
       <Input
-        aria-label="Full width"
+        aria-label="Subject"
         placeholder="Full width input"
         fullWidth
         classes={
@@ -38,7 +38,7 @@ export default function InputExample() {
         }
       />
       <Input
-        label="Full width, all features"
+        label="Message"
         placeholder="Enter your message..."
         fullWidth
         startIcon={<MailIcon className="text-cl-text-tertiary" />}

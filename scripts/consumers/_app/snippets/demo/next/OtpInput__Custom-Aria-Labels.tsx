@@ -9,7 +9,7 @@ export default function OtpInputExample() {
         `Code field ${index + 1} out of ${len}`
       }
       aria-label="Verification code entry"
-      label="Custom a11y labels"
+      label="Verification code"
       classes={
         {
           group: "flex items-center gap-2",

@@ -9,7 +9,7 @@ export default function DatePickerExample() {
         selectionMode="range"
         value={multiMonthRange}
         onValueChange={(range) => setMultiMonthRange(range)}
-        label="Two-month range picker"
+        label="Date range"
         placeholder="Select range..."
         numberOfMonths={2}
         clearable

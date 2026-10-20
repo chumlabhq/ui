@@ -354,7 +354,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Select fruits..."
               showSelectedChips={false}
               classes={c.dropdown}
-              aria-label="Select fruits count only"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -379,7 +379,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 ...c.dropdown,
                 trigger: `${c.dropdown.trigger} opacity-50 cursor-not-allowed`,
               }}
-              aria-label="Disabled fruits"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -394,7 +394,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
-              label="Required Field"
+              label="Fruits"
               options={staticOptions}
               value={errorValue}
               onValueChange={(values) => setErrorValue(values)}
@@ -443,7 +443,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-72">
             <MultiSelectSearchableDropdown
-              label="Required Fruits"
+              label="Fruits"
               options={staticOptions}
               value={successValue}
               onValueChange={(values) => setSuccessValue(values)}
@@ -476,7 +476,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Select fruits..."
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="Select fruits no search"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -500,7 +500,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 placeholder="Controlled dropdown..."
                 maxVisible={2}
                 classes={c.dropdown}
-                aria-label="Controlled dropdown"
+                aria-label="Fruits"
               />
             </div>
             <Button
@@ -540,7 +540,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Default (scrollable)"
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="Scroll unlocked dropdown"
+              aria-label="Fruits"
             />
           </div>
           <div className="w-full sm:max-w-72">
@@ -552,7 +552,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               lockScroll
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="Scroll locked dropdown"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -686,7 +686,7 @@ const MultiSelectSearchableDropdownDemo = () => {
       >
         <DemoWrapper isDarkMode={dark} layout="flex-col">
           <div>
-            <p className={`mb-2 ${c.label}`}>Default (bordered)</p>
+            <p id="multi-select-searchable-dropdown-style-default" className={`mb-2 ${c.label}`}>Default (bordered)</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
@@ -695,12 +695,12 @@ const MultiSelectSearchableDropdownDemo = () => {
                 placeholder="Select..."
                 maxVisible={2}
                 classes={c.dropdown}
-                aria-label="Default variant"
+                aria-labelledby="multi-select-searchable-dropdown-style-default"
               />
             </div>
           </div>
           <div>
-            <p className={`mb-2 ${c.label}`}>Borderless</p>
+            <p id="multi-select-searchable-dropdown-style-borderless" className={`mb-2 ${c.label}`}>Borderless</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
@@ -714,12 +714,12 @@ const MultiSelectSearchableDropdownDemo = () => {
                   value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
-                aria-label="Borderless variant"
+                aria-labelledby="multi-select-searchable-dropdown-style-borderless"
               />
             </div>
           </div>
           <div>
-            <p className={`mb-2 ${c.label}`}>Bottom border only</p>
+            <p id="multi-select-searchable-dropdown-style-bottom-border" className={`mb-2 ${c.label}`}>Bottom border only</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
@@ -733,12 +733,12 @@ const MultiSelectSearchableDropdownDemo = () => {
                   value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
-                aria-label="Bottom border variant"
+                aria-labelledby="multi-select-searchable-dropdown-style-bottom-border"
               />
             </div>
           </div>
           <div>
-            <p className={`mb-2 ${c.label}`}>Ghost</p>
+            <p id="multi-select-searchable-dropdown-style-ghost" className={`mb-2 ${c.label}`}>Ghost</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
@@ -752,12 +752,12 @@ const MultiSelectSearchableDropdownDemo = () => {
                   value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
-                aria-label="Ghost variant"
+                aria-labelledby="multi-select-searchable-dropdown-style-ghost"
               />
             </div>
           </div>
           <div>
-            <p className={`mb-2 ${c.label}`}>Pill</p>
+            <p id="multi-select-searchable-dropdown-style-pill" className={`mb-2 ${c.label}`}>Pill</p>
             <div className="w-full sm:max-w-72">
               <MultiSelectSearchableDropdown
                 options={staticOptions}
@@ -771,7 +771,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                   value:
                     "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 }}
-                aria-label="Pill variant"
+                aria-labelledby="multi-select-searchable-dropdown-style-pill"
               />
             </div>
           </div>
@@ -815,7 +815,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                   "inline-flex items-center px-2 py-0.5 text-xs bg-white/[0.10] text-white/80 rounded-cl-md shrink-0",
                 empty: "px-3 py-4 text-sm text-white/60 text-center",
               }}
-              aria-label="Dark theme fruits"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -852,7 +852,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 label: `block text-sm font-medium mb-1 text-cl-accent`,
                 message: `text-sm mt-1 text-cl-accent`,
               }}
-              aria-label="Blue theme fruits"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -876,7 +876,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 ...c.dropdown,
                 itemControl: `w-4 h-4 shrink-0 border rounded-full flex items-center justify-center border-cl-border-input`,
               }}
-              aria-label="Green checkbox fruits"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -901,7 +901,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 itemControl:
                   "w-5 h-5 shrink-0 border-2 border-cl-warning rounded-cl-sm flex items-center justify-center",
               }}
-              aria-label="Orange checkbox fruits"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -935,7 +935,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 ...c.dropdown,
                 itemControl: `w-4 h-4 shrink-0 border rounded flex items-center justify-center border-cl-warning`,
               }}
-              aria-label="Custom icon fruits"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -958,7 +958,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Select fruits..."
               maxVisible={3}
               classes={c.dropdown}
-              aria-label="Uncontrolled fruits"
+              aria-label="Fruits"
             />
             <div
               className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
@@ -1048,7 +1048,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Press keys while open..."
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="KeyDown demo"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -1094,7 +1094,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 padding: 4,
               }}
               classes={c.dropdown}
-              aria-label="Custom className and style"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -1119,7 +1119,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Select countries..."
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="Country selection without visible label"
+              aria-label="Countries"
             />
           </div>
         </DemoWrapper>
@@ -1145,7 +1145,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Keep mounted..."
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="Keep mounted demo"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -1172,7 +1172,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                 placeholder="Custom portal target..."
                 maxVisible={2}
                 classes={c.dropdown}
-                aria-label="Portal container demo"
+                aria-label="Fruits"
               />
             </div>
             <div
@@ -1198,7 +1198,7 @@ const MultiSelectSearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-start gap-6">
             <div>
-              <p className={`mb-2 ${c.label}`}>Default (4px)</p>
+              <p id="multi-select-searchable-dropdown-gap-default" className={`mb-2 ${c.label}`}>Default (4px)</p>
               <div className="w-56">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
@@ -1207,12 +1207,12 @@ const MultiSelectSearchableDropdownDemo = () => {
                   placeholder="Gap: 4px..."
                   maxVisible={1}
                   classes={c.dropdown}
-                  aria-label="Default gap"
+                  aria-labelledby="multi-select-searchable-dropdown-gap-default"
                 />
               </div>
             </div>
             <div>
-              <p className={`mb-2 ${c.label}`}>Large (16px)</p>
+              <p id="multi-select-searchable-dropdown-gap-large" className={`mb-2 ${c.label}`}>Large (16px)</p>
               <div className="w-56">
                 <MultiSelectSearchableDropdown
                   options={staticOptions}
@@ -1222,7 +1222,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                   placeholder="Gap: 16px..."
                   maxVisible={1}
                   classes={c.dropdown}
-                  aria-label="Large gap"
+                  aria-labelledby="multi-select-searchable-dropdown-gap-large"
                 />
               </div>
             </div>
@@ -1246,7 +1246,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="z-index: 9999..."
               maxVisible={2}
               classes={c.dropdown}
-              aria-label="Custom z-index"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -1272,7 +1272,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               placeholder="Full width dropdown..."
               maxVisible={3}
               classes={c.dropdown}
-              aria-label="Full width"
+              aria-label="Fruits"
             />
           </div>
         </DemoWrapper>
@@ -1287,19 +1287,19 @@ const MultiSelectSearchableDropdownDemo = () => {
         <DemoWrapper isDarkMode={dark}>
           <div className="flex items-start gap-6">
             <div>
-              <p className={`mb-2 ${c.label}`}>Default message</p>
+              <p id="multi-select-searchable-dropdown-empty-default" className={`mb-2 ${c.label}`}>Default message</p>
               <div className="w-56">
                 <MultiSelectSearchableDropdown
                   options={[]}
                   defaultOpen
                   placeholder="No options..."
                   classes={c.dropdown}
-                  aria-label="Empty default"
+                  aria-labelledby="multi-select-searchable-dropdown-empty-default"
                 />
               </div>
             </div>
             <div>
-              <p className={`mb-2 ${c.label}`}>Custom message</p>
+              <p id="multi-select-searchable-dropdown-empty-custom" className={`mb-2 ${c.label}`}>Custom message</p>
               <div className="w-56">
                 <MultiSelectSearchableDropdown
                   options={[]}
@@ -1315,7 +1315,7 @@ const MultiSelectSearchableDropdownDemo = () => {
                   }
                   placeholder="No options..."
                   classes={c.dropdown}
-                  aria-label="Empty custom message"
+                  aria-labelledby="multi-select-searchable-dropdown-empty-custom"
                 />
               </div>
             </div>

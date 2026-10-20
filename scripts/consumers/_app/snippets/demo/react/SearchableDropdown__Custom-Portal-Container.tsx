@@ -32,7 +32,7 @@ export default function SearchableDropdownExample() {
               label: "block text-sm font-medium mb-1 text-cl-text-secondary"
             }
           }
-          aria-label="Portal container demo"
+          aria-label="Fruit"
         />
       </div>
       <div

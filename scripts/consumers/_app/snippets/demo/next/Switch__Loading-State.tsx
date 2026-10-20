@@ -4,7 +4,7 @@ export default function SwitchExample() {
   return (
     <div className="flex flex-col gap-4">
       <Switch
-        label="Sync in progress"
+        label="Sync"
         loading
         checked
         classes={
@@ -17,7 +17,7 @@ export default function SwitchExample() {
         }
       />
       <Switch
-        label="Not loading"
+        label="Backups"
         defaultChecked
         classes={
           {

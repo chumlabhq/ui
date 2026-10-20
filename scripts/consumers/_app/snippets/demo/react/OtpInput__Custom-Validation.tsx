@@ -5,7 +5,7 @@ export default function OtpInputExample() {
     <>
       <OtpInput
         validate={(char) => /\d/.test(char)}
-        label="PIN (digits only)"
+        label="PIN"
         classes={
           {
             group: "flex items-center gap-2",
@@ -18,7 +18,7 @@ export default function OtpInputExample() {
       <OtpInput
         length={4}
         validate={(char) => /[a-zA-Z]/.test(char)}
-        label="Code (letters only)"
+        label="Code"
         classes={
           {
             group: "flex items-center gap-2",

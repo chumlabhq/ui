@@ -302,7 +302,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date range, emerald"
+                  aria-label="Date range"
                   selectionMode="range"
                   value={rangeEmerald}
                   onValueChange={(range) => setRangeEmerald(range)}
@@ -327,7 +327,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date range, amber"
+                  aria-label="Date range"
                   selectionMode="range"
                   value={rangeAmber}
                   onValueChange={(range) => setRangeAmber(range)}
@@ -352,7 +352,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date range, rose"
+                  aria-label="Date range"
                   selectionMode="range"
                   value={rangeRose}
                   onValueChange={(range) => setRangeRose(range)}
@@ -383,7 +383,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date range, gradient"
+                  aria-label="Date range"
                   selectionMode="range"
                   value={rangeGradient}
                   onValueChange={(range) => setRangeGradient(range)}
@@ -448,7 +448,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               selectionMode="range"
               value={presetRange}
               onValueChange={(range) => setPresetRange(range)}
-              label="Date range with presets"
+              label="Date range"
               placeholder="Select range..."
               showPresets
               clearable
@@ -478,7 +478,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                 <DatePicker
                   value={markersDate}
                   onValueChange={(date) => setMarkersDate(date)}
-                  label="Calendar with markers"
+                  label="Date"
                   placeholder="Pick a date..."
                   markers={markers}
                   showMarkerIndicator
@@ -500,7 +500,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Marked date, dots only"
+                  label="Date"
                   placeholder="Dots only..."
                   markers={markers}
                   showMarkerIndicator
@@ -521,7 +521,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Marked date, custom colours"
+                  label="Date"
                   placeholder="Colored dots..."
                   markers={[
                     { date: addDays(today, 1), label: "Red", color: "#ef4444" },
@@ -574,7 +574,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, past dates disabled"
+                  label="Date"
                   placeholder="No past dates"
                   disabledDates={{ disablePast: true }}
                   classes={c.datepicker}
@@ -593,7 +593,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, weekends disabled"
+                  label="Date"
                   placeholder="No weekends"
                   disabledDates={{ daysOfWeek: [0, 6] }}
                   classes={c.datepicker}
@@ -612,7 +612,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, min/max range"
+                  label="Date"
                   placeholder="Limited range"
                   minDate={subDays(today, 7)}
                   maxDate={addDays(today, 30)}
@@ -640,7 +640,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               selectionMode="range"
               value={multiMonthRange}
               onValueChange={(range) => setMultiMonthRange(range)}
-              label="Two-month range picker"
+              label="Date range"
               placeholder="Select range..."
               numberOfMonths={2}
               clearable
@@ -663,7 +663,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Date, week numbers shown"
+              label="Date"
               placeholder="With week numbers"
               showWeekNumbers
               classes={c.datepicker}
@@ -690,7 +690,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, default today style"
+                  label="Date"
                   placeholder="Clean calendar"
                   classes={c.datepicker}
                 />
@@ -708,7 +708,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, today indicator set"
+                  label="Date"
                   placeholder="Indicator only"
                   showTodayIndicator
                   classes={c.datepicker}
@@ -727,7 +727,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, today button"
+                  label="Date"
                   placeholder="Button only"
                   showTodayButton
                   classes={c.datepicker}
@@ -746,7 +746,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, indicator and today button"
+                  label="Date"
                   placeholder="Both enabled"
                   showTodayIndicator
                   showTodayButton
@@ -771,7 +771,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Date, week starts Monday"
+              label="Date"
               placeholder="Monday start"
               weekStartsOn={1}
               classes={c.datepicker}
@@ -849,7 +849,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Checking availability..."
+              label="Date"
               loading
               placeholder="Pick a date"
             />
@@ -866,7 +866,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         <DemoWrapper isDarkMode={dark}>
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Clearable Date"
+              label="Date"
               value={clearableDate}
               onValueChange={(d) => setClearableDate(d)}
               clearable
@@ -888,7 +888,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Disabled picker"
+              label="Date"
               placeholder="Cannot select"
               disabled
               classes={c.datepicker}
@@ -940,7 +940,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             <DatePicker
               value={controlledDate}
               onValueChange={(date) => setControlledDate(date)}
-              label="Controlled"
+              label="Date"
               placeholder="Pick a date..."
               clearable
               classes={c.datepicker}
@@ -971,7 +971,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             </Button>
             <div className="w-full sm:max-w-xs">
               <DatePicker
-                label="Date, open controlled externally"
+                label="Date"
                 value={openControlDate}
                 onValueChange={(date) => setOpenControlDate(date)}
                 open={calendarOpen}
@@ -1114,7 +1114,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             <DatePicker
               value={singlePresetDate}
               onValueChange={(date) => setSinglePresetDate(date)}
-              label="Custom presets"
+              label="Date"
               placeholder="Pick a date..."
               showPresets
               presets={customPresets}
@@ -1168,7 +1168,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, French locale"
+                  label="Date"
                   placeholder="Choisir une date..."
                   locale={fr}
                   weekStartsOn={1}
@@ -1186,7 +1186,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, German locale"
+                  label="Date"
                   placeholder="Datum auswählen..."
                   locale={de}
                   weekStartsOn={1}
@@ -1220,7 +1220,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
               >
                 <div className="w-full sm:max-w-xs">
                   <DatePicker
-                    label={`Date, ${fmt}`}
+                    label="Date"
                     value={formatDate}
                     onValueChange={setFormatDate}
                     dateFormat={fmt}
@@ -1252,7 +1252,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, outside days selectable"
+                  label="Date"
                   placeholder="Outside days visible & selectable"
                   showOutsideDays
                   outsideDaysSelectable
@@ -1272,7 +1272,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, outside days hidden"
+                  label="Date"
                   placeholder="Outside days hidden"
                   showOutsideDays={false}
                   classes={c.datepicker}
@@ -1296,7 +1296,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Date, fixed weeks"
+              label="Date"
               placeholder="Fixed 6 weeks"
               fixedWeeks
               classes={c.datepicker}
@@ -1323,7 +1323,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, specific dates disabled"
+                  label="Date"
                   placeholder="Some dates blocked"
                   disabledDates={{
                     dates: [
@@ -1348,7 +1348,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, Tuesdays and Thursdays only"
+                  label="Date"
                   placeholder="Tue & Thu only"
                   disabledDates={{
                     custom: (date) =>
@@ -1375,7 +1375,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Watch the log below"
+              label="Date"
               placeholder="Interact with me..."
               clearable
               onOpenChange={(isOpen) =>
@@ -1422,7 +1422,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date, pink accent"
+                  aria-label="Date"
                   placeholder="Pink theme"
                   classes={{
                     ...c.datepicker,
@@ -1456,7 +1456,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                     yearSelect: `flex items-center gap-1 px-3 py-2 text-base font-bold bg-transparent border border-none cursor-pointer rounded-cl-md transition-colors text-cl-text hover:bg-cl-bg-elevated`,
                     label: `block text-base font-semibold mb-2 text-cl-text`,
                   }}
-                  label="Large Calendar"
+                  label="Date"
                   showTodayIndicator
                 />
               </div>
@@ -1473,7 +1473,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="max-w-[220px]">
                 <DatePicker
-                  aria-label="Date, compact"
+                  aria-label="Date"
                   placeholder="Compact"
                   classes={{
                     ...c.datepicker,
@@ -1506,7 +1506,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date, custom nav buttons"
+                  aria-label="Date"
                   placeholder="Custom nav"
                   classes={{
                     ...c.datepicker,
@@ -1530,7 +1530,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  aria-label="Date range, styled presets"
+                  aria-label="Date range"
                   selectionMode="range"
                   value={classesRange}
                   onValueChange={(range) => setClassesRange(range)}
@@ -1566,7 +1566,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, repositions on scroll"
+                  label="Date"
                   placeholder="Scroll the page..."
                   clearable
                   classes={c.datepicker}
@@ -1585,7 +1585,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, scroll locked while open"
+                  label="Date"
                   placeholder="Open me, then try scrolling..."
                   lockScroll
                   clearable
@@ -1615,7 +1615,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, opens below (auto-flips)"
+                  label="Date"
                   value={forceBotDate}
                   onValueChange={(d) => setForceBotDate(d)}
                   dropdownSide="bottom"
@@ -1636,7 +1636,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, forced below"
+                  label="Date"
                   value={forceTopDate}
                   onValueChange={(d) => setForceTopDate(d)}
                   dropdownSide="bottom"
@@ -1658,7 +1658,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, forced above"
+                  label="Date"
                   dropdownSide="top"
                   forceDropdownSide
                   placeholder="Always opens above..."
@@ -1678,7 +1678,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
             >
               <div className="w-full sm:max-w-xs">
                 <DatePicker
-                  label="Date, forced below with scroll locked"
+                  label="Date"
                   dropdownSide="bottom"
                   forceDropdownSide
                   lockScroll
@@ -1704,7 +1704,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              aria-label="Date, custom icons"
+              aria-label="Date"
               placeholder="Custom icons"
               calendarIcon={<span className="text-lg">📅</span>}
               clearIcon={<span className="text-sm">✕</span>}
@@ -1735,7 +1735,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
         >
           <div className="w-full sm:max-w-xs">
             <DatePicker
-              label="Date, reduced motion"
+              label="Date"
               placeholder="No transitions"
               reduceMotion={true}
               classes={c.datepicker}

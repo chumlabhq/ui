@@ -41,7 +41,7 @@ export default function TextAreaExample() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
       <TextArea
-        label="Default"
+        label="Description"
         placeholder="Normal state"
         classes={
           {
@@ -60,7 +60,7 @@ export default function TextAreaExample() {
         className="flex flex-col"
       />
       <TextArea
-        label="Error"
+        label="Description"
         value="Too short"
         error
         errorMessage={
@@ -86,7 +86,7 @@ export default function TextAreaExample() {
         className="flex flex-col"
       />
       <TextArea
-        label="Success"
+        label="Description"
         value="This is a properly written description that meets the requirements."
         success
         successMessage={
