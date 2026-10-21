@@ -34,18 +34,50 @@ const MOTION_LEAKS = (waivers as { motionLeaks: Record<string, string[]> })
 const candidates = COMPONENTS.filter((c) => fixturesFor(c.name).length > 0);
 
 /**
- * Motion tokens on elements that have NOT opted out in CSS.
+ * Motion written into an element's `style` attribute, one token per declaration,
+ * as `style:animation(linear-loader-slide 1500ms ease-in-out infinite)`.
+ *
+ * The loaders animate this way: `style={{ animation: … }}`, with `"none"` under
+ * reduced motion. A reader of class tokens alone saw neither direction, so their
+ * motion was never required to exist and never required to stop. Read from the
+ * attribute rather than `el.style` because jsdom keeps the `animation` shorthand
+ * as written and does not expand it into `animation-name`. A 0ms transition
+ * (Drawer's under reduced motion) does not move, so it is not counted. A
+ * `motion-reduce:` class does not excuse these: an inline declaration beats it.
+ */
+const SHORTHANDS = /^(animation|transition)$/;
+const LONGHANDS = /^(animation-name|transition-property)$/;
+/** A shorthand item's first time is its duration, and an item with none lasts 0s. */
+const moves = (item: string) => {
+  const time = item.match(/(?:^|\s)(\d*\.?\d+)(m?s)(?=\s|$)/);
+  return time !== null && Number(time[1]) > 0;
+};
+const inlineMotion = (style: string | null): string[] =>
+  (style ?? "")
+    .split(";")
+    .map((declaration) => declaration.split(":"))
+    .map(([property, ...value]) => [property.trim().toLowerCase(), value.join(":").trim()])
+    .filter(([property, value]) =>
+      SHORTHANDS.test(property)
+        ? value.split(/,(?![^(]*\))/).some(moves)
+        : LONGHANDS.test(property) && value !== "" && !/^(none|initial|unset)$/i.test(value),
+    )
+    .map(([property, value]) => `style:${property}(${value})`);
+
+/**
+ * Motion tokens on elements that have NOT opted out in CSS, plus inline motion.
  *
  * An element carrying `motion-reduce:transition-none` has its transitions
  * switched off by the media query itself, so its `transition-opacity` is not a
  * violation — reading tokens as a flat set would fail the idiomatic fix.
  */
-const motionOnElements = (root: ParentNode): string[] => {
+const motionOnElements = (root: ParentNode, inline = true): string[] => {
   const out = new Set<string>();
   for (const el of [
     ...(root instanceof Element ? [root] : []),
     ...Array.from(root.querySelectorAll("*")),
   ]) {
+    if (inline) for (const t of inlineMotion(el.getAttribute("style"))) out.add(t);
     const cls = el.getAttribute("class");
     if (!cls) continue;
     const tokens = cls.split(/\s+/).filter(Boolean);
@@ -64,6 +96,7 @@ const tokensUnder = async (
   fixtures: ReturnType<typeof fixturesFor>,
   reduced: boolean,
   extraProps: Record<string, unknown> = {},
+  inline = true,
 ) => {
   const session = fixtureSession();
   setReducedMotion(reduced);
@@ -81,7 +114,7 @@ const tokensUnder = async (
       )) as React.ReactElement,
     );
     await session.act(f, container);
-    for (const token of motionOnElements(document.body)) seen.add(token);
+    for (const token of motionOnElements(document.body, inline)) seen.add(token);
     session.unmount();
   }
   return seen;
@@ -152,10 +185,16 @@ describe("reduced motion contract", () => {
         return false;
       return tokens.some(isMotion);
     });
-
-    it.runIf(declaresMotion)("animates when motion is allowed", async () => {
-      ran.motion.push(component.name);
+    // The defaults are not the whole of it: Avatar, CountryFlag and the
+    // RadioButton group move through nested parts, and the three loaders through
+    // an inline `style`. So "must animate" is decided by the motion-allowed
+    // render itself. A component that declares motion and emits none fails; one
+    // that neither declares nor emits any has nothing to stop, and is skipped
+    // here by name in vitest.skips.json, which fails the run if that set moves.
+    it("animates when motion is allowed", async ({ skip }) => {
       const moving = motionOf(await tokensUnder(component, fixtures, false));
+      skip(!declaresMotion && moving.length === 0, "declares no motion and emits none");
+      ran.motion.push(component.name);
       expect(
         moving.length,
         `${component.name} declares motion in its defaults but emits none, so the assertion below cannot fail`,
@@ -179,8 +218,15 @@ describe("reduced motion contract", () => {
       // Motion is decorative under ADR 001, so `unstyled` removes it too. The
       // two must not depend on each other: either alone, or both together, must
       // leave nothing moving.
+      //
+      // Class motion only, as before inline styles were read. With motion
+      // allowed, `unstyled` keeps the inline motion of 10 components (the three
+      // loaders, Accordion, Avatar, CountryFlag, CountryFlagGroup,
+      // InternationalPhoneInput, Drawer, Slider, Toast). Whether ADR 001's
+      // "unstyled removes motion" reaches an inline `style` is an open
+      // decision, not settled here.
       const unstyledOnly = motionOf(
-        await tokensUnder(component, fixtures, false, { unstyled: true }),
+        await tokensUnder(component, fixtures, false, { unstyled: true }, false),
       );
       const both = motionOf(
         await tokensUnder(component, fixtures, true, { unstyled: true }),
@@ -209,11 +255,11 @@ describe("reduced motion contract", () => {
   });
 
   it("ran the gated tests for every component whose type declares the prop", () => {
-    // `declaresMotion` is read from the defaults, not from a props type, so
-    // it has no independent count to hold it to; it is printed beside the one
-    // that does.
+    // "Must animate" is read from the defaults and the render, not from a
+    // props type, so there is no declared count to hold it to here; the
+    // components it skips are named in vitest.skips.json instead.
     console.log(
-      `CAPABILITY reduced-motion motion (from the defaults) ran=${ran.motion.length} skipped=${candidates.length - ran.motion.length}`,
+      `CAPABILITY reduced-motion motion (from the render) ran=${ran.motion.length} skipped=${candidates.length - ran.motion.length}`,
     );
     expectRanAsDeclared("reduced-motion", "unstyled", candidates, ran.unstyled);
   });
@@ -273,7 +319,7 @@ describe("the reduceMotion prop", () => {
    * below cannot fail for them.
    *
    * Named rather than skipped. The fixtures are derived from each component's
-   * simplest state, and for five that state has no animation in it — Drawer's
+   * simplest state, and for four that state has no animation in it — Drawer's
    * closed panel, Switch's resting track. That makes their pair of assertions
    * vacuous, which is worth seeing: it is the difference between "honours the
    * prop" and "was never asked to".
@@ -290,7 +336,6 @@ describe("the reduceMotion prop", () => {
     // A ratchet, not a target: this list may shrink as fixtures reach richer
     // states, and must not grow without someone noticing.
     expect(vacuous.sort()).toEqual([
-      "CountryFlag",
       "Drawer",
       "ResizablePanel",
       "Stepper",

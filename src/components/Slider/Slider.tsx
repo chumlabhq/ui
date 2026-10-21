@@ -231,7 +231,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       renderThumb,
       renderMark,
       markDotSize = 6,
-      animationDuration = 200,
+      animationDuration: animationDurationProp = 200,
       id,
       name,
       label,
@@ -297,6 +297,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
     });
 
     const prefersReducedMotion = useReducedMotion();
+    const animationDuration = prefersReducedMotion ? 0 : animationDurationProp;
     const baseClassesRaw = unstyled
       ? UNSTYLED_SLIDER_CLASSES
       : DEFAULT_SLIDER_CLASSES;

@@ -1,0 +1,43 @@
+{
+  "$comment": "Every site in the vitest sources that can skip a test, and why. `scripts/run-vitest.mjs` finds the sites itself (a TypeScript AST scan for runIf/skipIf/skip/todo on it/test/describe, a test context's skip(), and a { skip } or { todo } option) and fails on a site that is not listed here, an entry whose site no longer exists, and, on a full run, a count that moved. `count` is held to two sources besides the run: the skipped tests the reporter attributes to the site, and, where `capability` is set, that CAPABILITY line's population minus declared. `names` is held to the skipped tests' titles. A site is keyed by its file and its source text, not its line, so an edit above it does not stale the entry.",
+  "sites": [
+    {
+      "file": "src/__tests__/contracts/ssr.contract.test.tsx",
+      "site": "it.runIf(supports.keepMounted)",
+      "condition": "the component's props type declares `keepMounted` (src/test/capabilities.global.ts reads it from the type)",
+      "reason": "A component with no `keepMounted` prop has no mounted-while-closed state to render on the server; passing the prop would test an unknown attribute, not SSR.",
+      "pinned": "ssr.contract's 'renders to string with default props' runs for all 38; 'ran the gated tests for every component whose type declares the prop' (expectRanAsDeclared) requires exactly the 12 declaring components to have run it.",
+      "count": 26,
+      "capability": "ssr keepMounted"
+    },
+    {
+      "file": "src/__tests__/contracts/ssr.contract.test.tsx",
+      "site": "it.runIf(supports.open)",
+      "condition": "the component's props type declares `open` (src/test/capabilities.global.ts reads it from the type)",
+      "reason": "A component with no `open` prop has no open state to render on the server.",
+      "pinned": "ssr.contract's 'renders to string with default props' runs for all 38; expectRanAsDeclared requires exactly the 10 declaring components to have run it.",
+      "count": 28,
+      "capability": "ssr open"
+    },
+    {
+      "file": "src/__tests__/contracts/reduced-motion.contract.test.tsx",
+      "site": "skip(!declaresMotion && moving.length === 0)",
+      "condition": "the component declares no motion in its DEFAULT_* constants and its motion-allowed render emits none, in classes or in an inline `style`",
+      "reason": "ResizablePanel, Stepper and Tooltip have no motion utility anywhere in their sources and render none with motion allowed, so there is no motion to require.",
+      "pinned": "'stops animating when the user asks it to' runs for all three and fails on any motion under reduced motion; if one starts to animate with motion allowed it leaves this set and `names` fails the run.",
+      "count": 3,
+      "names": ["ResizablePanel", "Stepper", "Tooltip"],
+      "capability": "reduced-motion motion"
+    },
+    {
+      "file": "src/__tests__/contracts/reduced-motion.contract.test.tsx",
+      "site": "it.runIf(component.supports.unstyled)",
+      "condition": "the component's props type declares `unstyled`",
+      "reason": "RadioButton/RadioButton, the group's item, takes no `unstyled` prop: it reads the group's through context (RadioButton.tsx passes `unstyled` into the group context).",
+      "pinned": "The RadioButton group's own 'composes with unstyled rather than fighting it' renders its items under `unstyled`; expectRanAsDeclared requires exactly the 37 declaring components to have run it.",
+      "count": 1,
+      "names": ["RadioButton/RadioButton"],
+      "capability": "reduced-motion unstyled"
+    }
+  ]
+}

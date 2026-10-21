@@ -1,4 +1,5 @@
 import { writeFileSync } from "node:fs";
+import type { UserConsoleLog } from "vitest";
 import type { Reporter, TestCase, TestModule } from "vitest/node";
 
 /**
@@ -20,6 +21,8 @@ import type { Reporter, TestCase, TestModule } from "vitest/node";
  *   can name a matched file that never reported: a worker that fails to start
  *   leaves no entry for its file, and one that dies leaves an entry with no
  *   tests
+ * - every skipped test with its line, and every `CAPABILITY` line a contract
+ *   printed, so `scripts/run-vitest.mjs` can hold each skip to vitest.skips.json
  * - a machine-readable twin for `scripts/run-vitest.mjs`, which owns the
  *   verdict: a reporter cannot set vitest's exit code, and a gate that scrapes
  *   its own console output breaks the first time someone rewords a line
@@ -37,9 +40,39 @@ interface Row {
   state: string;
 }
 
+const SKIPPED = new Set(["skipped", "todo"]);
+const CAPABILITY = /^CAPABILITY (\S+) (\S+)(?: \([^)]*\))?(?: expected=(\d+))? ran=(\d+) skipped=(\d+)$/;
+
+interface Capability {
+  name: string;
+  expected: number | null;
+  ran: number;
+  skipped: number;
+}
+
 export default class VitestReconcileReporter implements Reporter {
+  private capabilities: Capability[] = [];
+
+  onTestRunStart(): void {
+    this.capabilities = [];
+  }
+
+  onUserConsoleLog(log: UserConsoleLog): void {
+    for (const line of log.content.split("\n")) {
+      const match = CAPABILITY.exec(line.trim());
+      if (!match) continue;
+      this.capabilities.push({
+        name: `${match[1]} ${match[2]}`,
+        expected: match[3] === undefined ? null : Number(match[3]),
+        ran: Number(match[4]),
+        skipped: Number(match[5]),
+      });
+    }
+  }
+
   onTestRunEnd(testModules: ReadonlyArray<TestModule>): void {
     const rows: Row[] = [];
+    const skipped: Row[] = [];
     const byState = new Map<string, number>();
     const byProject = new Map<string, number>();
     const modules: { file: string; project: string; tests: number }[] = [];
@@ -56,6 +89,15 @@ export default class VitestReconcileReporter implements Reporter {
         const state = test.result().state;
         byState.set(state, (byState.get(state) ?? 0) + 1);
         byProject.set(project, (byProject.get(project) ?? 0) + 1);
+        if (SKIPPED.has(state)) {
+          skipped.push({
+            file,
+            line: test.location?.line ?? null,
+            title: test.fullName,
+            project,
+            state,
+          });
+        }
         if (NOT_PASSED.has(state) || state === "pending") {
           rows.push({
             file,
@@ -109,6 +151,8 @@ export default class VitestReconcileReporter implements Reporter {
             notPassed,
             notPassedTests: rows,
             modules,
+            skippedTests: skipped,
+            capabilities: this.capabilities,
           },
           null,
           2,
