@@ -1446,7 +1446,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 160.44,
-    commit: "(uncommitted)",
+    commit: "3865a796",
     date: "2026-10-21",
     attribution: "attributed",
     reason:
@@ -1463,6 +1463,28 @@ const LIBRARY_TOTAL_HISTORY = [
       "so). The rest, +1 to +5 B on three entries, is the chunks' new hashed " +
       "names in import strings. No declared breach moved. No comments added to " +
       "src/components or src/utils. Measured against a build of 9c13207b.",
+  },
+  {
+    kb: 160.54,
+    commit: "this slice",
+    date: "2026-10-26",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.10 KB (164,289 -> 164,389 B gzipped), 83 files held, in " +
+      "two moves. a364de95 (SK), +10 B, recorded here because no row did: " +
+      "Slider's chunk +15 B (its inline transitions stop under reduced " +
+      "motion), its entry -1 B; measured as a build of 3865a796 against one " +
+      "of a364de95. This slice, +90 B on a build of a364de95: Tooltip +73 B " +
+      "exclusive in its chunk (a blur whose focus lands in the tooltip's own " +
+      "content keeps it open when the content is hoverable, a blur from the " +
+      "content to anywhere but the trigger closes it, and hoverable content " +
+      "takes tabIndex -1 so a press on it moves focus there rather than to " +
+      "the body); Drawer +20 B in its chunk (a swipeable panel reserves the " +
+      "handle's row as top padding and the handle sits in that row, two class " +
+      "constants applied whether or not unstyled). The rest, -2 to +4 B on 13 " +
+      "files, is the chunks' new hashed names in import strings (ButtonGroup's " +
+      "chunk renamed, 2,741 -> 2,742 B). No declared breach moved. No " +
+      "comments added to src/components or src/utils.",
   },
 ];
 

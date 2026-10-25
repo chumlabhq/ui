@@ -39,6 +39,8 @@ import {
   DEFAULT_SNAP_POINT_INDEX,
   SWIPE_DEADZONE,
   VELOCITY_THRESHOLD,
+  SWIPEABLE_PANEL_CLASS,
+  DRAWER_HANDLE_ROW_CLASS,
 } from "./utils/constants.js";
 import { DrawerContext } from "./utils/context.js";
 import { useControllableState } from "../../utils/useControllableState.js";
@@ -673,6 +675,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               className={
                 cn(
                   mergedClasses.content,
+                  swipeable && SWIPEABLE_PANEL_CLASS,
                   modal && !lockScroll && "pointer-events-auto",
                   !modal &&
                     (visualOpen
@@ -704,7 +707,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                   would be a stop with no action behind it. */}
               {swipeable && (
                 <div
-                  className={mergedClasses.handle || undefined}
+                  className={cn(DRAWER_HANDLE_ROW_CLASS, mergedClasses.handle)}
                   style={{ touchAction: "none" }}
                   data-drawer-handle
                   aria-hidden="true"

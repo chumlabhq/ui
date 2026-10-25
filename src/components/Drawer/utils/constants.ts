@@ -30,7 +30,7 @@ export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
    * two that make it a handle rather than decoration.
    */
   handle:
-    "sticky top-0 bg-inherit flex items-center justify-center h-5 shrink-0 select-none cursor-grab active:cursor-grabbing",
+    "sticky bg-inherit flex items-center justify-center h-5 shrink-0 select-none cursor-grab active:cursor-grabbing",
   handleBar: "block h-1 w-9 rounded-full bg-cl-border-input",
 };
 
@@ -44,6 +44,10 @@ export const DEFAULT_DRAWER_CLASSES: Required<DrawerClasses> = {
  * `Modal` renders its own.
  */
 export const DRAWER_CLOSE_BUTTON_CLASS = "cursor-pointer";
+
+export const SWIPEABLE_PANEL_CLASS = "pt-5";
+
+export const DRAWER_HANDLE_ROW_CLASS = "-top-5 -mt-5";
 
 export const UNSTYLED_DRAWER_CLASSES: Required<DrawerClasses> =
   structuralOnly(DEFAULT_DRAWER_CLASSES);

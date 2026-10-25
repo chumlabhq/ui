@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "./_test";
 import { gotoFixture } from "./_nav";
+import { scrollUntil } from "./_helpers";
 
 /**
  * Overlay content taller than the viewport is reachable, by keyboard and by
@@ -69,8 +70,12 @@ for (const vp of VIEWPORTS) {
         expect(s.label, "Tab never reached the last control").toBe("Last action");
         expect(s.visible, "focused and out of sight").toBe(true);
 
-        // Scrolling: back to the top, then a wheel over the overlay. The
-        // overlay scrolls and the page behind it does not.
+        // Scrolling: back to the top, then each project's own input over the
+        // overlay (scrollUntil): the wheel on desktop, a touch swipe on Mobile
+        // Chrome, and PageDown on Mobile Safari, where Playwright has no wheel
+        // and no swipe (the test at the end of this file pins that). Two more
+        // gestures past the end, where a scroll that chains would move the
+        // page. The overlay scrolls and the page behind it does not.
         await page.evaluate(() => {
           (document.activeElement as HTMLElement).blur();
           const spacer = document.createElement("div");
@@ -80,10 +85,10 @@ for (const vp of VIEWPORTS) {
         await last.evaluate((el) => {
           for (let c = el.parentElement; c; c = c.parentElement) if (c.scrollHeight > c.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(c).overflowY)) c.scrollTop = 0;
         });
-        const box = await page.getByRole("dialog").first().boundingBox();
-        await page.mouse.move(box!.x + box!.width / 2, Math.min(box!.y + box!.height / 2, vp.height - 20));
-        for (let i = 0; i < 12; i++) await page.mouse.wheel(0, 400);
-        await expect.poll(() => last.evaluate((el) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; }), { message: "scrolling the overlay never brought the last control into view" }).toBe(true);
+        const inView = () => last.evaluate((el) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; });
+        const scrolled = await scrollUntil(page, last, inView, { beyond: 2 });
+        console.log(`OVERLAY_REACH ${vp.width}x${vp.height} ${t.component}/${t.fixture} scroll: ${scrolled.input} x${scrolled.gestures}`);
+        await expect.poll(inView, { message: "scrolling the overlay never brought the last control into view" }).toBe(true);
         expect(await page.evaluate(() => window.scrollY), "the page behind the overlay scrolled").toBe(0);
       });
     }
@@ -241,4 +246,23 @@ test.describe("CascadingDropdown roving tab stop", () => {
       expect(focusedItem, "opening by pointer moved DOM focus into the menu").toBe(false);
     });
   }
+});
+
+/**
+ * The limitation scrollUntil works around, pinned. On Mobile Safari Playwright
+ * refuses the wheel, so the overlays above are scrolled there by PageDown.
+ * The day the wheel is accepted this fails, and the workaround is revisited:
+ * a wheel that works may mean a swipe does too. Every other project takes the
+ * wheel, desktop and Mobile Chrome alike.
+ */
+test("the mouse wheel is refused on Mobile Safari, and only there", async ({ page, browserName }) => {
+  await gotoFixture(page, "Modal", "tall");
+  const hasTouch = await page.evaluate(() => "ontouchstart" in window || navigator.maxTouchPoints > 0);
+  const refused = await page.mouse.wheel(0, 100).then(
+    () => "",
+    (e: Error) => e.message,
+  );
+  console.log(`OVERLAY_REACH wheel ${browserName} touch=${hasTouch}: ${refused || "accepted"}`);
+  if (browserName === "webkit" && hasTouch) expect(refused).toContain("Mouse wheel is not supported in mobile WebKit");
+  else expect(refused).toBe("");
 });

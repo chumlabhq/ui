@@ -1,5 +1,5 @@
 import { gotoFixture } from "./_nav";
-import { skipWithoutTabTraversal } from "./_helpers";
+import { conceal, reveal, skipWithoutTabTraversal } from "./_helpers";
 import { test, expect, type Page } from "./_test";
 
 /**
@@ -35,7 +35,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = arrowSection.locator("button").filter({ hasText: "With Arrow" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.getByRole("tooltip", { name: "Arrow visible on this tooltip" });
@@ -51,7 +51,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = arrowSection.locator("button").filter({ hasText: "No Arrow" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.getByRole("tooltip", { name: "No arrow on this tooltip" });
@@ -68,7 +68,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = positionsSection.locator("button").filter({ hasText: /^Top$/ });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.getByRole("tooltip", { name: "Top tooltip" });
@@ -88,7 +88,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = positionsSection.locator("button").filter({ hasText: /^Right$/ });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(500);
 
       const tooltip = page.getByRole("tooltip", { name: "Right tooltip" });
@@ -112,7 +112,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = positionsSection.locator("button").filter({ hasText: /^Left$/ });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.getByRole("tooltip", { name: "Left tooltip" });
@@ -147,7 +147,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = disabledSection.locator("button").filter({ hasText: "Disabled Tooltip" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(400);
 
       const tooltip = page.getByRole("tooltip", { name: "This won't show" });
@@ -161,7 +161,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = delaySection.locator("button").filter({ hasText: "Instant" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
 
       // The 500ms bound is the assertion: with `delayDuration={0}` the tooltip
       // appears on hover, and the 1000ms sibling below could not pass this.
@@ -182,7 +182,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = delaySection.locator("button").filter({ hasText: "Slow (1s)" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
 
       const tooltip = page.getByRole("tooltip", { name: "Slow appearance (1000ms)" });
 
@@ -217,13 +217,13 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = hoverableSection.locator("button").filter({ hasText: "Hoverable (default)" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.getByRole("tooltip", { name: "Move mouse to tooltip - it stays open" });
       await expect(tooltip).toBeVisible();
 
-      await tooltip.hover();
+      await reveal(page, tooltip);
       await page.waitForTimeout(300);
 
       await expect(tooltip).toBeVisible();
@@ -234,13 +234,13 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = hoverableSection.locator("button").filter({ hasText: "Not Hoverable" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.getByRole("tooltip", { name: "Tooltip closes when leaving trigger" });
       await expect(tooltip).toBeVisible();
 
-      await page.mouse.move(0, 0);
+      await conceal(page);
       await page.waitForTimeout(300);
 
       await expect(tooltip).not.toBeVisible();
@@ -253,7 +253,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
       const trigger = richSection.locator("button").filter({ hasText: "Rich Content" });
       await trigger.scrollIntoViewIfNeeded();
 
-      await trigger.hover();
+      await reveal(page, trigger);
       await page.waitForTimeout(300);
 
       const tooltip = page.locator('[role="tooltip"]').filter({ hasText: "Pro Tip" });
@@ -296,7 +296,7 @@ test.describe("Tooltip (fixtures)", () => {
     await gotoFixture(page, "Tooltip", "bottom");
 
     const trigger = page.getByRole("button", { name: "Trigger" });
-    await trigger.hover();
+    await reveal(page, trigger);
 
     const tooltip = page.getByRole("tooltip");
     await expect(tooltip).toBeVisible();

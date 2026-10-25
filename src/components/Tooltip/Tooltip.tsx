@@ -375,9 +375,23 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       [disabled, setOpen],
     );
 
-    const handleBlur = useCallback(() => {
-      setOpen(false);
-    }, [setOpen]);
+    const handleBlur = useCallback(
+      (event: React.FocusEvent) => {
+        const to = event.relatedTarget as Node | null;
+        if (hoverableContent && to && tooltipRef.current?.contains(to)) return;
+        setOpen(false);
+      },
+      [hoverableContent, setOpen],
+    );
+
+    const handleTooltipBlur = useCallback(
+      (event: React.FocusEvent) => {
+        const to = event.relatedTarget as Node | null;
+        if (to && (tooltipRef.current?.contains(to) || triggerNode?.contains(to))) return;
+        setOpen(false);
+      },
+      [setOpen, triggerNode],
+    );
 
     // Escape dismisses an open tooltip wherever focus is (WCAG 1.4.13), and only
     // the tooltip. This was a handler on the trigger, so a tooltip opened by hover
@@ -569,8 +583,10 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           ...shadowStyle,
           ...contentStyle,
         }}
+        tabIndex={hoverableContent ? -1 : undefined}
         onMouseEnter={handleTooltipMouseEnter}
         onMouseLeave={handleTooltipMouseLeave}
+        onBlur={hoverableContent ? handleTooltipBlur : undefined}
       >
         {truncate ? children : content}
         {arrowElement}

@@ -46,7 +46,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * Toast's five Pause on Focus tests. 5514 at M2: Modal's missing-name
  * warning and CountryFlagGroup's unstyled.
  */
-const SUITE_FLOOR = { tests: 5514 };
+const SUITE_FLOOR = { tests: 5519 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");

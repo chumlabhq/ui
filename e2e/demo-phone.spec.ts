@@ -2,6 +2,7 @@ import ts from "typescript";
 import { readFileSync } from "node:fs";
 import { test, expect, type Frame, type Locator } from "./_test";
 import { demoPages } from "./_demo-routes";
+import { scrollUntil } from "./_helpers";
 
 /**
  * Every phone-width frame on the docs pages shows what its section says.
@@ -24,7 +25,8 @@ import { demoPages } from "./_demo-routes";
  *     CascadingDropdown's menu, 8 px wider than the viewport, went unnoticed
  *     until L24 fixed it and gave it a frame;
  *   - for the two tall overlays, the last control is out of view at first and
- *     is reached both by Tab and by scrolling, and seen.
+ *     is reached both by Tab and by scrolling, and seen, and scrolling moves
+ *     nothing behind the overlay.
  *
  * The frames are read from the pages' source, so a frame added to a page is
  * checked here with no edit, and fails until it has an entry below.
@@ -212,16 +214,22 @@ test("every phone-width frame loads its preview at 360 px or the page's width, i
     if (want.reach) {
       const { last, scroller, heading } = want.reach;
       // What scrolls: the nearest ancestor of the last control that overflows.
+      // And by how much the dialog itself overflows: where the content is what
+      // scrolls, the dialog has to hold it exactly. A swipeable Drawer's handle
+      // row pushed an h-full child 20 px past its panel, so the content's end
+      // was reachable only by scrolling the panel as well, which PageDown in
+      // the content never does.
       const scrolls = await inner.getByRole("button", { name: last, exact: true }).evaluate((el) => {
         const dialog = el.closest("[role=dialog]")!;
+        const dialogOverflow = dialog.scrollHeight - dialog.clientHeight;
         for (let n = el.parentElement; n; n = n.parentElement) {
           const style = getComputedStyle(n);
           if (/auto|scroll/.test(style.overflowY) && n.scrollHeight > n.clientHeight + 1) {
             n.scrollTop = 0;
-            return { where: n === dialog ? "the dialog" : n.contains(dialog) ? "the overlay" : "the content" };
+            return { where: n === dialog ? "the dialog" : n.contains(dialog) ? "the overlay" : "the content", dialogOverflow };
           }
         }
-        return { where: "nothing" };
+        return { where: "nothing", dialogOverflow };
       });
       const atFirst = await inView(inner, last);
       const button = inner.getByRole("button", { name: last, exact: true });
@@ -238,26 +246,31 @@ test("every phone-width frame loads its preview at 360 px or the page's width, i
         byTab = await button.evaluate((el) => el === document.activeElement);
       }
       const seenByTab = byTab && (await inView(inner, last));
-      // By scrolling, from the top again, with the wheel over the overlay.
+      // By scrolling, from the top again, with each project's own input over
+      // what scrolls (scrollUntil): the wheel on desktop, a touch swipe on
+      // Mobile Chrome, and PageDown on Mobile Safari, where Playwright has no
+      // wheel and no swipe (overlay-reach.spec pins that). The reader's click
+      // again first: the blur takes focus out of the frame, and keys pressed
+      // then go to the docs page.
       await inner.evaluate((name) => {
         (document.activeElement as HTMLElement | null)?.blur();
         const el = [...document.querySelectorAll("button")].find((b) => b.textContent?.trim() === name)!;
         for (let n = el.parentElement; n; n = n.parentElement) if (n.scrollHeight > n.clientHeight + 1) n.scrollTop = 0;
       }, last);
-      const box = (await frame.boundingBox())!;
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height * 0.75);
-      let byScroll = false;
-      for (let i = 0; i < 20 && !byScroll; i += 1) {
-        await page.mouse.wheel(0, 400);
-        await inner.waitForTimeout(100);
-        byScroll = await inView(inner, last);
-      }
-      reach = `scrolls=${scrolls.where} hidden-at-first=${!atFirst} tab=${seenByTab} scroll=${byScroll}`;
+      await inner.locator("[role=dialog]").getByText(heading, { exact: true }).click();
+      const behind = await inner.evaluate(() => window.scrollY);
+      const scrolled = await scrollUntil(page, button, () => inView(inner, last));
+      const byScroll = await inView(inner, last);
+      const moved = (await inner.evaluate(() => window.scrollY)) - behind;
+      reach = `scrolls=${scrolls.where} hidden-at-first=${!atFirst} tab=${seenByTab} scroll=${byScroll} by=${scrolled.input}x${scrolled.gestures} behind-moved=${moved} dialog-overflow=${scrolls.dialogOverflow}`;
       if (scrolls.where !== scroller) problems.push(`${f.route}: ${scrolls.where} scrolls to reach "${last}", not ${scroller}`);
       if (atFirst) problems.push(`${f.route}: "${last}" is in view before scrolling, so nothing was reached`);
       if (!seenByTab) problems.push(`${f.route}: Tab did not reach "${last}" and bring it into view`);
       if (!byScroll) problems.push(`${f.route}: scrolling did not bring "${last}" into view`);
-      if (scrolls.where === scroller && !atFirst && seenByTab && byScroll) counts.reachable += 1;
+      if (moved !== 0) problems.push(`${f.route}: scrolling the overlay moved the preview behind it by ${moved} px`);
+      const heldExactly = scroller !== "the content" || scrolls.dialogOverflow === 0;
+      if (!heldExactly) problems.push(`${f.route}: the content scrolls, but the dialog around it overflows by ${scrolls.dialogOverflow} px`);
+      if (scrolls.where === scroller && !atFirst && seenByTab && byScroll && moved === 0 && heldExactly) counts.reachable += 1;
     }
 
     console.log(

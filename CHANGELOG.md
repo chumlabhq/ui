@@ -971,6 +971,8 @@ tables say.
   couple of pixels beside its trigger until the next scroll or resize.
 - Escape closes a Dropdown from anywhere inside it, not only from the trigger.
 - Focus reaches the surface on open, on every open rather than the first.
+- `Tooltip` stays open when focus moves from its trigger into its own content, as it already did when a pointer moved onto that content: on Mobile Chrome a tap on the bubble blurred the trigger and closed the tooltip under the finger. Hoverable content takes `tabIndex={-1}` so a press lands focus there; a blur anywhere else still closes it, and `hoverableContent={false}` closes on any blur as before.
+- `Drawer`'s swipeable handle no longer adds 20 px of overflow under a full-height child: the panel reserves the handle's row as top padding and the handle sits in it, so an `h-full` child fills the remaining height instead of pushing its last control 20 px past the panel. This holds with `unstyled` too.
 
 ### Fixed (documentation)
 

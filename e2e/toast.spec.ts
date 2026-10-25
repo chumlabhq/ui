@@ -1,5 +1,5 @@
 import { gotoFixture } from "./_nav";
-import { activateByTouch, skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, conceal, press, reveal, skipWithoutTouchEvents } from "./_helpers";
 import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
 
@@ -153,11 +153,11 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       // the failure the test exists to catch. Assert presence, then behaviour.
       await expect(quickButton.first()).toBeVisible();
       await quickButton.scrollIntoViewIfNeeded();
-      await quickButton.click();
+      await press(page, quickButton);
       await waitForToastVisible(page);
 
       const toast = page.locator(TOAST_SELECTOR).first();
-      await toast.hover();
+      await reveal(page, toast);
 
       await page.waitForTimeout(3000);
       await expect(toast).toBeVisible();
@@ -170,16 +170,16 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       // the failure the test exists to catch. Assert presence, then behaviour.
       await expect(quickButton.first()).toBeVisible();
       await quickButton.scrollIntoViewIfNeeded();
-      await quickButton.click();
+      await press(page, quickButton);
       await waitForToastVisible(page);
 
       const toast = page.locator(TOAST_SELECTOR).first();
-      await toast.hover();
+      await reveal(page, toast);
 
       await page.waitForTimeout(1000);
       await expect(toast).toBeVisible();
 
-      await page.mouse.move(0, 0);
+      await conceal(page);
 
       await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0, {
         timeout: 5000,

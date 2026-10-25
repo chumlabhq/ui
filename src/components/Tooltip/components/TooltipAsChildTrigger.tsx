@@ -10,7 +10,7 @@ interface TooltipAsChildTriggerProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onFocus: (e: React.FocusEvent) => void;
-  onBlur: () => void;
+  onBlur: (e: React.FocusEvent) => void;
   onTouchStart: () => void;
   onTouchEnd: () => void;
   naming: Record<string, unknown>;
@@ -60,7 +60,7 @@ export function TooltipAsChildTrigger({
           )?.(e);
         },
         onBlur: (e: React.FocusEvent) => {
-          onBlur();
+          onBlur(e);
           (child.props.onBlur as ((e: React.FocusEvent) => void) | undefined)?.(
             e,
           );

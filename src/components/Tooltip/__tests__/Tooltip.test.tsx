@@ -251,6 +251,50 @@ describe("Tooltip", () => {
         expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
       });
     });
+
+    it("stays open when focus moves from the trigger into its own content, and closes when it moves on elsewhere", async () => {
+      render(
+        <>
+          <Tooltip content="Hoverable tip" delayDuration={0}>
+            <span>Trigger</span>
+          </Tooltip>
+          <button type="button">Elsewhere</button>
+        </>
+      );
+
+      const trigger = screen.getByText("Trigger").closest("[tabindex]") as HTMLElement;
+      act(() => trigger.focus());
+      const tooltip = await screen.findByRole("tooltip");
+
+      act(() => tooltip.focus());
+      expect(document.activeElement).toBe(tooltip);
+      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+
+      act(() => screen.getByRole("button", { name: "Elsewhere" }).focus());
+      await waitFor(() => {
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      });
+    });
+
+    it("closes when focus moves from the trigger into content that is not hoverable", async () => {
+      render(
+        <Tooltip content="Plain tip" delayDuration={0} hoverableContent={false}>
+          <span>Trigger</span>
+        </Tooltip>
+      );
+
+      const trigger = screen.getByText("Trigger").closest("[tabindex]") as HTMLElement;
+      act(() => trigger.focus());
+      const tooltip = await screen.findByRole("tooltip");
+      expect(tooltip).not.toHaveAttribute("tabindex");
+
+      act(() => {
+        trigger.dispatchEvent(new FocusEvent("focusout", { bubbles: true, relatedTarget: tooltip }));
+      });
+      await waitFor(() => {
+        expect(screen.queryByRole("tooltip")).not.toBeInTheDocument();
+      });
+    });
   });
 
   /**

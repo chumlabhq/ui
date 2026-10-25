@@ -973,6 +973,23 @@ describe("Drawer", () => {
       expect(header.style.touchAction).toBe("none");
     });
 
+    it.each([false, true])(
+      "keeps the handle's row out of a full-height child's height (unstyled: %s)",
+      (unstyled) => {
+        renderDrawer({ swipeable: true, side: "bottom", unstyled });
+        const panel = screen.getByRole("dialog");
+        const handle = document.querySelector<HTMLElement>("[data-drawer-handle]")!;
+        expect(panel.className.split(" ")).toContain("pt-5");
+        expect(handle.className.split(" ")).toEqual(expect.arrayContaining(["sticky", "h-5", "-mt-5", "-top-5"]));
+        expect(handle.className.split(" ")).not.toContain("top-0");
+      },
+    );
+
+    it("leaves a non-swipeable panel unpadded", () => {
+      renderDrawer({ swipeable: false, side: "bottom" });
+      expect(screen.getByRole("dialog").className.split(" ")).not.toContain("pt-5");
+    });
+
     it("leaves a side drawer's header to the browser", () => {
       renderDrawer({ swipeable: true, side: "left" });
       const header = document.querySelector<HTMLElement>("[data-drawer-header]")!;
