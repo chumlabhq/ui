@@ -1,6 +1,37 @@
 import { defineConfig, devices } from "@playwright/test";
+import { guardRun } from "./e2e/_machine";
 
-export default defineConfig({
+/**
+ * WebKit and Mobile Safari: one worker, no video.
+ *
+ * This is an 8 GB Mac. One WebKit worker's browser alone peaks at 1.3 to
+ * 1.8 GB, and with video on every page also pipes its frames to an ffmpeg. The
+ * webkit project at 2 workers with video on pushed swap to 5.2 GB and the run
+ * was killed (X1R), and the default here is 4 workers.
+ *
+ * Measured on forms + pagination + flex-shrink (100 tests), sampling every
+ * 10 s. 2026-10-21, 4 workers with video: 4 WebContent + 6 ffmpeg, peak
+ * 2.9 GB, swap +181 to +586 MB. 2026-10-26, 1 worker: with video, 98 passed,
+ * peak load1 5.89, memory free 68% down to 32%; without, 98 passed, peak load1
+ * 3.23, 69% down to 35%, swap +0. One worker is what keeps memory off the 25%
+ * line; video at one worker costs load rather than memory (one ffmpeg, the
+ * browser's own swing is larger), and load is what the flaky WebKit runs had
+ * in common, so it stays off.
+ *
+ * Per project, so chromium and firefox keep their parallelism. Mobile Chrome
+ * is Chromium and keeps it too: the same 100 tests at 4 workers with video,
+ * 100 passed, peak load1 6.05, memory free 69% down to 42%, swap +0
+ * (2026-10-26). The machine guard in `e2e/_machine.ts` still applies to it.
+ *
+ * Neither setting is what stalled WebKit every 64th test; that was a thread
+ * leak in WebKit's browser process, fixed by `browser` in `e2e/_test.ts`.
+ */
+const ONE_AT_A_TIME = {
+  workers: 1,
+  use: { video: "off" as const },
+};
+
+const config = defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -86,7 +117,8 @@ export default defineConfig({
     {
       name: "webkit",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
-      use: { ...devices["Desktop Safari"] },
+      ...ONE_AT_A_TIME,
+      use: { ...devices["Desktop Safari"], ...ONE_AT_A_TIME.use },
     },
     // Mobile viewports
     {
@@ -97,7 +129,8 @@ export default defineConfig({
     {
       name: "Mobile Safari",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
-      use: { ...devices["iPhone 12"] },
+      ...ONE_AT_A_TIME,
+      use: { ...devices["iPhone 12"], ...ONE_AT_A_TIME.use },
     },
   ],
   webServer: {
@@ -107,3 +140,7 @@ export default defineConfig({
     timeout: 120000,
   },
 });
+
+guardRun(config.projects!.map((p) => p.name!));
+
+export default config;

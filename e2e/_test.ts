@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { test as base, type Route } from "@playwright/test";
+import { test as base, type Browser, type BrowserContext, type Route } from "@playwright/test";
 
 export * from "@playwright/test";
 
@@ -115,7 +115,87 @@ async function answerDemoData(route: Route) {
   await route.fulfill({ status: 200, headers, contentType: "image/svg+xml", path: `${FIXTURES}/images/${image}` });
 }
 
+/**
+ * Pages one WebKit browser opens before the harness relaunches it.
+ *
+ * WebKit's UI process keeps a thread for every page it has ever opened: each
+ * page leaves a user-interactive GCD worker parked in
+ * `-[NSAnimation _runBlocking]` for the life of the browser, and closing the
+ * page or its context does not return it. macOS gives a process at most 64
+ * such workers (`kern.wq_max_constrained_threads`), so once 64 are parked the
+ * 64th page's work never gets a thread and its `goto` waits out the test
+ * without sending a request. That is the stall single-worker WebKit and
+ * Mobile Safari runs hit at almost exactly every 64th test.
+ *
+ * Measured 2026-10-26. A bare `webkit.launch()` loop, with no test runner, no
+ * routes and no Vite: pages 1-63 navigate in 7 ms and page 64 hangs, whether
+ * the pages share one context or have one each, and whether or not the
+ * earlier pages navigated; contexts without a page do not count. Relaunching
+ * every 63 pages ran 200 clean; every 64, page 64 hung. A `sample` of the hung
+ * UI process showed exactly 64 workers, all in `_runBlocking`. In the suite
+ * the UI process grew from 1 thread to 73 by test 63 and stalled at tests 64,
+ * 128, 192 and 256; it only recovered because each timeout restarted the
+ * worker, which is a browser relaunch by accident.
+ *
+ * Only while the Mac's display is off. With the display on, the animations
+ * finish and the threads come back: the UI process held 15 threads for 535
+ * tests, began climbing three seconds after `pmset` logged "Display is turned
+ * off" and stopped when it came back on (2026-10-27, three such transitions).
+ * Unattended runs are display-off runs, which is why the stall reached some
+ * slices and not others, and why it is fixed here rather than waited out.
+ *
+ * The harness cannot close what leaks, so it relaunches deliberately, between
+ * tests, 16 pages short of the stall. Chromium and Firefox are untouched.
+ */
+export const WEBKIT_PAGES_PER_BROWSER = 48;
+
 export const test = base.extend<{ blockThirdParty: void }>({
+  browser: [
+    async ({ browser, browserName, playwright }, use) => {
+      if (browserName !== "webkit") {
+        await use(browser);
+        return;
+      }
+      let current: Browser = browser;
+      let pages = 0;
+      const counted = (context: BrowserContext) => {
+        pages += context.pages().length;
+        context.on("page", () => pages++);
+        return context;
+      };
+      // Only between tests: a browser with a context still open is not closed.
+      const fresh = async () => {
+        if (pages < WEBKIT_PAGES_PER_BROWSER || current.contexts().length) return;
+        await current.close();
+        // Launched with the project's options: `_browserOptions` sets them as
+        // the defaults for this worker, which is how the base fixture launches.
+        current = await playwright.webkit.launch();
+        pages = 0;
+      };
+      const recycling = new Proxy(browser, {
+        get(_target, key) {
+          if (key === "newContext")
+            return async (...args: Parameters<Browser["newContext"]>) => {
+              await fresh();
+              return counted(await current.newContext(...args));
+            };
+          if (key === "newPage")
+            return async (...args: Parameters<Browser["newPage"]>) => {
+              await fresh();
+              const page = await current.newPage(...args);
+              counted(page.context());
+              return page;
+            };
+          const value: unknown = Reflect.get(current, key, current);
+          return typeof value === "function" ? value.bind(current) : value;
+        },
+      });
+      await use(recycling);
+      // The base fixture closes the browser it launched; this one closes the last relaunch.
+      await current.close();
+    },
+    { scope: "worker", timeout: 0 },
+  ],
   blockThirdParty: [
     async ({ context }, use) => {
       // Registered first, so it is matched last: the named hosts below win.
