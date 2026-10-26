@@ -174,7 +174,6 @@ describe("useAccordionConfig", () => {
   it("returns the config value when provided", () => {
     const config: AccordionConfigValue = {
       orientation: "vertical",
-      dir: "ltr",
       classes: {},
       headingLevel: 3,
       reduceMotion: false,
@@ -256,7 +255,6 @@ const baseContext: AccordionContextValue = {
 
 const baseConfig: AccordionConfigValue = {
   orientation: "vertical",
-  dir: "ltr",
   classes: {},
   headingLevel: 3,
   reduceMotion: false,

@@ -256,8 +256,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "dir",
         "type": "\"ltr\" | \"rtl\"",
         "required": false,
-        "default": "\"ltr\"",
-        "description": "Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror."
+        "default": null,
+        "description": "Text direction. Omitted, the accordion inherits it from the nearest `dir` or the document; set, it overrides that and sets `dir` on the root. Reverses the horizontal arrow keys in RTL."
       },
       {
         "name": "disabled",
@@ -1411,8 +1411,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "dir",
             "type": "Direction",
             "required": false,
-            "default": "\"ltr\"",
-            "description": "Text direction. Sets `dir` on the group; the layout itself does not mirror."
+            "default": null,
+            "description": "Text direction. Omitted, the group inherits it from the page; set, it overrides that and sets `dir` on the group."
           },
           {
             "name": "classes",

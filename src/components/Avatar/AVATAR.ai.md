@@ -151,7 +151,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
 | `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
 | `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
-| `dir` | `Direction \| undefined` | Text direction. Sets `dir` on the group; the layout itself does not mirror. |
+| `dir` | `Direction \| undefined` | Text direction. Omitted, the group inherits it from the page; set, it overrides that and sets `dir` on the group. |
 | `classes` | `AvatarGroupClasses \| undefined` | CSS class overrides for group sub-elements. |
 | `asChild` | `boolean \| undefined` | Merges group props onto the child element via Slot. |
 

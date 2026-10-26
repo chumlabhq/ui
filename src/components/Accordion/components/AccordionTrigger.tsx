@@ -14,6 +14,7 @@ import { Slot } from "../../../utils/Slot.js";
 import { mergeRefs } from "../../../utils/mergeRefs.js";
 import type { AccordionTriggerProps } from "../utils/types.js";
 import { cn } from "../../../utils/scopedCn.js";
+import { isRtl } from "../../../utils/isBrowser.js";
 
 const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
   (
@@ -66,7 +67,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
 
     const handleKeyDown = useCallback((event: KeyboardEvent<HTMLButtonElement>) => {
       const isVertical = config.orientation === "vertical";
-      const isRtl = config.dir === "rtl";
+      const rtl = isRtl(event.currentTarget);
 
       let nextKey: string;
       let prevKey: string;
@@ -75,8 +76,8 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         nextKey = "ArrowDown";
         prevKey = "ArrowUp";
       } else {
-        nextKey = isRtl ? "ArrowLeft" : "ArrowRight";
-        prevKey = isRtl ? "ArrowRight" : "ArrowLeft";
+        nextKey = rtl ? "ArrowLeft" : "ArrowRight";
+        prevKey = rtl ? "ArrowRight" : "ArrowLeft";
       }
 
       switch (event.key) {
@@ -97,7 +98,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
           dispatch.focusItem("last");
           break;
       }
-    }, [config.orientation, config.dir, dispatch]);
+    }, [config.orientation, dispatch]);
 
     const getIconAnimationClass = () => {
       if (iconAnimation === "none" || config.reduceMotion) return "";

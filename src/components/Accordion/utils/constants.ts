@@ -6,16 +6,16 @@ export const DEFAULT_ACCORDION_CLASSES: Required<AccordionClasses> = {
   root: "w-full",
   item: "border-b border-cl-border last:border-b-0",
   trigger:
-    "flex w-full items-center justify-between text-left font-medium transition-colors text-cl-text hover:bg-cl-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
-  itemText: "flex-1 text-left",
+    "flex w-full items-center justify-between text-start font-medium transition-colors text-cl-text hover:bg-cl-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
+  itemText: "flex-1 text-start",
   body: "text-cl-text-secondary",
   content: "",
   icon: "shrink-0",
   itemIndicator:
     "text-cl-text-tertiary transition-transform duration-200",
   description: "block text-cl-text-tertiary font-normal mt-0.5",
-  itemIcon: "mr-2 shrink-0",
-  triggerActions: "ml-2 shrink-0",
+  itemIcon: "me-2 shrink-0",
+  triggerActions: "ms-2 shrink-0",
   header: "",
 };
 
@@ -26,7 +26,6 @@ export const UNSTYLED_ACCORDION_CLASSES: Required<AccordionClasses> =
 export const DEFAULT_ANIMATION_DURATION = 300;
 export const DEFAULT_HEADING_LEVEL = 3 as const;
 export const DEFAULT_ORIENTATION = "vertical" as const;
-export const DEFAULT_DIRECTION = "ltr" as const;
 export const DEFAULT_LOOP = true;
 export const DEFAULT_SIZE: AccordionSize = "md";
 export const DEFAULT_VARIANT: AccordionVariant = "default";
@@ -126,7 +125,7 @@ export const DEFAULT_ACCORDION_SHIMMER_CLASSES: Required<AccordionShimmerClasses
   itemText: "flex-1 space-y-2",
   titleBar: "h-4 rounded bg-cl-bg-skeleton animate-pulse",
   descriptionBar: "h-3 rounded bg-cl-bg-skeleton animate-pulse",
-  icon: "rounded bg-cl-bg-skeleton shrink-0 ml-4 animate-pulse",
+  icon: "rounded bg-cl-bg-skeleton shrink-0 ms-4 animate-pulse",
   body: "space-y-2",
 };
 

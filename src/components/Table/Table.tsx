@@ -1957,7 +1957,7 @@ function TableInner<TData>(
                 value={globalFilter ?? ""}
                 onChange={handleSearchChange}
                 placeholder={searchPlaceholder}
-                className={`w-full pl-8 pr-8 py-2 border rounded bg-cl-bg-input text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary ${searchInputClassName}`}
+                className={`w-full ps-8 pe-8 py-2 border rounded bg-cl-bg-input text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary ${searchInputClassName}`}
                 aria-label="Search table"
               />
               {globalFilter && (
@@ -2085,7 +2085,7 @@ function TableInner<TData>(
   const finalPinnedContainerClass = allColumnsPinned
     ? "w-full"
     : stripOverflow(
-        pinnedContainerClassName || "shrink-0 sticky left-0 z-20 bg-inherit",
+        pinnedContainerClassName || "shrink-0 sticky start-0 z-20 bg-inherit",
       );
 
   const finalPinnedTableClass = allColumnsPinned
@@ -2093,7 +2093,7 @@ function TableInner<TData>(
     : pinnedTableClassName || tableClassName;
 
   const finalPinnedRightContainerClass = stripOverflow(
-    pinnedRightContainerClassName || "shrink-0 sticky right-0 z-20 bg-inherit",
+    pinnedRightContainerClassName || "shrink-0 sticky end-0 z-20 bg-inherit",
   );
 
   const finalPinnedRightTableClass =
@@ -2129,14 +2129,14 @@ function TableInner<TData>(
           const iconPos = searchIconPosition;
           const showIcon = iconPos !== "none";
           const iconAtStart = iconPos === "start";
-          const inputPl = showIcon && iconAtStart ? "pl-9" : "pl-3";
+          const inputPl = showIcon && iconAtStart ? "ps-9" : "ps-3";
           const inputPr = globalFilter
             ? showIcon && !iconAtStart
-              ? "pr-16"
-              : "pr-9"
+              ? "pe-16"
+              : "pe-9"
             : showIcon && !iconAtStart
-              ? "pr-9"
-              : "pr-3";
+              ? "pe-9"
+              : "pe-3";
 
           return (
             <div className={`mb-3 ${searchBarClassName}`} data-table-search>

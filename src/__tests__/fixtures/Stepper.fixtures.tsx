@@ -8,6 +8,12 @@ const fixtures: Fixtures<typeof Stepper> = [
   { name: "horizontal-numbered", props: { steps: STEPS, value: 1, showDescriptions: true } },
   { name: "all-statuses", props: { steps: STEPS, value: 1, showDescriptions: true, getStepStatus: (_id: unknown, index: number) => (["completed", "error", "pending"] as const)[index] }, note: "completed/error/pending variants have no other route." },
   { name: "vertical", props: { steps: STEPS, value: 1, orientation: "vertical" } },
+  {
+    name: "vertical-rtl",
+    props: { steps: STEPS, value: 1, orientation: "vertical" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "The connector hangs under the indicator at the inline start, which is the right in right-to-left.",
+  },
   { name: "dot", props: { steps: STEPS, value: 1, variant: "dot" } },
   { name: "icon", props: { steps: STEPS, value: 1, variant: "icon" } },
   { name: "label-bottom", props: { steps: STEPS, value: 1, labelPosition: "bottom" } },

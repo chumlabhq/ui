@@ -177,6 +177,12 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     act: (c, ui) => ui.dblClick(c.querySelector("tbody td")),
   },
   {
+    name: "search-pinned-rtl",
+    props: { data: ROWS, columns: COLUMNS, showSearch: true, globalFilter: "a", pinnableColumns: ["name", "role"], pinnedColumns: ["name"], onPinnedColumnsChange: () => {} },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "Search with a value, so its icon and clear button render, and a pinned column with its pin control and divider, all in right-to-left.",
+  },
+  {
     name: "filter-open-rtl",
     props: { data: ROWS, columns: COLUMNS, filterable: true, filterableColumns: FILTERABLE },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,

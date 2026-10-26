@@ -44,7 +44,7 @@ export const PROGRESS_KEYFRAMES = `@keyframes chumlab-toast-progress{from{width:
 export const DEFAULT_TOAST_CLASSES: Required<ToastClasses> = {
   root: "relative overflow-hidden rounded-cl-md border shadow-lg",
   body: "flex items-start gap-3 p-4",
-  track: "absolute bottom-0 left-0 right-0 h-1 bg-white/20",
+  track: "absolute bottom-0 start-0 end-0 h-1 bg-white/20",
   title: "font-medium text-sm",
   description: "text-sm mt-1 opacity-80",
   range: "h-full bg-white/40",

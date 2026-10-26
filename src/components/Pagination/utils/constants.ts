@@ -59,7 +59,7 @@ export const DEFAULT_PAGINATION_CLASSES: Required<PaginationClasses> = {
      * `data-[highlighted]` are the same specificity, so emission order, not
      * intent, decided which painted the background.
      */
-    item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-item-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[selected]:hover:bg-cl-accent-bg-hover data-[selected]:data-[highlighted]:bg-cl-accent-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
+    item: "px-4 py-1.5 w-full text-start cursor-pointer transition-colors text-cl-text hover:bg-cl-bg-item-hover data-[highlighted]:bg-cl-bg-item-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[selected]:hover:bg-cl-accent-bg-hover data-[selected]:data-[highlighted]:bg-cl-accent-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg",
     icon: "w-4 h-4 transition-transform text-cl-text-tertiary",
   },
   label: "text-sm text-cl-text-chrome-quiet",

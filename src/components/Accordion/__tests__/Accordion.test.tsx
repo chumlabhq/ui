@@ -537,6 +537,33 @@ describe("Accordion", () => {
 
       expect(container.firstChild).toHaveAttribute("dir", "rtl");
     });
+
+    it("inherits the page's direction when no dir is given, rendering none of its own", async () => {
+      const user = userEvent.setup();
+      document.documentElement.dir = "rtl";
+      try {
+        const { container } = renderAccordion({ selectionMode: "single", orientation: "horizontal" });
+        expect(container.firstChild).not.toHaveAttribute("dir");
+        screen.getByRole("button", { name: "Item 1" }).focus();
+        await user.keyboard("{ArrowLeft}");
+        expect(screen.getByRole("button", { name: "Item 2" })).toHaveFocus();
+      } finally {
+        document.documentElement.removeAttribute("dir");
+      }
+    });
+
+    it("lets an explicit dir win over the page's", async () => {
+      const user = userEvent.setup();
+      document.documentElement.dir = "rtl";
+      try {
+        renderAccordion({ selectionMode: "single", orientation: "horizontal", dir: "ltr" });
+        screen.getByRole("button", { name: "Item 1" }).focus();
+        await user.keyboard("{ArrowRight}");
+        expect(screen.getByRole("button", { name: "Item 2" })).toHaveFocus();
+      } finally {
+        document.documentElement.removeAttribute("dir");
+      }
+    });
   });
 
   describe("Disabled State", () => {

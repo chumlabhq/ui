@@ -93,8 +93,7 @@
         "ltr",
         "rtl"
       ],
-      "description": "Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror.",
-      "default": "ltr"
+      "description": "Text direction. Omitted, the accordion inherits it from the nearest `dir` or the document; set, it overrides that and sets `dir` on the root. Reverses the horizontal arrow keys in RTL."
     },
     "disabled": {
       "type": "boolean",

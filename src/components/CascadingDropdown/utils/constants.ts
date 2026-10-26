@@ -5,8 +5,8 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   root: "relative",
   control: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
-  value: "flex-1 text-left truncate",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
+  value: "flex-1 text-start truncate",
   content: "sm:min-w-[200px] overflow-y-auto rounded-cl-md shadow-lg bg-cl-bg-panel border border-cl-border",
   // first:rounded-t / last:rounded-b so the hover/selected/focused bg
   // tucks under the menu's rounded corners on the top and bottom items
@@ -32,7 +32,7 @@ export const DEFAULT_CASCADINGDROPDOWN_CLASSES: Required<CascadingDropdownClasse
   empty:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   clearTrigger:
-    "absolute right-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover cursor-pointer text-cl-text-tertiary",
+    "absolute end-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover cursor-pointer text-cl-text-tertiary",
   loading:
     "px-3 py-4 text-sm text-center text-cl-text-tertiary",
   loadingItem:

@@ -19,7 +19,7 @@ export const DEFAULT_TABPANEL_CLASSES: Required<TabPanelClasses> = {
   itemIcon: "",
   count: "px-2 py-0.5 text-xs font-semibold rounded-full bg-cl-accent-bg text-cl-accent-hover",
   indicator:
-    "absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent",
+    "absolute bottom-0 start-0 end-0 h-0.5 bg-cl-accent",
   content: "p-4",
 };
 

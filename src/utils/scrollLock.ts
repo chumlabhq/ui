@@ -2,7 +2,17 @@ import { isBrowser } from "./isBrowser.js";
 
 let scrollLockCount = 0;
 let savedBodyOverflow = "";
-let savedPaddingRight = "";
+let savedPadding = "";
+let paddedSide: "paddingLeft" | "paddingRight" = "paddingRight";
+
+const gutterSide = (): "paddingLeft" | "paddingRight" => {
+  const probe = document.createElement("div");
+  probe.style.cssText = "position:fixed;top:0;left:0;width:0;height:0;visibility:hidden";
+  document.body.appendChild(probe);
+  const onLeft = probe.getBoundingClientRect().left > 0;
+  probe.remove();
+  return onLeft ? "paddingLeft" : "paddingRight";
+};
 
 // Locks body — not html — because flipping html.style.overflow forces a
 // layout/scroll-anchoring recompute on inner overflow:auto containers
@@ -14,11 +24,12 @@ export function acquireScrollLock() {
     const html = document.documentElement;
     const body = document.body;
     savedBodyOverflow = body.style.overflow;
-    savedPaddingRight = body.style.paddingRight;
     const scrollbarWidth = window.innerWidth - html.clientWidth;
+    paddedSide = scrollbarWidth > 0 ? gutterSide() : "paddingRight";
+    savedPadding = body.style[paddedSide];
     body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
-      body.style.paddingRight = `${scrollbarWidth}px`;
+      body.style[paddedSide] = `${scrollbarWidth}px`;
     }
   }
   scrollLockCount++;
@@ -29,9 +40,9 @@ export function releaseScrollLock() {
   scrollLockCount = Math.max(0, scrollLockCount - 1);
   if (scrollLockCount === 0) {
     document.body.style.overflow = savedBodyOverflow;
-    document.body.style.paddingRight = savedPaddingRight;
+    document.body.style[paddedSide] = savedPadding;
     savedBodyOverflow = "";
-    savedPaddingRight = "";
+    savedPadding = "";
   }
 }
 
@@ -39,7 +50,7 @@ export function resetScrollLock() {
   if (!isBrowser) return;
   scrollLockCount = 0;
   document.body.style.overflow = "";
-  document.body.style.paddingRight = "";
+  document.body.style[paddedSide] = "";
   savedBodyOverflow = "";
-  savedPaddingRight = "";
+  savedPadding = "";
 }

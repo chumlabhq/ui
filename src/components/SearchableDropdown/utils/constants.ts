@@ -6,7 +6,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
     root: "",
     control: "relative",
     trigger:
-      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success data-[placeholder]:text-cl-text-tertiary",
+      "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border rounded-cl-md transition-colors border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:border-transparent cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success data-[placeholder]:text-cl-text-tertiary",
     value: "flex-1 truncate",
     content:
       "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border",
@@ -17,7 +17,7 @@ export const DEFAULT_SEARCHABLEDROPDOWN_CLASSES: Required<SearchableDropdownClas
       "inline-flex w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",
     itemIndicator: "w-4 h-4 shrink-0 text-cl-accent",
     clearTrigger:
-      "absolute right-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover cursor-pointer text-cl-text-tertiary",
+      "absolute end-8 top-1/2 -translate-y-1/2 p-2 rounded hover:bg-cl-bg-hover cursor-pointer text-cl-text-tertiary",
     empty:
       "px-3 py-4 text-sm text-center text-cl-text-tertiary",
     label:

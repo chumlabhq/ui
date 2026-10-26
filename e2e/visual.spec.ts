@@ -279,6 +279,32 @@ const OPEN_SUBJECTS: Array<{
 const OPEN_WIDTHS = [320, 1024];
 
 /**
+ * Right-to-left, one subject per component the A2a slice made follow the page's
+ * direction: Accordion and AvatarGroup, which wrote `dir="ltr"` on themselves
+ * and so rendered left-to-right in an RTL page, and five whose physical classes
+ * became logical ones (Modal's close button, Dropdown's clear button, TextArea's
+ * counter, Table's search and pinned divider, Stepper's vertical connector).
+ *
+ * Each is an `-rtl` fixture, which sets `dir="rtl"` on the document the way a
+ * consumer's page does. None is an open floating surface: where those land is
+ * the positioners' slice (A2b), and photographing them now would record a
+ * placement that slice is about to move. Two widths, as for the open surfaces:
+ * mirroring does not depend on reflow, and 320 and 1024 are the narrowest and
+ * the first natural size.
+ */
+const RTL_SUBJECTS: Array<{ component: string; fixture: string }> = [
+  { component: "Accordion", fixture: "single-open-rtl" },
+  { component: "Avatar/AvatarGroup", fixture: "with-surplus-rtl" },
+  { component: "Modal", fixture: "open-rtl" },
+  { component: "Dropdown", fixture: "selected-clearable-rtl" },
+  { component: "TextArea", fixture: "with-counter-rtl" },
+  { component: "Table", fixture: "search-pinned-rtl" },
+  { component: "Stepper", fixture: "vertical-rtl" },
+];
+
+const RTL_WIDTHS = OPEN_WIDTHS;
+
+/**
  * Both switches, together.
  *
  * The `--cl-*` tokens hang off `:root[data-theme]` while Tailwind's `dark:`
@@ -481,6 +507,36 @@ test.describe("visual baselines", () => {
     });
   }
 
+  for (const width of RTL_WIDTHS) {
+    test.describe(`${width}px right-to-left`, () => {
+      for (const { component, fixture } of RTL_SUBJECTS) {
+        test(`${component}/${fixture} renders as recorded`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 900 });
+          await gotoFixture(page, component, fixture);
+          const subject = page.locator("[data-fixture]");
+          await subject.waitFor({ state: "attached" });
+          expect(await page.evaluate(() => document.documentElement.dir), "the fixture did not set the page right-to-left").toBe("rtl");
+          await freeze(page);
+
+          for (const theme of ["light", "dark"] as const) {
+            await setTheme(page, theme);
+            const portalled = await page
+              .locator("[role='dialog'],[role='listbox'],[role='menu'],[role='tooltip']")
+              .count();
+            const target = portalled > 0 ? page : subject;
+            // The budget and the threshold of the resting subjects above, for
+            // the reasons given there.
+            await expect(target).toHaveScreenshot(`${component}-${fixture}-${theme}-${width}.png`, {
+              animations: "disabled",
+              maxDiffPixels: 1,
+              threshold: 0.05,
+            });
+          }
+        });
+      }
+    });
+  }
+
   test("the baseline set is the size it should be", async () => {
     /**
      * The guard against passing on nothing.
@@ -507,13 +563,15 @@ test.describe("visual baselines", () => {
     const resting = SUBJECTS.length * WIDTHS.length * 2;
     const open = OPEN_SUBJECTS.length * OPEN_WIDTHS.length * 2;
     const focus = FOCUS_SUBJECTS.length * WIDTHS.length * 2;
+    const rtl = RTL_SUBJECTS.length * RTL_WIDTHS.length * 2;
     expect(
       pngs.length,
-      `expected ${resting + open + focus} baselines — ${SUBJECTS.length} resting subjects x ` +
+      `expected ${resting + open + focus + rtl} baselines — ${SUBJECTS.length} resting subjects x ` +
         `${WIDTHS.length} widths x 2 themes, plus ${OPEN_SUBJECTS.length} open surfaces x ` +
         `${OPEN_WIDTHS.length} widths x 2 themes, plus ${FOCUS_SUBJECTS.length} focus subjects x ` +
-        `${WIDTHS.length} widths x 2 themes`,
-    ).toBe(resting + open + focus);
+        `${WIDTHS.length} widths x 2 themes, plus ${RTL_SUBJECTS.length} right-to-left subjects x ` +
+        `${RTL_WIDTHS.length} widths x 2 themes`,
+    ).toBe(resting + open + focus + rtl);
   });
 
   /**

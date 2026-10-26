@@ -12,7 +12,7 @@ export type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | number;
 /** Online presence status indicator. */
 export type AvatarStatus = "online" | "offline" | "away" | "busy";
 
-/** Text direction. Sets `dir`; the layout itself does not mirror. */
+/** Text direction. Inherited from the page when omitted. */
 export type Direction = "ltr" | "rtl";
 
 /** Corner placement for status indicators and badges. */
@@ -203,7 +203,7 @@ export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   renderSurplus?: (count: number) => ReactNode;
   /** Click handler for individual avatars within the group. */
   onAvatarClick?: (info: { index: number; name?: string }, event: React.MouseEvent) => void;
-  /** Text direction. Sets `dir` on the group; the layout itself does not mirror. */
+  /** Text direction. Omitted, the group inherits it from the page; set, it overrides that and sets `dir` on the group. */
   dir?: Direction;
   /** CSS class overrides for group sub-elements. */
   classes?: AvatarGroupClasses;

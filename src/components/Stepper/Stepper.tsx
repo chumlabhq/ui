@@ -27,6 +27,7 @@ import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { isTooltipConfig } from "../../utils/isTooltipConfig.js";
+import { isRtl } from "../../utils/isBrowser.js";
 import {
   DEFAULT_STEPPER_CLASSES,
   UNSTYLED_STEPPER_CLASSES,
@@ -274,7 +275,7 @@ const StepItem = memo(function StepItem({
           className={cn(
             classes.separator,
           )}
-          style={{ marginLeft: connectorMarginLeft }}
+          style={{ marginInlineStart: connectorMarginLeft }}
           data-orientation={orientation}
           data-status={status}
       {...stateAttrsFor(status)}
@@ -597,8 +598,7 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
     const handleStepKeyDown = useCallback(
       (e: KeyboardEvent<HTMLElement>, index: number) => {
         const isHorizontal = orientation === "horizontal";
-        const direction = window.getComputedStyle(e.currentTarget).direction;
-        const isRTL = direction === "rtl";
+        const isRTL = isRtl(e.currentTarget);
 
         let forwardKey: string;
         let backwardKey: string;

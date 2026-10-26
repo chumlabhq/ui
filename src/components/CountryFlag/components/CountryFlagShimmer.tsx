@@ -96,7 +96,7 @@ export const CountryFlagGroupShimmer = forwardRef<HTMLDivElement, CountryFlagGro
         {showCount && (
           <span
             className={itemClassName}
-            style={{ minWidth: width, height, paddingLeft: 4, paddingRight: 4 }}
+            style={{ minWidth: width, height, paddingInline: 4 }}
           />
         )}
       </div>

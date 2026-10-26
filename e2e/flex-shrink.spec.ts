@@ -55,7 +55,7 @@ const FLOOR = 18;
  * one no longer in source fails as stale.
  */
 const EXCLUDED: Record<string, string> = {
-  'Accordion "flex-1 text-left"': "the item's title, which wraps",
+  'Accordion "flex-1 text-start"': "the item's title, which wraps",
   'Accordion "flex-1 space-y-2"': "AccordionShimmer's skeleton bars; no text",
   'MultiSelectDropdown "flex-1 h-4 bg-cl-bg-skeleton rounded animate-pulse"': "a skeleton bar; no text",
   'Stepper "flex-1 min-w-2 px-1 sm:min-w-4 sm:px-2"': "the connector between steps; no text",

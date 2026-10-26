@@ -1466,7 +1466,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 160.54,
-    commit: "this slice",
+    commit: "02a23d20",
     date: "2026-10-26",
     attribution: "attributed",
     reason:
@@ -1485,6 +1485,33 @@ const LIBRARY_TOTAL_HISTORY = [
       "files, is the chunks' new hashed names in import strings (ButtonGroup's " +
       "chunk renamed, 2,741 -> 2,742 B). No declared breach moved. No " +
       "comments added to src/components or src/utils.",
+  },
+  {
+    kb: 160.71,
+    commit: "this slice",
+    date: "2026-10-26",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.17 KB (164,389 -> 164,571 B gzipped, +182 B on a build of " +
+      "02a23d20), 83 files held. Accepted over the 0.10 KB per-chunk limit by " +
+      "the maintainer. A2a, RTL causes C3 and C6. C3, one direction reader: " +
+      "readDirection and isRtl (nearest dir, then the computed direction, then " +
+      "the document's) live in utils/isBrowser.ts so they ship in the shared " +
+      "chunk every entry already loads, useReducedMotion +129 B, instead of a " +
+      "new 248 B chunk; the four readers that each had their own read shrink, " +
+      "CascadingDropdown -34 B, TabPanel -26 B, Stepper -16 B, and Accordion " +
+      "stops defaulting dir to ltr and carrying it in its config, its chunk " +
+      "-19 B and its entry -11 B. Scroll lock pads the side the root " +
+      "scrollbar is on, measured by a fixed probe at left 0 rather than " +
+      "assumed right, scrollLock +161 B (clientLeft was ruled out: WebKit " +
+      "reports 0 for a scrollbar on the left). C6, logical spacing and " +
+      "alignment: classLayers counts start-/end- insets as structural, " +
+      "useReducedMotion +6 B; Table +9 B (logical search and pinned-region " +
+      "classes, and an rtl: divider shadow); constants +5 B. The rest, -3 to " +
+      "+4 B on 49 files, is class text a letter shorter or longer and the " +
+      "chunks' new hashed names in import strings. Accordion's declared " +
+      "breach did not rise (9.29 -> 9.25 KB). No comments added to " +
+      "src/components or src/utils.",
   },
 ];
 

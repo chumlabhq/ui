@@ -14,7 +14,7 @@
 
 const STRUCTURAL: RegExp[] = [
   /^(static|relative|absolute|fixed|sticky)$/,
-  /^(inset|top|right|bottom|left)(-|$)/,
+  /^(inset|top|right|bottom|left|start|end)(-|$)/,
   /^z-/,
   /^(isolate|isolation-)/,
   /^(block|inline-block|inline|flex|inline-flex|grid|inline-grid|contents|hidden|flow-root)$/,

@@ -41,16 +41,16 @@ import { structuralOnly } from "../../../utils/classLayers.js";
  */
 export const TEXTAREA_SIZE_CLASSES: Record<TextAreaSize, { control: string; input: string }> = {
   sm: {
-    control: "px-3 [&:has(>textarea:last-child)]:pr-0",
-    input: "py-1.5 text-xs last:pr-3",
+    control: "px-3 [&:has(>textarea:last-child)]:pe-0",
+    input: "py-1.5 text-xs last:pe-3",
   },
   md: {
-    control: "px-3.5 [&:has(>textarea:last-child)]:pr-0",
-    input: "py-2.5 text-sm last:pr-3.5",
+    control: "px-3.5 [&:has(>textarea:last-child)]:pe-0",
+    input: "py-2.5 text-sm last:pe-3.5",
   },
   lg: {
-    control: "px-5 [&:has(>textarea:last-child)]:pr-0",
-    input: "py-3.5 text-base last:pr-5",
+    control: "px-5 [&:has(>textarea:last-child)]:pe-0",
+    input: "py-3.5 text-base last:pe-5",
   },
 };
 
@@ -68,7 +68,7 @@ export const DEFAULT_TEXTAREA_CLASSES: Required<TextAreaClasses> = {
   message:
     "text-xs mt-1.5 flex items-center gap-1.5 data-[invalid]:text-cl-error data-[valid]:text-cl-success",
   count:
-    "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary",
+    "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary",
 };
 
 export const UNSTYLED_TEXTAREA_CLASSES: Required<TextAreaClasses> =

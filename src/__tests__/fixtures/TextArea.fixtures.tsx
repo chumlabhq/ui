@@ -1,5 +1,6 @@
 import { TextArea } from "../../components/TextArea/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 
 const fixtures: Fixtures<typeof TextArea> = [
   // One per size. `size` paints dimensions as of v1 — it emitted `data-size`
@@ -16,6 +17,12 @@ const fixtures: Fixtures<typeof TextArea> = [
   { name: "loading", props: { loading: true } },
   { name: "disabled", props: { disabled: true } },
   { name: "with-counter", props: { maxLength: 100, showCount: true, defaultValue: "hi" } },
+  {
+    name: "with-counter-rtl",
+    props: { label: "Bio", maxLength: 100, showCount: true, defaultValue: "hi" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "The counter at the inline end, which is the left in right-to-left.",
+  },
   {
     name: "with-icon-buttons",
     props: {

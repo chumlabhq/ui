@@ -391,6 +391,28 @@ describe("AvatarBadge", () => {
 });
 
 describe("AvatarGroup", () => {
+  describe("Direction", () => {
+    it("writes no dir of its own, so it inherits the page's", () => {
+      render(
+        <div dir="rtl">
+          <AvatarGroup aria-label="Team">
+            <Avatar name="John Doe" />
+          </AvatarGroup>
+        </div>
+      );
+      expect(screen.getByRole("group", { name: "Team" })).not.toHaveAttribute("dir");
+    });
+
+    it("sets an explicit dir", () => {
+      render(
+        <AvatarGroup aria-label="Team" dir="rtl">
+          <Avatar name="John Doe" />
+        </AvatarGroup>
+      );
+      expect(screen.getByRole("group", { name: "Team" })).toHaveAttribute("dir", "rtl");
+    });
+  });
+
   describe("Rendering", () => {
     it("renders all children when no max", () => {
       render(

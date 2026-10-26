@@ -35,7 +35,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       reverseOrder = false,
       renderSurplus,
       onAvatarClick,
-      dir = "ltr",
+      dir,
       classes = {},
       asChild = false,
       className,

@@ -97,7 +97,7 @@ These props have dependencies — using them wrong causes silent bugs:
 |------|------|---------|-------------|
 | `selectionMode` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
-| `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
+| `dir` | `"ltr"` \| `"rtl"` | — | Text direction. Omitted, the accordion inherits it from the nearest `dir` or the document; set, it overrides that and sets `dir` on the root. Reverses the horizontal arrow keys in RTL. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
 | `loop` | boolean | `true` | Whether keyboard navigation wraps from last to first item. |
 | `classes` | object | — | CSS class overrides for accordion sub-elements. |

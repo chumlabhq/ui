@@ -373,8 +373,7 @@
         },
         "dir": {
           "type": "Direction | undefined",
-          "description": "Text direction. Sets `dir` on the group; the layout itself does not mirror.",
-          "default": "ltr"
+          "description": "Text direction. Omitted, the group inherits it from the page; set, it overrides that and sets `dir` on the group."
         },
         "classes": {
           "type": "AvatarGroupClasses | undefined",

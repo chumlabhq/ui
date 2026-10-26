@@ -247,7 +247,6 @@ export interface AccordionDispatchValue {
 
 export interface AccordionConfigValue {
   orientation: Orientation;
-  dir: Direction;
   classes: AccordionClasses;
   headingLevel: 1 | 2 | 3 | 4 | 5 | 6;
   reduceMotion: boolean;

@@ -4,7 +4,7 @@ import { structuralOnly } from "../../utils/classLayers.js";
 export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   root: "",
   trigger: "flex items-center gap-2 w-full px-3 py-2.5 border border-cl-border-input rounded-cl-md bg-cl-bg-panel hover:border-cl-border-input-hover focus:ring-2 focus:ring-cl-accent focus:border-transparent cursor-pointer transition-all text-sm text-cl-text data-[loading]:opacity-50 data-[loading]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
-  input: "flex-1 text-left truncate",
+  input: "flex-1 text-start truncate",
   triggerActions: "flex items-center gap-1",
   icon: "w-5 h-5 shrink-0 text-cl-text-tertiary",
   clearTrigger: "p-2 rounded-full hover:bg-cl-bg-hover text-cl-text-tertiary hover:text-cl-text-secondary transition-colors shrink-0 cursor-pointer",
@@ -31,7 +31,7 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   monthSelect: "flex items-center gap-1 px-1 sm:px-2 py-1.5 text-sm font-semibold bg-transparent border-0 cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",
   yearSelect: "flex items-center gap-1 px-1 sm:px-2 py-1.5 text-sm font-semibold bg-transparent border-0 cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",
   subContent: "absolute z-[60] mt-1 max-h-60 overflow-auto rounded-cl-md bg-cl-bg-panel shadow-lg border border-cl-border py-1 min-w-[120px] sm:min-w-[140px]",
-  subItem: "flex items-center justify-between w-full px-3 py-2 text-sm text-left text-cl-text hover:bg-cl-bg-hover cursor-pointer",
+  subItem: "flex items-center justify-between w-full px-3 py-2 text-sm text-start text-cl-text hover:bg-cl-bg-hover cursor-pointer",
 };
 
 export const UNSTYLED_DATEPICKER_CLASSES: Required<DatePickerClasses> =

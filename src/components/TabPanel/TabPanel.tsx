@@ -18,6 +18,7 @@ import { Tooltip } from "../Tooltip/index.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
+import { isRtl } from "../../utils/isBrowser.js";
 /**
  * Component: TabPanel
  *
@@ -131,8 +132,7 @@ const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
     const handleKeyDown = useCallback(
       (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
         const isHorizontal = orientation === "horizontal";
-        const direction = window.getComputedStyle(e.currentTarget).direction;
-        const isRTL = direction === "rtl";
+        const isRTL = isRtl(e.currentTarget);
 
         let forwardKey: string;
         let backwardKey: string;

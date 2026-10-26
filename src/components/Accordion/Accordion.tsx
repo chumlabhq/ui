@@ -16,7 +16,6 @@ import {
   DEFAULT_ACCORDION_CLASSES,
   DEFAULT_HEADING_LEVEL,
   DEFAULT_ORIENTATION,
-  DEFAULT_DIRECTION,
   DEFAULT_LOOP,
   DEFAULT_SIZE,
   DEFAULT_VARIANT,
@@ -76,7 +75,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const {
     selectionMode,
     orientation = DEFAULT_ORIENTATION,
-    dir = DEFAULT_DIRECTION,
+    dir,
     disabled = false,
     loop = DEFAULT_LOOP,
     classes: classesProp,
@@ -272,7 +271,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const configValue: AccordionConfigValue = useMemo(
     () => ({
       orientation,
-      dir,
       classes: mergedClasses,
       headingLevel,
       reduceMotion: effectiveReduceMotion,
@@ -286,7 +284,6 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
     }),
     [
       orientation,
-      dir,
       mergedClasses,
       headingLevel,
       effectiveReduceMotion,

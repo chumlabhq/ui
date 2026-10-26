@@ -102,6 +102,12 @@ const fixtures: Fixtures<typeof Dropdown> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     note: "Every anchored surface in the package aligns to the trigger's left edge; in RTL it should align to the right. e2e/rtl.spec.ts measures it."
   },
+  {
+    name: "selected-clearable-rtl",
+    props: { options: OPTIONS, defaultValue: "a", clearable: true, label: "Fruit" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "Closed, so only the trigger: its value starts at the right and the clear button sits beside the chevron at the left.",
+  },
   { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
 ];
 export default fixtures;

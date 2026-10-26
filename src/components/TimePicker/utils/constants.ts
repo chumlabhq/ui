@@ -48,7 +48,7 @@ export const DEFAULT_TIMEPICKER_CLASSES: Required<TimePickerClasses> = {
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-item-hover cursor-pointer",
   confirmTrigger:
     "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent cursor-pointer",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger:
     "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-item-hover data-[active]:bg-cl-accent-bg data-[active]:text-cl-accent-hover data-[active]:hover:bg-cl-accent-bg-hover",
 };

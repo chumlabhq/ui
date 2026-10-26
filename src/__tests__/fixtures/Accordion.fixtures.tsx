@@ -4,6 +4,7 @@ import AccordionTrigger from "../../components/Accordion/components/AccordionTri
 import AccordionContent from "../../components/Accordion/components/AccordionContent.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
+import { RtlBoundary } from "./_harness.js";
 
 /** The parts under `item` only exist when real items are nested inside. */
 const items = (
@@ -46,6 +47,13 @@ const fixtures: Fixtures<typeof Accordion> = [
     note: "A focusable node in an aria-hidden trigger slot — two critical axe violations before the slots were made inert.",
   },
   { name: "single-open", props: { selectionMode: "single", collapsible: true, defaultValue: "one" }, children: items },
+  {
+    name: "single-open-rtl",
+    props: { selectionMode: "single", collapsible: true, defaultValue: "one" },
+    children: items,
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "No `dir` of its own: the accordion inherits the page's right-to-left, so the titles start at the right and the indicators sit at the left.",
+  },
   { name: "bordered", props: { selectionMode: "single", variant: "bordered", defaultValue: "one" }, children: items },
   { name: "separated", props: { selectionMode: "single", variant: "separated", defaultValue: "one" }, children: items },
   { name: "flush", props: { selectionMode: "single", variant: "flush", defaultValue: "one" }, children: items },

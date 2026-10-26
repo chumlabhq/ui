@@ -182,7 +182,7 @@ These props have dependencies — using them wrong causes silent bugs:
 |------|------|---------|-------------|
 | `selectionMode` **(required)** | `"single"` \| `"multiple"` | — | Selection mode: single or multiple expanded items. |
 | `orientation` | `"vertical"` \| `"horizontal"` | `"vertical"` | Layout orientation for keyboard navigation. |
-| `dir` | `"ltr"` \| `"rtl"` | `"ltr"` | Text direction. Reverses the horizontal arrow keys and sets `dir` on the root; the layout itself does not mirror. |
+| `dir` | `"ltr"` \| `"rtl"` | — | Text direction. Omitted, the accordion inherits it from the nearest `dir` or the document; set, it overrides that and sets `dir` on the root. Reverses the horizontal arrow keys in RTL. |
 | `disabled` | boolean | `false` | Disables all accordion items. |
 | `loop` | boolean | `true` | Whether keyboard navigation wraps from last to first item. |
 | `classes` | object | — | CSS class overrides for accordion sub-elements. |
@@ -798,7 +798,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `reverseOrder` | `boolean \| undefined` | Reverses the visual stacking order. |
 | `renderSurplus` | `((count: number) => ReactNode) \| undefined` | Custom render function for the surplus count indicator. |
 | `onAvatarClick` | `((info: { index: number; name?: string \| undefined; }, event: MouseEvent<Element, MouseEvent>) => void) \| undefined` | Click handler for individual avatars within the group. |
-| `dir` | `Direction \| undefined` | Text direction. Sets `dir` on the group; the layout itself does not mirror. |
+| `dir` | `Direction \| undefined` | Text direction. Omitted, the group inherits it from the page; set, it overrides that and sets `dir` on the group. |
 | `classes` | `AvatarGroupClasses \| undefined` | CSS class overrides for group sub-elements. |
 | `asChild` | `boolean \| undefined` | Merges group props onto the child element via Slot. |
 
