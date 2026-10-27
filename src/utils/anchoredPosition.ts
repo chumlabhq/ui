@@ -1,6 +1,6 @@
-import { isBrowser } from "./isBrowser.js";
+import { isBrowser, oppositeSide, readLayoutWidth, toInlineStart, type PhysicalSide } from "./isBrowser.js";
 
-export type AnchoredSide = "top" | "bottom" | "left" | "right";
+export type AnchoredSide = PhysicalSide;
 
 /** A rectangle, as `getBoundingClientRect` reports one. */
 export interface AnchoredRect {
@@ -23,6 +23,7 @@ export interface AnchoredViewport {
    */
   offsetTop: number;
   offsetLeft: number;
+  layoutWidth?: number;
 }
 
 export interface AnchoredPositionOptions {
@@ -53,11 +54,13 @@ export interface AnchoredPositionOptions {
    * `maxHeight` says how tall the element may be; the caller scrolls inside.
    */
   fit?: boolean;
+  rtl?: boolean;
+  surfaceRtl?: boolean;
 }
 
 export interface AnchoredPosition {
   top: number;
-  left: number;
+  inlineStart: number;
   /** The trigger's width, for callers that size the floating element to it. */
   width: number;
   /** The side actually used, after any flip. */
@@ -67,20 +70,13 @@ export interface AnchoredPosition {
   maxWidth: number;
 }
 
-const OPPOSITE: Record<AnchoredSide, AnchoredSide> = {
-  top: "bottom",
-  bottom: "top",
-  left: "right",
-  right: "left",
-};
-
 /** Reads the viewport, including the offsets no existing copy read. */
 export function readViewport(): AnchoredViewport {
   if (!isBrowser) {
     // The SSR fallback three of the nine copies already used. The numbers are
     // arbitrary but must be finite: they only decide whether a flip happens on
     // a server render that is corrected on the first client measurement.
-    return { width: 1024, height: 768, offsetTop: 0, offsetLeft: 0 };
+    return { width: 1024, height: 768, offsetTop: 0, offsetLeft: 0, layoutWidth: 1024 };
   }
   const vv = window.visualViewport;
   return {
@@ -88,6 +84,7 @@ export function readViewport(): AnchoredViewport {
     height: vv?.height ?? window.innerHeight,
     offsetTop: vv?.offsetTop ?? 0,
     offsetLeft: vv?.offsetLeft ?? 0,
+    layoutWidth: readLayoutWidth(),
   };
 }
 
@@ -101,7 +98,7 @@ const isVisible = (trigger: AnchoredRect, viewport: AnchoredViewport): boolean =
 const fits = (
   side: AnchoredSide,
   trigger: AnchoredRect,
-  floating: AnchoredRect,
+  floating: Pick<AnchoredRect, "width" | "height">,
   viewport: AnchoredViewport,
   gap: number,
 ): boolean => {
@@ -146,12 +143,12 @@ export function computeAnchoredPosition(
     forceSide = false,
     clampOnlyWhenTriggerVisible = false,
     fit = false,
+    rtl = false,
+    surfaceRtl = rtl,
   } = options;
 
   const maxWidth = Math.max(0, viewport.width - 2 * margin);
-  const floating: AnchoredRect = {
-    top: measured.top,
-    left: measured.left,
+  const floating = {
     width: Math.min(measured.width, maxWidth),
     height: measured.height,
   };
@@ -168,26 +165,31 @@ export function computeAnchoredPosition(
   // for another, which is what the space-comparing copies avoided.
   let side = preferred;
   if (!forceSide && !fits(preferred, trigger, floating, viewport, gap)) {
-    if (fits(OPPOSITE[preferred], trigger, floating, viewport, gap)) {
-      side = OPPOSITE[preferred];
-    } else if (fit && space(OPPOSITE[preferred]) > space(preferred)) {
-      side = OPPOSITE[preferred];
+    if (fits(oppositeSide(preferred), trigger, floating, viewport, gap)) {
+      side = oppositeSide(preferred);
+    } else if (fit && space(oppositeSide(preferred)) > space(preferred)) {
+      side = oppositeSide(preferred);
     }
   }
 
   const maxHeight = fit ? Math.max(0, space(side) - margin) : undefined;
   const height = Math.min(floating.height, maxHeight ?? Infinity);
 
+  // The floating element can be wider than its trigger — a menu with longer
+  // labels than the control that opens it. Clamping by the trigger's width, as
+  // most copies did, leaves the overhang off screen.
+  const width = side === "left" || side === "right" ? floating.width : Math.max(trigger.width, floating.width);
+
   let top: number;
   let left: number;
   switch (side) {
     case "top":
       top = trigger.top - height - gap;
-      left = trigger.left;
+      left = rtl ? trigger.left + trigger.width - width : trigger.left;
       break;
     case "bottom":
       top = trigger.top + trigger.height + gap;
-      left = trigger.left;
+      left = rtl ? trigger.left + trigger.width - width : trigger.left;
       break;
     case "left":
       top = trigger.top;
@@ -199,31 +201,27 @@ export function computeAnchoredPosition(
       break;
   }
 
-  // The floating element can be wider than its trigger — a menu with longer
-  // labels than the control that opens it. Clamping by the trigger's width, as
-  // most copies did, leaves the overhang off screen.
-  const width = side === "left" || side === "right" ? floating.width : Math.max(trigger.width, floating.width);
-
-  const clampAxis = (value: number, size: number, extent: number) => {
+  const clampAxis = (value: number, size: number, extent: number, pinEnd = false) => {
     const limit = extent - size - margin;
     // When the element is larger than the viewport, `limit` falls below
     // `margin`; pinning to `margin` keeps its start edge visible rather than
     // its end, which is where the content begins.
-    return limit <= margin ? margin : Math.max(margin, Math.min(value, limit));
+    return limit <= margin ? (pinEnd ? limit : margin) : Math.max(margin, Math.min(value, limit));
   };
 
   const clamp = !clampOnlyWhenTriggerVisible || isVisible(trigger, viewport);
   if (clamp) {
-    left = clampAxis(left, width, viewport.width);
+    left = clampAxis(left, width, viewport.width, rtl);
     top = clampAxis(top, height, viewport.height);
   }
 
   // Applied last, to coordinates that are already viewport-relative. The
   // floating element is positioned in layout coordinates, and these two are the
   // difference between the visual viewport and the layout one.
+  const surfaceLeft = (rtl ? left + width - floating.width : left) + viewport.offsetLeft;
   return {
     top: top + viewport.offsetTop,
-    left: left + viewport.offsetLeft,
+    inlineStart: toInlineStart(surfaceLeft, floating.width, surfaceRtl, viewport.layoutWidth ?? viewport.width),
     width: trigger.width,
     side,
     maxHeight,

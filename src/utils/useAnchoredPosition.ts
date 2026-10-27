@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { isBrowser } from "./isBrowser.js";
+import { isBrowser, isRtl } from "./isBrowser.js";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect.js";
 import {
   computeAnchoredPosition,
@@ -43,7 +43,7 @@ export function useAnchoredPosition(
   trigger: AnchorTarget,
   floating: AnchorTarget,
   isOpen: boolean,
-  options: AnchoredPositionOptions = {},
+  options: Omit<AnchoredPositionOptions, "rtl" | "surfaceRtl"> = {},
 ): AnchoredPosition | null {
   const [position, setPosition] = useState<AnchoredPosition | null>(null);
 
@@ -69,7 +69,7 @@ export function useAnchoredPosition(
         triggerEl.getBoundingClientRect(),
         floatingEl.getBoundingClientRect(),
         readViewport(),
-        { side, gap, margin, forceSide, clampOnlyWhenTriggerVisible, fit },
+        { side, gap, margin, forceSide, clampOnlyWhenTriggerVisible, fit, rtl: isRtl(triggerEl), surfaceRtl: isRtl(floatingEl) },
       ),
     );
   }, [trigger, floating, side, gap, margin, forceSide, clampOnlyWhenTriggerVisible, fit]);

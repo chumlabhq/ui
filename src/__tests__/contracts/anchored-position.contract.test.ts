@@ -34,9 +34,10 @@ const DECLARED = new Map([
       "tooltip does not exist yet when the position is computed.",
   ],
   [
-    "Table/Table.tsx:renderHeaderCell",
-    "The column-filter menu, positioned from a click handler with a hardcoded " +
-      "220px width estimate rather than a measured element.",
+    "Table/FilterPanel.tsx:placeFilterPanel",
+    "The column-filter menu, positioned from its trigger with a hardcoded " +
+      "220px width estimate, then corrected by its measured width. It moved " +
+      "here from Table's click handler in A2b so a resize places it again.",
   ],
 ]);
 
@@ -68,15 +69,18 @@ function findPositioners(root = "src/components"): Positioner[] {
       if (isFn && node.body) {
         const body = node.body.getText(sf);
         if (/getBoundingClientRect/.test(body)) {
-          // Yields coordinates: an object literal carrying both `top` and
-          // `left`. Read from the AST because the returns use shorthand, which
-          // no key-colon pattern matches.
+          // Yields coordinates: an object literal carrying both `top` and a
+          // horizontal offset. Read from the AST because the returns use
+          // shorthand, which no key-colon pattern matches. The horizontal one
+          // is `left` or its logical form: A2b made Table's filter yield
+          // `inlineStart`, and a scanner that only knew `left` lost it and
+          // called its DECLARED entry stale while the positioner was still there.
           let yieldsCoords = false;
           const scan = (n: ts.Node): void => {
             if (yieldsCoords) return;
             if (ts.isObjectLiteralExpression(n)) {
               const keys = n.properties.map((p) => p.name?.getText(sf));
-              if (keys.includes("top") && keys.includes("left")) {
+              if (keys.includes("top") && keys.some((k) => k === "left" || k === "inlineStart" || k === "insetInlineStart")) {
                 yieldsCoords = true;
                 return;
               }

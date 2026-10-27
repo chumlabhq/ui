@@ -10,3 +10,14 @@ export const readDirection = (node?: Element | null): Direction => {
 };
 
 export const isRtl = (node?: Element | null): boolean => readDirection(node) === "rtl";
+
+export type PhysicalSide = "top" | "right" | "bottom" | "left";
+
+const SIDES: readonly PhysicalSide[] = ["top", "right", "bottom", "left"];
+
+export const oppositeSide = (side: PhysicalSide): PhysicalSide => SIDES[(SIDES.indexOf(side) + 2) % 4];
+
+export const readLayoutWidth = (): number => document.documentElement.clientWidth || window.innerWidth;
+
+export const toInlineStart = (left: number, width: number, rtl: boolean, layoutWidth: number): number =>
+  rtl ? layoutWidth - left - width : left;

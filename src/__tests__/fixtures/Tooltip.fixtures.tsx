@@ -73,5 +73,11 @@ const fixtures: Fixtures<typeof Tooltip> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     children: <button>Trigger</button>,
   },
+  {
+    name: "align-start-rtl",
+    props: { content: "Copied to clipboard", open: true, align: "start" as const, showArrow: true },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    children: <button>Trigger</button>,
+  },
 ];
 export default fixtures;

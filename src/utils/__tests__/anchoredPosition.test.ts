@@ -24,7 +24,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { gap: 4 },
       );
-      expect(r).toEqual({ top: 144, left: 200, width: 100, side: "bottom", maxWidth: 984 });
+      expect(r).toEqual({ top: 144, inlineStart: 200, width: 100, side: "bottom", maxWidth: 984 });
     });
 
     it("sits above the trigger when asked", () => {
@@ -45,7 +45,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { side: "left", gap: 4 },
       );
-      expect(left).toMatchObject({ top: 100, left: 400 - 150 - 4, side: "left" });
+      expect(left).toMatchObject({ top: 100, inlineStart: 400 - 150 - 4, side: "left" });
 
       const right = computeAnchoredPosition(
         rect({ top: 100, left: 400, width: 100 }),
@@ -53,7 +53,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { side: "right", gap: 4 },
       );
-      expect(right).toMatchObject({ top: 100, left: 400 + 100 + 4, side: "right" });
+      expect(right).toMatchObject({ top: 100, inlineStart: 400 + 100 + 4, side: "right" });
     });
   });
 
@@ -90,7 +90,7 @@ describe("computeAnchoredPosition", () => {
         { side: "left", gap: 4 },
       );
       expect(r.side).toBe("right");
-      expect(r.left).toBe(40 + 100 + 4);
+      expect(r.inlineStart).toBe(40 + 100 + 4);
     });
 
     it("stays put when neither side can hold it", () => {
@@ -124,7 +124,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { margin: 8 },
       );
-      expect(r.left).toBe(1000 - 200 - 8);
+      expect(r.inlineStart).toBe(1000 - 200 - 8);
     });
 
     it("pulls the element back from the left edge", () => {
@@ -137,7 +137,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { margin: 8 },
       );
-      expect(r.left).toBe(8);
+      expect(r.inlineStart).toBe(8);
     });
 
     it("clamps the vertical axis as well", () => {
@@ -160,7 +160,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { margin: 8 },
       );
-      expect(r.left).toBe(1000 - 300 - 8);
+      expect(r.inlineStart).toBe(1000 - 300 - 8);
     });
 
     it("clamps a side placement by its own width, not its anchor's", () => {
@@ -174,7 +174,7 @@ describe("computeAnchoredPosition", () => {
         { side: "right", gap: 4, margin: 8 },
       );
       expect(r.side).toBe("right");
-      expect(r.left).toBe(25 + 238 + 4);
+      expect(r.inlineStart).toBe(25 + 238 + 4);
     });
 
     it("keeps the leading edge visible when the element exceeds the viewport", () => {
@@ -184,7 +184,7 @@ describe("computeAnchoredPosition", () => {
         VIEWPORT,
         { margin: 8 },
       );
-      expect(r.left).toBe(8);
+      expect(r.inlineStart).toBe(8);
     });
 
     it("leaves an off-screen trigger alone when asked", () => {
@@ -219,7 +219,7 @@ describe("computeAnchoredPosition", () => {
         { gap: 4 },
       );
       expect(r.top).toBe(144 + 150);
-      expect(r.left).toBe(200 + 20);
+      expect(r.inlineStart).toBe(200 + 20);
     });
 
     it("adds the offset after clamping, not before", () => {
@@ -233,7 +233,7 @@ describe("computeAnchoredPosition", () => {
         shifted,
         { margin: 8 },
       );
-      expect(r.left).toBe(1000 - 200 - 8);
+      expect(r.inlineStart).toBe(1000 - 200 - 8);
     });
   });
 
@@ -242,12 +242,12 @@ describe("computeAnchoredPosition", () => {
     // pinned to the top margin, over its own trigger, with its end off screen.
     it("opens below when there is more room below, capped to that room", () => {
       const r = computeAnchoredPosition(rect({ top: 100 }), rect({ height: 960 }), VIEWPORT, { gap: 4, margin: 8, fit: true });
-      expect(r).toEqual({ top: 144, left: 8, width: 100, side: "bottom", maxHeight: 648, maxWidth: 984 });
+      expect(r).toEqual({ top: 144, inlineStart: 8, width: 100, side: "bottom", maxHeight: 648, maxWidth: 984 });
     });
 
     it("opens above when there is more room above, ending at the trigger", () => {
       const r = computeAnchoredPosition(rect({ top: 600 }), rect({ height: 960 }), VIEWPORT, { gap: 4, margin: 8, fit: true });
-      expect(r).toEqual({ top: 8, left: 8, width: 100, side: "top", maxHeight: 588, maxWidth: 984 });
+      expect(r).toEqual({ top: 8, inlineStart: 8, width: 100, side: "top", maxHeight: 588, maxWidth: 984 });
       expect(r.top + r.maxHeight!).toBe(600 - 4);
     });
 
@@ -273,8 +273,8 @@ describe("computeAnchoredPosition", () => {
     it("places the capped width, so the surface ends inside the right margin", () => {
       const viewport = { width: 280, height: 640, offsetTop: 0, offsetLeft: 0 };
       const r = computeAnchoredPosition(rect({ top: 100, left: 24, width: 232 }), rect({ width: 288, height: 100 }), viewport, { margin: 8 });
-      expect(r.left).toBe(8);
-      expect(r.left + r.maxWidth).toBe(viewport.width - 8);
+      expect(r.inlineStart).toBe(8);
+      expect(r.inlineStart + r.maxWidth).toBe(viewport.width - 8);
     });
 
     it("reads a measured rect whose fields are getters, as a DOMRect's are", () => {
@@ -287,12 +287,12 @@ describe("computeAnchoredPosition", () => {
       const viewport = { width: 280, height: 640, offsetTop: 0, offsetLeft: 0 };
       const r = computeAnchoredPosition(rect({ top: 100, left: 24, width: 232 }), new Measured(), viewport, { gap: 4, margin: 8 });
       expect(r.top).toBe(100 + 40 + 4);
-      expect(r.left).toBe(8);
+      expect(r.inlineStart).toBe(8);
     });
 
     it("leaves a surface that fits its measured width", () => {
       const r = computeAnchoredPosition(rect({ top: 100, left: 880, width: 100 }), rect({ width: 300, height: 100 }), VIEWPORT, { margin: 8 });
-      expect(r.left).toBe(1000 - 300 - 8);
+      expect(r.inlineStart).toBe(1000 - 300 - 8);
       expect(r.maxWidth).toBe(984);
     });
   });
@@ -307,5 +307,79 @@ describe("computeAnchoredPosition", () => {
       {},
     );
     expect(r.width).toBe(120);
+  });
+});
+
+describe("computeAnchoredPosition in right-to-left", () => {
+  const surface = (
+    r: { inlineStart: number },
+    width: number,
+    viewport: AnchoredViewport,
+    rtlFrame: boolean,
+  ) => {
+    const extent = viewport.layoutWidth ?? viewport.width;
+    const left = rtlFrame ? extent - r.inlineStart - width : r.inlineStart;
+    return { left, right: left + width };
+  };
+
+  it("sits below the trigger with the right edges aligned", () => {
+    const r = computeAnchoredPosition(rect({ top: 100, left: 600, width: 100 }), rect({ width: 300, height: 200 }), VIEWPORT, { gap: 4, rtl: true });
+    expect(r.side).toBe("bottom");
+    expect(r.top).toBe(144);
+    expect(surface(r, 300, VIEWPORT, true)).toEqual({ left: 400, right: 700 });
+  });
+
+  it("sits above the trigger with the right edges aligned", () => {
+    const r = computeAnchoredPosition(rect({ top: 400, left: 600, width: 100 }), rect({ width: 300, height: 200 }), VIEWPORT, { side: "top", gap: 4, rtl: true });
+    expect(r.side).toBe("top");
+    expect(r.top).toBe(400 - 200 - 4);
+    expect(surface(r, 300, VIEWPORT, true)).toEqual({ left: 400, right: 700 });
+  });
+
+  it("aligns a surface narrower than its trigger to the trigger's right edge", () => {
+    const r = computeAnchoredPosition(rect({ top: 100, left: 24, width: 952 }), rect({ width: 244, height: 160 }), VIEWPORT, { gap: 4, rtl: true });
+    expect(surface(r, 244, VIEWPORT, true)).toEqual({ left: 976 - 244, right: 976 });
+  });
+
+  it("pushes a surface that would cross the left edge back inside the margin", () => {
+    const r = computeAnchoredPosition(rect({ top: 100, left: 50, width: 100 }), rect({ width: 300, height: 200 }), VIEWPORT, { gap: 4, rtl: true });
+    expect(surface(r, 300, VIEWPORT, true)).toEqual({ left: 8, right: 308 });
+  });
+
+  it("pins a box wider than the viewport to the right margin, where the line starts", () => {
+    const r = computeAnchoredPosition(rect({ top: 100, left: -50, width: 1100 }), rect({ width: 300, height: 200 }), VIEWPORT, { gap: 4, rtl: true });
+    expect(surface(r, 300, VIEWPORT, true)).toEqual({ left: 1000 - 8 - 300, right: 1000 - 8 });
+    const ltr = computeAnchoredPosition(rect({ top: 100, left: -50, width: 1100 }), rect({ width: 300, height: 200 }), VIEWPORT, { gap: 4 });
+    expect(surface(ltr, 300, VIEWPORT, false)).toEqual({ left: 8, right: 308 });
+  });
+
+  it("still flips to the side that can hold it, keeping the right edges aligned", () => {
+    const r = computeAnchoredPosition(rect({ top: 700, left: 600, width: 100, height: 40 }), rect({ width: 300, height: 200 }), VIEWPORT, { gap: 4, rtl: true });
+    expect(r.side).toBe("top");
+    expect(r.top).toBe(700 - 200 - 4);
+    expect(surface(r, 300, VIEWPORT, true)).toEqual({ left: 400, right: 700 });
+  });
+
+  it("leaves the physical sides where they were", () => {
+    const options = { side: "left" as const, gap: 4 };
+    const ltr = computeAnchoredPosition(rect({ top: 100, left: 400 }), rect({ width: 150, height: 100 }), VIEWPORT, options);
+    const rtl = computeAnchoredPosition(rect({ top: 100, left: 400 }), rect({ width: 150, height: 100 }), VIEWPORT, { ...options, rtl: true, surfaceRtl: false });
+    expect(rtl).toEqual(ltr);
+    expect(surface(rtl, 150, VIEWPORT, false)).toEqual({ left: 246, right: 396 });
+  });
+
+  it("writes the offset in the surface's own direction when it differs from the trigger's", () => {
+    const trigger = rect({ top: 100, left: 600, width: 100 });
+    const floating = rect({ width: 300, height: 200 });
+    const rtlInLtr = computeAnchoredPosition(trigger, floating, VIEWPORT, { rtl: true, surfaceRtl: false });
+    expect(surface(rtlInLtr, 300, VIEWPORT, false)).toEqual({ left: 400, right: 700 });
+    const ltrInRtl = computeAnchoredPosition(trigger, floating, VIEWPORT, { rtl: false, surfaceRtl: true });
+    expect(surface(ltrInRtl, 300, VIEWPORT, true)).toEqual({ left: 600, right: 900 });
+  });
+
+  it("measures a right-to-left offset from the layout viewport while the visual one is zoomed", () => {
+    const viewport: AnchoredViewport = { width: 500, height: 400, offsetTop: 0, offsetLeft: 100, layoutWidth: 1000 };
+    const r = computeAnchoredPosition(rect({ top: 50, left: 300, width: 100 }), rect({ width: 200, height: 100 }), viewport, { gap: 4, rtl: true });
+    expect(surface(r, 200, viewport, true)).toEqual({ left: 300, right: 500 });
   });
 });

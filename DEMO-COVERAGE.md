@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 59 |
 | Library-authored props across the public surface | 1253 |
 | With no demo | 263 (21%) |
-| With no fixture | 692 (55%) |
+| With no fixture | 691 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 54 |
@@ -142,5 +142,5 @@ listed here with no demo anywhere fails the generator.
 | TimePicker | 45 | 276 | 1 | 0 | 24 | 0 | `portalContainer` | — |
 | Toast | 24 | 2 | 10 | 3 | 12 | 0 | `unstyled` | `providerClasses`, `providerUnstyled`, `closeOnEscape` |
 | ToastProvider | 12 | 0 | 9 | 8 | 10 | 0 | `unstyled` | `containerClassName`, `defaultDuration`, `animationDuration`, `gap`, `zIndex`, `closeOnEscape`, `containerAriaLabel`, `classes` |
-| Tooltip | 37 | 2 | 12 | 4 | 23 | 0 | `unstyled`, `portalContainer` | `hideDelayDuration`, `arrowStyle`, `baseArrowStyle`, `portal` |
+| Tooltip | 37 | 2 | 12 | 4 | 22 | 0 | `unstyled`, `portalContainer` | `hideDelayDuration`, `arrowStyle`, `baseArrowStyle`, `portal` |
 

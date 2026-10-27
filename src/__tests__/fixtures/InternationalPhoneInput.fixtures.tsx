@@ -1,5 +1,6 @@
 import { InternationalPhoneInput } from "../../components/InternationalPhoneInput/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 
 const fixtures: Fixtures<typeof InternationalPhoneInput> = [
   { name: "default", props: {} },
@@ -8,6 +9,12 @@ const fixtures: Fixtures<typeof InternationalPhoneInput> = [
   {
     name: "country-open",
     props: {},
+    act: (c, ui) => ui.click(c.querySelector("[role='combobox'], button")),
+  },
+  {
+    name: "country-open-rtl",
+    props: {},
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     act: (c, ui) => ui.click(c.querySelector("[role='combobox'], button")),
   },
   {

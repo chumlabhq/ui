@@ -285,12 +285,16 @@ const OPEN_WIDTHS = [320, 1024];
  * became logical ones (Modal's close button, Dropdown's clear button, TextArea's
  * counter, Table's search and pinned divider, Stepper's vertical connector).
  *
+ * Then one open surface per positioner A2b made follow the direction: the
+ * shared one (SearchableDropdown, the phone input's country list, DatePicker,
+ * TimePicker's clock, Breadcrumb's overflow menu) and the two of their own
+ * (Table's filter, Tooltip with `align="start"`). Each sits against its
+ * trigger's right edge, or, for Table's filter, mirrors LTR's own placement.
+ *
  * Each is an `-rtl` fixture, which sets `dir="rtl"` on the document the way a
- * consumer's page does. None is an open floating surface: where those land is
- * the positioners' slice (A2b), and photographing them now would record a
- * placement that slice is about to move. Two widths, as for the open surfaces:
- * mirroring does not depend on reflow, and 320 and 1024 are the narrowest and
- * the first natural size.
+ * consumer's page does. Two widths, as for the open surfaces: mirroring does
+ * not depend on reflow, and 320 and 1024 are the narrowest and the first
+ * natural size.
  */
 const RTL_SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Accordion", fixture: "single-open-rtl" },
@@ -300,6 +304,13 @@ const RTL_SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "TextArea", fixture: "with-counter-rtl" },
   { component: "Table", fixture: "search-pinned-rtl" },
   { component: "Stepper", fixture: "vertical-rtl" },
+  { component: "SearchableDropdown", fixture: "open-rtl" },
+  { component: "InternationalPhoneInput", fixture: "country-open-rtl" },
+  { component: "DatePicker", fixture: "open-rtl" },
+  { component: "TimePicker", fixture: "open-clock-rtl" },
+  { component: "Breadcrumb", fixture: "collapsed-open-rtl" },
+  { component: "Table", fixture: "filter-open-rtl" },
+  { component: "Tooltip", fixture: "align-start-rtl" },
 ];
 
 const RTL_WIDTHS = OPEN_WIDTHS;

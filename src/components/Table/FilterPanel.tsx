@@ -1,4 +1,6 @@
 import { useEffect, useRef, type ReactNode, type RefObject } from "react";
+import { isRtl, toInlineStart } from "../../utils/isBrowser.js";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 
 /**
  * The column-filter dialog, in its own chunk.
@@ -25,8 +27,6 @@ export interface FilterPanelProps {
   triggerRef: RefObject<HTMLButtonElement | null>;
   id: string;
   columnId: string;
-  top: number;
-  left: number;
   options: { label: string; value: string }[];
   /** `false` means picking one value replaces the selection and closes. */
   multi?: boolean;
@@ -49,12 +49,26 @@ export interface FilterPanelProps {
   };
 }
 
+const placeFilterPanel = (trigger: HTMLElement) => {
+  const rect = trigger.getBoundingClientRect();
+  const dropdownWidth = 220; // estimated min-w
+  const rtl = isRtl(trigger);
+  const start = rtl ? window.innerWidth - rect.right : rect.left;
+  const end = rtl ? window.innerWidth - rect.left : rect.right;
+  const spaceEnd = window.innerWidth - start;
+  const inlineStart = spaceEnd < dropdownWidth
+    ? end - dropdownWidth
+    : start;
+  return {
+    top: rect.bottom + 4,
+    inlineStart: Math.max(8, inlineStart), // keep 8px minimum from the start edge
+  };
+};
+
 export default function FilterPanel({
   triggerRef,
   id,
   columnId,
-  top,
-  left,
   options,
   multi,
   values,
@@ -104,11 +118,25 @@ export default function FilterPanel({
     const el = panelRef.current;
     if (!el) return;
     el.focus({ preventScroll: true });
-    const rect = el.getBoundingClientRect();
-    if (rect.right > window.innerWidth - 8) {
-      el.style.left = `${left - (rect.right - window.innerWidth + 8)}px`;
-    }
-  }, [columnId, top, left]);
+  }, [columnId]);
+
+  useIsomorphicLayoutEffect(() => {
+    const el = panelRef.current;
+    const trigger = triggerRef.current;
+    if (!el || !trigger) return;
+    const place = () => {
+      const { top, inlineStart } = placeFilterPanel(trigger);
+      el.style.top = `${top}px`;
+      el.style.insetInlineStart = `${inlineStart}px`;
+      const { width } = el.getBoundingClientRect();
+      const end = inlineStart + width;
+      const placed = end > window.innerWidth - 8 ? inlineStart - (end - window.innerWidth + 8) : inlineStart;
+      el.style.insetInlineStart = `${toInlineStart(placed, width, isRtl(trigger) !== isRtl(el), window.innerWidth)}px`;
+    };
+    place();
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
+  }, [columnId, triggerRef]);
 
   return (
     <div
@@ -140,7 +168,6 @@ export default function FilterPanel({
         onClose();
       }}
       className={`outline-none fixed rounded-cl-md border shadow-xl overflow-hidden min-w-[160px] sm:min-w-[180px] max-w-[calc(100vw-32px)] z-[9999] ${renderColumnFilter ? "" : "max-h-[250px] overflow-y-auto"} ${classes.content || "bg-cl-bg-panel border-cl-border"}`}
-      style={{ top, left }}
       onClick={(e) => e.stopPropagation()}
     >
       {renderColumnFilter ? (

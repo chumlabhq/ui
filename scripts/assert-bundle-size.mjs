@@ -1488,7 +1488,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 160.71,
-    commit: "this slice",
+    commit: "72087ce7",
     date: "2026-10-26",
     attribution: "attributed",
     reason:
@@ -1512,6 +1512,43 @@ const LIBRARY_TOTAL_HISTORY = [
       "chunks' new hashed names in import strings. Accordion's declared " +
       "breach did not rise (9.29 -> 9.25 KB). No comments added to " +
       "src/components or src/utils.",
+  },
+  {
+    kb: 160.90,
+    commit: "this slice",
+    date: "2026-10-27",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.19 KB (164,571 -> 164,765 B gzipped, +194 B on a build of " +
+      "e0a478eb), 83 files held, no file in this total rising 0.10 KB. A2b, " +
+      "RTL causes C1 and C2: a floating surface opens from its trigger's " +
+      "inline-start edge. C1, the shared positioner, useMenuNavigation +91 B: " +
+      "above or below its trigger a surface aligns to the trigger's right edge " +
+      "in a right-to-left trigger, one wider than the viewport pins to the " +
+      "right margin there, and the result is an inline-start offset written " +
+      "for the surface's own direction (a right-to-left widget in a " +
+      "left-to-right page, or the reverse, would otherwise land mirrored), " +
+      "from two isRtl reads in the hook. C2, the positioners outside it: " +
+      "Tooltip +94 B (align start and end follow the trigger's inline " +
+      "direction, alignOffset points toward the inline end, side left and " +
+      "right stay physical, and the same inline-start write); Table -153 B in " +
+      "its chunk, -156 B exclusive, because the filter's placement left " +
+      "Table's click handler for FilterPanel, which places the panel from its " +
+      "trigger on open and again on every resize (a panel opened at 1024 and " +
+      "resized to 360 stayed where 1024 put it: past the right edge left to " +
+      "right, at -563 px once it was written as an inline-start offset right " +
+      "to left). FilterPanel is loaded with import(), which this gate does " +
+      "not follow, so its chunk is not in this total: 1,421 -> 1,690 B, " +
+      "+269 B, the placement that left Table plus its direction handling and " +
+      "the resize listener. Shared by both positioners, useReducedMotion " +
+      "+99 B: the side rotation, the layout-width read and the inline-start " +
+      "conversion live once in utils/isBrowser.ts beside isRtl, in the chunk " +
+      "every entry already loads. Written as a copy in each positioner they " +
+      "cost useMenuNavigation +132 B and Tooltip +142 B, both over the " +
+      "0.10 KB per-chunk limit; one copy costs the total 0.06 KB more and both " +
+      "fall under it. The rest, -3 to +3 B on 43 files, is the chunks' new " +
+      "hashed names in import strings. Table's declared breach moved with it " +
+      "(below). No comments added to src/components or src/utils.",
   },
 ];
 
@@ -1566,8 +1603,12 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.42,
-      why: "2026-10-21, M1-L1: 16.39 -> 16.42 (exclusive 16,780 -> 16,809 B gzipped, +29 B), " +
+      kb: 16.27,
+      why: "2026-10-27, A2b: 16.42 -> 16.27 (exclusive 16,815 -> 16,659 B gzipped, -156 B), " +
+        "measured on a build of e0a478eb: the column filter's placement moved out of Table's " +
+        "click handler into FilterPanel, its own chunk, which places the panel from its trigger " +
+        "on open and on every resize, from the trigger's inline-start edge in either direction. " +
+        "2026-10-21, M1-L1: 16.39 -> 16.42 (exclusive 16,780 -> 16,809 B gzipped, +29 B), " +
         "measured on a build of 0ea7d77c: an unpinned column's pin control takes " +
         "group-focus-within/header:opacity-100 and [@media(hover:none)]:opacity-100, so it " +
         "shows while its header cell has focus within and always on a screen without hover, " +

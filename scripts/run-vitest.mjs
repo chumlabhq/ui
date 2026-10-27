@@ -45,9 +45,11 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * of docs/adr/002-gate-populations.json's `$basisChanges`. 5502 at M1-L1:
  * Toast's five Pause on Focus tests. 5514 at M2: Modal's missing-name
  * warning and CountryFlagGroup's unstyled. 5536 at A2a: the direction
- * reader, scroll-lock side and physical-direction contracts.
+ * reader, scroll-lock side and physical-direction contracts. 5558 at A2b:
+ * right-to-left placement in the shared positioner, Tooltip's align and
+ * Table's filter panel, which also follows its trigger on a resize.
  */
-const SUITE_FLOOR = { tests: 5536 };
+const SUITE_FLOOR = { tests: 5558 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");

@@ -1,6 +1,7 @@
 import type { Page } from "@playwright/test";
 import { test, expect } from "./_test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
+import { openSurfaces, settle, type Surface } from "./_surfaces";
 
 /**
  * Every open popup lies inside the viewport and holds its own content, at
@@ -64,78 +65,6 @@ const framed = (page: Page) =>
     style.textContent = css;
     document.documentElement.appendChild(style);
   }, FRAME);
-
-type Surface = { el: string; left: number; right: number; client: number; scroll: number; viewport: number };
-
-/** The act, the harness's still-document answer and the fonts; a fixture that never settles is named, not read. */
-async function settle(page: Page, id: string): Promise<void> {
-  await page
-    .waitForFunction(
-      () => {
-        const main = document.querySelector("main[data-fixture-act]");
-        const act = main?.getAttribute("data-fixture-act");
-        const still = main?.getAttribute("data-fixture-still");
-        return act && act !== "pending" && still && still !== "pending" ? act : null;
-      },
-      undefined,
-      { timeout: 30000 },
-    )
-    .catch((error: Error) => {
-      throw new Error(`${id} never reported a settled act and a still document: ${error.message}`);
-    });
-  await page.evaluate(() => document.fonts.ready.then(() => undefined));
-}
-
-/** Every open surface, read until two reads two frames apart agree: a resize re-places it a frame later. */
-async function openSurfaces(page: Page): Promise<Surface[]> {
-  return page.evaluate(async () => {
-    const POPUP = /^(listbox|menu|dialog|alertdialog|tooltip)$/;
-    const read = (): Surface[] => {
-      const viewport = document.documentElement.clientWidth;
-      const portals = [...document.body.children].filter(
-        (c) => c.id !== "root" && Object.keys(c).some((key) => key.startsWith("__reactFiber$")),
-      );
-      const found: Element[] = [];
-      for (const el of document.querySelectorAll("body *")) {
-        const portalled = portals.some((p) => p.contains(el));
-        const style = getComputedStyle(el);
-        const placed = style.position === "fixed" || style.position === "absolute";
-        const role = el.getAttribute("role") ?? "";
-        if (!(portalled && (placed || POPUP.test(role))) && !(placed && POPUP.test(role))) continue;
-        if (el.closest("[aria-hidden='true'], [inert]")) continue;
-        if (style.display === "none" || style.visibility === "hidden" || parseFloat(style.opacity) === 0) continue;
-        const r = el.getBoundingClientRect();
-        if (r.width < 2 || r.height < 2) continue;
-        const scrim = Math.abs(r.left) < 0.5 && Math.abs(r.top) < 0.5 && Math.abs(r.right - viewport) < 0.5 && Math.abs(r.bottom - innerHeight) < 0.5;
-        if (scrim && !POPUP.test(role)) continue;
-        found.push(el);
-      }
-      return found
-        .filter((el) => !found.some((other) => other !== el && other.contains(el)))
-        .map((el) => {
-          const r = el.getBoundingClientRect();
-          const classes = String((el as HTMLElement).className ?? "").split(/\s+/).slice(0, 3).join(".");
-          return {
-            el: `${el.tagName.toLowerCase()}${el.getAttribute("role") ? `[role=${el.getAttribute("role")}]` : ""}.${classes}`,
-            left: Math.round(r.left * 10) / 10,
-            right: Math.round(r.right * 10) / 10,
-            client: el.clientWidth,
-            scroll: el.scrollWidth,
-            viewport,
-          };
-        });
-    };
-    const frames = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    let last = JSON.stringify(read());
-    for (let i = 0; i < 30; i++) {
-      await frames();
-      const now = JSON.stringify(read());
-      if (now === last) return JSON.parse(now) as Surface[];
-      last = now;
-    }
-    throw new Error("the surfaces never stopped moving across 30 double frames");
-  });
-}
 
 /** What is wrong with one surface, or nothing. Both are integers off one layout, so neither has rounding slack. */
 const problems = (s: Surface): string[] => [

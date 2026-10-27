@@ -2103,3 +2103,106 @@ describe("Table – additional coverage", () => {
     });
   });
 });
+
+describe("filter panel placement and direction", () => {
+  const PANEL_WIDTH = 180;
+  let trigger: { left: number; right: number };
+
+  const box = (left: number, top: number, width: number, height: number) =>
+    ({ left, right: left + width, top, bottom: top + height, width, height, x: left, y: top, toJSON() {} }) as DOMRect;
+
+  beforeEach(() => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      if (this.tagName === "BUTTON" && this.getAttribute("aria-label") === "Filter name") return box(trigger.left, 40, trigger.right - trigger.left, 14);
+      if (this.hasAttribute("data-table-filter-content")) {
+        const own = this.closest("[dir]")?.getAttribute("dir") === "rtl";
+        const offset = parseFloat(this.style.left || this.style.insetInlineStart);
+        const left = this.style.left || !own ? offset : window.innerWidth - offset - PANEL_WIDTH;
+        return box(left, 58, PANEL_WIDTH, 71);
+      }
+      return box(0, 0, 0, 0);
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.documentElement.removeAttribute("dir");
+  });
+
+  const open = async (ui: Parameters<typeof render>[0]) => {
+    render(ui);
+    await userEvent.click(screen.getByLabelText("Filter name"));
+    await lazyLoaded();
+    const panel = document.querySelector("[data-table-filter-content]") as HTMLElement;
+    expect(panel, "the filter panel did not open").not.toBeNull();
+    return panel.getBoundingClientRect();
+  };
+
+  const table = (
+    <Table
+      columns={columns}
+      data={data}
+      aria-label="t"
+      filterableColumns={{ name: { options: [{ label: "Alice", value: "Alice" }] } }}
+    />
+  );
+
+  it("aligns the panel's right edge to the trigger's in a right-to-left page", async () => {
+    document.documentElement.setAttribute("dir", "rtl");
+    trigger = { left: 600, right: 614 };
+    const panel = await open(table);
+    expect([panel.left, panel.right]).toEqual([614 - PANEL_WIDTH, 614]);
+  });
+
+  it("mirrors the short-of-room branch: the panel ends where a 220 px estimate would", async () => {
+    document.documentElement.setAttribute("dir", "rtl");
+    trigger = { left: 41, right: 55 };
+    const panel = await open(table);
+    expect([panel.left, panel.right]).toEqual([41 + 220 - PANEL_WIDTH, 41 + 220]);
+  });
+
+  it("leaves a left-to-right panel at its trigger's left edge", async () => {
+    trigger = { left: 400, right: 414 };
+    expect((await open(table)).left).toBe(400);
+  });
+
+  it("leaves the left-to-right short-of-room branch where it was", async () => {
+    trigger = { left: window.innerWidth - 55, right: window.innerWidth - 41 };
+    const panel = await open(table);
+    expect([panel.left, panel.right]).toEqual([window.innerWidth - 41 - 220, window.innerWidth - 41 - 220 + PANEL_WIDTH]);
+  });
+
+  it("places a right-to-left table's panel by the table's direction when the page is left-to-right", async () => {
+    trigger = { left: 600, right: 614 };
+    const panel = await open(<div dir="rtl">{table}</div>);
+    expect([panel.left, panel.right]).toEqual([614 - PANEL_WIDTH, 614]);
+  });
+
+  describe("after the viewport resizes", () => {
+    const resize = (width: number, to: { left: number; right: number }) => {
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: width });
+      trigger = to;
+      fireEvent(window, new Event("resize"));
+    };
+    afterEach(() => {
+      Object.defineProperty(window, "innerWidth", { configurable: true, value: 1024 });
+    });
+
+    it("keeps a right-to-left panel beside its trigger", async () => {
+      document.documentElement.setAttribute("dir", "rtl");
+      trigger = { left: 41, right: 55 };
+      await open(table);
+      resize(360, { left: 41, right: 55 });
+      const panel = document.querySelector("[data-table-filter-content]")!.getBoundingClientRect();
+      expect([panel.left, panel.right]).toEqual([41 + 220 - PANEL_WIDTH, 41 + 220]);
+    });
+
+    it("moves a left-to-right panel with its trigger", async () => {
+      trigger = { left: 969, right: 983 };
+      await open(table);
+      resize(360, { left: 305, right: 319 });
+      const panel = document.querySelector("[data-table-filter-content]")!.getBoundingClientRect();
+      expect([panel.left, panel.right]).toEqual([319 - 220, 319 - 220 + PANEL_WIDTH]);
+    });
+  });
+});

@@ -33,7 +33,7 @@ import {
   type Position,
 } from "./utils/helpers.js";
 import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl } from "../../utils/isBrowser.js";
 import { useHydrated } from "../../utils/useHydrated.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -140,7 +140,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     });
 
     const [isTruncated, setIsTruncated] = useState(false);
-    const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
+    const [position, setPosition] = useState<Position>({ top: 0, inlineStart: 0 });
     const [isPositioned, setIsPositioned] = useState(false);
     const hydrated = useHydrated();
 
@@ -211,6 +211,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           align,
           sideOffset,
           alignOffset,
+          isRtl(triggerNode),
+          isRtl(tooltipRef.current),
         );
         setPosition(newPosition);
         setIsPositioned(true);
@@ -573,7 +575,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         style={{
           position: "fixed",
           top: position.top,
-          left: position.left,
+          insetInlineStart: position.inlineStart,
           maxWidth: computedMaxWidth,
           ...wordWrapStyles[wordWrap],
           visibility: isPositioned ? "visible" : "hidden",

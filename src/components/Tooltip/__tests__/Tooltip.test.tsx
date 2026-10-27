@@ -1784,25 +1784,25 @@ describe("computeForSide", () => {
 
   it("computes left positioning", () => {
     const result = computeForSide(trigger, tooltip, "left", "center", 6, 0);
-    expect(result.left).toBe(100 - 120 - 6);
+    expect(result.x).toBe(100 - 120 - 6);
     expect(result.arrowRotation).toBe(90);
     expect(result.arrowTop).toBeDefined();
   });
 
   it("computes right positioning", () => {
     const result = computeForSide(trigger, tooltip, "right", "center", 6, 0);
-    expect(result.left).toBe(180 + 6);
+    expect(result.x).toBe(180 + 6);
     expect(result.arrowRotation).toBe(-90);
   });
 
   it("computes start alignment for horizontal sides", () => {
     const result = computeForSide(trigger, tooltip, "top", "start", 6, 10);
-    expect(result.left).toBe(100 + 10);
+    expect(result.x).toBe(100 + 10);
   });
 
   it("computes end alignment for horizontal sides", () => {
     const result = computeForSide(trigger, tooltip, "top", "end", 6, 0);
-    expect(result.left).toBe(180 - 120);
+    expect(result.x).toBe(180 - 120);
   });
 
   it("computes start alignment for vertical sides", () => {
@@ -1854,13 +1854,13 @@ describe("calculatePosition", () => {
     const pos = calculatePosition(trigger, tooltip, "top", "center", 6, 0);
     expect(pos.resolvedSide).toBeDefined();
     expect(pos.top).toBeDefined();
-    expect(pos.left).toBeDefined();
+    expect(pos.inlineStart).toBeDefined();
   });
 
   it("clamps left to padding when positioned too far left", () => {
     const edgeTrigger = makeDOMRect(5, 100, 20, 30);
     const pos = calculatePosition(edgeTrigger, tooltip, "top", "center", 6, 0);
-    expect(pos.left).toBeGreaterThanOrEqual(8);
+    expect(pos.inlineStart).toBeGreaterThanOrEqual(8);
   });
 
   it("clamps top to padding when positioned too high", () => {
@@ -1897,12 +1897,51 @@ describe("calculatePosition", () => {
   it("adjusts right edge clamping with arrowLeft", () => {
     const rightTrigger = makeDOMRect(750, 200, 40, 30);
     const pos = calculatePosition(rightTrigger, tooltip, "bottom", "center", 6, 0);
-    expect(pos.left).toBeLessThanOrEqual(800 - 8 - 120);
+    expect(pos.inlineStart).toBeLessThanOrEqual(800 - 8 - 120);
   });
 
   it("adjusts bottom edge clamping with arrowTop", () => {
     const bottomTrigger = makeDOMRect(200, 580, 80, 30);
     const pos = calculatePosition(bottomTrigger, tooltip, "right", "center", 6, 0);
     expect(pos.top).toBeLessThanOrEqual(600 - 8 - 40);
+  });
+});
+
+describe("align in right-to-left", () => {
+  const trigger = makeDOMRect(100, 100, 80, 30);
+  const tooltip = makeDOMRect(0, 0, 120, 40);
+
+  it("start aligns the right edges, end the left edges", () => {
+    expect(computeForSide(trigger, tooltip, "bottom", "start", 6, 0, true).x).toBe(180 - 120);
+    expect(computeForSide(trigger, tooltip, "bottom", "end", 6, 0, true).x).toBe(100);
+    expect(computeForSide(trigger, tooltip, "top", "start", 6, 0, true).x).toBe(180 - 120);
+  });
+
+  it("keeps left-to-right start and end where they were", () => {
+    expect(computeForSide(trigger, tooltip, "bottom", "start", 6, 0).x).toBe(100);
+    expect(computeForSide(trigger, tooltip, "bottom", "end", 6, 0).x).toBe(180 - 120);
+  });
+
+  it("moves alignOffset toward the inline end", () => {
+    expect(computeForSide(trigger, tooltip, "bottom", "start", 6, 10, true).x).toBe(180 - 120 - 10);
+    expect(computeForSide(trigger, tooltip, "bottom", "center", 6, 10, true).x).toBe(100 + (80 - 120) / 2 - 10);
+  });
+
+  it("keeps the arrow on the trigger's centre", () => {
+    const result = computeForSide(trigger, tooltip, "bottom", "start", 6, 0, true);
+    expect(result.arrowLeft).toBe(140 - (180 - 120));
+  });
+
+  it("leaves the vertical axis of a side placement alone", () => {
+    expect(computeForSide(trigger, tooltip, "right", "start", 6, 0, true)).toEqual(computeForSide(trigger, tooltip, "right", "start", 6, 0));
+  });
+
+  it("writes the offset from the right edge for a right-to-left tooltip", () => {
+    const wide = makeDOMRect(400, 200, 80, 30);
+    const extent = document.documentElement.clientWidth || window.innerWidth;
+    const rtl = calculatePosition(wide, tooltip, "bottom", "start", 6, 0, true);
+    expect(extent - rtl.inlineStart).toBe(480);
+    const physical = calculatePosition(wide, tooltip, "bottom", "start", 6, 0, true, false);
+    expect(physical.inlineStart).toBe(480 - 120);
   });
 });

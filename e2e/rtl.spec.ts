@@ -2,35 +2,27 @@ import { test, expect } from "./_test";
 import { gotoFixture } from "./_nav";
 
 /**
- * Right-to-left, which nothing in this package has ever rendered.
+ * Right-to-left placement, measured against what mirroring IS rather than what
+ * the package happens to do.
  *
- * `useAnchoredPosition` decides a left coordinate, clamps it against the
- * viewport's left and right edges, and flips a surface to the opposite side
- * when the preferred one cannot hold it — all of it on the horizontal axis, and
- * none of it aware of the writing direction. Breadcrumb, Pagination, Stepper
- * and Slider carry direction in their layout as well.
+ * A surface anchored under its trigger aligns to the trigger's inline-start
+ * edge — its left in LTR, its right in RTL — and a submenu that flips on the
+ * cross axis prefers the leading side. Until A2b every positioner placed from
+ * the trigger's physical left (the A2 audit, cause C1 and C2), and these tests
+ * were skipped with that measurement in their reason; they now hold it. The
+ * one remaining skip is Slider's, whose position math is A2d's.
  *
- * The assertions here state what mirroring IS, not what the package currently
- * does: a surface anchored under its trigger aligns to the trigger's leading
- * edge, which is the left in LTR and the right in RTL, and a surface that flips
- * on the cross axis prefers the leading side.
+ * Each subject says which alignment it expects, rather than the test deciding
+ * from what it measured: a surface sized to its trigger lines up on both edges
+ * at once, and asserting that coincidence is what keeps it from going wrong
+ * unnoticed. Every expectation is clamp-aware: where the aligned placement
+ * would cross the 8 px margin, the surface belongs pushed inside it.
  *
- * **RTL is not supported in 0.1.0, so the mirroring assertions are skipped with
- * the measurement in the reason.** Nothing mirrors: the positioner has no
- * direction input at all, which is a different thing from mirroring the wrong
- * way — there is nothing to get wrong. Fixing the positioner alone would leave
- * `pl-*`, `text-left` and every chevron pointing the wrong way, so this is a
- * 1.1 feature and these seven measurements are its specification. The order it
- * has to be done in is in ACCESSIBILITY.md: logical properties across the
- * constants files first, a direction input to `useAnchoredPosition` second,
- * icon mirroring third.
- *
- * What still RUNS is everything that already holds — the fixture renders
- * right-to-left, the anchor and the surface exist, and the clamp keeps the
- * surface on screen in both directions, because it works from both viewport
- * edges. Deleting the rest would delete the evidence.
+ * Every open surface of every fixture is walked the same way in
+ * rtl-surfaces.spec.ts; these are the named subjects, one per component.
  */
 const WIDTH = 1024;
+const MARGIN = 8;
 
 /** Reads the anchor and the surface in one pass, in whichever direction. */
 async function measure(
@@ -67,54 +59,76 @@ async function measure(
  * The surfaces that anchor under their trigger. In LTR each aligns its left
  * edge to the trigger's; the mirror of that is the right edge to the right.
  */
-const ANCHORED = [
+/**
+ * - `start`: the surface's right edge is the trigger's.
+ * - `both-edges`: the surface is sized to its trigger, so it lines up on both.
+ * - `end-estimate`: Table's filter with less than its 220 px estimate of room
+ *   toward the inline end, which aligns its END edge by that estimate. That is
+ *   LTR's own branch (the recorded LTR baseline ends 40 px short of the
+ *   trigger's right), mirrored rather than replaced.
+ */
+type Alignment = "start" | "both-edges" | "end-estimate";
+
+const ANCHORED: Array<{ component: string; fixture: string; anchor: string; surface: string; alignment: Alignment }> = [
   {
     component: "Dropdown",
     fixture: "open-rtl",
     anchor: "[data-fixture] [role='combobox']",
     surface: "[role='listbox']",
+    alignment: "both-edges",
   },
   {
     component: "SearchableDropdown",
     fixture: "open-rtl",
     anchor: "[data-fixture] [role='combobox']",
-    surface: "[role='listbox']",
+    surface: "[role='group'][data-side]",
+    alignment: "start",
   },
   {
     component: "MultiSelectDropdown",
     fixture: "open-rtl",
     anchor: "[data-fixture] [role='combobox']",
     surface: "[role='listbox']",
+    alignment: "both-edges",
   },
   {
+    // Clock mode, measured on the dialog that is the surface and against the
+    // field box it anchors to — the element holding the input, not the input:
+    // the box is wider by its padding. The dropdown mode's list is sized to
+    // that box and would only show the two alignments coinciding.
     component: "TimePicker",
-    fixture: "open-rtl",
-    anchor: "[data-fixture] [role='combobox'],[data-fixture] input",
-    surface: "[role='listbox']",
+    fixture: "open-clock-rtl",
+    anchor: "[data-fixture] div:has(> input[role='combobox'])",
+    surface: "[role='dialog']",
+    alignment: "start",
   },
   {
     component: "DatePicker",
     fixture: "open-rtl",
     anchor: "[data-fixture] [role='combobox'],[data-fixture] button",
     surface: "[role='dialog']",
+    alignment: "start",
   },
   {
     component: "Breadcrumb",
     fixture: "collapsed-open-rtl",
-    anchor: "[data-fixture] button",
+    anchor: "[data-fixture] button[aria-haspopup]",
     surface: "[role='menu']",
+    alignment: "start",
   },
   {
     component: "Pagination",
     fixture: "rows-per-page-open-rtl",
     anchor: "[data-fixture] [aria-haspopup='listbox']",
     surface: "[role='listbox']",
+    alignment: "both-edges",
   },
   {
     component: "Table",
     fixture: "filter-open-rtl",
-    anchor: "[data-fixture] th button",
+    anchor: "[data-fixture] th button[aria-haspopup='dialog']",
     surface: "[data-table-filter-content]",
+    alignment: "end-estimate",
   },
 ];
 
@@ -132,31 +146,27 @@ test.describe("right-to-left", () => {
       expect(seen.anchor, "no anchor found").not.toBeNull();
       expect(seen.surface, "no surface found").not.toBeNull();
 
-      // Still on screen, whatever the direction. This half already holds: the
-      // clamp is symmetrical because it works from both viewport edges.
       expect(seen.surface!.left, "clamped off the left edge").toBeGreaterThanOrEqual(0);
       expect(seen.surface!.right, "clamped off the right edge").toBeLessThanOrEqual(seen.viewport);
 
-      // A surface sized to its trigger aligns on both edges at once and says
-      // nothing either way; every other width has a leading edge to align to.
-      test.skip(
-        Math.abs(seen.surface!.width - seen.anchor!.width) <= 2,
-        "surface is exactly as wide as its trigger — the two alignments coincide",
-      );
+      const placed =
+        `the surface sits at [${seen.surface!.left}..${seen.surface!.right}] against a trigger at ` +
+        `[${seen.anchor!.left}..${seen.anchor!.right}] in a ${seen.viewport} px viewport`;
 
-      test.skip(
-        true,
-        `RTL is not supported in 0.1.0 (ACCESSIBILITY.md). Measured: the surface sits at ` +
-          `[${seen.surface!.left}..${seen.surface!.right}] against a trigger at ` +
-          `[${seen.anchor!.left}..${seen.anchor!.right}] — aligned to the trigger's LEFT edge, ` +
-          `exactly as in LTR. Mirrored, it would end at ${seen.anchor!.right}.`,
-      );
+      if (subject.alignment === "both-edges") {
+        expect(Math.abs(seen.surface!.left - seen.anchor!.left), `sized to its trigger, so both edges align: ${placed}`).toBeLessThanOrEqual(2);
+        expect(Math.abs(seen.surface!.right - seen.anchor!.right), `sized to its trigger, so both edges align: ${placed}`).toBeLessThanOrEqual(2);
+        return;
+      }
 
+      // Aligned, then pushed inside the margin: right first, so a surface
+      // wider than the viewport keeps the right margin, where the line starts.
+      let right = subject.alignment === "start" ? seen.anchor!.right : seen.anchor!.left + 220;
+      if (right - seen.surface!.width < MARGIN) right = MARGIN + seen.surface!.width;
+      if (right > seen.viewport - MARGIN) right = seen.viewport - MARGIN;
       expect(
-        Math.abs(seen.surface!.right - seen.anchor!.right),
-        `in RTL the surface should align to the trigger's right edge: trigger ends at ` +
-          `${seen.anchor!.right}, surface at ${seen.surface!.right} (surface starts at ` +
-          `${seen.surface!.left}, trigger at ${seen.anchor!.left})`,
+        Math.abs(seen.surface!.right - right),
+        `in RTL the surface's right edge belongs at ${right} (${subject.alignment === "start" ? "the trigger's right edge" : "220 px past the trigger's left edge, as LTR ends it 220 px before the trigger's right"}, kept inside the ${MARGIN} px margin): ${placed}`,
       ).toBeLessThanOrEqual(2);
     });
   }

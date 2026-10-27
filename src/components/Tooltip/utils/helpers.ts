@@ -1,7 +1,7 @@
 import type { Ref } from "react";
 import { mergeRefs } from "../../../utils/mergeRefs.js";
 import { INTERACTIVE_TAGS, INTERACTIVE_QUERY } from "./constants.js";
-import { isBrowser } from "../../../utils/isBrowser.js";
+import { isBrowser, oppositeSide, readLayoutWidth, toInlineStart } from "../../../utils/isBrowser.js";
 
 export function mergeTooltipRefs<T>(
   ...refs: (Ref<T> | undefined | null)[]
@@ -25,19 +25,12 @@ export const hasInteractiveChild = (wrapper: HTMLElement): boolean => {
 
 export interface Position {
   top: number;
-  left: number;
+  inlineStart: number;
   arrowTop?: number;
   arrowLeft?: number;
   arrowRotation?: number;
   resolvedSide?: "top" | "right" | "bottom" | "left";
 }
-
-const OPPOSITE_SIDE: Record<string, "top" | "right" | "bottom" | "left"> = {
-  top: "bottom",
-  bottom: "top",
-  left: "right",
-  right: "left",
-};
 
 export const computeForSide = (
   triggerRect: DOMRect,
@@ -46,9 +39,10 @@ export const computeForSide = (
   align: "start" | "center" | "end",
   sideOffset: number,
   alignOffset: number,
-): { top: number; left: number; arrowTop?: number; arrowLeft?: number; arrowRotation: number } => {
+  rtl = false,
+): { top: number; x: number; arrowTop?: number; arrowLeft?: number; arrowRotation: number } => {
   let top = 0;
-  let left = 0;
+  let x = 0;
   let arrowTop: number | undefined;
   let arrowLeft: number | undefined;
   let arrowRotation = 0;
@@ -63,31 +57,34 @@ export const computeForSide = (
       arrowRotation = 0;
       break;
     case "left":
-      left = triggerRect.left - tooltipRect.width - sideOffset;
+      x = triggerRect.left - tooltipRect.width - sideOffset;
       arrowRotation = 90;
       break;
     case "right":
-      left = triggerRect.right + sideOffset;
+      x = triggerRect.right + sideOffset;
       arrowRotation = -90;
       break;
   }
 
   if (side === "top" || side === "bottom") {
+    const offset = rtl ? -alignOffset : alignOffset;
+    const startX = rtl ? triggerRect.right - tooltipRect.width : triggerRect.left;
+    const endX = rtl ? triggerRect.left : triggerRect.right - tooltipRect.width;
     switch (align) {
       case "start":
-        left = triggerRect.left + alignOffset;
+        x = startX + offset;
         break;
       case "center":
-        left =
+        x =
           triggerRect.left +
           (triggerRect.width - tooltipRect.width) / 2 +
-          alignOffset;
+          offset;
         break;
       case "end":
-        left = triggerRect.right - tooltipRect.width + alignOffset;
+        x = endX + offset;
         break;
     }
-    arrowLeft = triggerRect.left + triggerRect.width / 2 - left;
+    arrowLeft = triggerRect.left + triggerRect.width / 2 - x;
   }
 
   if (side === "left" || side === "right") {
@@ -108,7 +105,7 @@ export const computeForSide = (
     arrowTop = triggerRect.top + triggerRect.height / 2 - top;
   }
 
-  return { top, left, arrowTop, arrowLeft, arrowRotation };
+  return { top, x, arrowTop, arrowLeft, arrowRotation };
 };
 
 export const wouldOverflow = (
@@ -127,11 +124,12 @@ export const wouldOverflow = (
   );
 };
 
-function getViewportSize(): { width: number; height: number } {
-  if (!isBrowser) return { width: 0, height: 0 };
+function getViewportSize(): { width: number; height: number; layoutWidth: number } {
+  if (!isBrowser) return { width: 0, height: 0, layoutWidth: 0 };
   const vv = window.visualViewport;
-  if (vv) return { width: vv.width, height: vv.height };
-  return { width: window.innerWidth, height: window.innerHeight };
+  const layoutWidth = readLayoutWidth();
+  if (vv) return { width: vv.width, height: vv.height, layoutWidth };
+  return { width: window.innerWidth, height: window.innerHeight, layoutWidth };
 }
 
 export const calculatePosition = (
@@ -141,34 +139,36 @@ export const calculatePosition = (
   align: "start" | "center" | "end",
   sideOffset: number,
   alignOffset: number,
+  rtl = false,
+  surfaceRtl = rtl,
 ): Position => {
-  const { width: viewportWidth, height: viewportHeight } = getViewportSize();
+  const { width: viewportWidth, height: viewportHeight, layoutWidth } = getViewportSize();
   const padding = 8;
 
-  let result = computeForSide(triggerRect, tooltipRect, side, align, sideOffset, alignOffset);
+  let result = computeForSide(triggerRect, tooltipRect, side, align, sideOffset, alignOffset, rtl);
   let resolvedSide = side;
 
-  if (wouldOverflow(result.top, result.left, tooltipRect, viewportWidth, viewportHeight, padding)) {
-    const flipped = OPPOSITE_SIDE[side];
-    const flippedResult = computeForSide(triggerRect, tooltipRect, flipped, align, sideOffset, alignOffset);
+  if (wouldOverflow(result.top, result.x, tooltipRect, viewportWidth, viewportHeight, padding)) {
+    const flipped = oppositeSide(side);
+    const flippedResult = computeForSide(triggerRect, tooltipRect, flipped, align, sideOffset, alignOffset, rtl);
 
-    if (!wouldOverflow(flippedResult.top, flippedResult.left, tooltipRect, viewportWidth, viewportHeight, padding)) {
+    if (!wouldOverflow(flippedResult.top, flippedResult.x, tooltipRect, viewportWidth, viewportHeight, padding)) {
       result = flippedResult;
       resolvedSide = flipped;
     }
   }
 
-  let { top, left, arrowTop, arrowLeft } = result;
+  let { top, x, arrowTop, arrowLeft } = result;
   const { arrowRotation } = result;
 
-  if (left < padding) {
-    const adjustment = padding - left;
-    left = padding;
+  if (x < padding) {
+    const adjustment = padding - x;
+    x = padding;
     if (arrowLeft !== undefined) arrowLeft -= adjustment;
-  } else if (left + tooltipRect.width > viewportWidth - padding) {
+  } else if (x + tooltipRect.width > viewportWidth - padding) {
     const adjustment =
-      left + tooltipRect.width - (viewportWidth - padding);
-    left = viewportWidth - padding - tooltipRect.width;
+      x + tooltipRect.width - (viewportWidth - padding);
+    x = viewportWidth - padding - tooltipRect.width;
     if (arrowLeft !== undefined) arrowLeft += adjustment;
   }
 
@@ -190,5 +190,5 @@ export const calculatePosition = (
     arrowTop = Math.max(12, Math.min(tooltipRect.height - 12, arrowTop));
   }
 
-  return { top, left, arrowTop, arrowLeft, arrowRotation, resolvedSide };
+  return { top, inlineStart: toInlineStart(x, tooltipRect.width, surfaceRtl, layoutWidth), arrowTop, arrowLeft, arrowRotation, resolvedSide };
 };

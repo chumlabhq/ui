@@ -374,8 +374,6 @@ function TableInner<TData>(
 
   const [filterDropdownState, setFilterDropdownState] = useState<{
     columnId: string;
-    top: number;
-    left: number;
   } | null>(null);
   const openFilterColumn = filterDropdownState?.columnId ?? null;
   const filterDropdownId = `${useId()}-column-filter`;
@@ -1299,18 +1297,8 @@ function TableInner<TData>(
                   if (openFilterColumn === columnId) {
                     setFilterDropdownState(null);
                   } else {
-                    const rect = e.currentTarget.getBoundingClientRect();
                     filterTriggerRef.current = e.currentTarget;
-                    const dropdownWidth = 220; // estimated min-w
-                    const spaceRight = window.innerWidth - rect.left;
-                    const left = spaceRight < dropdownWidth
-                      ? rect.right - dropdownWidth
-                      : rect.left;
-                    setFilterDropdownState({
-                      columnId,
-                      top: rect.bottom + 4,
-                      left: Math.max(8, left), // keep 8px minimum from left edge
-                    });
+                    setFilterDropdownState({ columnId });
                   }
                 }}
                 className={filterIconClassName}
@@ -2327,8 +2315,6 @@ function TableInner<TData>(
             triggerRef={filterTriggerRef}
             id={filterDropdownId}
             columnId={filterDropdownState.columnId}
-            top={filterDropdownState.top}
-            left={filterDropdownState.left}
             options={filterableColumns[filterDropdownState.columnId].options}
             multi={filterableColumns[filterDropdownState.columnId].multi}
             values={getColumnFilterValues(filterDropdownState.columnId)}
