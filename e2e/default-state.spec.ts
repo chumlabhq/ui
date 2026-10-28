@@ -1586,6 +1586,7 @@ const STATE_PAINT_HOOKS: Record<string, string[]> = {
   MultiSelectSearchableDropdown: ["data-dropdown-id", "data-position", "data-side"],
   OtpInput: ["data-group", "data-index"],
   Pagination: ["data-direction", "data-side"],
+  RadioButton: ["data-value"],
   ResizablePanel: ["data-direction"],
   SearchableDropdown: ["data-dropdown-id", "data-position", "data-side", "data-value"],
   Slider: ["data-index"],

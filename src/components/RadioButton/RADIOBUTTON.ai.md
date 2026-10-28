@@ -54,7 +54,7 @@ export default function Example() {
 | `onBlur` | object | — | (event: FocusEvent<HTMLInputElement>) => void - Fires when a radio loses focus. |
 | `label` | object | — | React.ReactNode - Text label for the group. |
 | `description` | object | — | React.ReactNode - Helper text for the group. |
-| `name` | string | — | Field name for form submission. |
+| `name` | string | — | Field name for form submission. Defaults to a generated name; pass one if the group is submitted in a form. |
 | `required` | boolean | `false` | Required field indicator. |
 | `disabled` | boolean | `false` | Disables all radio buttons in the group. |
 | `error` | boolean | `false` | Displays the group in an error state. |

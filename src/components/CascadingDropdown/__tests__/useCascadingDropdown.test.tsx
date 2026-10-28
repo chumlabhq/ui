@@ -840,6 +840,40 @@ describe("useCascadingDropdown", () => {
     });
   });
 
+  describe("keyboard navigation – the arrows follow the submenu's side", () => {
+    const inside = (dir: "ltr" | "rtl") => {
+      const wrapper = document.createElement("div");
+      wrapper.setAttribute("dir", dir);
+      const el = document.createElement("div");
+      wrapper.appendChild(el);
+      document.body.appendChild(wrapper);
+      return el;
+    };
+    const keyIn = (key: string, el: Element) =>
+      ({ key, currentTarget: el, preventDefault: vi.fn(), defaultPrevented: false }) as unknown as React.KeyboardEvent;
+
+    it.each([
+      ["end", "ltr", "ArrowRight", "ArrowLeft"],
+      ["start", "ltr", "ArrowLeft", "ArrowRight"],
+      ["end", "rtl", "ArrowLeft", "ArrowRight"],
+      ["start", "rtl", "ArrowRight", "ArrowLeft"],
+    ] as const)("submenuSide %s in %s: %s opens it, %s does not and closes it from inside", (side, dir, toward, away) => {
+      const el = inside(dir);
+      const { result } = renderHook(() =>
+        useCascadingDropdown({ options: nestedOptions, defaultOpen: true, submenuSide: side })
+      );
+      act(() => { result.current.setFocusedIndex(0); });
+      act(() => { result.current.handleKeyDown(keyIn(away, el)); });
+      expect(result.current.activeSubmenu).toBeNull();
+      act(() => { result.current.handleKeyDown(keyIn(toward, el)); });
+      expect(result.current.activeSubmenu).toBe("fruits");
+      expect(result.current.submenuFocusedIndex).toBe(0);
+      act(() => { result.current.handleKeyDown(keyIn(away, el)); });
+      expect(result.current.activeSubmenu).toBeNull();
+      el.parentElement!.remove();
+    });
+  });
+
   describe("keyboard navigation – Escape", () => {
     it("closes submenu when in submenu context", () => {
       const { result } = renderHook(() =>

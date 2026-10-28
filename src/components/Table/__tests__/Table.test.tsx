@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, within, fireEvent } from "@testing-library/react";
+import { act, render, screen, within, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Table } from "../index.js";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -851,6 +851,21 @@ describe("Table", () => {
       // The component sets focusedCell state which controls tabIndex
       // We just verify no error is thrown and the event is handled
       expect(cells[0]).toBeInTheDocument();
+    });
+
+    it("moves to the visually adjacent cell in a right-to-left table: ArrowLeft is the next column", () => {
+      render(<div dir="rtl"><Table columns={columns} data={data} /></div>);
+
+      const row = screen.getAllByRole("row")[1];
+      const cells = within(row).getAllByRole("gridcell");
+      act(() => cells[1].focus());
+      fireEvent.keyDown(cells[1], { key: "ArrowLeft" });
+      expect(cells[2]).toHaveFocus();
+      fireEvent.keyDown(cells[2], { key: "ArrowRight" });
+      fireEvent.keyDown(cells[1], { key: "ArrowRight" });
+      expect(cells[0]).toHaveFocus();
+      fireEvent.keyDown(cells[0], { key: "ArrowRight" });
+      expect(cells[0]).toHaveFocus();
     });
 
     it("moves focus down with ArrowDown key", async () => {

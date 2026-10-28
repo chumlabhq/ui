@@ -280,6 +280,7 @@ export interface UseCascadingDropdownProps {
   /** Loads a submenu's results for a typed query. */
   searchSubmenu?: (query: string, parent: CascadingOption) => Promise<CascadingOption[]>;
   searchDebounce?: number;
+  submenuSide?: "start" | "end";
 }
 
 export interface UseCascadingDropdownReturn {

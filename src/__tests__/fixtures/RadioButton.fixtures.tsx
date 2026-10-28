@@ -36,6 +36,18 @@ const fixtures: Fixtures<typeof RadioGroup> = [
     ),
   },
   { name: "horizontal", props: { orientation: "horizontal" }, children: radios },
+  {
+    name: "named-horizontal",
+    props: { name: "fruit", orientation: "horizontal" },
+    note: "Three enabled radios in a row, named. With two, one arrow key reaches the other radio whether it mirrors, wraps or both, so rtl-keys could not tell a mirrored key from a wrapped one.",
+    children: (
+      <>
+        <RadioButton value="a" label="Apple" />
+        <RadioButton value="b" label="Banana" />
+        <RadioButton value="c" label="Cherry" />
+      </>
+    ),
+  },
   { name: "required", props: { label: "Fruit", required: true }, children: radios },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

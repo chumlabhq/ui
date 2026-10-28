@@ -11796,7 +11796,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "type": "string",
             "required": false,
             "default": null,
-            "description": "Field name for form submission."
+            "description": "Field name for form submission. Defaults to a generated name; pass one if the group is submitted in a form."
           },
           {
             "name": "required",

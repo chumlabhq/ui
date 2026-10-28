@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 import { test, expect } from "./_test";
-import { gotoFixture, gotoFixtureIndex } from "./_nav";
+import { gotoFixture, gotoFixtureIndex, servedRtl } from "./_nav";
 import { openSurfaces, settle, type Surface } from "./_surfaces";
 
 /**
@@ -74,21 +74,6 @@ function verdict(s: Surface): { verdict: Verdict; expected?: number } {
   if (filter) return { verdict: "end-estimate" };
   if (Math.abs(s.right - t.right) > TOLERANCE) return { verdict: "clamped" };
   return { verdict: Math.abs(s.left - t.left) <= TOLERANCE ? "both-edges" : "start" };
-}
-
-/** Serves every fixture document as `<html dir="rtl">`; everything else falls through to the harness's routes. */
-async function servedRtl(page: Page): Promise<void> {
-  await page.route(/\/__fixtures(\/|$)/, async (route) => {
-    if (route.request().resourceType() !== "document") return route.fallback();
-    const response = await route.fetch();
-    const body = (await response.text()).replace(/<html([^>]*)>/, '<html$1 dir="rtl">');
-    await route.fulfill({ response, body });
-  });
-  await page.addInitScript(() => {
-    const style = document.createElement("style");
-    style.textContent = "*, *::before, *::after { animation: none !important; transition: none !important; }";
-    document.documentElement.appendChild(style);
-  });
 }
 
 const describe = (id: string, width: number, s: Surface, why: { verdict: Verdict; expected?: number }) =>

@@ -1,4 +1,5 @@
 import { forwardRef, createContext, useContext, useId, useMemo, useCallback, useRef } from "react";
+import type { KeyboardEvent } from "react";
 import type {
   RadioButtonProps,
   RadioButtonClasses,
@@ -8,6 +9,7 @@ import type {
 } from "./utils/types.js";
 import type { FocusEvent } from "react";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { isRtl } from "../../utils/isBrowser.js";
 import { CircularLoader } from "../Loader/index.js";
 import {
   SIZE_MAP,
@@ -27,7 +29,7 @@ import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.j
 import { motionSafeClasses } from "../../utils/classLayers.js";
 
 interface RadioGroupContextValue {
-  name?: string;
+  name: string;
   required?: boolean;
   selectedValue: string;
   onSelect: (value: string) => void;
@@ -42,6 +44,8 @@ interface RadioGroupContextValue {
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
 }
+
+const ARROW_STEP: Record<string, number> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
 
 const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
@@ -87,6 +91,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       children,
       className,
       "aria-describedby": ariaDescribedBy,
+      onKeyDown: onKeyDownProp,
       ...rest
     },
     ref,
@@ -128,6 +133,22 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       [disabled, setSelectedValue],
     );
 
+    const handleKeyDown = useCallback(
+      (event: KeyboardEvent<HTMLDivElement>) => {
+        onKeyDownProp?.(event);
+        const step = ARROW_STEP[event.key];
+        const radio = event.target as HTMLInputElement;
+        if (!step || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || radio.type !== "radio") return;
+        const radios = [...event.currentTarget.querySelectorAll<HTMLInputElement>("input:enabled")].filter((r) => r.name === radio.name);
+        const inline = event.key === "ArrowLeft" || event.key === "ArrowRight";
+        const next = radios[(radios.indexOf(radio) + (inline && isRtl(radio) ? -step : step) + radios.length) % radios.length];
+        event.preventDefault();
+        next.focus();
+        next.click();
+      },
+      [onKeyDownProp],
+    );
+
     const baseClassesRaw = unstyled ? UNSTYLED_RADIO_GROUP_CLASSES : DEFAULT_RADIO_GROUP_CLASSES;
     const baseClasses = motionSafeClasses(baseClassesRaw, prefersReducedMotion);
     const mergedClasses: Required<RadioGroupClasses> = useMemo(
@@ -150,7 +171,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
     const ctxValue = useMemo<RadioGroupContextValue>(
       () => ({
-        name,
+        name: name || generatedId,
         required,
         selectedValue,
         onSelect: handleSelect,
@@ -166,7 +187,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         onFocus,
         onBlur,
       }),
-      [name, required, selectedValue, handleSelect, disabled, loading, error, success, size, unstyled, prefersReducedMotion, onFocus, onBlur],
+      [name, generatedId, required, selectedValue, handleSelect, disabled, loading, error, success, size, unstyled, prefersReducedMotion, onFocus, onBlur],
     );
 
     return (
@@ -186,6 +207,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           data-reduce-motion={prefersReducedMotion || undefined}
           data-loading={loading || undefined}
           data-valid={(!error && success) || undefined}
+          onKeyDown={handleKeyDown}
           {...rest}
         >
           {label && (

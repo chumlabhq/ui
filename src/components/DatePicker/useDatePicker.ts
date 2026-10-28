@@ -23,6 +23,7 @@ import {
 } from "./utils.js";
 import { startOfWeek, endOfWeek } from "date-fns";
 import { useControllableState } from "../../utils/useControllableState.js";
+import { isRtl } from "../../utils/isBrowser.js";
 
 export function useDatePicker(props: UseDatePickerProps) {
   const {
@@ -450,12 +451,12 @@ export function useDatePicker(props: UseDatePickerProps) {
 
       switch (event.key) {
         case "ArrowLeft":
-          target = addDays(date, -1);
-          direction = -1;
+        case "ArrowRight": {
+          const forward = (event.key === "ArrowRight") !== isRtl(event.currentTarget);
+          target = addDays(date, forward ? 1 : -1);
+          direction = forward ? 1 : -1;
           break;
-        case "ArrowRight":
-          target = addDays(date, 1);
-          break;
+        }
         case "ArrowUp":
           target = addDays(date, -7);
           direction = -1;

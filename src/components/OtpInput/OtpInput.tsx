@@ -365,6 +365,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         )}
         <div
           className={cn(mergedClasses.control) || undefined}
+          dir="ltr"
           onPaste={handlePaste}
           role="group"
           aria-label={ariaLabel ?? "One-time password input"}

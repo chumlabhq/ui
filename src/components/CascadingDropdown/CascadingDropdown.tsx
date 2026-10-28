@@ -530,6 +530,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
       searchMenu,
       searchSubmenu,
       searchDebounce,
+      submenuSide,
     });
 
     const activeItemId =

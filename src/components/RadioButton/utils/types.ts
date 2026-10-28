@@ -83,7 +83,7 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "d
   label?: ReactNode;
   /** Helper text for the group. */
   description?: ReactNode;
-  /** Field name for form submission. */
+  /** Field name for form submission. Defaults to a generated name; pass one if the group is submitted in a form. */
   name?: string;
   /** Required field indicator. */
   required?: boolean;

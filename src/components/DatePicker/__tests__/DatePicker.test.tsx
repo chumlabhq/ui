@@ -983,6 +983,30 @@ describe("DatePicker", () => {
       }
     });
 
+    it("moves to the visually adjacent day in a right-to-left page: ArrowLeft is the next day", async () => {
+      const user = userEvent.setup({
+        advanceTimers: vi.advanceTimersByTime,
+      });
+      document.documentElement.dir = "rtl";
+      try {
+        render(<DatePicker defaultValue={new Date(2026, 0, 14)} />);
+        await openCalendar(user);
+        const day = (n: string) =>
+          screen.getAllByRole("gridcell").find((cell) => cell.textContent?.trim() === n && !cell.getAttribute("data-outside"))!;
+        act(() => {
+          day("14").focus();
+        });
+        await user.keyboard("{ArrowLeft}");
+        await flushPositionFrames();
+        expect(day("15")).toHaveFocus();
+        await user.keyboard("{ArrowRight}{ArrowRight}");
+        await flushPositionFrames();
+        expect(day("13")).toHaveFocus();
+      } finally {
+        document.documentElement.dir = "";
+      }
+    });
+
     it("selects focused date with Enter key in calendar", async () => {
       const user = userEvent.setup({
         advanceTimers: vi.advanceTimersByTime,

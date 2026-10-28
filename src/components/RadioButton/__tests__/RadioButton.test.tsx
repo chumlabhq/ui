@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RadioGroup, RadioButton } from "../index.js";
 
@@ -305,6 +305,70 @@ describe("RadioButton", () => {
         radios[0] === document.activeElement ||
           radios[1] === document.activeElement
       ).toBe(true);
+    });
+  });
+
+  describe("name and arrow keys", () => {
+    const fruit = (props: Partial<React.ComponentProps<typeof RadioGroup>> = {}) => (
+      <RadioGroup aria-label="Fruit" {...props}>
+        <RadioButton value="a" label="Apple" />
+        <RadioButton value="b" label="Banana" />
+        <RadioButton value="c" label="Cherry" disabled />
+        <RadioButton value="d" label="Date" />
+      </RadioGroup>
+    );
+
+    it("gives a group without a name one of its own, shared by its radios and by no other group", () => {
+      render(<>{fruit()}{fruit({ "aria-label": "More fruit" })}</>);
+      const names = screen.getAllByRole("radiogroup").map((g) => within(g).getAllByRole("radio").map((r) => r.getAttribute("name")));
+      expect(names[0][0]).toBeTruthy();
+      expect(new Set(names[0]).size).toBe(1);
+      expect(new Set(names[1]).size).toBe(1);
+      expect(names[0][0]).not.toBe(names[1][0]);
+    });
+
+    it("keeps a name that is passed", () => {
+      render(fruit({ name: "fruit" }));
+      expect(screen.getAllByRole("radio").map((r) => r.getAttribute("name"))).toEqual(["fruit", "fruit", "fruit", "fruit"]);
+    });
+
+    it("moves to the next enabled radio, wraps at the ends and selects what it reaches", () => {
+      const onValueChange = vi.fn();
+      render(fruit({ onValueChange }));
+      const [apple, banana, , date] = screen.getAllByRole("radio");
+      fireEvent.keyDown(banana, { key: "ArrowDown" });
+      expect(date).toHaveFocus();
+      expect(onValueChange).toHaveBeenLastCalledWith("d");
+      fireEvent.keyDown(date, { key: "ArrowRight" });
+      expect(apple).toHaveFocus();
+      fireEvent.keyDown(apple, { key: "ArrowUp" });
+      expect(date).toHaveFocus();
+      fireEvent.keyDown(date, { key: "ArrowLeft" });
+      expect(banana).toHaveFocus();
+      expect(onValueChange).toHaveBeenLastCalledWith("b");
+    });
+
+    it("mirrors ArrowLeft and ArrowRight in a right-to-left page, and not ArrowUp and ArrowDown", () => {
+      render(<div dir="rtl">{fruit()}</div>);
+      const [apple, banana] = screen.getAllByRole("radio");
+      fireEvent.keyDown(apple, { key: "ArrowLeft" });
+      expect(banana).toHaveFocus();
+      fireEvent.keyDown(banana, { key: "ArrowRight" });
+      expect(apple).toHaveFocus();
+      fireEvent.keyDown(apple, { key: "ArrowDown" });
+      expect(banana).toHaveFocus();
+    });
+
+    it("leaves a key the consumer prevented, and a modified arrow, to whoever handles them", () => {
+      const onValueChange = vi.fn();
+      render(fruit({ onValueChange, onKeyDown: (e) => e.key === "ArrowDown" && e.preventDefault() }));
+      const [apple] = screen.getAllByRole("radio");
+      apple.focus();
+      fireEvent.keyDown(apple, { key: "ArrowDown" });
+      fireEvent.keyDown(apple, { key: "ArrowRight", shiftKey: true });
+      fireEvent.keyDown(apple, { key: "ArrowRight", ctrlKey: true });
+      expect(apple).toHaveFocus();
+      expect(onValueChange).not.toHaveBeenCalled();
     });
   });
 

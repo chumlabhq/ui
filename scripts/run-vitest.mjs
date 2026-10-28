@@ -49,7 +49,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  * right-to-left placement in the shared positioner, Tooltip's align and
  * Table's filter panel, which also follows its trigger on a resize.
  */
-const SUITE_FLOOR = { tests: 5558 };
+const SUITE_FLOOR = { tests: 5571 };
 
 const args = process.argv.slice(2).filter((a) => a !== "--self-check");
 const selfCheck = process.argv.includes("--self-check");

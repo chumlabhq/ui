@@ -1515,7 +1515,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 160.90,
-    commit: "this slice",
+    commit: "844a6946",
     date: "2026-10-27",
     attribution: "attributed",
     reason:
@@ -1549,6 +1549,37 @@ const LIBRARY_TOTAL_HISTORY = [
       "fall under it. The rest, -3 to +3 B on 43 files, is the chunks' new " +
       "hashed names in import strings. Table's declared breach moved with it " +
       "(below). No comments added to src/components or src/utils.",
+  },
+  {
+    kb: 161.22,
+    commit: "this slice",
+    date: "2026-10-28",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.32 KB (164,765 -> 165,085 B gzipped, +320 B on a build of " +
+      "844a6946), 83 files held. A2c, arrow keys follow the inline direction. " +
+      "RadioButton 3.40 → 3.70 KB: cross-engine radio arrows (mirror in RTL, " +
+      "wrap, select), 264 B; generated name; over the 0.10 tripwire, approved " +
+      "by Aditya 2026-10-28 after measuring 312/264/258/270 B variants " +
+      "(exclusive 3,486 -> 3,789 B, +303 B; its chunk +301 B, of which the key " +
+      "handler is 264 B measured by removing it from the built chunk, and the " +
+      "rest the generated name, the consumer onKeyDown passthrough and the " +
+      "isRtl import). CascadingDropdown +39 B exclusive (9,772 -> 9,811, its " +
+      "chunk +37 B): the arrow pointing at the submenu's side opens it and the " +
+      "other closes it, read through physicalSide from the submenuSide option " +
+      "the hook now takes. DatePicker +31 B exclusive (12,916 -> 12,947, its " +
+      "chunk +30 B): ArrowLeft and ArrowRight in the calendar grid read the " +
+      "grid's direction through isRtl. Table +26 B exclusive (16,659 -> " +
+      "16,685, its chunk +22 B): ArrowLeft and ArrowRight in the grid read the " +
+      "grid's direction through isRtl; the column resize handle is unchanged. " +
+      "OtpInput +17 B exclusive (3,327 -> 3,344, its chunk +17 B): the box row " +
+      "carries dir=\"ltr\" and w-fit, so a code reads left to right in a " +
+      "right-to-left page and stays at the start of the line. The rest, -1 to " +
+      "+2 B on three entry files, is the chunks' new hashed names in import " +
+      "strings. The per-file rises sum to 409 B; one gzip stream over all 83 " +
+      "files shares their repeated text, hence +320 B. Table's and " +
+      "DatePicker's declared breaches moved with them (below). No comments " +
+      "added to src/components or src/utils.",
   },
 ];
 
@@ -1603,8 +1634,12 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.27,
-      why: "2026-10-27, A2b: 16.42 -> 16.27 (exclusive 16,815 -> 16,659 B gzipped, -156 B), " +
+      kb: 16.29,
+      why: "2026-10-28, A2c: 16.27 -> 16.29 (exclusive 16,659 -> 16,685 B gzipped, +26 B; own " +
+        "chunk +22 B), measured on a build of 844a6946: ArrowLeft and ArrowRight in the grid " +
+        "read the grid's direction through isRtl, so in a right-to-left page each moves to the " +
+        "cell it points at; the column resize handle is unchanged. " +
+        "2026-10-27, A2b: 16.42 -> 16.27 (exclusive 16,815 -> 16,659 B gzipped, -156 B), " +
         "measured on a build of e0a478eb: the column filter's placement moved out of Table's " +
         "click handler into FilterPanel, its own chunk, which places the panel from its trigger " +
         "on open and on every resize, from the trigger's inline-start edge in either direction. " +
@@ -1709,7 +1744,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.62,
+      kb: 12.64,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1774,7 +1809,13 @@ const DECLARED_BREACHES = new Map([
         "column 24 px (the inline `2rem` column became `auto` and the width " +
         "moved to the `weekNumber` class, which can carry a breakpoint), the " +
         "header's nav buttons p-1 and month and year buttons px-1, and the " +
-        "panel p-1.5.",
+        "panel p-1.5.\n\n" +
+        "12.62 -> 12.64 on 2026-10-28, A2c (exclusive 12,916 -> 12,947 B " +
+        "gzipped, +31 B; own chunk +30 B, entry -1 B; measured on a build of " +
+        "844a6946, where it sat 2 B under the A1b figure inside " +
+        "DECLARED_SLACK_KB): ArrowLeft and ArrowRight in the calendar grid read " +
+        "the grid's direction through isRtl, so in a right-to-left page each " +
+        "moves to the day it points at.",
     },
   ],
   [

@@ -46,6 +46,22 @@ const walk = (dir: string): string[] =>
 
 const DIRECTION_LITERAL = /^(rtl|ltr)$/i;
 
+/**
+ * Written directions that are a decision, not a default. Each is matched by
+ * file and finding without its line number, must still be found, and says
+ * why. Decision D3 (A2c): a digit row reads left to right in Arabic and
+ * Hebrew interfaces too, so OtpInput's boxes keep that order in a
+ * right-to-left page and their arrow keys follow the row they paint. The
+ * phone input's number field needs no entry: every engine already lays out
+ * type="tel" left to right, which rtl-keys pins.
+ */
+const DECIDED: Array<{ file: string; finding: string; reason: string }> = [
+  { file: "components/OtpInput/OtpInput.tsx", finding: 'renders a hard-coded dir="ltr"', reason: "D3: the code's boxes are one digit row, entered and read left to right in every script." },
+];
+
+const decided = (finding: string) =>
+  DECIDED.find((d) => finding.startsWith(`${d.file}:`) && finding.replace(/^[^ ]+ /, "") === d.finding);
+
 export function directionReads(file: string, source: string): string[] {
   const sf = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, file.endsWith("x") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
   const found: string[] = [];
@@ -97,11 +113,19 @@ describe("direction-reads contract", () => {
     .filter(({ rel }) => !NOT_SHIPPED.test(rel) && !HELPER.test(rel));
 
   it("reads direction only through readDirection/isRtl and writes none by default", () => {
-    const findings = files.flatMap(({ path, rel }) => directionReads(rel, readFileSync(path, "utf8")));
-    console.log(`DIRECTION_READS files ${files.length} (floor ${FLOOR}), findings ${findings.length}`);
+    const all = files.flatMap(({ path, rel }) => directionReads(rel, readFileSync(path, "utf8")));
+    const findings = all.filter((f) => !decided(f));
+    console.log(`DIRECTION_READS files ${files.length} (floor ${FLOOR}), findings ${findings.length}, decided ${all.length - findings.length} of ${DECIDED.length}`);
     for (const f of findings) console.log(`  DIRECTION_READ ${f}`);
     expect(files.length, "the walk read fewer files than when this was written").toBeGreaterThanOrEqual(FLOOR);
     expect(findings).toEqual([]);
+  });
+
+  it("lists no decided direction the source no longer writes, and each says why", () => {
+    const all = files.flatMap(({ path, rel }) => directionReads(rel, readFileSync(path, "utf8")));
+    const stale = DECIDED.filter((d) => all.filter((f) => decided(f) === d).length !== 1).map((d) => `${d.file} ${d.finding}`);
+    expect(stale, "a decided direction that is gone, or written more than once").toEqual([]);
+    expect(DECIDED.filter((d) => d.reason.length < 20)).toEqual([]);
   });
 
   it("finds each kind of read when one is planted", () => {

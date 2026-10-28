@@ -145,3 +145,18 @@ export async function gotoFixture(
     `"${path}" resolved but rendered no fixture`,
   ).toBeAttached({ timeout: 10000 });
 }
+
+/** Serves every fixture document as `<html dir="rtl">`; everything else falls through to the harness's routes. */
+export async function servedRtl(page: Page): Promise<void> {
+  await page.route(/\/__fixtures(\/|$)/, async (route) => {
+    if (route.request().resourceType() !== "document") return route.fallback();
+    const response = await route.fetch();
+    const body = (await response.text()).replace(/<html([^>]*)>/, '<html$1 dir="rtl">');
+    await route.fulfill({ response, body });
+  });
+  await page.addInitScript(() => {
+    const style = document.createElement("style");
+    style.textContent = "*, *::before, *::after { animation: none !important; transition: none !important; }";
+    document.documentElement.appendChild(style);
+  });
+}

@@ -45,7 +45,7 @@
         },
         "name": {
           "type": "string",
-          "description": "Field name for form submission."
+          "description": "Field name for form submission. Defaults to a generated name; pass one if the group is submitted in a form."
         },
         "required": {
           "type": "boolean",
@@ -283,7 +283,7 @@
         },
         "name": {
           "type": "string | undefined",
-          "description": "Field name for form submission."
+          "description": "Field name for form submission. Defaults to a generated name; pass one if the group is submitted in a form."
         },
         "required": {
           "type": "boolean | undefined",

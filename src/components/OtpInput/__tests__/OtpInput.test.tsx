@@ -324,6 +324,20 @@ describe("OtpInput", () => {
       expect(inputs[1]).toHaveFocus();
     });
 
+    it("keeps a left-to-right digit row in a right-to-left page, so ArrowLeft is still the previous box", async () => {
+      const user = userEvent.setup();
+
+      render(<div dir="rtl"><OtpInput value="123" onValueChange={() => {}} autoFocusFirst={false} /></div>);
+
+      expect(screen.getByRole("group")).toHaveAttribute("dir", "ltr");
+      const inputs = screen.getAllByRole("textbox");
+      await user.click(inputs[2]);
+      await user.keyboard("{ArrowLeft}");
+      expect(inputs[1]).toHaveFocus();
+      await user.keyboard("{ArrowRight}{ArrowRight}");
+      expect(inputs[3]).toHaveFocus();
+    });
+
     it("moves focus right on ArrowRight", async () => {
       const user = userEvent.setup();
 

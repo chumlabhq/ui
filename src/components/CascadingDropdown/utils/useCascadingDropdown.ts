@@ -7,6 +7,7 @@ import type {
   UseCascadingDropdownReturn,
 } from "./types.js";
 import { useControllableState } from "../../../utils/useControllableState.js";
+import { physicalSide } from "./side.js";
 
 export const useCascadingDropdown = ({
   options,
@@ -25,6 +26,7 @@ export const useCascadingDropdown = ({
   searchMenu,
   searchSubmenu,
   searchDebounce = 300,
+  submenuSide = "end",
 }: UseCascadingDropdownProps): UseCascadingDropdownReturn => {
   const [internalValue, setInternalValue, resetValue] = useControllableState<CascadingValue>({
     value,
@@ -444,8 +446,11 @@ export const useCascadingDropdown = ({
     (event: React.KeyboardEvent) => {
       if (disabled) return;
 
+      const side = physicalSide(submenuSide, event.currentTarget);
+      const toward = side === "left" ? "ArrowLeft" : "ArrowRight";
+
       switch (event.key) {
-        case "ArrowRight": {
+        case toward: {
           event.preventDefault();
           if (!isOpen || focusedIndex < 0) return;
           const option = filteredOptions[focusedIndex];
@@ -453,6 +458,7 @@ export const useCascadingDropdown = ({
           return;
         }
         case "ArrowLeft":
+        case "ArrowRight":
           event.preventDefault();
           if (isInSubmenu) {
             setSubmenuFocusedIndex(-1);
@@ -480,6 +486,7 @@ export const useCascadingDropdown = ({
     },
     [
       disabled,
+      submenuSide,
       isOpen,
       isInSubmenu,
       focusedIndex,

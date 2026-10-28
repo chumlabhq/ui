@@ -11,7 +11,7 @@ import {
   isValidElement,
 } from "react";
 import { createPortal } from "react-dom";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl } from "../../utils/isBrowser.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { useLazyComponent } from "../../utils/useLazyComponent.js";
 import { cn } from "../../utils/scopedCn.js";
@@ -989,18 +989,15 @@ function TableInner<TData>(
       const totalCols = table.getAllLeafColumns().length;
 
       switch (event.key) {
-        case "ArrowRight":
-          event.preventDefault();
-          if (colIndex < totalCols - 1) {
-            setFocusedCell({ row: rowIndex, col: colIndex + 1 });
-          }
-          break;
         case "ArrowLeft":
+        case "ArrowRight": {
           event.preventDefault();
-          if (colIndex > 0) {
-            setFocusedCell({ row: rowIndex, col: colIndex - 1 });
+          const col = colIndex + ((event.key === "ArrowRight") !== isRtl(event.currentTarget) ? 1 : -1);
+          if (col >= 0 && col < totalCols) {
+            setFocusedCell({ row: rowIndex, col });
           }
           break;
+        }
         case "ArrowDown":
           event.preventDefault();
           if (rowIndex < totalRows - 1) {

@@ -291,6 +291,16 @@ const OPEN_WIDTHS = [320, 1024];
  * (Table's filter, Tooltip with `align="start"`). Each sits against its
  * trigger's right edge, or, for Table's filter, mirrors LTR's own placement.
  *
+ * Then OtpInput, the one paint A2c changed: decision D3 keeps its digit row
+ * left to right in a right-to-left page, at the start of the line, under a
+ * label that sits at the right. Plant margin measured on the way in:
+ * removing the row's `dir="ltr"` puts the two digits in each other's boxes,
+ * 132 pixels different at both widths (light, the first theme compared)
+ * against the budget of 1. The phone input's number field needs no
+ * subject of its own: chromium, firefox and webkit already computed a
+ * `type="tel"` field's direction as ltr in a right-to-left page (A2c's step
+ * 0), and `country-open-rtl` above, which includes the field, holds it.
+ *
  * Each is an `-rtl` fixture, which sets `dir="rtl"` on the document the way a
  * consumer's page does. Two widths, as for the open surfaces: mirroring does
  * not depend on reflow, and 320 and 1024 are the narrowest and the first
@@ -311,6 +321,7 @@ const RTL_SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Breadcrumb", fixture: "collapsed-open-rtl" },
   { component: "Table", fixture: "filter-open-rtl" },
   { component: "Tooltip", fixture: "align-start-rtl" },
+  { component: "OtpInput", fixture: "with-value-rtl" },
 ];
 
 const RTL_WIDTHS = OPEN_WIDTHS;
