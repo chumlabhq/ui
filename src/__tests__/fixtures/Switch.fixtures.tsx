@@ -1,5 +1,6 @@
 import { Switch } from "../../components/Switch/index.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
 import { motionOverrides } from "./_motion.js";
 
 const fixtures: Fixtures<typeof Switch> = [
@@ -28,6 +29,12 @@ const fixtures: Fixtures<typeof Switch> = [
       renderDescription: ({ switchId }) => <em>{`for ${switchId}`}</em>,
     },
     note: "Both render props replace library markup with the consumer's own.",
+  },
+  {
+    name: "checked-rtl",
+    props: { label: "Notify", defaultChecked: true },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "The checked thumb travels to the inline end, the left; the A2 audit measured it painted past the track's right edge.",
   },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

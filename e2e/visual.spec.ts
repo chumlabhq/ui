@@ -301,6 +301,15 @@ const OPEN_WIDTHS = [320, 1024];
  * `type="tel"` field's direction as ltr in a right-to-left page (A2c's step
  * 0), and `country-open-rtl` above, which includes the field, holds it.
  *
+ * Then A2d's: the paints that place a value or point along the inline axis.
+ * Slider's thumb and fill from the right, a checked Switch's thumb at the left
+ * of its track (it painted past the track's right edge before), Table's resize
+ * handles on each column's left edge and a collapsed row's expand icon
+ * pointing left, Pagination's previous and next chevrons and
+ * CascadingDropdown's submenu chevron mirrored. DatePicker's month and year
+ * arrows and Breadcrumb's separators mirror inside `open-rtl` and
+ * `collapsed-open-rtl` above, whose baselines A2d rewrote.
+ *
  * Each is an `-rtl` fixture, which sets `dir="rtl"` on the document the way a
  * consumer's page does. Two widths, as for the open surfaces: mirroring does
  * not depend on reflow, and 320 and 1024 are the narrowest and the first
@@ -322,6 +331,12 @@ const RTL_SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Table", fixture: "filter-open-rtl" },
   { component: "Tooltip", fixture: "align-start-rtl" },
   { component: "OtpInput", fixture: "with-value-rtl" },
+  { component: "Slider", fixture: "rtl" },
+  { component: "Switch", fixture: "checked-rtl" },
+  { component: "Table", fixture: "resizable-rtl" },
+  { component: "Table", fixture: "expandable-rtl" },
+  { component: "Pagination", fixture: "default-rtl" },
+  { component: "CascadingDropdown", fixture: "open-submenu-rtl" },
 ];
 
 const RTL_WIDTHS = OPEN_WIDTHS;

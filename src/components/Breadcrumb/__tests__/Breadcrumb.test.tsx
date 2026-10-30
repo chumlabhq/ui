@@ -80,6 +80,13 @@ describe("Breadcrumb", () => {
   });
 
   describe("Separator", () => {
+    it("marks its default chevron separators to mirror in a right-to-left page", () => {
+      const { container } = render(<Breadcrumb items={items} />);
+      const chevrons = container.querySelectorAll('li[role="presentation"] svg');
+      expect(chevrons.length).toBe(2);
+      for (const svg of chevrons) expect(svg).toHaveClass("rtl:-scale-x-100");
+    });
+
     it("renders separators between items", () => {
       const { container } = render(<Breadcrumb items={items} />);
 

@@ -888,6 +888,54 @@ describe("Table", () => {
     });
   });
 
+  /**
+   * A column's resize handle sits on its inline-end edge, and in a
+   * right-to-left table that edge is on the left: the A2 audit measured the
+   * handle on the cell's right (its start) and both the arrows and a drag
+   * moving the width the physical way, so the edge that moved went the
+   * opposite way to the pointer and the key.
+   */
+  describe("Column resize in a right-to-left table", () => {
+    const handleOf = (container: HTMLElement) => container.querySelector("[data-resize-handle]") as HTMLElement;
+
+    it("widens the column on ArrowLeft, which moves its inline-end edge left", () => {
+      const { container } = render(<div dir="rtl"><Table columns={columns} data={data} resizable /></div>);
+      const handle = handleOf(container);
+      const start = Number(handle.getAttribute("aria-valuenow"));
+      fireEvent.keyDown(handle, { key: "ArrowLeft" });
+      expect(Number(handle.getAttribute("aria-valuenow"))).toBe(start + 8);
+      fireEvent.keyDown(handle, { key: "ArrowRight" });
+      fireEvent.keyDown(handle, { key: "ArrowRight" });
+      expect(Number(handle.getAttribute("aria-valuenow"))).toBe(start - 8);
+    });
+
+    it("widens the column when its handle is dragged left", () => {
+      const { container } = render(<div dir="rtl"><Table columns={columns} data={data} resizable /></div>);
+      const handle = handleOf(container);
+      const start = Number(handle.getAttribute("aria-valuenow"));
+      fireEvent.mouseDown(handle, { clientX: 100 });
+      fireEvent.mouseMove(document, { clientX: 70 });
+      fireEvent.mouseUp(document, { clientX: 70 });
+      expect(Number(handle.getAttribute("aria-valuenow"))).toBe(start + 30);
+    });
+
+    it("draws the handle on the inline-end edge and the header's room for it on the same side", () => {
+      const { container } = render(<Table columns={columns} data={data} resizable />);
+      const handle = handleOf(container);
+      expect(handle).toHaveClass("end-0");
+      expect(handle).not.toHaveClass("right-0");
+      expect(handle.previousElementSibling).toHaveClass("pe-3");
+    });
+
+    it("mirrors the expand icon, which points along the inline axis", () => {
+      const { container } = render(
+        <Table columns={columns} data={data} expandable getRowId={(r) => r.id} renderExpandedRow={() => null} />,
+      );
+      const icon = container.querySelector("button[aria-label='Expand row'] svg");
+      expect(icon).toHaveClass("rtl:-scale-x-100");
+    });
+  });
+
   describe("Caption", () => {
     it("renders a visually hidden caption when provided", () => {
       const { container } = render(

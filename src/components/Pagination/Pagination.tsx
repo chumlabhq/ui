@@ -17,7 +17,7 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icon
 import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -36,7 +36,7 @@ function renderIcon(
   defaultClassName: string,
 ) {
   if (icon != null && icon !== false) return icon;
-  return <DefaultIcon className={iconClassName || defaultClassName} />;
+  return <DefaultIcon className={cn(MIRROR_IN_RTL, iconClassName || defaultClassName)} />;
 }
 
 const RowSelectorPortal = memo(function RowSelectorPortal({

@@ -57,7 +57,7 @@ import { useHydrated } from "../../utils/useHydrated.js";
 import { useLazyComponent } from "../../utils/useLazyComponent.js";
 import type { PresetsPanelProps } from "./PresetsPanel.js";
 import type { MarkerTooltipProps } from "./MarkerTooltip.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { createPortal } from "react-dom";
@@ -1003,7 +1003,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                               className={mergedClasses.navTrigger}
                             >
                               {prevYearIcon || (
-                                <DoubleChevronLeftIcon className="w-4 h-4" />
+                                <DoubleChevronLeftIcon className={cn(MIRROR_IN_RTL, "w-4 h-4")} />
                               )}
                             </button>
                             <button
@@ -1013,7 +1013,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                               className={mergedClasses.navTrigger}
                             >
                               {prevMonthIcon || (
-                                <ChevronLeftIcon className="w-4 h-4" />
+                                <ChevronLeftIcon className={cn(MIRROR_IN_RTL, "w-4 h-4")} />
                               )}
                             </button>
                           </>
@@ -1051,7 +1051,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                               className={mergedClasses.navTrigger}
                             >
                               {nextMonthIcon || (
-                                <ChevronRightIcon className="w-4 h-4" />
+                                <ChevronRightIcon className={cn(MIRROR_IN_RTL, "w-4 h-4")} />
                               )}
                             </button>
                             <button
@@ -1061,7 +1061,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                               className={mergedClasses.navTrigger}
                             >
                               {nextYearIcon || (
-                                <DoubleChevronRightIcon className="w-4 h-4" />
+                                <DoubleChevronRightIcon className={cn(MIRROR_IN_RTL, "w-4 h-4")} />
                               )}
                             </button>
                           </>

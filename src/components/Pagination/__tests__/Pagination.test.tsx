@@ -63,6 +63,12 @@ describe("Pagination", () => {
   });
 
   describe("Rendering", () => {
+    it("marks its previous and next chevrons to mirror in a right-to-left page", () => {
+      render(<Pagination value={2} totalPages={5} onValueChange={() => {}} />);
+      expect(screen.getByLabelText("Previous page").querySelector("svg")).toHaveClass("rtl:-scale-x-100");
+      expect(screen.getByLabelText("Next page").querySelector("svg")).toHaveClass("rtl:-scale-x-100");
+    });
+
     it("renders as a nav element with aria-label", () => {
       render(
         <Pagination value={1} totalPages={5} onValueChange={() => {}} />

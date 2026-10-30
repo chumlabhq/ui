@@ -11,6 +11,10 @@ export const readDirection = (node?: Element | null): Direction => {
 
 export const isRtl = (node?: Element | null): boolean => readDirection(node) === "rtl";
 
+export const MIRROR_IN_RTL = "rtl:-scale-x-100";
+
+export const MIRROR_IN_LTR = "-scale-x-100 rtl:scale-x-100";
+
 export type PhysicalSide = "top" | "right" | "bottom" | "left";
 
 const SIDES: readonly PhysicalSide[] = ["top", "right", "bottom", "left"];

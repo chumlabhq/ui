@@ -436,6 +436,15 @@ describe("Switch Component", () => {
       const thumb = switchEl.querySelector("span");
       expect(thumb?.className).toContain("var(--switch-thumb-bg");
     });
+
+    // The A2 audit measured a checked thumb in RTL painted 18px past the
+    // track's right edge: it starts at the inline start, which is the right,
+    // and the travel moved it further right.
+    it("moves the checked thumb toward the inline end, which is the left in RTL", () => {
+      render(<Switch checked={true} aria-label="Toggle" />);
+      const thumb = screen.getByRole("switch").querySelector("span");
+      expect(thumb?.className).toContain("rtl:data-[state=checked]:-translate-x-[1.125rem]");
+    });
   });
 
   describe("Form Integration", () => {

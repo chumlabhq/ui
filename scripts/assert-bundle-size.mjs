@@ -1552,7 +1552,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 161.22,
-    commit: "this slice",
+    commit: "7fa7310c",
     date: "2026-10-28",
     attribution: "attributed",
     reason:
@@ -1578,6 +1578,40 @@ const LIBRARY_TOTAL_HISTORY = [
       "+2 B on three entry files, is the chunks' new hashed names in import " +
       "strings. The per-file rises sum to 409 B; one gzip stream over all 83 " +
       "files shares their repeated text, hence +320 B. Table's and " +
+      "DatePicker's declared breaches moved with them (below). No comments " +
+      "added to src/components or src/utils.",
+  },
+  {
+    kb: 161.58,
+    commit: "this slice",
+    date: "2026-10-31",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.36 KB (165,085 -> 165,461 B gzipped, +376 B on a build of " +
+      "7fa7310c), 83 files held, no chunk's module imports changed. A2d, " +
+      "position math and directional icons follow the inline direction. " +
+      "Slider +144 B, logical insets, direction sign, pointer from inline " +
+      "start, D4 keys; over the tripwire, approved by Aditya 2026-10-29 after " +
+      "measuring A/B/C (+144/+145/+151) (on this build its chunk 5,776 -> " +
+      "5,917 B, +141 B, exclusive 5,866 -> 6,004 B, +138 B; the 3 B against " +
+      "the approved figure are hashed names in import strings). Table +67 B " +
+      "exclusive (16,685 -> 16,752, its chunk +70 B): the column resize handle " +
+      "sits on the inline-end edge, its arrows read the header's direction " +
+      "through isRtl, a press passes the handle's direction to TanStack's " +
+      "columnResizeDirection, and the expand icon carries MIRROR_IN_RTL. " +
+      "CascadingDropdown +39 B exclusive (9,811 -> 9,850, its chunk +44 B): " +
+      "the submenu chevron carries MIRROR_IN_RTL, or MIRROR_IN_LTR when " +
+      "submenuSide is start, so it points to the side the submenu opens on. " +
+      "DatePicker +17 B exclusive (12,947 -> 12,964, its chunk +20 B): the " +
+      "month and year arrows carry MIRROR_IN_RTL. Breadcrumb +15 B (its " +
+      "chunk +15 B): the default separator carries MIRROR_IN_RTL. Switch +6 B " +
+      "(its chunk +7 B): the checked thumb travels with an rtl: class. " +
+      "Pagination +3 B (its chunk +6 B): the default previous and next " +
+      "chevrons carry MIRROR_IN_RTL. Shared, useReducedMotion +36 B: " +
+      "MIRROR_IN_RTL and MIRROR_IN_LTR live once in utils/isBrowser.ts beside " +
+      "isRtl, in the chunk every entry already loads, and the chunks above " +
+      "import one or two more bindings from it. The rest, -5 to +3 B on 37 " +
+      "files, is the chunks' new hashed names in import strings. Table's and " +
       "DatePicker's declared breaches moved with them (below). No comments " +
       "added to src/components or src/utils.",
   },
@@ -1634,8 +1668,13 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.29,
-      why: "2026-10-28, A2c: 16.27 -> 16.29 (exclusive 16,659 -> 16,685 B gzipped, +26 B; own " +
+      kb: 16.36,
+      why: "2026-10-31, A2d: 16.29 -> 16.36 (exclusive 16,685 -> 16,752 B gzipped, +67 B; own " +
+        "chunk +70 B), measured on a build of 7fa7310c: the column resize handle sits on the " +
+        "inline-end edge, its arrows read the header's direction through isRtl, a press passes " +
+        "the handle's direction to TanStack's columnResizeDirection so a drag moves the edge the " +
+        "pointer moves, and the expand icon mirrors in a right-to-left page. " +
+        "2026-10-28, A2c: 16.27 -> 16.29 (exclusive 16,659 -> 16,685 B gzipped, +26 B; own " +
         "chunk +22 B), measured on a build of 844a6946: ArrowLeft and ArrowRight in the grid " +
         "read the grid's direction through isRtl, so in a right-to-left page each moves to the " +
         "cell it points at; the column resize handle is unchanged. " +
@@ -1744,7 +1783,7 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.64,
+      kb: 12.66,
       why: "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
@@ -1815,7 +1854,11 @@ const DECLARED_BREACHES = new Map([
         "844a6946, where it sat 2 B under the A1b figure inside " +
         "DECLARED_SLACK_KB): ArrowLeft and ArrowRight in the calendar grid read " +
         "the grid's direction through isRtl, so in a right-to-left page each " +
-        "moves to the day it points at.",
+        "moves to the day it points at.\n\n" +
+        "12.64 -> 12.66 on 2026-10-31, A2d (exclusive 12,947 -> 12,964 B " +
+        "gzipped, +17 B; own chunk +20 B; measured on a build of 7fa7310c): " +
+        "the previous and next month and year arrows carry MIRROR_IN_RTL, so " +
+        "they point the way the page reads.",
     },
   ],
   [

@@ -178,6 +178,19 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     act: openSubmenu,
   },
   {
+    name: "open-submenu-start",
+    props: {
+      options: NESTED,
+      defaultOpen: true,
+      keepMounted: true,
+      showSubmenuSearch: true,
+      submenuSide: "start",
+    },
+    wrap: (node) => <div style={{ width: 260, margin: "0 auto" }}>{node}</div>,
+    note: "Centred, so the inline start has room in either direction and the submenu opens where its chevron points.",
+    act: openSubmenu,
+  },
+  {
     name: "open-submenu-near-left",
     props: { options: NESTED, defaultOpen: true, keepMounted: true, showSubmenuSearch: true },
     wrap: (node) => <div style={{ width: 260, marginRight: "auto" }}>{node}</div>,

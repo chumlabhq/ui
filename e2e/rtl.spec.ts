@@ -9,8 +9,9 @@ import { gotoFixture } from "./_nav";
  * edge — its left in LTR, its right in RTL — and a submenu that flips on the
  * cross axis prefers the leading side. Until A2b every positioner placed from
  * the trigger's physical left (the A2 audit, cause C1 and C2), and these tests
- * were skipped with that measurement in their reason; they now hold it. The
- * one remaining skip is Slider's, whose position math is A2d's.
+ * were skipped with that measurement in their reason; they now hold it.
+ * Slider's skip went with A2d, which placed its thumb and fill from the inline
+ * start.
  *
  * Each subject says which alignment it expects, rather than the test deciding
  * from what it measured: a surface sized to its trigger lines up on both edges
@@ -217,13 +218,6 @@ test.describe("right-to-left", () => {
     });
     expect(seen, "no slider found").not.toBeNull();
     expect(seen!.direction).toBe("rtl");
-
-    test.skip(
-      true,
-      `RTL is not supported in 0.1.0 (ACCESSIBILITY.md). Measured: at value 25 the thumb sits ` +
-        `${seen!.fromLeading}% from the leading edge, i.e. the fill is measured from the ` +
-        `physical left in both directions.`,
-    );
 
     expect(
       Math.abs(seen!.fromLeading - 25),

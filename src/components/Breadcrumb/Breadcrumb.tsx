@@ -22,7 +22,7 @@ import BreadcrumbItemContent from "./components/BreadcrumbItemContent.js";
 import Tooltip from "../Tooltip/Tooltip.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -480,7 +480,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const renderSeparator = useCallback(
       (key: string) => (
         <li key={key} role="presentation" aria-hidden="true" className={mergedClasses.separator || undefined}>
-          {separator || <ChevronRightIcon {...iconSizeProps} />}
+          {separator || <ChevronRightIcon {...iconSizeProps} className={cn(MIRROR_IN_RTL, iconSizeProps.className)} />}
         </li>
       ),
       [separator, mergedClasses.separator, iconSizeProps],

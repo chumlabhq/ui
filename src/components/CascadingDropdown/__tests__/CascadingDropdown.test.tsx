@@ -149,6 +149,23 @@ describe("CascadingDropdown", () => {
       );
     });
 
+    it("marks the chevron of an item with a submenu to mirror in a right-to-left page", async () => {
+      const user = userEvent.setup();
+      render(<CascadingDropdown options={nestedOptions} />);
+      await user.click(screen.getByRole("button"));
+      const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']")!;
+      expect(fruitItem.querySelector("svg")).toHaveClass("rtl:-scale-x-100");
+    });
+
+    it("points the chevron toward the inline start when the submenu opens there", async () => {
+      const user = userEvent.setup();
+      render(<CascadingDropdown options={nestedOptions} submenuSide="start" />);
+      await user.click(screen.getByRole("button"));
+      const icon = screen.getByText("Fruits").closest("[role='menuitem']")!.querySelector("svg");
+      expect(icon).toHaveClass("-scale-x-100", "rtl:scale-x-100");
+      expect(icon).not.toHaveClass("rtl:-scale-x-100");
+    });
+
     it("shows submenu on hover of parent with children", async () => {
       const user = userEvent.setup();
       render(<CascadingDropdown options={nestedOptions} />);

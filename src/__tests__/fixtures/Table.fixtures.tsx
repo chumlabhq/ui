@@ -189,6 +189,18 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     act: openFilterPanel,
   },
   {
+    name: "resizable-rtl",
+    props: { data: ROWS, columns: COLUMNS, resizable: true },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "Each column's resize handle on its inline-end edge, the left, with the header's room for it on the same side.",
+  },
+  {
+    name: "expandable-rtl",
+    props: { data: ROWS, columns: COLUMNS, expandable: true, getRowId: GET_ID, expandedRowIds: ["1"], renderExpandedRow: () => <div>More</div> },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "A collapsed row's expand icon points to the inline end, the left; the expanded row's icon points down and does not mirror.",
+  },
+  {
     // A consumer's `CheckboxIcon` beside the default checkbox, both
     // uncontrolled. `default-state` tabs to each, presses Space and Enter,
     // clicks the icon, and holds the custom one to what the default did.

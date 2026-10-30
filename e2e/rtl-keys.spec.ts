@@ -46,14 +46,31 @@ import { settle } from "./_surfaces";
  *   checked. The two unnamed fixtures carry a disabled third radio, which the
  *   arrows skip.
  *
+ * - Slider, `tooltip-always` (40): ArrowRight, ArrowLeft, Home, End. The value
+ *   moves as D4 decided (ArrowLeft increases in RTL, as native range inputs do
+ *   in chromium and firefox) and the thumb moves toward the arrow, or to the
+ *   inline start for Home and the inline end for End, measured on the track.
+ * - ResizablePanel, `default`: ArrowRight and ArrowLeft move the handle toward
+ *   the arrow by the size they change. In a right-to-left page it is measured
+ *   and then skipped while it is wrong: the default `resizeDirection="right"`
+ *   is physical by name, so the handle sits on the panel's outer edge and
+ *   cannot move. That is decision D2 (start/end values), A2d2's; once A2d2
+ *   puts the handle on the free edge the rows go green and the skip stops
+ *   applying.
+ * - TableResize, `resizable`, the first column's handle: ArrowRight, ArrowLeft,
+ *   Home, End. The handle moves toward the arrow, the column widens when it
+ *   moves toward the inline end, and Home and End move it to the narrowest and
+ *   widest.
+ *
  * Every page is 1024 px wide in every project, so the submenu has room on both
- * sides and Mobile Chrome and Mobile Safari press the same rows.
+ * sides and Mobile Chrome and Mobile Safari press the same rows. Motion is
+ * reduced, so a thumb is read where it lands rather than mid-transition.
  */
 
 type Dir = "ltr" | "rtl";
 type Row = { name: string; ok: boolean; detail: string };
 
-/** Rows per component and direction, from A2c's step 0 on 844a6946. A walk that presses fewer has lost rows. */
+/** Rows per component and direction, from A2c's step 0 on 844a6946 and A2d's on 7fa7310c. A walk that presses fewer has lost rows. */
 const FLOOR = {
   CascadingDropdown: 6,
   DatePicker: 4,
@@ -61,12 +78,16 @@ const FLOOR = {
   OtpInput: 4,
   InternationalPhoneInput: 3,
   RadioGroup: 12,
+  Slider: 4,
+  ResizablePanel: 2,
+  TableResize: 4,
 } as const;
 
 type Component = keyof typeof FLOOR;
 
 async function load(page: Page, dir: Dir, component: string, fixture: string): Promise<void> {
   await page.setViewportSize({ width: 1024, height: 800 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await gotoFixture(page, component, fixture);
   await settle(page, `${component}/${fixture}`);
   const painted = await page.evaluate(() => getComputedStyle(document.documentElement).direction);
@@ -313,6 +334,88 @@ async function radio(page: Page, dir: Dir): Promise<Row[]> {
   return rows;
 }
 
+/** The element's centre x, and the box it is read against. */
+const centreX = (page: Page, selector: string) =>
+  page.locator(selector).first().evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    return r.left + r.width / 2;
+  });
+const valueOf = async (page: Page, selector: string) => Number(await page.locator(selector).first().getAttribute("aria-valuenow"));
+const towards = (key: string) => (key === "ArrowRight" ? 1 : -1);
+
+async function slider(page: Page, dir: Dir): Promise<Row[]> {
+  const rows: Row[] = [];
+  const thumb = "[data-fixture] [role='slider']";
+  const want: Record<string, number> = dir === "ltr"
+    ? { ArrowRight: 41, ArrowLeft: 39, Home: 0, End: 100 }
+    : { ArrowRight: 39, ArrowLeft: 41, Home: 0, End: 100 };
+  for (const key of ["ArrowRight", "ArrowLeft", "Home", "End"]) {
+    await load(page, dir, "Slider", "tooltip-always");
+    const before = await centreX(page, thumb);
+    await page.locator(thumb).focus();
+    await page.keyboard.press(key);
+    const after = await centreX(page, thumb);
+    const value = await valueOf(page, thumb);
+    const track = await page.locator(thumb).evaluate((el) => {
+      const r = el.parentElement!.getBoundingClientRect();
+      return { left: r.left, right: r.right };
+    });
+    const startEdge = inlineStartIsLeft(dir) ? track.left : track.right;
+    const endEdge = inlineStartIsLeft(dir) ? track.right : track.left;
+    const painted = key.startsWith("Arrow")
+      ? Math.sign(after - before) === towards(key)
+      : Math.abs(after - (key === "Home" ? startEdge : endEdge)) <= 2;
+    rows.push({
+      name: `${key} from 40`,
+      ok: value === want[key] && painted,
+      detail: `value ${value} (want ${want[key]}), thumb ${Math.round(before)} -> ${Math.round(after)}` +
+        (key.startsWith("Arrow") ? `, want it moved ${towards(key) > 0 ? "right" : "left"}` : `, want ${key === "Home" ? "the inline start" : "the inline end"} at ${Math.round(key === "Home" ? startEdge : endEdge)}`),
+    });
+  }
+  return rows;
+}
+
+async function resizablePanel(page: Page, dir: Dir): Promise<Row[]> {
+  const rows: Row[] = [];
+  const handle = "[data-fixture] [role='separator']";
+  for (const key of ["ArrowRight", "ArrowLeft"]) {
+    await load(page, dir, "ResizablePanel", "default");
+    const [x0, v0] = [await centreX(page, handle), await valueOf(page, handle)];
+    await page.locator(handle).focus();
+    await page.keyboard.press(key);
+    const [x1, v1] = [await centreX(page, handle), await valueOf(page, handle)];
+    const moved = x1 - x0;
+    rows.push({
+      name: `${key} from ${v0}`,
+      ok: v1 !== v0 && Math.sign(moved) === towards(key) && Math.abs(Math.abs(moved) - Math.abs(v1 - v0)) <= 1,
+      detail: `size ${v0} -> ${v1}, handle moved ${Math.round(moved)}px, want ${Math.abs(v1 - v0)}px ${towards(key) > 0 ? "right" : "left"}`,
+    });
+  }
+  return rows;
+}
+
+async function tableResize(page: Page, dir: Dir): Promise<Row[]> {
+  const rows: Row[] = [];
+  const handle = "[data-fixture] [data-resize-handle]";
+  const end = inlineStartIsLeft(dir) ? 1 : -1;
+  for (const key of ["ArrowRight", "ArrowLeft", "Home", "End"]) {
+    await load(page, dir, "Table", "resizable");
+    const [x0, w0] = [await centreX(page, handle), await valueOf(page, handle)];
+    await page.locator(handle).first().focus();
+    await page.keyboard.press(key);
+    const [x1, w1] = [await centreX(page, handle), await valueOf(page, handle)];
+    const moved = Math.sign(x1 - x0);
+    const direction = key === "Home" ? -end : key === "End" ? end : towards(key);
+    const widened = Math.sign(w1 - w0) === direction * end;
+    rows.push({
+      name: `${key} on the first column's handle`,
+      ok: moved === direction && widened,
+      detail: `width ${w0} -> ${w1}, handle ${Math.round(x0)} -> ${Math.round(x1)}, want it moved ${direction > 0 ? "right" : "left"} and the column ${direction === end ? "wider" : "narrower"}`,
+    });
+  }
+  return rows;
+}
+
 const WALKS: Record<Component, (page: Page, dir: Dir) => Promise<Row[]>> = {
   CascadingDropdown: cascading,
   DatePicker: datePicker,
@@ -320,6 +423,9 @@ const WALKS: Record<Component, (page: Page, dir: Dir) => Promise<Row[]>> = {
   OtpInput: otp,
   InternationalPhoneInput: phone,
   RadioGroup: radio,
+  Slider: slider,
+  ResizablePanel: resizablePanel,
+  TableResize: tableResize,
 };
 
 for (const dir of ["ltr", "rtl"] as const) {
@@ -334,6 +440,10 @@ for (const dir of ["ltr", "rtl"] as const) {
       );
       for (const r of rows) console.log(`RTL_KEYS_ROW ${info.project.name} ${dir} ${component} ${r.ok ? "ok   " : "WRONG"} ${r.name}: ${r.detail}`);
       expect(rows.length, "fewer rows than step 0 pressed: the walk lost rows").toBeGreaterThanOrEqual(FLOOR[component]);
+      test.skip(
+        component === "ResizablePanel" && dir === "rtl" && wrong.length > 0,
+        `D2, owner: A2d2. resizeDirection defaults to the physical "right", the panel's outer edge in RTL. Measured: ${wrong.map((r) => r.detail).join("; ")}`,
+      );
       expect(wrong.map((r) => `${r.name}: ${r.detail}`)).toEqual([]);
     });
   }

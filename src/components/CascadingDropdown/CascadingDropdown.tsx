@@ -7,7 +7,7 @@ import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_LTR, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
@@ -106,6 +106,7 @@ interface MenuItemProps {
   onClick: (option: CascadingOption) => void;
   /** Set only while the submenu is open, so the reference always resolves. */
   submenuId?: string;
+  submenuSide: "start" | "end";
 }
 
 /**
@@ -130,10 +131,12 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
   onHover,
   onClick,
   submenuId,
+  submenuSide,
 }, ref) {
   const combinedClassName = cn(
     classes.item,
   );
+  const pointsToStart = submenuSide === "start";
 
   return (
     <div
@@ -155,7 +158,7 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
       onClick={() => onClick(option)}
     >
       <span className="flex-1 truncate">{option.content || option.label}</span>
-      {hasSubmenu && <ChevronRightIcon className={classes.itemIcon || undefined} />}
+      {hasSubmenu && <ChevronRightIcon className={cn(pointsToStart ? MIRROR_IN_LTR : MIRROR_IN_RTL, classes.itemIcon)} />}
       {isSelected &&
         showSelectedIcon &&
         (selectedIcon || <CheckIcon className={classes.itemIndicator || undefined} />)}
@@ -888,6 +891,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
                           showSelectedIcon={showSelectedIcon}
                           selectedIcon={selectedIcon}
                           submenuId={submenuId}
+                          submenuSide={submenuSide}
                           onHover={handleMenuItemHover}
                           onClick={handleMenuItemClick}
                         />

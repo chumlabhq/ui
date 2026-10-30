@@ -11,7 +11,7 @@ import {
   isValidElement,
 } from "react";
 import { createPortal } from "react-dom";
-import { isBrowser, isRtl } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl, readDirection, MIRROR_IN_RTL, type Direction } from "../../utils/isBrowser.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { useLazyComponent } from "../../utils/useLazyComponent.js";
 import { cn } from "../../utils/scopedCn.js";
@@ -367,6 +367,7 @@ function TableInner<TData>(
     columnId: string;
   } | null>(null);
   const [editValue, setEditValue] = useState<string>("");
+  const [resizeDirection, setResizeDirection] = useState<Direction>();
   // The cell an Enter or Escape left, focused again once the editor is gone.
   const editReturnRef = useRef<HTMLElement | null>(null);
 
@@ -618,7 +619,7 @@ function TableInner<TData>(
                 ) : isExpanded ? (
                   <CollapseIcon className="w-4 h-4" />
                 ) : (
-                  <ExpandIcon className="w-4 h-4" />
+                  <ExpandIcon className={cn(MIRROR_IN_RTL, "w-4 h-4")} />
                 )}
               </button>
             );
@@ -798,6 +799,7 @@ function TableInner<TData>(
       ? {
           resizable: true,
           columnResizeMode: "onChange" as const,
+          columnResizeDirection: resizeDirection,
           onColumnSizingChange: (updater) => {
             const newSizing =
               typeof updater === "function" ? updater(columnSizing) : updater;
@@ -1171,10 +1173,8 @@ function TableInner<TData>(
       let next: number | undefined;
       switch (event.key) {
         case "ArrowLeft":
-          next = current - step;
-          break;
         case "ArrowRight":
-          next = current + step;
+          next = current + ((event.key === "ArrowRight") !== isRtl(event.currentTarget) ? step : -step);
           break;
         case "Home":
           next = COLUMN_MIN_WIDTH;
@@ -1193,6 +1193,14 @@ function TableInner<TData>(
       onColumnSizingChange?.(updated);
     },
     [columnSizing, onColumnSizingChange, table],
+  );
+
+  const startResize = useCallback(
+    (header: Header<TData, unknown>) => (event: React.MouseEvent | React.TouchEvent) => {
+      setResizeDirection(readDirection(event.currentTarget));
+      header.getResizeHandler()(event);
+    },
+    [],
   );
 
   const renderHeaderCell = useCallback(
@@ -1246,7 +1254,7 @@ function TableInner<TData>(
           style={Object.keys(headerStyle).length > 0 ? headerStyle : undefined}
         >
           <div
-            className={`${resizable ? "overflow-hidden pr-3" : ""} ${headerCellContentClassName}`}
+            className={`${resizable ? "overflow-hidden pe-3" : ""} ${headerCellContentClassName}`}
           >
             <span
               className={`flex items-center gap-1 ${resizable ? "truncate" : ""}`}
@@ -1359,10 +1367,10 @@ function TableInner<TData>(
           {/* Column resize handle - positioned inside th, outside content div */}
           {resizable && header.column.getCanResize() && (
             <div
-              onMouseDown={header.getResizeHandler()}
-              onTouchStart={header.getResizeHandler()}
+              onMouseDown={startResize(header)}
+              onTouchStart={startResize(header)}
               onKeyDown={(e) => handleResizeKeyDown(e, header.column.id)}
-              className={`absolute right-0 top-0 h-full w-4 cursor-col-resize select-none touch-none z-10 flex items-center justify-center group/resize ${resizeHandleClassName}`}
+              className={`absolute end-0 top-0 h-full w-4 cursor-col-resize select-none touch-none z-10 flex items-center justify-center group/resize ${resizeHandleClassName}`}
               data-resize-handle
               role="separator"
               aria-orientation="vertical"
@@ -1386,6 +1394,7 @@ function TableInner<TData>(
     },
     [
       handleResizeKeyDown,
+      startResize,
       headerCellClassName,
       headerCellContentClassName,
       pinnedColumnIds,
@@ -1504,7 +1513,7 @@ function TableInner<TData>(
           {cell.row.getIsExpanded() ? (
             <CollapseIcon className="w-4 h-4" />
           ) : (
-            <ExpandIcon className="w-4 h-4" />
+            <ExpandIcon className={cn(MIRROR_IN_RTL, "w-4 h-4")} />
           )}
           {flexRender(cell.column.columnDef.cell, cell.getContext())} (
           {cell.row.subRows.length})

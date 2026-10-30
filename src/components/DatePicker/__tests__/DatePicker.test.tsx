@@ -824,30 +824,24 @@ describe("DatePicker", () => {
   });
 
   describe("Month/Year Dropdown Navigation", () => {
-    it("navigates to previous month via button", async () => {
-      const user = userEvent.setup({
-        advanceTimers: vi.advanceTimersByTime,
-      });
+    it("marks its previous and next month and year arrows to mirror in a right-to-left page", async () => {
+      const user = userEvent.setup();
       render(<DatePicker />);
-
       await openCalendar(user);
-
-      const now = new Date();
-      const currentMonthName = now.toLocaleString("default", { month: "long" });
-      expect(screen.getByText(currentMonthName)).toBeInTheDocument();
-
-      const prevButton = screen.getByLabelText("Previous month");
-      await user.click(prevButton);
-
-      const prevMonth = new Date(now);
-      prevMonth.setMonth(now.getMonth() - 1);
-      const prevMonthName = prevMonth.toLocaleString("default", {
-        month: "long",
-      });
-      expect(screen.getByText(prevMonthName)).toBeInTheDocument();
+      for (const label of ["Previous year", "Previous month", "Next month", "Next year"]) {
+        expect(screen.getByLabelText(label).querySelector("svg")).toHaveClass("rtl:-scale-x-100");
+      }
     });
 
-    it("navigates to next month via button", async () => {
+    /**
+     * The expected month is built from day 1. Built with `setMonth` on today,
+     * it rolled over on any day the neighbouring month lacks: on 31 October
+     * "previous" asked for 31 September, which is 1 October.
+     */
+    const monthName = (from: Date, by: number) =>
+      new Date(from.getFullYear(), from.getMonth() + by, 1).toLocaleString("default", { month: "long" });
+
+    async function navigatesByMonth(button: "Previous month" | "Next month", by: number) {
       const user = userEvent.setup({
         advanceTimers: vi.advanceTimersByTime,
       });
@@ -855,16 +849,31 @@ describe("DatePicker", () => {
 
       await openCalendar(user);
 
-      const nextButton = screen.getByLabelText("Next month");
-      await user.click(nextButton);
-
       const now = new Date();
-      const nextMonth = new Date(now);
-      nextMonth.setMonth(now.getMonth() + 1);
-      const nextMonthName = nextMonth.toLocaleString("default", {
-        month: "long",
-      });
-      expect(screen.getByText(nextMonthName)).toBeInTheDocument();
+      expect(screen.getByText(monthName(now, 0))).toBeInTheDocument();
+
+      await user.click(screen.getByLabelText(button));
+
+      expect(screen.getByText(monthName(now, by))).toBeInTheDocument();
+    }
+
+    const MONTH_ENDS = [
+      ["31 Oct 2026", new Date(2026, 9, 31, 12)],
+      ["31 Mar 2026", new Date(2026, 2, 31, 12)],
+    ] as const;
+
+    it("navigates to previous month via button", () => navigatesByMonth("Previous month", -1));
+
+    it.each(MONTH_ENDS)("navigates to previous month via button on %s", async (_, at) => {
+      vi.setSystemTime(at);
+      await navigatesByMonth("Previous month", -1);
+    });
+
+    it("navigates to next month via button", () => navigatesByMonth("Next month", 1));
+
+    it.each(MONTH_ENDS)("navigates to next month via button on %s", async (_, at) => {
+      vi.setSystemTime(at);
+      await navigatesByMonth("Next month", 1);
     });
 
     it("navigates to previous year via button", async () => {

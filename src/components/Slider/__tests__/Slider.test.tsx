@@ -1036,4 +1036,46 @@ describe("Slider", () => {
       expect(onValueCommit).toHaveBeenCalled();
     });
   });
+
+  /**
+   * The A2 audit measured a right-to-left slider laid out from the physical
+   * left: value 25 put the thumb 75% from the leading edge, and a press 20%
+   * from the left read 20 instead of 80. D4: the arrows move the thumb toward
+   * themselves, so in RTL ArrowLeft increases, as native range inputs do in
+   * chromium and firefox.
+   */
+  describe("Right to left", () => {
+    it("places the thumb and the fill from the inline start", () => {
+      render(<div dir="rtl"><Slider defaultValue={40} /></div>);
+      const thumb = screen.getByRole("slider");
+      const fill = thumb.parentElement!.children[1] as HTMLElement;
+      expect(thumb.style.insetInlineStart).toBe("40%");
+      expect(thumb.style.left).toBe("");
+      expect(fill.style.insetInlineStart).toBe("0%");
+      expect(fill.style.insetInlineEnd).toBe("60%");
+    });
+
+    it("reads a pointer press from the inline start", () => {
+      const onValueChange = vi.fn();
+      render(<div dir="rtl"><Slider defaultValue={50} onValueChange={onValueChange} /></div>);
+      const control = screen.getByRole("slider").parentElement!;
+      vi.spyOn(control, "getBoundingClientRect").mockReturnValue(
+        { left: 0, right: 100, width: 100, top: 0, bottom: 6, height: 6, x: 0, y: 0, toJSON: () => ({}) },
+      );
+      fireEvent.pointerDown(control, { button: 0, clientX: 20, clientY: 3, pointerId: 1 });
+      expect(onValueChange).toHaveBeenLastCalledWith(80);
+    });
+
+    it("moves toward the arrow: ArrowLeft increases, ArrowRight decreases (D4)", () => {
+      render(<div dir="rtl"><Slider defaultValue={40} /></div>);
+      const thumb = screen.getByRole("slider");
+      fireEvent.keyDown(thumb, { key: "ArrowLeft" });
+      expect(thumb).toHaveAttribute("aria-valuenow", "41");
+      fireEvent.keyDown(thumb, { key: "ArrowRight" });
+      fireEvent.keyDown(thumb, { key: "ArrowRight" });
+      expect(thumb).toHaveAttribute("aria-valuenow", "39");
+      fireEvent.keyDown(thumb, { key: "ArrowUp" });
+      expect(thumb).toHaveAttribute("aria-valuenow", "40");
+    });
+  });
 });

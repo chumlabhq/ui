@@ -64,5 +64,11 @@ const fixtures: Fixtures<typeof Pagination> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     act: (c, ui) => ui.click(c.querySelector("[aria-haspopup='listbox']")),
   },
+  {
+    name: "default-rtl",
+    props: { defaultValue: 2, totalPages: 5 },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    note: "Previous on the right pointing right, next on the left pointing left; page 2 so both are enabled.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

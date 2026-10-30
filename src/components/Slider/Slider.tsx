@@ -13,7 +13,7 @@ import {
   DEFAULT_SLIDER_CLASSES,
   UNSTYLED_SLIDER_CLASSES,
 } from "./utils/constants.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl } from "../../utils/isBrowser.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { FormValue } from "../../utils/FormValue.js";
 import { setRef } from "../../utils/mergeRefs.js";
@@ -36,6 +36,9 @@ function snapToStep(val: number, min: number, step: number) {
     min + Math.ceil((1e12 - min) / step) * step,
   );
 }
+
+const INLINE_SIGN = "rtl:[--cl-slider-sign:-1]";
+const signed = (pct: string) => `calc(var(--cl-slider-sign, 1) * ${pct})`;
 
 function valueToPercent(val: number, min: number, max: number) {
   return ((val - min) / (max - min)) * 100;
@@ -110,13 +113,13 @@ function Thumb({
   const positionTransition =
     isDragging || animationDuration <= 0
       ? "none"
-      : `left ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`;
+      : `inset-inline-start ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), bottom ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`;
 
   const thumbStyle: CSSProperties = isHorizontal
     ? {
-        left: `${pos}%`,
+        insetInlineStart: `${pos}%`,
         top: "50%",
-        transform: "translate(-50%, -50%)",
+        transform: `translate(${signed("-50%")}, -50%)`,
         transition: positionTransition,
       }
     : {
@@ -137,10 +140,10 @@ function Thumb({
         marginBottom: "8px",
       }
     : {
-        right: "100%",
+        insetInlineEnd: "100%",
         top: "50%",
         transform: "translateY(-50%)",
-        marginRight: "8px",
+        marginInlineEnd: "8px",
       };
 
   const thumbClassName = cn(
@@ -351,7 +354,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         const rect = track.getBoundingClientRect();
         let pct: number;
         if (orientation === "horizontal") {
-          pct = ((clientX - rect.left) / rect.width) * 100;
+          pct = ((isRtl(track) ? rect.right - clientX : clientX - rect.left) / rect.width) * 100;
         } else {
           pct = ((rect.bottom - clientY) / rect.height) * 100;
         }
@@ -443,15 +446,18 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         const current = valuesRef.current[index];
 
         switch (e.key) {
-          case "ArrowRight":
           case "ArrowUp":
             e.preventDefault();
             newVal = current + (e.shiftKey ? largeStep : step);
             break;
-          case "ArrowLeft":
           case "ArrowDown":
             e.preventDefault();
             newVal = current - (e.shiftKey ? largeStep : step);
+            break;
+          case "ArrowRight":
+          case "ArrowLeft":
+            e.preventDefault();
+            newVal = current + ((e.key === "ArrowRight") !== isRtl(e.currentTarget as Element) ? 1 : -1) * (e.shiftKey ? largeStep : step);
             break;
           case "Home":
             e.preventDefault();
@@ -497,17 +503,16 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           top: 0,
           bottom: 0,
           ...(inverted
-            ? { right: `${rangeStart}%`, left: `${100 - rangeEnd}%` }
-            : { left: `${rangeStart}%`, right: `${100 - rangeEnd}%` }),
+            ? { insetInlineEnd: `${rangeStart}%`, insetInlineStart: `${100 - rangeEnd}%` }
+            : { insetInlineStart: `${rangeStart}%`, insetInlineEnd: `${100 - rangeEnd}%` }),
           transition:
             isDragging || animationDuration <= 0
               ? "none"
-              : `left ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), right ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
+              : `inset-inline-start ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1), inset-inline-end ${animationDuration}ms cubic-bezier(0.32, 0.72, 0, 1)`,
         }
       : {
           position: "absolute",
-          left: 0,
-          right: 0,
+          insetInline: 0,
           ...(inverted
             ? { top: `${rangeStart}%`, bottom: `${100 - rangeEnd}%` }
             : { bottom: `${rangeStart}%`, top: `${100 - rangeEnd}%` }),
@@ -535,8 +540,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           width: `${TRACK_SIZE}px`,
           height: "100%",
           flex: "1 1 0%",
-          marginLeft: `${Math.max(thumbPad, tooltipSpace)}px`,
-          marginRight: `${Math.max(thumbPad, markLabelSpace)}px`,
+          marginInlineStart: `${Math.max(thumbPad, tooltipSpace)}px`,
+          marginInlineEnd: `${Math.max(thumbPad, markLabelSpace)}px`,
         };
 
     const ariaDescribedBy =
@@ -580,7 +585,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {/* Track wrapper — box-content so padding doesn't shrink track */}
         <div
           ref={trackRef}
-          className={cn(mc.control) || undefined}
+          className={cn(mc.control, INLINE_SIGN)}
           style={{ position: "relative", overflow: "visible", ...wrapperStyle }}
           onPointerDown={handleTrackPointerDown}
           data-orientation={orientation}
@@ -611,7 +616,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               : mark.value <= values[0];
 
             const dotPositionStyle: CSSProperties = isHorizontal
-              ? { left: `${markPos}%`, top: "50%", transform: "translate(-50%, -50%)" }
+              ? { insetInlineStart: `${markPos}%`, top: "50%", transform: `translate(${signed("-50%")}, -50%)` }
               : { bottom: `${markPos}%`, left: "50%", transform: "translate(-50%, 50%)" };
 
             const customMark = renderMark?.({
@@ -654,7 +659,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                       whiteSpace: "nowrap",
                       ...(isHorizontal
                         ? {
-                            left: `${markPos}%`,
+                            insetInlineStart: `${markPos}%`,
                             top: "100%",
                             /**
                              * The end labels align to their end, not to their
@@ -669,15 +674,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                              * start, the last back from its end, and every
                              * label in between stays centred on its tick.
                              */
-                            transform:
-                              markPos <= 0
-                                ? "translateX(0)"
-                                : markPos >= 100
-                                  ? "translateX(-100%)"
-                                  : "translateX(-50%)",
+                            transform: `translateX(${signed(markPos <= 0 ? "0%" : markPos >= 100 ? "-100%" : "-50%")})`,
                             marginTop: "8px",
                           }
-                        : { bottom: `${markPos}%`, left: "100%", transform: "translateY(50%)", marginLeft: "8px" }),
+                        : { bottom: `${markPos}%`, insetInlineStart: "100%", transform: "translateY(50%)", marginInlineStart: "8px" }),
                     }}
                   >
                     {mark.label}
