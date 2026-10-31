@@ -41,7 +41,7 @@ export default function ModalExample() {
             content: "w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg-elevated border border-cl-border",
             header: "flex items-start gap-3 p-6 pb-4",
             title: "font-semibold text-lg text-cl-text",
-            closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto",
+            closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ms-auto",
             closeIcon: "w-5 h-5 text-cl-text-tertiary",
             body: "px-6 pb-6"
           }

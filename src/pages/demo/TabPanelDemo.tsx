@@ -233,7 +233,7 @@ const getClasses = () => ({
       root: "w-full",
       list: `flex items-center gap-6 border-b border-cl-border`,
       item: `relative px-1 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg data-[state=active]:text-cl-accent data-[state=inactive]:text-cl-text-secondary data-[state=inactive]:hover:text-cl-text`,
-      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent`,
+      indicator: `absolute bottom-0 start-0 end-0 h-0.5 bg-cl-accent`,
       content: "p-4",
     },
     pill: {
@@ -255,7 +255,7 @@ const getClasses = () => ({
          colour as the card these tabs sit on, so either one rendered the
          badge as a bare number. Same idiom as the pill track above. */
       count: `px-2 py-0.5 text-xs font-semibold rounded-full data-[state=active]:bg-cl-accent-surface data-[state=active]:text-cl-text data-[state=inactive]:bg-cl-bg-hover data-[state=inactive]:text-cl-text-secondary`,
-      indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-accent`,
+      indicator: `absolute bottom-0 start-0 end-0 h-0.5 bg-cl-accent`,
       content: "p-4",
     },
   },
@@ -463,9 +463,9 @@ const TabPanelDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 4. With Icons (Left) ────────────────────────────────────────── */}
+      {/* ─── 4. With Icons (Start) ───────────────────────────────────────── */}
       <Section
-        title="With Icons (Left)"
+        title="With Icons (Start)"
         description="Tabs with leading icon components using iconPosition='start' (default)."
         isDarkMode={dark}
       >
@@ -512,9 +512,9 @@ const TabPanelDemo = () => {
         </DemoWrapper>
       </Section>
 
-      {/* ─── 5. With Icons (Right) ───────────────────────────────────────── */}
+      {/* ─── 5. With Icons (End) ─────────────────────────────────────────── */}
       <Section
-        title="With Icons (Right)"
+        title="With Icons (End)"
         description="Tabs with trailing icon components using iconPosition='end'."
         isDarkMode={dark}
       >
@@ -752,7 +752,7 @@ const TabPanelDemo = () => {
                 onValueChange={setCustomFocusTab}
                 classes={{
                   ...c.tabs.icon,
-                  indicator: `absolute bottom-0 left-0 right-0 h-0.5 bg-cl-success`,
+                  indicator: `absolute bottom-0 start-0 end-0 h-0.5 bg-cl-success`,
                 }}
               >
                 <div className={c.content}>Custom green dashed focus ring</div>
@@ -808,7 +808,7 @@ const TabPanelDemo = () => {
       {/* ─── 16. RTL Support ─────────────────────────────────────────────── */}
       <Section
         title="RTL Support"
-        description="Arrow key direction automatically reverses in right-to-left contexts. The component detects RTL via computed CSS direction."
+        description="Arrow key direction automatically reverses in right-to-left contexts. The component reads the direction from the nearest dir attribute, or the computed direction when there is none."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark}>
@@ -938,8 +938,8 @@ const TabPanelDemo = () => {
             orientation="vertical"
             classes={{
               root: "flex gap-0 w-full",
-              list: `flex flex-col gap-1 pr-0 min-w-[160px] border-r border-cl-border`,
-              item: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-left w-full",
+              list: `flex flex-col gap-1 pe-0 min-w-[160px] border-e border-cl-border`,
+              item: "relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-start w-full",
               content: "flex-1 p-4",
             }}
           >
@@ -1046,7 +1046,7 @@ const TabPanelDemo = () => {
                 {defaultElement}
                 {props.tab.count != null && props.tab.count > 0 && (
                   <span
-                    className={`absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error`}
+                    className={`absolute -top-1 -end-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error`}
                   >
                     {props.tab.count}
                   </span>

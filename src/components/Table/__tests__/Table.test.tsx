@@ -1407,7 +1407,7 @@ describe("Table", () => {
         <Table
           columns={columns}
           data={data}
-          pinnedRightColumns={["email"]}
+          pinnedEndColumns={["email"]}
           onPinnedColumnsChange={() => {}}
         />
       );
@@ -2267,5 +2267,14 @@ describe("filter panel placement and direction", () => {
       const panel = document.querySelector("[data-table-filter-content]")!.getBoundingClientRect();
       expect([panel.left, panel.right]).toEqual([319 - 220, 319 - 220 + PANEL_WIDTH]);
     });
+  });
+});
+
+describe("Table search field takes its text direction from its text", () => {
+  it("lays out the placeholder and typed text by their first strong character", () => {
+    render(<Table columns={columns} data={data} showSearch />);
+    expect(screen.getByPlaceholderText("Search...").className.split(" ")).toEqual(
+      expect.arrayContaining(["[unicode-bidi:plaintext]", "placeholder:[unicode-bidi:plaintext]"]),
+    );
   });
 });

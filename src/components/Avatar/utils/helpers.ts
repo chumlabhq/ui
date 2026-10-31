@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { AvatarSize, AvatarColors, AvatarStatus, CornerPosition, BadgeSize, BadgeOverlap, BadgeOffset } from "./types.js";
+import { inlineSigned } from "../../../utils/isBrowser.js";
 import {
   SIZE_MAP,
   FONT_SIZE_MAP,
@@ -116,10 +117,10 @@ export const getStatusPosition = (
 ): CSSProperties => {
   const offset = Math.floor(statusSize * 0.15);
   const positions: Record<CornerPosition, CSSProperties> = {
-    "top-right": { top: offset, right: offset },
-    "top-left": { top: offset, left: offset },
-    "bottom-right": { bottom: offset, right: offset },
-    "bottom-left": { bottom: offset, left: offset },
+    "top-end": { top: offset, insetInlineEnd: offset },
+    "top-start": { top: offset, insetInlineStart: offset },
+    "bottom-end": { bottom: offset, insetInlineEnd: offset },
+    "bottom-start": { bottom: offset, insetInlineStart: offset },
   };
   return positions[position];
 };
@@ -134,25 +135,25 @@ export const getBadgePosition = (
   const offsetY = offset?.y ?? 0;
 
   const positions: Record<CornerPosition, CSSProperties> = {
-    "top-right": {
+    "top-end": {
       top: `calc(${baseOffset} + ${offsetY}px)`,
-      right: `calc(${baseOffset} + ${offsetX}px)`,
-      transform: "translate(50%, -50%)",
+      insetInlineEnd: `calc(${baseOffset} + ${offsetX}px)`,
+      transform: `translate(${inlineSigned("50%")}, -50%)`,
     },
-    "top-left": {
+    "top-start": {
       top: `calc(${baseOffset} + ${offsetY}px)`,
-      left: `calc(${baseOffset} - ${offsetX}px)`,
-      transform: "translate(-50%, -50%)",
+      insetInlineStart: `calc(${baseOffset} - ${offsetX}px)`,
+      transform: `translate(${inlineSigned("-50%")}, -50%)`,
     },
-    "bottom-right": {
+    "bottom-end": {
       bottom: `calc(${baseOffset} - ${offsetY}px)`,
-      right: `calc(${baseOffset} + ${offsetX}px)`,
-      transform: "translate(50%, 50%)",
+      insetInlineEnd: `calc(${baseOffset} + ${offsetX}px)`,
+      transform: `translate(${inlineSigned("50%")}, 50%)`,
     },
-    "bottom-left": {
+    "bottom-start": {
       bottom: `calc(${baseOffset} - ${offsetY}px)`,
-      left: `calc(${baseOffset} - ${offsetX}px)`,
-      transform: "translate(-50%, 50%)",
+      insetInlineStart: `calc(${baseOffset} - ${offsetX}px)`,
+      transform: `translate(${inlineSigned("-50%")}, 50%)`,
     },
   };
   return positions[position];

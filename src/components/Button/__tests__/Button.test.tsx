@@ -422,7 +422,7 @@ describe("Button", () => {
     it("consumer className overrides internal group class", () => {
       render(
         <Button
-          iconAnimation="slideRight"
+          iconAnimation="slideEnd"
           startIcon={<span>→</span>}
           className="custom-class"
         >
@@ -796,5 +796,27 @@ describe("ButtonGroup", () => {
       expect(cls.has("px-6"), "unstyled kept decorative padding").toBe(false);
       expect(cls.has("text-base"), "unstyled kept a type size").toBe(false);
     });
+  });
+});
+
+describe("Button icon slide follows the inline direction", () => {
+  it("slides slideEnd's icon toward the inline end: right, and left in a right-to-left page", () => {
+    const { container } = render(
+      <Button iconAnimation="slideEnd" endIcon={<span>i</span>}>
+        Next
+      </Button>,
+    );
+    const icon = container.querySelector('[class*="group-hover:translate-x-1"]');
+    expect(icon?.className.split(" ")).toEqual(expect.arrayContaining(["group-hover:translate-x-1", "rtl:group-hover:-translate-x-1"]));
+  });
+
+  it("slides slideStart's icon toward the inline start", () => {
+    const { container } = render(
+      <Button iconAnimation="slideStart" animateIcon="leading" startIcon={<span>i</span>}>
+        Back
+      </Button>,
+    );
+    const icon = container.querySelector('[class*="group-hover:-translate-x-1"]');
+    expect(icon?.className.split(" ")).toEqual(expect.arrayContaining(["group-hover:-translate-x-1", "rtl:group-hover:translate-x-1"]));
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -19,13 +19,13 @@ function getTableClasses() {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
+    headerCell: "px-4 py-3 h-[52px] text-start text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
     body: "",
     row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover",
     selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent-bg hover:bg-cl-accent-bg-hover",
     cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
     empty: "flex items-center justify-center py-12 text-cl-text-secondary",
-    pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+    pinnedContainer: "shrink-0 sticky start-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
     unpinnedTable: "w-full border-collapse",
@@ -37,8 +37,8 @@ function getTableClasses() {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinTrigger: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
-    pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
+    pinTrigger: "ms-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
+    pinnedPinButton: "ms-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
     shimmer: "w-full border rounded-cl-md overflow-hidden border-cl-border",
@@ -47,26 +47,6 @@ function getTableClasses() {
     shimmerBar: "h-full w-full bg-linear-to-r rounded animate-pulse from-cl-bg-hover via-cl-bg-skeleton to-cl-bg-hover",
   };
 }
-
-const StatusBadge = ({
-  status,
-}: {
-  status: User["status"];
-}) => {
-  const styles = {
-        active: "bg-cl-success/15 text-cl-text",
-        inactive: "bg-cl-bg-hover text-cl-text",
-        pending: "bg-cl-warning/15 text-cl-text",
-      };
-
-  return (
-    <span
-      className={`px-2 py-1 text-xs font-medium rounded-full ${styles[status]}`}
-    >
-      {status.charAt(0).toUpperCase() + status.slice(1)}
-    </span>
-  );
-};
 
 const s = getTableClasses();
 
@@ -146,83 +126,73 @@ const sampleData: User[] = [
 ];
 
 export default function TableExample() {
-  const columns: ColumnDef<User>[] = useMemo(
+  const [rightPinAction, setRightPinAction] = useState("not fired yet");
+  const rightPinColumns: ColumnDef<User>[] = useMemo(
     () => [
       {
         accessorKey: "name",
-        header: () => <span>Name</span>,
+        header: "Name",
         cell: ({ row }) => (
           <span className="font-medium">{row.getValue("name")}</span>
         ),
       },
+      { accessorKey: "email", header: "Email" },
+      { accessorKey: "role", header: "Role" },
+      { accessorKey: "department", header: "Department" },
       {
-        accessorKey: "email",
-        header: () => <span>Email</span>,
-        cell: ({ row }) => row.getValue("email"),
-      },
-      {
-        accessorKey: "role",
-        header: () => <span>Role</span>,
-        cell: ({ row }) => row.getValue("role"),
-      },
-      {
-        accessorKey: "status",
-        header: () => <span>Status</span>,
+        id: "actions",
+        accessorKey: "actions",
+        header: "Actions",
         cell: ({ row }) => (
-          <StatusBadge status={row.getValue("status")} />
+          <button
+            className={"px-2 py-1 text-xs rounded bg-cl-accent-bg text-cl-accent-hover hover:bg-cl-accent-bg-hover cursor-pointer"}
+            onClick={() =>
+              setRightPinAction(
+                JSON.stringify({ action: "Edit", name: row.original.name }),
+              )
+            }
+          >
+            Edit
+          </button>
         ),
-      },
-      {
-        accessorKey: "department",
-        header: () => <span>Department</span>,
-        cell: ({ row }) => row.getValue("department"),
-      },
-      {
-        accessorKey: "joinDate",
-        header: () => <span>Join Date</span>,
-        cell: ({ row }) => {
-          const date = new Date(row.getValue("joinDate"));
-          return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          });
-        },
       },
     ],
     [],
   );
   return (
     <>
-      {
-        (() => {
-          const RightDragDemo = () => {
-            const [data, setData] = React.useState(sampleData.slice(0, 5));
-            return (
-              <Table
-                columns={columns}
-                data={data}
-                reorderable
-                dragColumnPosition="end"
-                onRowReorder={(from, to) => {
-                  setData((prev) => {
-                    const u = [...prev];
-                    const [m] = u.splice(from, 1);
-                    u.splice(to, 0, m);
-                    return u;
-                  });
-                }}
-                getRowId={(row) => row.id}
-                classes={{
-                  ...s,
-                  dragHandle: "text-cl-text-tertiary hover:text-cl-text-secondary"
-                }}
-              />
-            );
-          };
-          return <RightDragDemo />;
-        })()
-      }
+      <Table
+        columns={rightPinColumns}
+        data={sampleData.slice(0, 5)}
+        pinnedEndColumns={["actions"]}
+        getRowId={(row) => row.id}
+        maxWidth={600}
+        classes={
+          {
+            ...s,
+            ...s,
+            root: "border rounded-cl-md border-cl-border",
+            list: "w-max border-collapse",
+            pinnedEndRegion: "shrink-0 sticky end-0 z-20 border-s-2 border-cl-border-input-focus bg-cl-bg-elevated"
+          }
+        }
+      />
+      <div
+        className="mt-3 rounded-cl-md px-3 py-2 text-xs font-mono bg-cl-bg-elevated text-cl-text-tertiary"
+        data-demo-action
+      >
+        action:
+        {rightPinAction}
+      </div>
+      <p className="mt-3 text-sm text-cl-text-secondary">
+        The "Actions" column is pinned to the inline end using
+        {" "}
+        <code className="px-1 rounded bg-cl-bg-elevated">
+          pinnedEndColumns=
+          {'{["actions"]}'}
+        </code>
+        . Scroll horizontally to see it stay fixed.
+      </p>
     </>
   );
 }

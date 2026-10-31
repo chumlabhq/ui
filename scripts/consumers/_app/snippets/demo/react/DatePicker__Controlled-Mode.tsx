@@ -15,7 +15,7 @@ export default function DatePickerExample() {
         </span>
         <Button
           size="sm"
-          className="ml-auto rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
+          className="ms-auto rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover"
           onClick={() => setControlledDate(null)}
         >
           Clear
@@ -39,7 +39,7 @@ export default function DatePickerExample() {
             {
               root: "",
               trigger: "flex items-center gap-2 w-full px-3.5 py-2.5 rounded-cl-lg border text-sm transition-all cursor-pointer bg-cl-bg-input border-cl-text/10 text-cl-text shadow-sm shadow-black/[0.04] hover:border-cl-border-input-hover focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success data-[disabled]:cursor-not-allowed",
-              input: "flex-1 text-left truncate",
+              input: "flex-1 text-start truncate",
               label: "block text-[13px] font-medium mb-1.5 text-cl-text-secondary",
               header: "flex items-center justify-between mb-4",
               navTrigger: "p-1.5 rounded-cl-md transition-colors text-cl-text-chrome-quiet hover:text-cl-text hover:bg-cl-bg-hover",

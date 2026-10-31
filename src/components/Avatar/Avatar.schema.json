@@ -124,10 +124,10 @@
             "position": {
               "type": "string",
               "enum": [
-                "top-right",
-                "top-left",
-                "bottom-right",
-                "bottom-left"
+                "top-end",
+                "top-start",
+                "bottom-end",
+                "bottom-start"
               ]
             },
             "className": {
@@ -478,8 +478,8 @@
         },
         "position": {
           "type": "CornerPosition | undefined",
-          "description": "Corner position for the badge. Default: `\"top-right\"`.",
-          "default": "top-right"
+          "description": "Corner position for the badge. Default: `\"top-end\"`.",
+          "default": "top-end"
         },
         "offset": {
           "type": "BadgeOffset | undefined",

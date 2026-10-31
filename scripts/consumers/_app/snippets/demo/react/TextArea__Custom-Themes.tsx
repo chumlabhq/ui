@@ -26,7 +26,7 @@ export default function TextAreaExample() {
                  colour token drops both variants and then only the last one survives,
                  which is how every error message on this page rendered green. */
               message: "text-xs mt-1.5 flex items-center gap-1.5",
-              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+              count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
             }),
                               control: "px-0 gap-2.5 transition-all duration-150 rounded-none border-0 border-b-2 bg-transparent border-cl-text/10 focus-within:ring-0 focus-within:border-cl-border-input-focus"
                             }
@@ -56,7 +56,7 @@ export default function TextAreaExample() {
                  colour token drops both variants and then only the last one survives,
                  which is how every error message on this page rendered green. */
               message: "text-xs mt-1.5 flex items-center gap-1.5",
-              count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+              count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
             }),
                               control: "rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-border-input-focus bg-cl-accent/[0.08] shadow-sm focus-within:ring-2 focus-within:ring-cl-accent-halo"
                             }

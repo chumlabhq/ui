@@ -49,7 +49,7 @@ const getClasses = () => ({
   modalHeader: "flex items-start gap-3 p-6 pb-4",
   modalTitle: "font-semibold text-lg text-cl-text",
   modalDescription: "mt-1 text-sm text-cl-text-secondary",
-  modalCloseBtn: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto",
+  modalCloseBtn: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ms-auto",
   modalCloseIcon: "w-5 h-5 text-cl-text-tertiary",
   modalBody: "px-6 pb-6",
   kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
@@ -384,7 +384,7 @@ const ModalDemo = () => {
           <div className="relative">
             <button aria-label="Close"
               onClick={() => setImagePreviewOpen(false)}
-              className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors cursor-pointer"
+              className="absolute top-4 end-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(0,0,0,0.55)] text-white hover:bg-[rgba(0,0,0,0.75)] transition-colors cursor-pointer"
             >
               <svg
                 className="h-5 w-5"
@@ -548,7 +548,7 @@ const ModalDemo = () => {
                   <p className="text-sm text-cl-text-tertiary truncate">Annual Report 2024.pdf</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 ml-auto">
+              <div className="flex items-center gap-2 ms-auto">
                 <Button className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
                   onClick={() => setDocAction("Download started (demo)")}
                 >
@@ -611,7 +611,7 @@ const ModalDemo = () => {
                 className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12 origin-top transition-transform"
                 style={{ transform: `scale(${docZoom / 100})` }}
               >
-                <p className="text-right text-sm text-cl-text-tertiary mb-4">
+                <p className="text-end text-sm text-cl-text-tertiary mb-4">
                   Page {docPage} of {DOC_PAGES}
                 </p>
                 <div className="text-center mb-12">
@@ -784,7 +784,7 @@ const ModalDemo = () => {
                     />
                   </svg>
                 </Button>
-                <span className="text-sm text-cl-text-tertiary ml-2">{docZoom}%</span>
+                <span className="text-sm text-cl-text-tertiary ms-2">{docZoom}%</span>
               </div>
             </footer>
           </div>
@@ -1024,7 +1024,7 @@ const ModalDemo = () => {
             content: `w-full max-w-lg m-4 rounded-cl-lg shadow-2xl overflow-hidden bg-cl-bg`,
             header: "flex items-start gap-3 p-6 pb-4 border-b border-cl-border-input-focus",
             title: "font-semibold text-lg text-cl-accent",
-            closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-accent/10 transition-colors ml-auto",
+            closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-accent/10 transition-colors ms-auto",
             body: "px-6 pb-6 pt-4",
           }}
         >

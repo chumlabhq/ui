@@ -3,6 +3,7 @@ import type { DrawerSide } from "./types.js";
 
 export { getFocusableElements } from "../../../utils/focusUtils.js";
 import { useReducedMotion } from "../../../utils/useReducedMotion.js";
+import { inlineSigned } from "../../../utils/isBrowser.js";
 
 /**
  * Kept as a named export because Drawer's call sites use it, but the
@@ -23,14 +24,14 @@ export const getSideStyles = (
   const transition = `transform ${duration}ms ${easing}`;
 
   switch (side) {
-    case "left":
-      return { top: 0, left: 0, height: "100vh", width: size, maxWidth: "100vw", transform: `translateX(${-closedPercent}%)`, transition };
-    case "right":
-      return { top: 0, right: 0, height: "100vh", width: size, maxWidth: "100vw", transform: `translateX(${closedPercent}%)`, transition };
+    case "start":
+      return { top: 0, insetInlineStart: 0, height: "100vh", width: size, maxWidth: "100vw", transform: getTransformString(side, closedPercent), transition };
+    case "end":
+      return { top: 0, insetInlineEnd: 0, height: "100vh", width: size, maxWidth: "100vw", transform: getTransformString(side, closedPercent), transition };
     case "top":
-      return { top: 0, left: 0, width: "100vw", height: size, transform: `translateY(${-closedPercent}%)`, transition };
+      return { top: 0, insetInlineStart: 0, width: "100vw", height: size, transform: `translateY(${-closedPercent}%)`, transition };
     case "bottom":
-      return { bottom: 0, left: 0, width: "100vw", height: size, transform: `translateY(${closedPercent}%)`, transition };
+      return { bottom: 0, insetInlineStart: 0, width: "100vw", height: size, transform: `translateY(${closedPercent}%)`, transition };
   }
 };
 
@@ -38,16 +39,17 @@ export function getClosingDelta(
   side: DrawerSide,
   deltaX: number,
   deltaY: number,
+  rtl: boolean,
 ): number {
   switch (side) {
     case "bottom":
       return deltaY;
     case "top":
       return -deltaY;
-    case "left":
-      return -deltaX;
-    case "right":
-      return deltaX;
+    case "start":
+      return rtl ? deltaX : -deltaX;
+    case "end":
+      return rtl ? -deltaX : deltaX;
   }
 }
 
@@ -56,10 +58,10 @@ export function getTransformString(
   closedPercent: number,
 ): string {
   switch (side) {
-    case "left":
-      return `translateX(${-closedPercent}%)`;
-    case "right":
-      return `translateX(${closedPercent}%)`;
+    case "start":
+      return `translateX(${inlineSigned(`${-closedPercent}%`)})`;
+    case "end":
+      return `translateX(${inlineSigned(`${closedPercent}%`)})`;
     case "top":
       return `translateY(${-closedPercent}%)`;
     case "bottom":
@@ -68,7 +70,7 @@ export function getTransformString(
 }
 
 export function isHorizontalSide(side: DrawerSide): boolean {
-  return side === "left" || side === "right";
+  return side === "start" || side === "end";
 }
 
 export function getTouchAction(side: DrawerSide): string {

@@ -118,7 +118,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `data` | array | — | Array of row data objects. |
 | `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
 | `showHeader` | boolean | `true` | Whether to show the table header row. |
-| `pinnedColumns` | array | — | Column IDs to pin to the left side. |
+| `pinnedColumns` | array | — | Column IDs to pin to the inline start: the left in a left-to-right page, the right in a right-to-left one. |
 | `onPinnedColumnsChange` | object | — | (pinnedColumns: string[]) => void — Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned. |
 | `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |
 | `maxPinnedColumns` | number | `3` | Maximum number of columns that can be pinned simultaneously. |
@@ -179,7 +179,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `striped` | boolean | `false` | Alternate row background colors. |
 | `stripedClassName` | string | — | Custom CSS class for striped rows. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Cell padding and text size. |
-| `pinnedRightColumns` | array | — | Column IDs to pin to the right side. |
+| `pinnedEndColumns` | array | — | Column IDs to pin to the inline end: the right in a left-to-right page, the left in a right-to-left one. |
 | `editable` | boolean | `false` | Enable inline cell editing: double-click a cell, or press Enter or F2 on it. |
 | `editableColumns` | array | — | Column IDs that are editable. |
 | `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |

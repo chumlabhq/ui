@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode, RefObject } from "react";
 
-export type DrawerSide = "left" | "right" | "top" | "bottom";
+export type DrawerSide = "start" | "end" | "top" | "bottom";
 
 export interface DrawerClasses {
   /** The fixed layer the panel and its scrim share. */
@@ -20,7 +20,7 @@ export interface DrawerClasses {
  *
  * @example
  * ```tsx
- * <Drawer open={isOpen} onOpenChange={setIsOpen} side="right">...</Drawer>
+ * <Drawer open={isOpen} onOpenChange={setIsOpen} side="end">...</Drawer>
  * ```
  */
 export interface DrawerProps
@@ -34,7 +34,7 @@ export interface DrawerProps
   /** CSS z-index for the drawer layer. */
   zIndex?: number;
   children?: ReactNode;
-  /** The edge the drawer slides in from. Not `direction` or `placement`. Default: `"left"`. */
+  /** The edge the drawer slides in from. Not `direction` or `placement`. Default: `"start"`. */
   side?: DrawerSide;
   size?: string;
   overlayColor?: string;

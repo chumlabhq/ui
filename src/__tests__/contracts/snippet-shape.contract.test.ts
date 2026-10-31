@@ -591,7 +591,7 @@ describe("snippet shape contract", () => {
       // Link-style text actions.
       { key: "CascadingDropdown/Fully Async - Load on Open", element: '<button> "Reset"', reason: LINK_STYLE },
       { key: "Modal/Use Cases", element: '<button> "Maybe later"', reason: LINK_STYLE },
-      { key: "Table/Right Column Pinning", element: '<button> "Edit"', reason: LINK_STYLE },
+      { key: "Table/End Column Pinning", element: '<button> "Edit"', reason: LINK_STYLE },
       { key: "Table/Context Menu", element: '<button> "Dismiss"', reason: LINK_STYLE },
       { key: "Table/Infinite Scroll", element: '<button> "Reset"', reason: LINK_STYLE },
       { key: "Table/Infinite Scroll (Skeleton Loader)", element: '<button> "Reset"', reason: LINK_STYLE },

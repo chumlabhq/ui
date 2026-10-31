@@ -6,7 +6,7 @@ export default function AccordionExample() {
       <AccordionItem value="ac-1">
         <AccordionTrigger asChild>
           <button
-            className="flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover"
+            className="flex w-full items-center justify-between px-4 py-4 text-start text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover"
           >
             Your own button, styled your way
           </button>

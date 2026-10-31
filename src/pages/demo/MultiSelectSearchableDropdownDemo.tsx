@@ -68,7 +68,7 @@ const countryOptions: MultiSelectOption[] = [
 const getClasses = () => ({
   dropdown: {
     root: "",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors min-h-[42px] border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
     content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border`,
     searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-elevated`,
     searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
@@ -795,7 +795,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger:
-                  "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px]",
+                  "flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px]",
                 content:
                   "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
                 searchControl:
@@ -837,7 +837,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               maxVisible={2}
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start border rounded-cl-md transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-cl-accent min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus`,
                 value:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus`,
@@ -1355,7 +1355,7 @@ const MultiSelectSearchableDropdownDemo = () => {
               onKeyDown={(e) => setCombinedKey(JSON.stringify(e.key))}
               classes={{
                 ...c.dropdown,
-                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
+                trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start border rounded-cl-md transition-colors min-h-[42px] border-cl-border-input-focus bg-cl-accent/10 text-cl-text hover:border-cl-border-input-focus focus:outline-none focus:ring-2 focus:ring-cl-accent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
                 value:
                   "flex-1 flex items-center gap-1.5 flex-wrap min-w-0",
                 content: `rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus`,

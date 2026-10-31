@@ -150,7 +150,7 @@ const getClasses = () => ({
     icon: "shrink-0",
     ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-text/[0.14] text-cl-text-secondary`,
     dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border`,
-    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
+    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-start bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated`,
   },
   pill: {
     list: "flex flex-wrap items-center gap-2",
@@ -158,7 +158,7 @@ const getClasses = () => ({
     separator: "text-cl-text-secondary",
     ellipsisTrigger: `flex items-center justify-center w-10 h-10 rounded-full transition-all cursor-pointer bg-cl-bg-panel hover:bg-cl-bg-hover text-cl-text-secondary border border-cl-border-input hover:shadow-sm`,
     content: `flex flex-col min-w-40 rounded-cl-lg shadow-lg py-2 bg-cl-bg-elevated border border-cl-border`,
-    collapsedItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-left bg-transparent text-cl-text-secondary hover:bg-cl-bg-hover`,
+    collapsedItem: `flex items-center gap-2 px-4 py-2 text-sm cursor-pointer w-full text-start bg-transparent text-cl-text-secondary hover:bg-cl-bg-hover`,
   } satisfies BreadcrumbClasses,
   colored: {
     root: `p-4 rounded-cl-md bg-cl-accent-surface`,
@@ -173,7 +173,7 @@ const getClasses = () => ({
   coloredExtra: {
     ellipsisButton: `flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent-bg hover:bg-cl-accent-bg-hover text-cl-accent-hover`,
     dropdown: `flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-panel border border-cl-border-input-focus`,
-    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent-surface`,
+    dropdownItem: `flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-start bg-transparent border border-none text-cl-accent hover:bg-cl-accent-surface`,
   },
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,

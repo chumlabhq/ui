@@ -122,7 +122,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
 | `classes` | object | — | CSS class overrides for button sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
-| `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
+| `iconAnimation` | `"none"` \| `"slideEnd"` \| `"slideStart"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
 | `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
 | `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
@@ -322,7 +322,7 @@ const [saving, setSaving] = useState(false);
 <Button
   className={primaryClasses}
   startIcon={<ArrowRightIcon />}
-  iconAnimation="slideRight"
+  iconAnimation="slideEnd"
 >
   Continue
 </Button>
@@ -362,7 +362,7 @@ const [saving, setSaving] = useState(false);
 | Two backgrounds fighting | Both `classes.root` and `className` have bg classes | Use one or the other for colors. `className` takes priority in CSS. |
 | Focus ring shows white gap on dark bg | Missing `dark:focus-visible:ring-offset-gray-900` | Add offset color matching your dark background. |
 | Link button still looks like button | `as="a"` but no link-specific classes | Use underline/text-color classes instead of bg classes. |
-| Icon not animating | `iconAnimation="none"` (default) | Set `iconAnimation="slideRight"` etc. |
+| Icon not animating | `iconAnimation="none"` (default) | Set `iconAnimation="slideEnd"` etc. |
 | Animation runs continuously | `animateOnHover={false}` | Set `animateOnHover={true}` (default) for hover-only. |
 | Loading spinner not visible | Custom `className` hides it | Check `loading` slot classes. Default spinner is 16px white. |
 | `as="span"` not keyboard accessible | Missing aria-label | Add `aria-label` — dev warning should appear in console. |
@@ -418,7 +418,7 @@ const [saving, setSaving] = useState(false);
 | Icon placement | `title="With Icons"` | startIcon, endIcon combinations |
 | Icon-only | `title="Icon Only Buttons"` | aria-label requirement |
 | Polymorphic | `title="Polymorphic Rendering (as prop)"` | as="button", as="a", as="span" |
-| Hover animations | `title="Icon Animations (On Hover)"` | slideRight/Left/Up/Down |
+| Hover animations | `title="Icon Animations (On Hover)"` | slideEnd/Start/Up/Down |
 | Bounce/pulse/spin | `title="More Animation Effects"` | animateIcon="leading" |
 | Both icons animated | `title="Animate Both Icons"` | animateIcon="both" |
 | Always-on animation | `title="Continuous Animation"` | animateOnHover={false} |

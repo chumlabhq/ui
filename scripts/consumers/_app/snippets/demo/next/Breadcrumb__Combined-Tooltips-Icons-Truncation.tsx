@@ -90,7 +90,7 @@ export default function BreadcrumbExample() {
                     itemIcon: "shrink-0",
                     ellipsisTrigger: "flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer bg-cl-accent-bg hover:bg-cl-accent-bg-hover text-cl-accent-hover",
                     content: "flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-panel border border-cl-border-input-focus",
-                    collapsedItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-accent hover:bg-cl-accent-surface"
+                    collapsedItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-start bg-transparent border border-none text-cl-accent hover:bg-cl-accent-surface"
                   }
       }
       onItemClick={handleItemClick}

@@ -327,18 +327,19 @@ The behaviours below are the ones with a contract test behind them, named so you
 "WAI-ARIA 1.2" is not claimed as a conformance statement; the contracts above test specific
 behaviours, not the whole specification.
 
-### Right-to-left is not supported
+### Right-to-left
 
-`dir="rtl"` is not supported in 0.1.0. The components render, and nothing is lost off the
-edge of the screen — every floating surface is still clamped into the viewport — but nothing
-mirrors: a menu opens from the left of its trigger in both directions, a submenu opens to the
-right in both, and a Slider fills from the left in both. Spacing, text alignment and icon
-direction are written physically (`pl-*`, `text-left`, a chevron that points right), so they
-do not mirror either.
+Put `dir="rtl"` on the page, or on any ancestor, and the components follow it: spacing and
+alignment are logical, menus open from the trigger's inline-start edge, arrow keys move to
+the element they point at, Slider, Switch and Table's resize handles are placed from the
+inline start, directional icons mirror, and text the library writes ("+3", "+44", "09:30",
+"Search…") reads in its own order. Props that name a side take `start`/`end` (Drawer `side`,
+ToastProvider `position`, Avatar's badge and status corners, Button's `slideStart`/`slideEnd`,
+ResizablePanel `resizeDirection`), so one value is right in both directions.
 
-It is measured rather than assumed: `e2e/rtl.spec.ts` renders the `dir="rtl"` fixtures
-and carries the measurement for each surface in its skip reason. RTL is a 1.1 feature, and
-`ACCESSIBILITY.md` records the order the work has to be done in.
+Each part is held by a gate in five browsers: `e2e/rtl-surfaces.spec.ts`,
+`e2e/rtl-keys.spec.ts` and `e2e/rtl-paint.spec.ts`. `ACCESSIBILITY.md` lists them, and what
+stays the same in both directions by decision (digit rows, Tooltip's `side`, the clock dial).
 
 ---
 

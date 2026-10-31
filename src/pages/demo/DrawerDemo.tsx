@@ -90,8 +90,8 @@ const DrawerDemo = () => {
   const basic = useDrawerState();
   const untrapped = useDrawerState();
   const directions = {
-    left: useDrawerState(),
-    right: useDrawerState(),
+    start: useDrawerState(),
+    end: useDrawerState(),
     top: useDrawerState(),
     bottom: useDrawerState(),
   };
@@ -177,13 +177,13 @@ const DrawerDemo = () => {
       {/* ─── Directions ─────────────────────────────────────────────────── */}
       <Section
         title="Directions"
-        description="Slide from left, right, top, or bottom."
+        description="Slide in from the inline start or end, the top or the bottom. Start is the left in a left-to-right page and the right in a right-to-left one."
         isDarkMode={dark}
       >
         <DemoWrapper isDarkMode={dark} layout="inline">
           {/* Each Drawer beside its own button, inside the wrapper: the panel
               portals out, and the snippet carries the Drawer with its trigger. */}
-          {(["left", "right", "top", "bottom"] as const).map((dir) => (
+          {(["start", "end", "top", "bottom"] as const).map((dir) => (
             <div key={dir}>
               <Button className={c.btn} onClick={directions[dir].onOpen}>
                 {dir}
@@ -328,7 +328,7 @@ const DrawerDemo = () => {
           open={nonModal.open}
           onOpenChange={nonModal.onOpenChange}
           modal={false}
-          side="right"
+          side="end"
           lockScroll={false}
         >
           {renderDrawerContent(
@@ -572,7 +572,7 @@ const DrawerDemo = () => {
         <Drawer
           open={classesDemo.open}
           onOpenChange={classesDemo.onOpenChange}
-          side="right"
+          side="end"
           size="360px"
           classes={{
             overlay: `fixed inset-0 transition-opacity bg-cl-accent/30`,
@@ -580,7 +580,7 @@ const DrawerDemo = () => {
           }}
         >
           <div
-            className={`flex flex-col h-full bg-cl-bg border-l border-cl-border-input-focus`}
+            className={`flex flex-col h-full bg-cl-bg border-s border-cl-border-input-focus`}
           >
             <DrawerHeader
               className={`flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus`}
@@ -645,7 +645,7 @@ const DrawerDemo = () => {
         <Drawer
           open={formDrawer.open}
           onOpenChange={formDrawer.onOpenChange}
-          side="right"
+          side="end"
           size="400px"
         >
           <div className={c.panel}>
@@ -731,7 +731,7 @@ const DrawerDemo = () => {
             Show it
           </Button>
           {announcementMounts > 0 && (
-            <Drawer key={announcementMounts} defaultOpen side="right" aria-label="What's new">
+            <Drawer key={announcementMounts} defaultOpen side="end" aria-label="What's new">
               <div className="flex h-full flex-col bg-cl-bg text-cl-text">
                 <DrawerHeader className="flex items-center justify-between border-b border-cl-border px-6 py-4">
                   <h2 className="text-[17px] font-semibold">What's new</h2>

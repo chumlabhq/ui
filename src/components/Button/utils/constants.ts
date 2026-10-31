@@ -5,8 +5,8 @@ export const BASE_TRANSITION = "transition-transform duration-200";
 
 export const HOVER_ANIMATION_MAP: Record<IconAnimation, string> = {
   none: "",
-  slideRight: `${BASE_TRANSITION} group-hover:translate-x-1`,
-  slideLeft: `${BASE_TRANSITION} group-hover:-translate-x-1`,
+  slideEnd: `${BASE_TRANSITION} group-hover:translate-x-1 rtl:group-hover:-translate-x-1`,
+  slideStart: `${BASE_TRANSITION} group-hover:-translate-x-1 rtl:group-hover:translate-x-1`,
   slideUp: `${BASE_TRANSITION} group-hover:-translate-y-1`,
   slideDown: `${BASE_TRANSITION} group-hover:translate-y-1`,
   bounce: `${BASE_TRANSITION} group-hover:animate-bounce`,
@@ -16,8 +16,8 @@ export const HOVER_ANIMATION_MAP: Record<IconAnimation, string> = {
 
 export const CONTINUOUS_ANIMATION_MAP: Record<IconAnimation, string> = {
   none: "",
-  slideRight: `${BASE_TRANSITION} animate-slide-right`,
-  slideLeft: `${BASE_TRANSITION} animate-slide-left`,
+  slideEnd: `${BASE_TRANSITION} animate-slide-right rtl:animate-slide-left`,
+  slideStart: `${BASE_TRANSITION} animate-slide-left rtl:animate-slide-right`,
   slideUp: `${BASE_TRANSITION} animate-slide-up`,
   slideDown: `${BASE_TRANSITION} animate-slide-down`,
   bounce: "animate-bounce",

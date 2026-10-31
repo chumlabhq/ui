@@ -42,7 +42,7 @@ export default function TimePickerExample() {
                footer: "flex items-center justify-end gap-2 mt-4",
                cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
                confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
-               row: "flex flex-col gap-1 ml-3",
+               row: "flex flex-col gap-1 ms-3",
                periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover"
              }
           }
@@ -54,7 +54,7 @@ export default function TimePickerExample() {
       </div>
       <div className="text-sm text-cl-text-secondary">
         <p className="mb-1 font-medium">Try typing:</p>
-        <ul className="list-disc pl-5 space-y-0.5 text-xs">
+        <ul className="list-disc ps-5 space-y-0.5 text-xs">
           <li>
             <code className="font-mono">2p</code>
             &rarr; 02:00 PM

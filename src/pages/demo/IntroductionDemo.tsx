@@ -97,7 +97,7 @@ const IntroductionDemo = () => {
         title="Who it's for"
         description="If any of these sound like you, Chumlab UI was built with you in mind."
       >
-        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
+        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc ps-5 marker:text-accent">
           <li>
             Engineers who want a working component library without re-inventing
             accessibility every project.

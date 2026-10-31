@@ -30,7 +30,7 @@ export default function SearchableDropdownExample() {
         placeholder="Pick a fruit..."
         classes={
           {
-            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent",
+            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent",
             content: "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border",
             searchInput: "flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-recessed",
             searchIcon: "w-4 h-4 shrink-0 text-cl-text-tertiary",
@@ -45,7 +45,7 @@ export default function SearchableDropdownExample() {
             <button
               ref={ref as React.RefCallback<HTMLButtonElement>}
               {...triggerProps}
-              className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? ("border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"} cursor-pointer`}
+              className={`flex items-center gap-3 w-full px-4 py-3 text-start rounded-cl-lg border-2 transition-all ${isOpen ? ("border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"} cursor-pointer`}
             >
               <span
                 className={`text-xl ${selectedOption ? "" : "opacity-50"}`}

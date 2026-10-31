@@ -47,7 +47,7 @@ export default function ModalExample() {
             header: "flex items-start gap-3 p-6 pb-4",
             title: "font-semibold text-lg text-cl-text",
             description: "mt-1 text-sm text-cl-text-secondary",
-            closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ml-auto",
+            closeTrigger: "shrink-0 p-1 rounded-cl-md hover:bg-cl-bg-hover transition-colors ms-auto",
             closeIcon: "w-5 h-5 text-cl-text-tertiary",
             body: "px-6 pb-6"
           }
@@ -121,7 +121,7 @@ export default function ModalExample() {
                 <p className="text-sm text-cl-text-tertiary truncate">Annual Report 2024.pdf</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 ml-auto">
+            <div className="flex items-center gap-2 ms-auto">
               <Button
                 className="px-3 py-2 text-sm text-cl-text-secondary hover:bg-cl-bg-hover rounded-cl-md transition-colors flex items-center gap-2 cursor-pointer"
                 onClick={() => setDocAction("Download started (demo)")}
@@ -171,7 +171,7 @@ export default function ModalExample() {
               className="max-w-4xl mx-auto bg-cl-bg-elevated rounded-cl-lg shadow-sm border border-cl-border p-12 origin-top transition-transform"
               style={{ transform: `scale(${docZoom / 100})` }}
             >
-              <p className="text-right text-sm text-cl-text-tertiary mb-4">
+              <p className="text-end text-sm text-cl-text-tertiary mb-4">
                 Page
                 {docPage}
                 of
@@ -339,7 +339,7 @@ export default function ModalExample() {
                   />
                 </svg>
               </Button>
-              <span className="text-sm text-cl-text-tertiary ml-2">
+              <span className="text-sm text-cl-text-tertiary ms-2">
                 {docZoom}
                 %
               </span>

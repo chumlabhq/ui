@@ -27,7 +27,7 @@ const AnimationDemo = () => {
         title="Defaults"
         description="Every animated primitive ships with sensible defaults — quick, never bouncy."
       >
-        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
+        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc ps-5 marker:text-accent">
           <li>
             <span className="text-fg font-medium">Hover transitions</span>:{" "}
             <code className="font-mono text-[12px] text-accent">transition-colors</code>{" "}

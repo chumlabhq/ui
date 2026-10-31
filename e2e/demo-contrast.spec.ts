@@ -55,6 +55,15 @@ import { EXEMPT, LATE_SECTIONS, demoPages, demoPreviewRoutes, demoRoutes, outsid
 const ROUTES = [...demoRoutes(), ...demoPreviewRoutes()];
 
 /**
+ * Every route is read in both directions. The demo's direction control writes
+ * `dir` on the document root from `chumlab-demo-dir`, so a page is set the way
+ * a viewer sets it, then checked to have rendered in it before it is measured:
+ * a colour that is right only left to right is a finding like any other.
+ */
+const DIRECTIONS = ["ltr", "rtl"] as const;
+type Dir = (typeof DIRECTIONS)[number];
+
+/**
  * CPU throttle, for proving the wait rather than for the gate.
  *
  * `DEMO_CONTRAST_CPU_THROTTLE=6` runs every page at 6× CPU slowdown through
@@ -565,8 +574,8 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
   expect(uncovered, "demo pages no measured route renders — the route list missed them").toEqual([]);
   expect(staleExemptions, "exempt from coverage and measured anyway — delete the exemption").toEqual([]);
 
-  const findings: Array<{ route: string; theme: string; key: string; ratio: number; detail: string }> = [];
-  const short: Array<{ route: string; theme: string; measured: number; floor: number; named: string[] }> = [];
+  const findings: Array<{ route: string; theme: string; dir: Dir; key: string; ratio: number; detail: string }> = [];
+  const short: Array<{ route: string; theme: string; dir: Dir; measured: number; floor: number; named: string[] }> = [];
 
   /**
    * What a read under its floor was missing, by selector, text and paint.
@@ -605,10 +614,13 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
     return [`${missing.length} named`, ...missing];
   };
   const notReady: string[] = [];
-  const perPage: Array<{ route: string; theme: string; measured: number; readyMs: number; expanded: number }> = [];
+  const wrongDirection: string[] = [];
+  const perPage: Array<{ route: string; theme: string; dir: Dir; measured: number; readyMs: number; expanded: number }> = [];
+  const measuredRoutes: Record<Dir, Set<string>> = { ltr: new Set(), rtl: new Set() };
   let measured = 0;
 
   for (const route of ROUTES) {
+    for (const dir of DIRECTIONS) {
     for (const theme of ["light", "dark"] as const) {
       /**
        * Set the way a user sets it, then load.
@@ -623,6 +635,12 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
       await page.addInitScript(
         ([key, value]) => window.localStorage.setItem(key, value),
         ["chumlab-theme", theme] as const,
+      );
+      // The direction the same way: the demo's one direction control keeps the
+      // viewer's choice under this key and writes it on the document root.
+      await page.addInitScript(
+        ([key, value]) => window.localStorage.setItem(key, value),
+        ["chumlab-demo-dir", dir] as const,
       );
       const started = Date.now();
       await page.goto(`/${route}`, { waitUntil: "networkidle" });
@@ -646,48 +664,76 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
           ...(report?.pending ?? []),
           ...(await page.evaluate(paintPending, section)),
         ];
-        notReady.push(`${route} (${theme}) not ready after ${READY_TIMEOUT_MS}ms: ${why.join("; ")}`);
+        notReady.push(`${route} (${theme}, ${dir}) not ready after ${READY_TIMEOUT_MS}ms: ${why.join("; ")}`);
         continue;
       }
+      const renderedDir = await page.evaluate(() => getComputedStyle(document.documentElement).direction);
+      if (renderedDir !== dir) {
+        wrongDirection.push(`${route} (${theme}) asked for ${dir}, rendered ${renderedDir}`);
+        continue;
+      }
+      measuredRoutes[dir].add(route);
       const rows = (await page.evaluate(MEASURE_DOCUMENT)) as Row[];
       let onPage = 0;
       for (const row of rows) {
         if (row.unmeasurable) continue;
         onPage += 1;
-        if (underFloor(row, row.floor ?? 4.5)) findings.push({ route, theme, ...row });
+        if (underFloor(row, row.floor ?? 4.5)) findings.push({ route, theme, dir, ...row });
       }
       measured += onPage;
-      perPage.push({ route, theme, measured: onPage, readyMs, expanded: ready.expanded });
+      perPage.push({ route, theme, dir, measured: onPage, readyMs, expanded: ready.expanded });
       const floor = MEASURED_FLOOR[route];
       if (floor !== undefined && onPage < floor) {
-        short.push({ route, theme, measured: onPage, floor, named: await missingFrom(route, floor, rows) });
+        short.push({ route, theme, dir, measured: onPage, floor, named: await missingFrom(route, floor, rows) });
       }
+    }
     }
   }
 
+  /**
+   * Pages measured in each direction, against a floor read independently of
+   * the route walk: every demo page file (`src/pages/demo/*Demo.tsx`, mapped to
+   * the routes that render it, less the exempt ones) has to have been measured
+   * in that direction, and so has every route the walk found.
+   */
+  const missedPages = (dir: Dir) =>
+    pages.filter((p) => !EXEMPT[p.file] && !p.routes.some((r) => measuredRoutes[dir].has(r))).map((p) => p.file);
+  for (const dir of DIRECTIONS) {
+    const inDir = findings.filter((f) => f.dir === dir);
+    const fresh = inDir.filter((f) => !RECORDED.has(`${f.route} ${f.theme} ${f.key}`)).length;
+    console.log(
+      `DEMO_CONTRAST ${dir} pages=${measuredRoutes[dir].size} (floor ${ROUTES.length} routes; page-files ${covered - missedPages(dir).length}/${covered}) ` +
+        `findings=${inDir.length} (unrecorded ${fresh}) -> ${fresh || measuredRoutes[dir].size < ROUTES.length || missedPages(dir).length ? "RED" : "GREEN"}`,
+    );
+  }
   console.log(
-    `DEMO_CONTRAST pages=${ROUTES.length} measured=${measured} findings=${findings.length} ` +
+    `DEMO_CONTRAST pages=${ROUTES.length} directions=${DIRECTIONS.length} measured=${measured} findings=${findings.length} ` +
       `| page-files=${pages.length} exempt=${Object.keys(EXEMPT).length} covered=${covered - uncovered.length}/${covered}` +
       (CPU_THROTTLE !== 1 ? ` cpu-throttle=${CPU_THROTTLE}x` : ""),
   );
   for (const p of perPage) {
     console.log(
-      `DEMO_CONTRAST_PAGE ${p.route} ${p.theme} measured=${p.measured} ` +
+      `DEMO_CONTRAST_PAGE ${p.route} ${p.theme} ${p.dir} measured=${p.measured} ` +
         `expanded-waited=${p.expanded} ready=${p.readyMs}ms`,
     );
   }
   for (const f of findings.slice(0, 1200)) {
-    console.log(`DEMO_CONTRAST_FINDING ${f.route} ${f.theme} ${f.ratio} ${f.key} :: ${f.detail}`);
+    console.log(`DEMO_CONTRAST_FINDING ${f.route} ${f.theme} ${f.dir} ${f.ratio} ${f.key} :: ${f.detail}`);
   }
 
   expect(notReady, "pages that never became ready, so were not measured").toEqual([]);
+  expect(wrongDirection, "pages that did not render the direction asked for, so were not measured in it").toEqual([]);
+  for (const dir of DIRECTIONS) {
+    expect(measuredRoutes[dir].size, `routes measured ${dir}, against the routes the walk found`).toBe(ROUTES.length);
+    expect(missedPages(dir), `demo page files no route measured ${dir} renders`).toEqual([]);
+  }
 
   for (const s of short) {
-    console.log(`DEMO_CONTRAST_SHORT ${s.route} ${s.theme} measured=${s.measured} floor=${s.floor} — ${s.named[0]}`);
-    for (const m of s.named.slice(1)) console.log(`DEMO_CONTRAST_MISSING ${s.route} ${s.theme} ${m}`);
+    console.log(`DEMO_CONTRAST_SHORT ${s.route} ${s.theme} ${s.dir} measured=${s.measured} floor=${s.floor} — ${s.named[0]}`);
+    for (const m of s.named.slice(1)) console.log(`DEMO_CONTRAST_MISSING ${s.route} ${s.theme} ${s.dir} ${m}`);
   }
   expect(
-    short.map((s) => `${s.route} (${s.theme}): measured ${s.measured}, floor ${s.floor}; ${s.named.join(" | ")}`),
+    short.map((s) => `${s.route} (${s.theme}, ${s.dir}): measured ${s.measured}, floor ${s.floor}; ${s.named.join(" | ")}`),
     "pages measured under their floor — rendered partly, or lost content",
   ).toEqual([]);
   expect(
@@ -703,7 +749,7 @@ test("every demo page clears AA on the text it paints", async ({ page }) => {
   const key = (f: { route: string; theme: string; key: string }) => `${f.route} ${f.theme} ${f.key}`;
   const fresh = findings.filter((f) => !RECORDED.has(key(f)));
   expect(
-    fresh.map((f) => `${f.route} ${f.theme} ${f.ratio}:1 ${f.key} (${f.detail})`).sort(),
+    fresh.map((f) => `${f.route} ${f.theme} ${f.dir} ${f.ratio}:1 ${f.key} (${f.detail})`).sort(),
     "painted under AA on a demo page. The pages are not fixtures, so this is the only thing " +
       "measuring the classes the demo authors wrote for themselves",
   ).toEqual([]);

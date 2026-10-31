@@ -59,15 +59,15 @@ const renderDrawerContent = (
 
 export default function DrawerExample() {
   const directions = {
-    left: useDrawerState(),
-    right: useDrawerState(),
+    start: useDrawerState(),
+    end: useDrawerState(),
     top: useDrawerState(),
     bottom: useDrawerState(),
   };
   return (
     <>
       {
-        (["left", "right", "top", "bottom"] as const).map((dir) => (
+        (["start", "end", "top", "bottom"] as const).map((dir) => (
           <div key={dir}>
             <Button
               className="inline-flex items-center justify-center gap-2 h-10 px-5 text-sm font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cl-accent focus-visible:ring-offset-2 focus-visible:ring-offset-cl-bg cursor-pointer"

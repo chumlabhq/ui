@@ -135,7 +135,7 @@ const getClasses = () => ({
        colour token drops both variants and then only the last one survives,
        which is how every error message on this page rendered green. */
     message: "text-xs mt-1.5 flex items-center gap-1.5",
-    count: `text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary`,
+    count: `text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary`,
   } satisfies TextAreaClasses,
 
   /* The one native field this page renders, for the TextAreaLabel section
@@ -163,7 +163,7 @@ const getClasses = () => ({
   propDesc: `text-xs text-cl-text-secondary`,
   code: `px-1.5 py-0.5 rounded-cl-md text-[11px] font-mono font-medium bg-cl-bg-elevated text-cl-text-secondary`,
  kbd: `px-2 py-1 rounded-cl-md text-[11px] font-mono min-w-[2.5rem] text-center font-medium bg-cl-bg-elevated border border-cl-border text-cl-text-secondary`,
-  tableHead: `text-left py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
+  tableHead: `text-start py-3 px-4 text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
   tableCell: "py-2.5 px-4",
   divider: `border-t border-cl-border`,
 });

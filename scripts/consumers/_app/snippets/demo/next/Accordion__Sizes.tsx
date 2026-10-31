@@ -12,7 +12,7 @@ export default function AccordionExample() {
         {
           root: "w-full",
           item: "border-b border-cl-border last:border-b-0",
-          itemText: "flex-1 text-left",
+          itemText: "flex-1 text-start",
           content: "overflow-hidden transition-[max-height,opacity,visibility]",
           icon: "shrink-0",
           description: "font-normal mt-0.5 text-cl-text-tertiary",

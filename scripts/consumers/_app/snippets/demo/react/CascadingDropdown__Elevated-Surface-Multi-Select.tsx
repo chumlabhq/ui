@@ -3,12 +3,12 @@ import { CascadingDropdown, CascadingDropdownClasses, CascadingOption, Cascading
 
 const themedSurfaceClasses: CascadingDropdownClasses = {
     trigger:
-      "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border rounded-cl-md bg-cl-bg-elevated text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent",
+      "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border border-cl-border rounded-cl-md bg-cl-bg-elevated text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent",
     content: "bg-cl-bg-elevated border border-cl-border rounded-cl-md shadow-cl-md overflow-visible",
     item:
       "flex items-center justify-between px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-bg-hover data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
     subContent:
-      "min-w-[180px] bg-cl-bg-elevated border border-cl-border rounded-cl-md shadow-cl-md ml-1",
+      "min-w-[180px] bg-cl-bg-elevated border border-cl-border rounded-cl-md shadow-cl-md ms-1",
     subItem:
       "flex items-center gap-2 px-3 py-2 cursor-pointer text-cl-text hover:bg-cl-bg-hover data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed first:rounded-t-cl-md last:rounded-b-cl-md",
     icon: "w-4 h-4 shrink-0 transition-transform duration-200 text-cl-text-tertiary",

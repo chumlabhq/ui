@@ -54,7 +54,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }
         }
         className="flex flex-col"
@@ -80,7 +80,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }), control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15" }
         }
         className="flex flex-col"
@@ -106,7 +106,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }), control: "rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15" }
         }
         className="flex flex-col"

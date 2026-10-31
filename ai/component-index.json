@@ -1813,7 +1813,7 @@
         "striped",
         "stripedClassName",
         "size",
-        "pinnedRightColumns",
+        "pinnedEndColumns",
         "onExport",
         "editable",
         "editableColumns",

@@ -496,7 +496,7 @@ export function ClockFace({
       onMouseDown={(e) => e.preventDefault()}
       onKeyDown={handleContainerKeyDown}
     >
-      <div className={cls.clockDisplay}>
+      <div className={cls.clockDisplay} dir="auto">
         <button
           type="button"
           className={[

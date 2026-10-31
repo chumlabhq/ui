@@ -41,7 +41,7 @@ export default function DrawerExample() {
       <Drawer
         open={classesDemo.open}
         onOpenChange={classesDemo.onOpenChange}
-        side="right"
+        side="end"
         size="360px"
         classes={
           {
@@ -50,7 +50,7 @@ export default function DrawerExample() {
           }
         }
       >
-        <div className="flex flex-col h-full bg-cl-bg border-l border-cl-border-input-focus">
+        <div className="flex flex-col h-full bg-cl-bg border-s border-cl-border-input-focus">
           <DrawerHeader
             className="flex items-center justify-between px-5 py-4 border-b border-cl-border-input-focus"
           >

@@ -231,7 +231,7 @@ const GettingStartedDemo = () => {
               style={{ borderLeft: "2px solid var(--accent)" }}
             >
               <span
-                className="font-medium mr-2"
+                className="font-medium me-2"
                 style={{ color: "var(--accent)" }}
               >
                 Note

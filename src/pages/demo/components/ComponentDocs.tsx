@@ -83,7 +83,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           description="What the component puts on the DOM, for your own CSS and your own tests. Read off the JSX, so it is what ships rather than what was written down."
         >
           <div className="code-scroll overflow-x-auto w-full min-w-0">
-            <table className="w-full table-fixed text-left min-w-[560px]">
+            <table className="w-full table-fixed text-start [&_th]:text-start min-w-[560px]">
               <colgroup>
                 <col className="w-[34%]" />
                 <col className="w-[30%]" />
@@ -141,7 +141,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           description="Set by the component on its own elements, so your CSS can read them."
         >
           <div className={cardClass}>
-            <ul className="list-disc pl-5 space-y-2 text-sm text-fg-secondary">
+            <ul className="list-disc ps-5 space-y-2 text-sm text-fg-secondary">
               {doc.cssVariables.map((variable) => (
                 <li key={variable} className="font-mono text-[13px]">
                   {variable}
@@ -161,7 +161,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
           )}
           {doc.keyboard.rows.length > 0 && (
             <div className="code-scroll overflow-x-auto w-full min-w-0">
-              <table className="w-full table-fixed text-left min-w-[520px]">
+              <table className="w-full table-fixed text-start [&_th]:text-start min-w-[520px]">
                 <colgroup>
                   <col className="w-[30%]" />
                   <col className="w-[70%]" />
@@ -192,7 +192,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
       {doc.accessibility.length > 0 && (
         <Section title="Accessibility">
           <div className={cardClass}>
-            <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-fg-secondary">
+            <ul className="list-disc ps-5 space-y-2 text-sm leading-relaxed text-fg-secondary">
               {doc.accessibility.map((line) => (
                 <li key={line}>
                   <Inline text={line} />
@@ -272,7 +272,7 @@ export const ComponentAnatomy: FC<{ name: string; doc?: ComponentDoc }> = ({ nam
         <div data-anatomy="slots" className="space-y-3">
           <h3 className="font-mono text-[13px] text-fg">Parts and slots</h3>
           <div className="code-scroll overflow-x-auto w-full min-w-0">
-            <table className="w-full table-fixed text-left min-w-[600px]">
+            <table className="w-full table-fixed text-start [&_th]:text-start min-w-[600px]">
               <colgroup>
                 <col className="w-[26%]" />
                 <col className="w-[20%]" />
@@ -414,7 +414,7 @@ export const SetupNote: FC = () => (
       <pre className={preClass} {...scrollableCode}>
         <code>{'import "@chumlab/ui/styles.css";'}</code>
       </pre>
-      <ul className="list-disc pl-5 space-y-2 text-sm leading-relaxed text-fg-secondary mt-4">
+      <ul className="list-disc ps-5 space-y-2 text-sm leading-relaxed text-fg-secondary mt-4">
         <li>
           <strong className="text-fg">Our utilities cannot reach your markup.</strong> Every one is
           emitted as <code className="font-mono text-[12px]">.flex:where(.cl-s)</code> — a marker

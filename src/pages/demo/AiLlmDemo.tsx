@@ -26,7 +26,7 @@ const AiLlmDemo = () => {
         title="LLM-friendly APIs"
         description="The properties that make Chumlab UI components reliable for AI tooling to emit."
       >
-        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
+        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc ps-5 marker:text-accent">
           <li>
             <span className="text-fg font-medium">Strict TypeScript types</span>{" "}
             — every prop, every variant, every event handler. LLMs
@@ -59,7 +59,7 @@ const AiLlmDemo = () => {
         title="Streaming UIs"
         description="The primitives we reach for when building chat and streaming experiences."
       >
-        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
+        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc ps-5 marker:text-accent">
           <li>
             <span className="text-fg font-medium">Toast</span> — surfacing
             non-blocking status (model switched, tokens left, request rate
@@ -93,7 +93,7 @@ const AiLlmDemo = () => {
   return (
     <p className="text-[14px] leading-[1.6] text-fg whitespace-pre-wrap">
       {content}
-      <span className="inline-block w-[2px] h-[14px] bg-accent animate-cursor ml-0.5" />
+      <span className="inline-block w-[2px] h-[14px] bg-accent animate-cursor ms-0.5" />
     </p>
   );
 }`}

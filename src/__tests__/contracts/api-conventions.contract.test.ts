@@ -79,8 +79,8 @@ const SLOT_VOCABULARY = new Set([
   "itemIndicator", "itemRow", "itemText", "label", "link", "list", "listHeader", "listRow", "loading",
   "loadingBar", "loadingFooter", "loadingItem", "loadingItemControl", "loadingRow", "mark", "markLabel",
   "markerIndicator", "message", "mobileCard", "monthSelect", "navIcon", "navTrigger", "overlay", "pageInfo",
-  "periodTrigger", "pinIcon", "pinTrigger", "pinnedList", "pinnedRegion", "pinnedRightList",
-  "pinnedRightRegion", "positioner", "prefix", "presetGroup", "presetTrigger", "range", "resizeHandle",
+  "periodTrigger", "pinIcon", "pinTrigger", "pinnedList", "pinnedRegion", "pinnedEndList",
+  "pinnedEndRegion", "positioner", "prefix", "presetGroup", "presetTrigger", "range", "resizeHandle",
   "resizeIndicator", "root", "row", "rowsPerPage", "scrollRegion", "searchControl", "searchIcon",
   "searchInput", "separator", "sortIcon", "status", "subContent", "subItem", "subPositioner",
   "subSearchControl", "subSearchIcon", "subSearchInput", "suffix", "surplus", "thumb", "title", "titleBar",
@@ -210,7 +210,6 @@ const EXCEPTIONS: { rule: Rule; id: string; prop: string; reason: string }[] = [
   ...([["Tooltip/Tooltip", "side"], ["Breadcrumb/Breadcrumb", "tooltipSide"], ["TabPanel/TabPanel", "tooltipSide"], ["Breadcrumb/Breadcrumb", "dropdownSide"]] as const).map(
     ([id, prop]) => ({ rule: "physical-side" as const, id, prop, reason: "a floating layer's side of its anchor, one of four physical edges, as Floating UI and Radix name it" }),
   ),
-  { rule: "physical-side", id: "Drawer/Drawer", prop: "side", reason: "the viewport edge the drawer enters from, physical by decision (A2c kept the four edges)" },
 ];
 
 // ── The population ─────────────────────────────────────────────────────────

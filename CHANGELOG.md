@@ -611,6 +611,9 @@ tables say.
 | `classes.expandButton` | `classes.expandTrigger` | slot |
 | `classes.filterButton` | `classes.filterTrigger` | slot |
 | `classes.pinButton` | `classes.pinTrigger` | slot |
+| `pinnedRightColumns` | `pinnedEndColumns` | the inline end: the right in a left-to-right page, the left in a right-to-left one, as it already painted |
+| `classes.pinnedRightRegion` | `classes.pinnedEndRegion` | slot |
+| `classes.pinnedRightList` | `classes.pinnedEndList` | slot |
 
 ##### TextArea
 
@@ -654,6 +657,26 @@ tables say.
 | Old | New | Note |
 |---|---|---|
 | `disableHoverableContent` | `hoverableContent` | inverted; default `true` |
+
+##### Values that named a physical side
+
+The physical values are retired, not aliased: start and end follow the page's direction, so one value is right in a left-to-right and a right-to-left page. Top, bottom and center stay.
+
+- Drawer `side`: `"left"` is now `"start"`, still the default: the left edge in a left-to-right page, the right in a right-to-left one.
+- Drawer `side`: `"right"` is now `"end"`.
+- ToastProvider `position`: `"top-left"` is now `"top-start"`.
+- ToastProvider `position`: `"top-right"` is now `"top-end"`.
+- ToastProvider `position`: `"bottom-left"` is now `"bottom-start"`.
+- ToastProvider `position`: `"bottom-right"` is now `"bottom-end"`, still the default.
+- AvatarBadge `position` and Avatar's `status.position`: `"top-right"` is now `"top-end"`, AvatarBadge's default.
+- AvatarBadge `position` and Avatar's `status.position`: `"top-left"` is now `"top-start"`.
+- AvatarBadge `position` and Avatar's `status.position`: `"bottom-right"` is now `"bottom-end"`, the status default.
+- AvatarBadge `position` and Avatar's `status.position`: `"bottom-left"` is now `"bottom-start"`.
+- Button `iconAnimation`: `"slideRight"` is now `"slideEnd"`.
+- Button `iconAnimation`: `"slideLeft"` is now `"slideStart"`.
+- ResizablePanel `resizeDirection`: `"left"` is now `"start"`.
+- ResizablePanel `resizeDirection`: `"right"` is now `"end"`.
+- ResizablePanel `resizeDirection` defaults to `"end"`, the edge between the panes in either direction. The old default, `"right"`, put the handle on the panel's outer edge in a right-to-left page, where neither the arrows nor a drag could move it.
 
 ### Removed
 
@@ -980,11 +1003,15 @@ tables say.
 - Arrow keys move to the element they point at in a right-to-left page, in CascadingDropdown, DatePicker's calendar grid and Table's grid. Each mapped ArrowLeft to the previous item whatever the direction, so in a right-to-left page focus went to the visually opposite day or cell, and CascadingDropdown's ArrowRight opened a submenu drawn on the left while ArrowLeft did nothing; the arrow pointing at a submenu now opens it and the opposite arrow closes it, for `submenuSide` `"start"` as well as `"end"`, which also changes a left-to-right page with `submenuSide="start"`, where ArrowRight opened the submenu drawn on the left.
 - OtpInput's boxes keep a left-to-right digit row in a right-to-left page, where a code reads left to right too, so ArrowLeft moves to the box on the left. The boxes were laid out right to left while ArrowLeft still moved to the previous box, which sat to the right. The row stays at the start of the line.
 - RadioGroup names its radios when no `name` is passed, so the browser groups them: Firefox moved nothing on an arrow key in an unnamed group, even left to right. Its arrow keys now behave the same in every engine: the next or previous enabled radio, selected, wrapping at the ends, with ArrowLeft and ArrowRight mirrored in a right-to-left page. WebKit neither wrapped nor mirrored. The generated name is submitted with a native form; pass `name` if the group is submitted in a form.
-- Position math follows the inline direction in a right-to-left page, in Slider, Switch and Table's column resize. Slider placed its thumb, fill and marks from the physical left and read a press from the left, so value 25 sat 75% from the leading edge and a press near the right end read as a low value; its arrows now move the thumb toward themselves, so ArrowLeft increases in a right-to-left page, as native range inputs do in Chromium and Firefox. A checked Switch's thumb travelled right and painted past its track. Table's resize handles sat on each column's inline-start edge and the arrows and a drag changed the width the physical way; they now sit on the inline-end edge, the left, where the arrow and the pointer move the edge they point at. ResizablePanel is unchanged: its default `resizeDirection="right"` names a physical edge.
+- Position math follows the inline direction in a right-to-left page, in Slider, Switch and Table's column resize. Slider placed its thumb, fill and marks from the physical left and read a press from the left, so value 25 sat 75% from the leading edge and a press near the right end read as a low value; its arrows now move the thumb toward themselves, so ArrowLeft increases in a right-to-left page, as native range inputs do in Chromium and Firefox. A checked Switch's thumb travelled right and painted past its track. Table's resize handles sat on each column's inline-start edge and the arrows and a drag changed the width the physical way; they now sit on the inline-end edge, the left, where the arrow and the pointer move the edge they point at.
 - Icons that point along the line mirror in a right-to-left page: Pagination's previous and next chevrons, Breadcrumb's default separators, the chevron on a CascadingDropdown item with a submenu, DatePicker's month and year arrows and Table's expand icon all pointed the left-to-right way. CascadingDropdown's chevron now points to the side `submenuSide` opens on, so with `submenuSide="start"` it points left in a left-to-right page, where it pointed right while the submenu opened on the left; a submenu that flips for want of room keeps its chevron, as native menus do. Icons with no direction, such as search, close, check, sort and the down chevrons, do not mirror. Icons you pass in are drawn as given.
+- Text the library writes reads in its own order in a right-to-left page: AvatarGroup's surplus "+3" painted "3+", AvatarBadge's "99+" painted "+99", InternationalPhoneInput's dial code "+44" painted "44+", TimePicker's clock header "09:30" painted "30:09", a negative Slider value "-20" painted "20-", and every "Search..." placeholder painted "...Search". Each token takes its direction from its own text (`dir="auto"`), and the search fields of SearchableDropdown, MultiSelectSearchableDropdown, Table and CascadingDropdown lay out their placeholder and what is typed by its first letter, so Arabic typed in a left-to-right page no longer paints "12 مرحبا" for "مرحبا 12".
+- Tooltip's arrow points at the centre of its trigger: it sat 1px past it, measured from the tooltip's border box while it is placed inside the border, and on a left or right tooltip it sat 2px above the trigger's middle, from the rotated arrow's box.
+- Button's `iconAnimation` no longer moves the icon when `unstyled` is set, which removes motion everywhere else.
 
 ### Fixed (documentation)
 
+- **Right-to-left is documented as it now works.** README, ACCESSIBILITY.md and the site's FAQ said `dir="rtl"` was not supported in 0.1.0; they now say what mirrors and name the gate that holds each part (rtl-surfaces, rtl-keys, rtl-paint, the direction contracts), and what stays the same in both directions by decision. CascadingDropdown's `submenuSide`, Table's pinned columns and the ResizablePanel, TabPanel, Table and Accordion examples describe start and end, not left and right.
 - **Every demo field is named for what it holds, or by the caption beside it.** 257 names on 17 demo pages named their example's variant ("Date, German locale", "Fruits (ghost)", "Small switch", "Required Field") and 6 gave an instruction ("Type anything"). 71 now point at the visible caption beside the field by `aria-labelledby`, the caption carrying an `id` its snippet keeps; the rest name what the field holds ("Date", "Fruits", "Email"). The Initial Focus modal's two native labels were not linked to their inputs at all; they are now.
 - **`aria-labelledby` and `aria-describedby` are documented wherever they are accepted.** Dropdown, SearchableDropdown and MultiSelectDropdown take `aria-labelledby`, and their pages pass it, but their schemas and All Props tables did not list it, so DEMO-COVERAGE.md counted 3 demonstrated but undocumented props. The same two props were missing from CascadingDropdown and MultiSelectSearchableDropdown, and `aria-describedby` from Slider. The count reads 0, and `audit-demo-coverage.mjs --check` now fails when it is above 0, with the count and its population printed beside the verdict.
 - **Every demo field has a name.** The demo pages and phone previews rendered 303 fields with no accessible name; 278 now take one from their example's heading or purpose, and the other 25 were closed Drawers whose warning was Drawer's own defect (above). 18 of the names were revised to that rule, 14 of them to point at the visible caption above the field, which a field's snippet now carries as a `<p id>`. 0 warnings on 37 pages and 57 routes.

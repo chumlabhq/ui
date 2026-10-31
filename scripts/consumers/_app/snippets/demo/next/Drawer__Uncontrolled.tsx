@@ -16,7 +16,7 @@ export default function DrawerExample() {
       </Button>
       {
         announcementMounts > 0 && (
-          <Drawer key={announcementMounts} defaultOpen side="right" aria-label="What's new">
+          <Drawer key={announcementMounts} defaultOpen side="end" aria-label="What's new">
             <div className="flex h-full flex-col bg-cl-bg text-cl-text">
               <DrawerHeader
                 className="flex items-center justify-between border-b border-cl-border px-6 py-4"

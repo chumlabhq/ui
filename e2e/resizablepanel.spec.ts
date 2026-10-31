@@ -28,7 +28,7 @@ test.describe("ResizablePanel Component", () => {
     });
 
     test("panel renders with correct initial width", async ({ page }) => {
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       const separator = rightSection.getByRole("separator");
       const valueNow = await separator.getAttribute("aria-valuenow");
       expect(Number(valueNow)).toBeGreaterThanOrEqual(200);
@@ -38,7 +38,7 @@ test.describe("ResizablePanel Component", () => {
 
   test.describe("Keyboard Navigation", () => {
     test("ArrowRight increases width for right-resize panel", async ({ page }) => {
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       const separator = rightSection.getByRole("separator");
       const initialValue = Number(await separator.getAttribute("aria-valuenow"));
 
@@ -50,7 +50,7 @@ test.describe("ResizablePanel Component", () => {
     });
 
     test("ArrowLeft decreases width for right-resize panel", async ({ page }) => {
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       const separator = rightSection.getByRole("separator");
       const initialValue = Number(await separator.getAttribute("aria-valuenow"));
 
@@ -62,7 +62,7 @@ test.describe("ResizablePanel Component", () => {
     });
 
     test("Home sets panel to minimum size", async ({ page }) => {
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       const separator = rightSection.getByRole("separator");
       const minValue = Number(await separator.getAttribute("aria-valuemin"));
 
@@ -74,7 +74,7 @@ test.describe("ResizablePanel Component", () => {
     });
 
     test("End sets panel to maximum size", async ({ page }) => {
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       const separator = rightSection.getByRole("separator");
       const maxValue = Number(await separator.getAttribute("aria-valuemax"));
 
@@ -124,7 +124,7 @@ test.describe("ResizablePanel Component", () => {
 
   test.describe("Pointer Drag Interaction", () => {
     test("dragging the handle resizes the panel", async ({ page }) => {
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       const separator = rightSection.getByRole("separator");
       const initialValue = Number(await separator.getAttribute("aria-valuenow"));
 
@@ -230,7 +230,7 @@ test.describe("ResizablePanel Component", () => {
   test.describe("Accessibility", () => {
     test("separator has no accessibility violations", async ({ page }) => {
       await injectAxe(page);
-      const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+      const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
       await rightSection.scrollIntoViewIfNeeded();
       await checkA11y(page, "[role='separator']", {
         detailedReport: true,
@@ -279,7 +279,7 @@ test.describe("ResizablePanel - Cross Browser", () => {
   });
 
   test("keyboard resize works consistently", async ({ page }) => {
-    const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+    const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
     const separator = rightSection.getByRole("separator");
     const initialValue = Number(await separator.getAttribute("aria-valuenow"));
 
@@ -325,7 +325,7 @@ test.describe("ResizablePanel - Full User Flow", () => {
   });
 
   test("keyboard-only user can resize panel from min to max", async ({ page }) => {
-    const rightSection = page.locator("section").filter({ hasText: "Right Resize (Default)" }).first();
+    const rightSection = page.locator("section").filter({ hasText: "End Resize (Default)" }).first();
     const separator = rightSection.getByRole("separator");
 
     await separator.focus();

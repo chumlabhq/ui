@@ -21,7 +21,7 @@ const getVioletClockTheme = (): TimePickerClasses => ({
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated",
   confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated",
 });
 
@@ -45,7 +45,7 @@ const getRoseClockTheme = (): TimePickerClasses => ({
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated",
   confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated",
 });
 
@@ -69,7 +69,7 @@ const getEmeraldClockTheme = (): TimePickerClasses => ({
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated",
   confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success text-white hover:bg-cl-success",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated",
 });
 

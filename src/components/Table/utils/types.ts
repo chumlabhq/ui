@@ -98,10 +98,10 @@ export interface TableClasses {
   filterItemControl?: string;
   /** Expand/collapse icon button. */
   expandTrigger?: string;
-  /** Right-pinned column container. */
-  pinnedRightRegion?: string;
-  /** The `<table>` element for right-pinned columns. */
-  pinnedRightList?: string;
+  /** End-pinned column container. */
+  pinnedEndRegion?: string;
+  /** The `<table>` element for end-pinned columns. */
+  pinnedEndList?: string;
   /** Inline edit input field. A text field, so it takes the field boundary
    *  (`--cl-border-input`) and the field hover and focus treatment. */
   input?: string;
@@ -154,6 +154,7 @@ export interface TableProps<TData> {
   data?: TData[];
   loading?: boolean;
   showHeader?: boolean;
+  /** Column IDs to pin to the inline start: the left in a left-to-right page, the right in a right-to-left one. */
   pinnedColumns?: string[];
   /** Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned. */
   onPinnedColumnsChange?: (pinnedColumns: string[]) => void;
@@ -269,8 +270,8 @@ export interface TableProps<TData> {
   /** Cell padding and text size. Defaults to `"md"`. */
   size?: "sm" | "md" | "lg";
 
-  /** Column IDs to pin to the right side of the table. */
-  pinnedRightColumns?: string[];
+  /** Column IDs to pin to the inline end: the right in a left-to-right page, the left in a right-to-left one. */
+  pinnedEndColumns?: string[];
 
   /** Enable inline cell editing: double-click a cell, or press Enter or F2 on it. */
   editable?: boolean;

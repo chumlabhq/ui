@@ -719,7 +719,7 @@ This renders correctly with no additional props, classes, or setup.
 | `bordered={true}` | Uses auto-generated border color if `autoColor` is on, otherwise defaults to white. Pass a CSS string for explicit color. |
 | `maxInitials` | Only affects initials display. Ignored when `src` loads successfully. |
 | `loading={true}` | Renders shimmer in place of the avatar. Overrides `src`/`name`/`fallback`. |
-| `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-right" }`). |
+| `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-end" }`). |
 | AvatarGroup `maxVisible` | Hides excess children and shows a surplus count. Set `total` separately if you're rendering a subset from an API. |
 | AvatarGroup `ringColor` | The ring between stacked avatars. Match to your background color for clean overlap (e.g., `ringColor="#111827"` on dark bg). |
 | AvatarGroup `layout` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
@@ -829,7 +829,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `max` | `number \| undefined` | Maximum count before showing `max+`. |
 | `showZero` | `boolean \| undefined` | Shows the badge even when count is zero. Default: `false`. |
 | `dot` | `boolean \| undefined` | Renders a small dot instead of a count. |
-| `position` | `CornerPosition \| undefined` | Corner position for the badge. Default: `"top-right"`. |
+| `position` | `CornerPosition \| undefined` | Corner position for the badge. Default: `"top-end"`. |
 | `offset` | `BadgeOffset \| undefined` | Pixel offset from the default corner position. |
 | `color` | `string \| undefined` | Background color of the badge. |
 | `size` | `BadgeSize \| undefined` | Badge size preset. Default: `"sm"`. |
@@ -1044,7 +1044,7 @@ For grouped avatars, match `ringColor` to your background:
 ```tsx
 <div className="relative inline-block">
   <Avatar name="John" src="/john.jpg" />
-  <AvatarBadge count={5} position="top-right" variant="solid" pulse />
+  <AvatarBadge count={5} position="top-end" variant="solid" pulse />
 </div>
 ```
 
@@ -1579,7 +1579,7 @@ To override structural defaults (e.g., different padding), include the override 
 | `fullWidth` | boolean | `false` | Stretches the button to fill its container width. |
 | `classes` | object | — | CSS class overrides for button sub-elements. |
 | `unstyled` | boolean | `false` | Removes all default styling, rendering a plain element. |
-| `iconAnimation` | `"none"` \| `"slideRight"` \| `"slideLeft"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
+| `iconAnimation` | `"none"` \| `"slideEnd"` \| `"slideStart"` \| `"slideUp"` \| `"slideDown"` \| `"bounce"` \| `"pulse"` \| `"spin"` | `"none"` | Animation applied to icons on hover. |
 | `animateOnHover` | boolean | `true` | Enables icon animation on hover. |
 | `animateIcon` | `"leading"` \| `"trailing"` \| `"both"` | `"trailing"` | Which icon(s) to animate. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects OS setting. |
@@ -1778,7 +1778,7 @@ const [saving, setSaving] = useState(false);
 <Button
   className={primaryClasses}
   startIcon={<ArrowRightIcon />}
-  iconAnimation="slideRight"
+  iconAnimation="slideEnd"
 >
   Continue
 </Button>
@@ -1980,7 +1980,7 @@ DOM nesting: `root > control > trigger + portal(menu > menuItem* + submenu > sub
 | `selectedIcon` | object | — | React.ReactNode — Custom icon for selected items. |
 | `checkboxIcon` | object | — | React.ReactNode — Custom checkbox icon for multi-select. |
 | `fullWidth` | boolean | `false` | Stretches the dropdown to fill its container width. |
-| `submenuSide` | `"start"` \| `"end"` | `"end"` | The side submenus open on, logical: `"end"` is the right in a left-to-right page and the left in a right-to-left one, read from the closest `dir` attribute when the submenu opens, else the document's. RTL is not supported in 0.1.0; the values are logical so they need no rename when it is. |
+| `submenuSide` | `"start"` \| `"end"` | `"end"` | The side submenus open on, logical: `"end"` is the right in a left-to-right page and the left in a right-to-left one, read from the closest `dir` attribute when the submenu opens, else the document's. The chevron on an item with a submenu points to the same side. |
 | `dropdownSide` | `"top"` \| `"bottom"` | `"bottom"` | Vertical position of the dropdown. |
 | `closeOnSelect` | boolean | `true` | Closes the dropdown after an item is selected. |
 | `classes` | object | — | CSS class overrides for dropdown sub-elements. |
@@ -2078,9 +2078,8 @@ inline styles, and inline wins. Everything else it carried still applies; the
 default value (`z-[9999]`) is unchanged. Use `submenuSide` to choose a side:
 `"end"` (the default) or `"start"`, logical, so `"end"` opens right in a
 left-to-right page and left in a right-to-left one, read from the closest `dir`
-attribute when the submenu opens. RTL is not supported in 0.1.0; the values are
-logical so that supporting it later needs no rename. The physical side actually
-used, after any flip, is on the element as `data-side`.
+attribute when the submenu opens; its chevron points to the same side. The
+physical side actually used, after any flip, is on the element as `data-side`.
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
@@ -3234,7 +3233,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `side` | `"left"` (default), `"right"`, `"top"`, `"bottom"` |
+| `side` | `"start"` (default), `"end"`, `"top"`, `"bottom"`. Start is the left in a left-to-right page and the right in a right-to-left one. |
 | `snapPoints` | Array of percentages (0-1). Requires `swipeable={true}`. |
 | `swipeable` | By touch, a `left` or `right` drawer is dragged from anywhere on it. A `top` or `bottom` sheet is dragged from its handle or its `DrawerHeader`, because its content scrolls along the axis it dismisses on. A mouse drags from the handle on every side. |
 | `trapFocus` | Defaults `true` when `modal={true}`. |
@@ -3246,7 +3245,7 @@ export default function Example() {
 
 **Root:**
 - `data-state="open" | "closed"` — follows `open`; the panel slides and the overlay fades on it
-- `data-side="left" | "right" | "top" | "bottom"` — the edge the drawer comes from
+- `data-side="start" | "end" | "top" | "bottom"` — the edge the drawer comes from
 
 **Parts** (each a marker on its element, for a selector or a test; none of them is a state):
 - `data-drawer-overlay` — the backdrop, when `modal`
@@ -3268,8 +3267,8 @@ export default function Example() {
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
 | `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
 | `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
-| `side` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | The edge the drawer slides in from. |
-| `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
+| `side` | `"start"` \| `"end"` \| `"top"` \| `"bottom"` | `"start"` | The edge the drawer slides in from. |
+| `size` | string | `"300px"` | CSS size value for the drawer panel (width for start/end, height for top/bottom). |
 | `overlayColor` | string | `"black"` | Background color of the overlay. |
 | `overlayOpacity` | number | `0.32` | How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so overlayBlur is not diluted. |
 | `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |
@@ -6056,7 +6055,7 @@ export default function Example() {
 **Handle (`role="separator"`):**
 - `data-resizing` — while a pointer drag is resizing the panel; the handle shows an accent bar for the length of the drag, the only time it paints anything by default
 - `data-disabled` — when `disabled`; the handle is hidden and leaves the tab order
-- `data-direction="left" | "right" | "top" | "bottom"` — the edge it sits on, from `resizeDirection`
+- `data-direction="start" | "end" | "top" | "bottom"` — the edge it sits on, from `resizeDirection`
 
 ---
 
@@ -6073,7 +6072,7 @@ export default function Example() {
 | `onResizeEnd` | object | — | (value: number) => void — Callback fired when a resize drag ends. |
 | `minValue` | number | `200` | Minimum allowed size value in pixels. |
 | `maxValue` | number | `800` | Maximum allowed size value in pixels. |
-| `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
+| `resizeDirection` | `"start"` \| `"end"` \| `"top"` \| `"bottom"` | `"end"` | The panel edge the resize handle sits on. Not `orientation`. |
 | `step` | number | `10` | Step increment for resize value changes. |
 | `disabled` | boolean | `false` | Whether the resize handle is disabled. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
@@ -7198,7 +7197,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `data` | array | — | Array of row data objects. |
 | `loading` | boolean | `false` | Whether the table is in a loading state showing shimmer rows. |
 | `showHeader` | boolean | `true` | Whether to show the table header row. |
-| `pinnedColumns` | array | — | Column IDs to pin to the left side. |
+| `pinnedColumns` | array | — | Column IDs to pin to the inline start: the left in a left-to-right page, the right in a right-to-left one. |
 | `onPinnedColumnsChange` | object | — | (pinnedColumns: string[]) => void — Fires when a pin button is pressed, with the full new `pinnedColumns` array: the column appended when pinned, removed when unpinned. |
 | `pinnableColumns` | array | — | Column IDs that are allowed to be pinned. |
 | `maxPinnedColumns` | number | `3` | Maximum number of columns that can be pinned simultaneously. |
@@ -7259,7 +7258,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `striped` | boolean | `false` | Alternate row background colors. |
 | `stripedClassName` | string | — | Custom CSS class for striped rows. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Cell padding and text size. |
-| `pinnedRightColumns` | array | — | Column IDs to pin to the right side. |
+| `pinnedEndColumns` | array | — | Column IDs to pin to the inline end: the right in a left-to-right page, the left in a right-to-left one. |
 | `editable` | boolean | `false` | Enable inline cell editing: double-click a cell, or press Enter or F2 on it. |
 | `editableColumns` | array | — | Column IDs that are editable. |
 | `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |
@@ -8146,7 +8145,7 @@ function rather than rendering an element.
 import { ToastProvider } from "@chumlab/ui/toast";
 
 export default function App({ children }) {
-  return <ToastProvider position="top-right">{children}</ToastProvider>;
+  return <ToastProvider position="top-end">{children}</ToastProvider>;
 }
 ```
 
@@ -8207,7 +8206,7 @@ function MyComponent() {
 | Prop | Constraint |
 |------|-----------|
 | `variant` | `"success"`, `"warning"`, `"error"`, `"info"` |
-| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
+| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-end"` (default), `"top-end"`, `"top-start"`, `"top-center"`, `"bottom-start"`, `"bottom-center"`. Start and end follow the page direction. |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `classes.root` | Class string for the toast's outer element. It does not replace the layout. |
 | `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
@@ -8278,7 +8277,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `children` | `ReactNode` | Content rendered inside this element. |
-| `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-right"`. |
+| `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-end"`. |
 | `maxToasts` | `number \| undefined` | How many toasts may be visible at once. Older ones leave as new ones arrive. |
 | `containerClassName` | `string \| undefined` | Additional classes for the toast container. |
 | `defaultDuration` | `number \| undefined` | How long a toast stays up, in milliseconds, when it does not set its own. |

@@ -373,29 +373,25 @@ the criterion is measured in one engine, and the same is true of the full axe sw
 scope fact, separate from the timing defect they both shared: fixing that told us what Firefox
 reports for 2.4.7, and told us nothing about 1.4.11 anywhere but Chrome.
 
-### 3.8 Right-to-left is measured and recorded as unsupported
+### 3.8 Right-to-left is measured and gated
 
-Fourteen `dir="rtl"` fixtures render the anchored and directional surfaces with the direction
-on `<html>`. `e2e/rtl.spec.ts` keeps 7 of 10 assertions skipped, each carrying its own
-measurement in the skip reason:
+Components follow the nearest `dir`, or the document's. The A2 audit (2026-10-20) measured
+what did not mirror in a `dir="rtl"` page; slices A2a to A2d2 fixed it by cause, each with a
+gate that was red on the code before it and runs in chromium, firefox, webkit, Mobile Chrome
+and Mobile Safari:
 
-- **No anchored surface mirrors.** `SearchableDropdown`, `TimePicker`, `DatePicker`,
-  `Breadcrumb` and Table's filter menu all align their LEFT edge to the trigger's left in RTL,
-  exactly as in LTR. DatePicker is the plainest: trigger `[24..1000]`, surface `[24..338]`,
-  where the mirror is `[686..1000]`.
-- **The one surface that flips does not flip by direction.** `CascadingDropdown`'s submenu
-  chooses a side from available space alone. There is no direction input to get wrong.
-- **`Slider` is measured from the physical left.** At `value: 25` the thumb sits 75% from the
-  leading edge in RTL.
-- The viewport clamp is the one thing that already mirrors, because it works from both edges.
+- **Surfaces.** Every open surface aligns to its trigger's inline-start edge or is pushed
+  inside the viewport (`e2e/rtl-surfaces.spec.ts`; 46 surfaces were wrong at 1024 before A2b).
+- **Keys.** Arrow keys move to the element they point at (`e2e/rtl-keys.spec.ts`).
+- **Paint.** Positions, directional icons, the `start`/`end` sides of Drawer, ToastProvider,
+  Avatar, Button and ResizablePanel, and the text the library writes read from the inline
+  start (`e2e/rtl-paint.spec.ts`: `positions`, `icons`, `ResizablePanel`, `sides`, `bidi`).
+- **Source.** One direction reader and no physical left/right outside a listed allowlist
+  (`direction-reads.contract`, `physical-direction.contract`).
 
-What would still be missing if all seven were fixed: text alignment (`text-left`, not
-`text-start`), icon direction, and logical properties — the package writes `left`/`right`,
-`pl-*`/`pr-*` and `ml-*`/`mr-*` throughout. `Drawer` takes a physical `direction`, so nothing
-there mirrors by design. Making the package RTL-correct is a vocabulary change across every
-constants file, which is why it is a 1.1 feature with a recorded order: logical properties
-first, a direction input second, icons third. README and `ACCESSIBILITY.md` both say plainly
-that RTL is not supported.
+Props that named a physical side were renamed to `start`/`end` before 0.1.0 shipped; the old
+values are tombstoned (`api-names.contract`). Digit rows, Tooltip's `side` and the clock dial
+stay the same in both directions by decision, as `ACCESSIBILITY.md` records.
 
 ### 3.9 Every WCAG criterion below Supports
 

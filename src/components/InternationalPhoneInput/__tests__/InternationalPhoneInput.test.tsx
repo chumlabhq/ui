@@ -886,3 +886,10 @@ describe("loading", () => {
     expect(group.querySelector('[role="status"]')).not.toBeNull();
   });
 });
+
+describe("InternationalPhoneInput dial code reads in its own order in a right-to-left page", () => {
+  it("lets the trigger's dial code take its own direction, so +44 is not painted 44+", () => {
+    render(<InternationalPhoneInput defaultValue={{ countryCode: "GB", phoneNumber: "" }} />);
+    expect(screen.getAllByText("+44").find((el) => el.tagName === "SPAN")).toHaveAttribute("dir", "auto");
+  });
+});

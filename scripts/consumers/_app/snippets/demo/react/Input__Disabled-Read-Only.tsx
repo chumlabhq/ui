@@ -35,7 +35,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }),
                           input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
                           control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover"
@@ -55,7 +55,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }),
                           input: "w-full bg-transparent outline-none text-sm cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
                           control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover"
@@ -75,7 +75,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }),
                           control: `${"px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus"} cursor-default`
                         }

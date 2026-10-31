@@ -2,6 +2,7 @@ import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "re
 import { useParams } from "react-router-dom";
 import NotFound from "../../NotFound.js";
 import type { Previews } from "./types.js";
+import { useDemoDirection } from "../components/DirectionControl.js";
 
 /**
  * `/preview/:component/:example`: one demo example on a page of its own, with
@@ -52,6 +53,8 @@ function previewOf(component: string, example: string): LazyExoticComponent<Comp
 
 export default function PreviewRoute() {
   const { component = "", example = "" } = useParams();
+  // The phone frames on a docs page show the direction the page is in.
+  useDemoDirection();
   const Example = previewOf(component, example);
   return (
     <main data-preview={`${component}/${example}`} className="min-h-screen bg-cl-bg p-4 text-cl-text">

@@ -10,8 +10,8 @@ import type {
 /** Animation type applied to leading/trailing icons. */
 export type IconAnimation =
   | "none"
-  | "slideRight"
-  | "slideLeft"
+  | "slideEnd"
+  | "slideStart"
   | "slideUp"
   | "slideDown"
   | "bounce"

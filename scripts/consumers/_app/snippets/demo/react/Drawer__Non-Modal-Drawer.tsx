@@ -71,7 +71,7 @@ export default function DrawerExample() {
         open={nonModal.open}
         onOpenChange={nonModal.onOpenChange}
         modal={false}
-        side="right"
+        side="end"
         lockScroll={false}
       >
         {

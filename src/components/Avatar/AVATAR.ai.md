@@ -72,7 +72,7 @@ This renders correctly with no additional props, classes, or setup.
 | `bordered={true}` | Uses auto-generated border color if `autoColor` is on, otherwise defaults to white. Pass a CSS string for explicit color. |
 | `maxInitials` | Only affects initials display. Ignored when `src` loads successfully. |
 | `loading={true}` | Renders shimmer in place of the avatar. Overrides `src`/`name`/`fallback`. |
-| `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-right" }`). |
+| `status` | Can be a string shorthand (`"online"`) or a config object (`{ type: "online", position: "bottom-end" }`). |
 | AvatarGroup `maxVisible` | Hides excess children and shows a surplus count. Set `total` separately if you're rendering a subset from an API. |
 | AvatarGroup `ringColor` | The ring between stacked avatars. Match to your background color for clean overlap (e.g., `ringColor="#111827"` on dark bg). |
 | AvatarGroup `layout` | `"stack"` overlaps, `"grid"` uses CSS grid, `"inline"` uses inline-flex. Only `"stack"` uses `spacing` and `ringColor`. |
@@ -182,7 +182,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | `max` | `number \| undefined` | Maximum count before showing `max+`. |
 | `showZero` | `boolean \| undefined` | Shows the badge even when count is zero. Default: `false`. |
 | `dot` | `boolean \| undefined` | Renders a small dot instead of a count. |
-| `position` | `CornerPosition \| undefined` | Corner position for the badge. Default: `"top-right"`. |
+| `position` | `CornerPosition \| undefined` | Corner position for the badge. Default: `"top-end"`. |
 | `offset` | `BadgeOffset \| undefined` | Pixel offset from the default corner position. |
 | `color` | `string \| undefined` | Background color of the badge. |
 | `size` | `BadgeSize \| undefined` | Badge size preset. Default: `"sm"`. |
@@ -398,7 +398,7 @@ For grouped avatars, match `ringColor` to your background:
 ```tsx
 <div className="relative inline-block">
   <Avatar name="John" src="/john.jpg" />
-  <AvatarBadge count={5} position="top-right" variant="solid" pulse />
+  <AvatarBadge count={5} position="top-end" variant="solid" pulse />
 </div>
 ```
 

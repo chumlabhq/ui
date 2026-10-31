@@ -117,7 +117,7 @@ describe("Avatar", () => {
       render(
         <Avatar
           name="John"
-          status={{ type: "busy", position: "top-left" }}
+          status={{ type: "busy", position: "top-start" }}
         />
       );
 
@@ -260,6 +260,22 @@ describe("Avatar", () => {
 
 describe("AvatarBadge", () => {
   describe("Rendering", () => {
+    it("places the default top-end badge from the inline end, its overhang signed by the page direction", () => {
+      render(<AvatarBadge count={5} />);
+      const badge = screen.getByRole("status");
+      expect(badge.style.insetInlineEnd).toBe("calc(14.6% + 0px)");
+      expect(badge.style.right).toBe("");
+      expect(badge.style.transform).toBe("translate(calc(var(--cl-inline-sign, 1) * 50%), -50%)");
+      expect(badge).toHaveClass("rtl:[--cl-inline-sign:-1]");
+    });
+
+    it("places a top-start badge from the inline start", () => {
+      render(<AvatarBadge count={5} position="top-start" />);
+      const badge = screen.getByRole("status");
+      expect(badge.style.insetInlineStart).toBe("calc(14.6% - 0px)");
+      expect(badge.style.left).toBe("");
+    });
+
     it("renders count badge", () => {
       render(<AvatarBadge count={5} />);
 
@@ -978,5 +994,18 @@ describe("AvatarGroupShimmer", () => {
       expect(ref).toHaveBeenCalled();
       expect(ref.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
     });
+  });
+});
+
+describe("Library text reads in its own order in a right-to-left page", () => {
+  it("lets the surplus count take its own direction, so +3 is not painted 3+", () => {
+    render(<AvatarGroupCount count={3} />);
+    const text = screen.getByText("+3");
+    expect(text).toHaveAttribute("dir", "auto");
+  });
+
+  it("lets the badge's cap take its own direction, so 99+ is not painted +99", () => {
+    render(<AvatarBadge count={120} max={99} />);
+    expect(screen.getByText("99+")).toHaveAttribute("dir", "auto");
   });
 });

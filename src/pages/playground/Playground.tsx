@@ -672,7 +672,7 @@ export default function Playground() {
           }}
           minValue={420}
           maxValue={980}
-          resizeDirection="right"
+          resizeDirection="end"
           className="flex h-full min-h-0 flex-col"
           classes={{
             handle:

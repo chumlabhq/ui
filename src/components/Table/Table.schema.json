@@ -27,7 +27,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Column IDs to pin to the left side."
+      "description": "Column IDs to pin to the inline start: the left in a left-to-right page, the right in a right-to-left one."
     },
     "onPinnedColumnsChange": {
       "type": "object",
@@ -231,10 +231,10 @@
         "expandTrigger": {
           "type": "string"
         },
-        "pinnedRightRegion": {
+        "pinnedEndRegion": {
           "type": "string"
         },
-        "pinnedRightList": {
+        "pinnedEndList": {
           "type": "string"
         },
         "input": {
@@ -456,12 +456,12 @@
       "description": "Cell padding and text size.",
       "default": "md"
     },
-    "pinnedRightColumns": {
+    "pinnedEndColumns": {
       "type": "array",
       "items": {
         "type": "string"
       },
-      "description": "Column IDs to pin to the right side."
+      "description": "Column IDs to pin to the inline end: the right in a left-to-right page, the left in a right-to-left one."
     },
     "editable": {
       "type": "boolean",

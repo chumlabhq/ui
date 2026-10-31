@@ -47,7 +47,7 @@ export default function Example() {
 **Handle (`role="separator"`):**
 - `data-resizing` — while a pointer drag is resizing the panel; the handle shows an accent bar for the length of the drag, the only time it paints anything by default
 - `data-disabled` — when `disabled`; the handle is hidden and leaves the tab order
-- `data-direction="left" | "right" | "top" | "bottom"` — the edge it sits on, from `resizeDirection`
+- `data-direction="start" | "end" | "top" | "bottom"` — the edge it sits on, from `resizeDirection`
 
 ---
 
@@ -64,7 +64,7 @@ export default function Example() {
 | `onResizeEnd` | object | — | (value: number) => void — Callback fired when a resize drag ends. |
 | `minValue` | number | `200` | Minimum allowed size value in pixels. |
 | `maxValue` | number | `800` | Maximum allowed size value in pixels. |
-| `resizeDirection` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"right"` | Direction from which the panel can be resized. |
+| `resizeDirection` | `"start"` \| `"end"` \| `"top"` \| `"bottom"` | `"end"` | The panel edge the resize handle sits on. Not `orientation`. |
 | `step` | number | `10` | Step increment for resize value changes. |
 | `disabled` | boolean | `false` | Whether the resize handle is disabled. |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |

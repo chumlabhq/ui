@@ -261,7 +261,7 @@ export const FAQ_DATA: FaqEntry[] = [
     category: "Accessibility",
     question: "Does Chumlab UI support RTL languages?",
     answer:
-      'Not in 0.1.0. Components render under `dir="rtl"` and nothing is lost off-screen, but several layouts and keyboard directions do not mirror yet; right-to-left support is planned for 1.1.',
+      'Yes. Components follow the nearest `dir` (or the document\'s): spacing, menus, arrow keys, positions, directional icons and the text the library writes all mirror in a `dir="rtl"` page, and props that name a side take `start`/`end`. Each part is checked in five browsers by the rtl-surfaces, rtl-keys and rtl-paint gates; ACCESSIBILITY.md lists them.',
   },
   {
     category: "Accessibility",

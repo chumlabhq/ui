@@ -23,6 +23,7 @@ import {
 import SearchableDropdownShimmer from "./components/SearchableDropdownShimmer.js";
 import { SearchableDropdownOption as SearchableDropdownOptionComponent } from "./components/SearchableDropdownOption.js";
 import { cn } from "../../utils/scopedCn.js";
+import { TEXT_DIRECTION_FROM_CONTENT } from "../../utils/isBrowser.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import {
   DEFAULT_SEARCHABLEDROPDOWN_CLASSES,
@@ -173,7 +174,7 @@ const SearchableDropdownContent = memo(function SearchableDropdownContent({
             onKeyDown={onSearchInputKeyDown}
             onKeyDownCapture={onSearchInputKeyDownCapture}
             placeholder={searchPlaceholder}
-            className={classes.searchInput || undefined}
+            className={cn(classes.searchInput, TEXT_DIRECTION_FROM_CONTENT)}
             aria-label={searchInputAriaLabel}
             aria-autocomplete="list"
             aria-controls={listboxId}

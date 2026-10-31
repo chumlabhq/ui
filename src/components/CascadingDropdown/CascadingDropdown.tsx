@@ -7,7 +7,7 @@ import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
-import { isBrowser, MIRROR_IN_LTR, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_LTR, MIRROR_IN_RTL, TEXT_DIRECTION_FROM_CONTENT } from "../../utils/isBrowser.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
@@ -268,7 +268,7 @@ const Submenu = memo(function Submenu({
               onChange={(e) => onSearchChange?.(e.target.value)}
               onClick={(e) => e.stopPropagation()}
               placeholder={searchPlaceholder || "Search..."}
-              className={submenuSearchInputElementClass || classes.searchInput || undefined}
+              className={cn(submenuSearchInputElementClass || classes.searchInput, TEXT_DIRECTION_FROM_CONTENT)}
               aria-label={searchAriaLabel || "Search submenu"}
               aria-autocomplete="list"
             />
@@ -832,7 +832,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
                     onChange={(e) => onMenuSearchChange(e.target.value)}
                     onClick={(e) => e.stopPropagation()}
                     placeholder={menuSearchPlaceholder}
-                    className={mergedClasses.searchInput || undefined}
+                    className={cn(mergedClasses.searchInput, TEXT_DIRECTION_FROM_CONTENT)}
                     aria-label={menuSearchAriaLabel}
                     aria-autocomplete="list"
                     aria-controls={menuId}

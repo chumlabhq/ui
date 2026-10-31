@@ -752,3 +752,14 @@ describe("a selected top-level option", () => {
     expect(screen.getByRole("menuitemradio", { name: "Plain" }).querySelector("svg")).toBeNull();
   });
 });
+
+describe("CascadingDropdown search fields take their text direction from their text", () => {
+  it("lays out the menu search's placeholder and typed text by their first strong character", async () => {
+    const user = userEvent.setup();
+    render(<CascadingDropdown options={nestedOptions} showMenuSearch />);
+    await user.click(screen.getByRole("button"));
+    expect(screen.getByPlaceholderText("Search...").className.split(" ")).toEqual(
+      expect.arrayContaining(["[unicode-bidi:plaintext]", "placeholder:[unicode-bidi:plaintext]"]),
+    );
+  });
+});

@@ -107,14 +107,22 @@ const fixtures: Fixtures<typeof Drawer> = [
     props: { open: true, swipeable: true },
     children: <><DrawerHeader>Drawer</DrawerHeader><DrawerCloseButton />Body</>,
   },
-  { name: "open-left", props: { open: true, side: "left" }, children: <><DrawerHeader>Drawer</DrawerHeader>Body</> },
+  { name: "open-left", props: { open: true, side: "start" }, children: <><DrawerHeader>Drawer</DrawerHeader>Body</> },
+  { name: "open-end", props: { open: true, side: "end" }, children: <><DrawerHeader>Drawer</DrawerHeader>Body</> },
+  {
+    name: "open-end-rtl",
+    props: { open: true, side: "end" },
+    wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
+    children: <><DrawerHeader>Drawer</DrawerHeader>Body</>,
+    note: "`side=\"end\"` in a right-to-left page: the panel enters from the left.",
+  },
   {
     name: "tall-left",
     props: {},
     note: "Content taller than the viewport, with a control at the end: the panel has to scroll for it to be reachable.",
-    render: () => <TallDrawer side="left" />,
+    render: () => <TallDrawer side="start" />,
   },
-  { name: "tall-right", props: {}, render: () => <TallDrawer side="right" /> },
+  { name: "tall-right", props: {}, render: () => <TallDrawer side="end" /> },
   { name: "tall-top", props: {}, render: () => <TallDrawer side="top" /> },
   { name: "tall-bottom", props: {}, render: () => <TallDrawer side="bottom" /> },
   {
@@ -128,21 +136,21 @@ const fixtures: Fixtures<typeof Drawer> = [
     name: "tall-initial-focus",
     props: {},
     note: "initialFocus aims at the last control, below the fold of a tall panel.",
-    render: () => <TallDrawer side="right" initialFocusLast />,
+    render: () => <TallDrawer side="end" initialFocusLast />,
   },
   {
     name: "tall-autofocus",
     props: {},
     note: "data-autofocus on the last control, below the fold of a tall panel.",
-    render: () => <TallDrawer side="right" autoFocusLast />,
+    render: () => <TallDrawer side="end" autoFocusLast />,
   },
   { name: "closed-kept-mounted", props: { open: false, keepMounted: true }, children: <><DrawerHeader>Drawer</DrawerHeader>Body</> },
   {
     name: "open-rtl",
-    props: { open: true, side: "left" },
+    props: { open: true, side: "start" },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     children: <><DrawerHeader>Drawer</DrawerHeader>Body</>,
-    note: "`side` is physical (left/right), not logical (start/end), so nothing here mirrors — which is the finding."
+    note: "`side=\"start\"` in a right-to-left page: the panel enters from the right."
   },
   { name: "open-with-footer", props: { open: true }, children: <><DrawerHeader>Drawer</DrawerHeader>Body<DrawerFooter>Footer</DrawerFooter></> },
 ];

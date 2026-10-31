@@ -26,7 +26,7 @@ export default function DropdownExample() {
         classes={
           {
             root: "w-full",
-            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
+            trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success",
             content: "rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border",
             label: "block text-sm font-medium mb-1 text-cl-text-secondary"
           }
@@ -40,7 +40,7 @@ export default function DropdownExample() {
               ref={ref as React.RefCallback<HTMLButtonElement>}
               {...triggerProps}
               type="button"
-              className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${
+              className={`flex items-center gap-3 w-full px-4 py-3 text-start rounded-cl-lg border-2 transition-all ${
                 isOpen
                   ? "border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20"
                   : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"

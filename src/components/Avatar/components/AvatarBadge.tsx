@@ -3,6 +3,7 @@ import type { AvatarBadgeProps, BadgeTone, BadgeVariant } from "../utils/types.j
 import { Slot } from "../../../utils/Slot.js";
 import { getBadgePosition, getBadgeSizeClasses } from "../utils/helpers.js";
 import { cn } from "../../../utils/scopedCn.js";
+import { INLINE_SIGN } from "../../../utils/isBrowser.js";
 
 /**
  * Token families, not Tailwind's ramps.
@@ -59,7 +60,7 @@ export const AvatarBadge = forwardRef<HTMLSpanElement, AvatarBadgeProps>(
       max = 99,
       showZero = false,
       dot = false,
-      position = "top-right",
+      position = "top-end",
       offset,
       color,
       size = "md",
@@ -123,6 +124,7 @@ export const AvatarBadge = forwardRef<HTMLSpanElement, AvatarBadgeProps>(
         role="status"
         className={cn(
           "absolute flex items-center justify-center",
+          INLINE_SIGN,
           defaultVariantClass,
           pulse && "animate-pulse",
           className,
@@ -139,7 +141,7 @@ export const AvatarBadge = forwardRef<HTMLSpanElement, AvatarBadgeProps>(
         aria-live={ariaLive}
         {...rest}
       >
-        {dot ? null : displayCount}
+        {!dot && <span dir="auto">{displayCount}</span>}
         {children}
       </Comp>
     );

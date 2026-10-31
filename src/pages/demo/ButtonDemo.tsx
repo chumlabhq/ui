@@ -360,7 +360,7 @@ const ButtonDemo = () => {
                 rel="noreferrer"
                 className={c.link}
                 endIcon={<ExternalLinkIcon />}
-                iconAnimation="slideRight"
+                iconAnimation="slideEnd"
               >
                 External Link
               </Button>
@@ -391,7 +391,7 @@ const ButtonDemo = () => {
                 as="span"
                 className={c.text}
                 endIcon={<ArrowRightIcon />}
-                iconAnimation="slideRight"
+                iconAnimation="slideEnd"
                 onClick={() => setSpanActivations((n) => n + 1)}
               >
                 Learn More
@@ -414,14 +414,14 @@ const ButtonDemo = () => {
           <Button
             className={c.primary}
             endIcon={<ArrowRightIcon />}
-            iconAnimation="slideRight"
+            iconAnimation="slideEnd"
           >
             Slide Right
           </Button>
           <Button
             className={c.secondary}
             startIcon={<ArrowRightIcon />}
-            iconAnimation="slideLeft"
+            iconAnimation="slideStart"
             animateIcon="leading"
           >
             Slide Left
@@ -487,7 +487,7 @@ const ButtonDemo = () => {
             className={c.primary}
             startIcon={<SparkleIcon />}
             endIcon={<SparkleIcon />}
-            iconAnimation="slideRight"
+            iconAnimation="slideEnd"
             animateIcon="both"
           >
             Both Slide
@@ -514,7 +514,7 @@ const ButtonDemo = () => {
           <Button
             className={c.primary}
             endIcon={<ArrowRightIcon />}
-            iconAnimation="slideRight"
+            iconAnimation="slideEnd"
             animateOnHover={false}
           >
             Always Sliding
@@ -551,7 +551,7 @@ const ButtonDemo = () => {
             <Button
               className={c.primary}
               endIcon={<ArrowRightIcon />}
-              iconAnimation="slideRight"
+              iconAnimation="slideEnd"
             >
               Default (auto)
             </Button>
@@ -561,7 +561,7 @@ const ButtonDemo = () => {
             <Button
               className={c.primary}
               endIcon={<ArrowRightIcon />}
-              iconAnimation="slideRight"
+              iconAnimation="slideEnd"
               reduceMotion={true}
             >
               No Animation
@@ -931,7 +931,7 @@ const ButtonDemo = () => {
                 {["Left", "Middle", "Right"].map((label, i) => (
                   <Button
                     key={label}
-                    className={`${c.outline} ${i === 0 ? "rounded-r-none border-r-0" : i === 2 ? "rounded-l-none" : "rounded-none border-r-0"} ${activeGroup === label.toLowerCase() ? ("bg-cl-accent/10") : ""}`}
+                    className={`${c.outline} ${i === 0 ? "rounded-e-none border-e-0" : i === 2 ? "rounded-s-none" : "rounded-none border-e-0"} ${activeGroup === label.toLowerCase() ? ("bg-cl-accent/10") : ""}`}
                     onClick={() => {
                       setActiveGroup(label.toLowerCase());
                       setTimeout(() => setActiveGroup(null), 500);

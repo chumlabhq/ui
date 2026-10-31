@@ -15,12 +15,13 @@
     "2026-10-11, A2f (routing): hand-edited, not re-recorded. propsWithoutFixture 631 → 639, rendersMarkup holds at 147. +13 newly declared attribute props with no fixture, none rendering markup: InternationalPhoneInput `numberAriaLabel`; Modal `style` and `id`; Stepper `aria-labelledby` and `aria-describedby`; TabPanel `aria-describedby`; Toast `aria-label`, `aria-labelledby` and `aria-describedby`; Tooltip `id`, `aria-label`, `aria-labelledby` and `aria-describedby`. −5: OtpInput `groupAriaLabel` (folded into `aria-label`), and InputLabel's and TextAreaLabel's `htmlFor` and `className`, now inherited from the label element's attributes rather than declared by the shared label helper. One rank move with no new markup: Tooltip `truncate`, whose un-overflowed branch now carries the consumer's `id` and `aria-*` on its span like the trigger wrapper does, reads as an ARIA attribute (markup with none of the above 35 → 34, an ARIA attribute 0 → 1).",
     "2026-10-12, L13 (Pagination dropdownIcon rotates): rank move only, rendersMarkup held at 147. `Pagination.dropdownIcon` went from \"a slot the fixtures never fill\" (51 → 50) to \"markup with none of the above\" (34 → 35): it used to reach the DOM through `renderIcon`, which the audit reads as a slot; it now renders in JSX inside the span that carries the icon slot and the rotation. Still unfixtured either way; no prop gained or lost a fixture.",
     "2026-10-17, G6 (the demo audit now reads Table): hand-edited, not re-recorded. `export default memo(Table)` resolves to a Property-flagged symbol, which audit-demo-coverage.mjs dropped, so this audit never saw Table either. propsWithoutFixture 639 → 705: HEAD measured 638 (the record had carried 639 since A2f, a field the check does not compare), plus Table’s 67 props with no fixture; no other prop moved. rendersMarkup 147 → 165, all 18 Table’s: a new role 0 → 3 (showHeader, floatingActions, children), a new interactive element 0 → 1 (renderColumnFilter), markup with none of the above 35 → 41 (emptyContent, caption, renderFilterIcon, renderExpandIcon, dragHandleIcon, searchIcon), the component itself 43 → 48 (onRowClick, floatingActionsHovered, popupOpen, expandOnRowClick, copyOnClick), a slot the fixtures never fill 50 → 53 (pinIcon, pinnedIcon, loadingMoreContent). The 147 other props are identical, prop for prop.",
-    "2026-10-19, S4 (hand-edited, not --record): rendersMarkup 165 -> 162, all three in \"the component itself, present or absent\" 48 -> 45: Input.onClear, TextArea.onClear and InternationalPhoneInput.onClear. Each replaced the clear with an early return when passed, so the field rendered differently with it than without; a clear now always clears and onClear only reports, so none of the three changes what renders. propsWithoutFixture 705 -> 691: HEAD measured 692 (the record had carried 705 since the Table row, a field the check does not compare), and TabPanel.disabled gained the `disabled` fixture. No other prop moved."
+    "2026-10-19, S4 (hand-edited, not --record): rendersMarkup 165 -> 162, all three in \"the component itself, present or absent\" 48 -> 45: Input.onClear, TextArea.onClear and InternationalPhoneInput.onClear. Each replaced the clear with an early return when passed, so the field rendered differently with it than without; a clear now always clears and onClear only reports, so none of the three changes what renders. propsWithoutFixture 705 -> 691: HEAD measured 692 (the record had carried 705 since the Table row, a field the check does not compare), and TabPanel.disabled gained the `disabled` fixture. No other prop moved.",
+    "2026-10-31, A2d2 (hand-edited, not --record): rendersMarkup 162 -> 161, in \"the component itself, present or absent\" 45 -> 44: ResizablePanel.resizeDirection, now rendered by the `start` and `default-rtl` fixtures. propsWithoutFixture 691 -> 684: a clean 6eb6ccd5 measured 690 (the record carried 691, a field the check does not compare), and six props gained fixtures: ResizablePanel.resizeDirection, Button.iconAnimation and Button.animateIcon (`icon-slide-end`, `icon-slide-start`), Button.animateOnHover (`icon-slide-end-continuous`, `icon-slide-start-continuous`), Slider.min and Slider.max (`negative`). No prop joined the list."
   ],
   "recordedOn": "2026-10-19",
   "fixtures": 414,
-  "propsWithoutFixture": 691,
-  "rendersMarkup": 162,
+  "propsWithoutFixture": 684,
+  "rendersMarkup": 161,
   "byRank": {
     "a slot the fixtures never fill": 53,
     "a classes key": 18,
@@ -28,6 +29,6 @@
     "a new interactive element": 1,
     "an ARIA attribute": 1,
     "markup with none of the above": 41,
-    "the component itself, present or absent": 45
+    "the component itself, present or absent": 44
   }
 }

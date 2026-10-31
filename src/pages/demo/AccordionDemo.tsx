@@ -85,7 +85,7 @@ const getClasses = () => ({
   accordion: {
     root: "w-full",
     item: "border-b border-cl-border last:border-b-0",
-    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
+    trigger: `flex w-full items-center justify-between px-4 py-4 text-start text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-cl-text hover:bg-cl-bg-hover focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
     icon: `h-4 w-4 shrink-0 transition-transform duration-200 text-cl-text-secondary`,
   } satisfies AccordionClasses,
 
@@ -93,7 +93,7 @@ const getClasses = () => ({
      keys — Accordion has no such slots, and passing them there styled
      nothing. */
   accordionExtra: {
-    triggerInner: "flex-1 text-left",
+    triggerInner: "flex-1 text-start",
     contentWrapper:
       "overflow-hidden transition-[max-height,opacity,visibility]",
     iconWrapper: "shrink-0",
@@ -111,7 +111,7 @@ const getClasses = () => ({
   accordionFlush: {
     root: "w-full",
     item: "",
-    trigger: `flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
+    trigger: `flex w-full items-center justify-between px-4 py-4 text-start text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-cl-text hover:text-cl-accent focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg`,
   },
   sectionLabel: `text-[11px] font-semibold uppercase tracking-wider text-cl-text-tertiary`,
  card: `rounded-cl-lg p-5 bg-cl-bg-elevated`,
@@ -474,7 +474,7 @@ const AccordionDemo = () => {
             </span>
             <span className={c.stateDisplay}>{singleValue ?? "null"}</span>
           </div>
-          <div className="sm:ml-auto flex gap-2">
+          <div className="sm:ms-auto flex gap-2">
             <button
               className={c.btnPrimary}
               onClick={() => setSingleValue("item-2")}
@@ -527,7 +527,7 @@ const AccordionDemo = () => {
             </span>
             <span className={c.stateDisplay}>[{multipleValue.join(", ")}]</span>
           </div>
-          <div className="sm:ml-auto flex gap-2">
+          <div className="sm:ms-auto flex gap-2">
             <button
               className={c.btnPrimary}
               onClick={() =>
@@ -727,7 +727,7 @@ const AccordionDemo = () => {
             <p
               className={`text-xs font-medium mb-2 text-cl-text-tertiary`}
             >
-              Icon on left
+              Icon at the start (iconPosition=&quot;start&quot;)
             </p>
             <DemoWrapper isDarkMode={dark} layout="block">
               <Accordion selectionMode="single" collapsible classes={c.accordion}>
@@ -741,7 +741,7 @@ const AccordionDemo = () => {
                       <ChevronDownIcon className="w-4 h-4 text-cl-accent" />
                     }
                   >
-                    Icon on the left
+                    Icon at the start
                   </AccordionTrigger>
                   <AccordionContent>
                     The icon is positioned before the title.
@@ -1202,7 +1202,7 @@ const AccordionDemo = () => {
           <Accordion selectionMode="single" collapsible defaultValue="ac-1">
             <AccordionItem value="ac-1">
               <AccordionTrigger asChild>
-                <button className="flex w-full items-center justify-between px-4 py-4 text-left text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover">
+                <button className="flex w-full items-center justify-between px-4 py-4 text-start text-sm font-medium cursor-pointer text-cl-text hover:bg-cl-bg-hover">
                   Your own button, styled your way
                 </button>
               </AccordionTrigger>

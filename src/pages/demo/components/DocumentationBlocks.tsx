@@ -45,7 +45,7 @@ export const DocEdgeCases: FC<DocEdgeCasesProps> = ({ items }) => (
     description="Situations that need explicit handling in product code."
   >
     <div className={cardClass}>
-      <ul className={`list-disc pl-5 space-y-2 ${bodyClass}`}>
+      <ul className={`list-disc ps-5 space-y-2 ${bodyClass}`}>
         {items.map((item) => (
           <li key={item}>{item}</li>
         ))}
@@ -69,7 +69,7 @@ export const DocDoDont: FC<DocDoDontProps> = ({ dos, donts }) => (
       <div className="grid gap-8 md:grid-cols-2">
         <div>
           <p className={eyebrowDoClass}>Do</p>
-          <ul className={`list-disc pl-5 space-y-2 ${bodyClass}`}>
+          <ul className={`list-disc ps-5 space-y-2 ${bodyClass}`}>
             {dos.map((t) => (
               <li key={t}>{t}</li>
             ))}
@@ -77,7 +77,7 @@ export const DocDoDont: FC<DocDoDontProps> = ({ dos, donts }) => (
         </div>
         <div>
           <p className={eyebrowDontClass}>Don&apos;t</p>
-          <ul className={`list-disc pl-5 space-y-2 ${bodyClass}`}>
+          <ul className={`list-disc ps-5 space-y-2 ${bodyClass}`}>
             {donts.map((t) => (
               <li key={t}>{t}</li>
             ))}

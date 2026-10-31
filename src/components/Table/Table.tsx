@@ -11,7 +11,7 @@ import {
   isValidElement,
 } from "react";
 import { createPortal } from "react-dom";
-import { isBrowser, isRtl, readDirection, MIRROR_IN_RTL, type Direction } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl, readDirection, MIRROR_IN_RTL, TEXT_DIRECTION_FROM_CONTENT, type Direction } from "../../utils/isBrowser.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { useLazyComponent } from "../../utils/useLazyComponent.js";
 import { cn } from "../../utils/scopedCn.js";
@@ -231,7 +231,7 @@ function TableInner<TData>(
 
     size = "md",
 
-    pinnedRightColumns = [],
+    pinnedEndColumns = [],
 
     editable = false,
     editableColumns,
@@ -312,8 +312,8 @@ function TableInner<TData>(
   const checkboxCellClassName = mergeSlot(base.cell, classesProp?.cell);
   const sortIconClassName = mergeSlot(base.sortIcon, classesProp?.sortIcon);
   const expandIconClassName = mergeSlot(base.expandTrigger, classesProp?.expandTrigger);
-  const pinnedRightContainerClassName = mergeSlot(base.pinnedRightRegion, classesProp?.pinnedRightRegion);
-  const pinnedRightTableClassName = mergeSlot(base.pinnedRightList, classesProp?.pinnedRightList);
+  const pinnedRightContainerClassName = mergeSlot(base.pinnedEndRegion, classesProp?.pinnedEndRegion);
+  const pinnedRightTableClassName = mergeSlot(base.pinnedEndList, classesProp?.pinnedEndList);
   const editInputClassName = mergeSlot(base.input, classesProp?.input);
   const dragHandleClassName = mergeSlot(base.dragHandle, classesProp?.dragHandle);
   const footerClassName = mergeSlot(base.footer, classesProp?.footer);
@@ -838,12 +838,12 @@ function TableInner<TData>(
   );
 
   const pinnedRightColumnIds = useMemo(
-    () => new Set(pinnedRightColumns),
-    [pinnedRightColumns],
+    () => new Set(pinnedEndColumns),
+    [pinnedEndColumns],
   );
 
   const hasPinnedColumns = pinnedColumns.length > 0;
-  const hasPinnedRightColumns = pinnedRightColumns.length > 0;
+  const hasPinnedRightColumns = pinnedEndColumns.length > 0;
 
   const containerStyle = useMemo(() => {
     const style: React.CSSProperties & {
@@ -1951,7 +1951,7 @@ function TableInner<TData>(
                 value={globalFilter ?? ""}
                 onChange={handleSearchChange}
                 placeholder={searchPlaceholder}
-                className={`w-full ps-8 pe-8 py-2 border rounded bg-cl-bg-input text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary ${searchInputClassName}`}
+                className={`w-full ps-8 pe-8 py-2 border rounded bg-cl-bg-input text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary ${TEXT_DIRECTION_FROM_CONTENT} ${searchInputClassName}`}
                 aria-label="Search table"
               />
               {globalFilter && (
@@ -2149,7 +2149,7 @@ function TableInner<TData>(
                   value={globalFilter ?? ""}
                   onChange={handleSearchChange}
                   placeholder={searchPlaceholder}
-                  className={`w-full ${inputPl} ${inputPr} py-2 text-sm rounded-cl-md border bg-cl-bg-elevated text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary focus:outline-none focus:ring-2 focus:ring-cl-accent/30 focus:border-cl-border-input-focus ${searchInputClassName}`}
+                  className={`w-full ${inputPl} ${inputPr} py-2 text-sm rounded-cl-md border bg-cl-bg-elevated text-cl-text border-cl-border-input placeholder:text-cl-text-tertiary focus:outline-none focus:ring-2 focus:ring-cl-accent/30 focus:border-cl-border-input-focus ${TEXT_DIRECTION_FROM_CONTENT} ${searchInputClassName}`}
                   aria-label="Search table"
                 />
                 {globalFilter && (

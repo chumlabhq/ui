@@ -1583,7 +1583,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 161.58,
-    commit: "this slice",
+    commit: "6eb6ccd5",
     date: "2026-10-31",
     attribution: "attributed",
     reason:
@@ -1614,6 +1614,40 @@ const LIBRARY_TOTAL_HISTORY = [
       "files, is the chunks' new hashed names in import strings. Table's and " +
       "DatePicker's declared breaches moved with them (below). No comments " +
       "added to src/components or src/utils.",
+  },
+  {
+    kb: 161.89,
+    commit: "this slice",
+    date: "2026-10-31",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.31 KB (165,461 -> 165,772 B gzipped, +311 B on a build of " +
+      "6eb6ccd5), 83 files held, no chunk's module imports changed, no chunk " +
+      "up 0.10 KB or more. A2d2, physical-by-name props become start/end and " +
+      "library text reads in its own order. Shared, useReducedMotion +87 B: " +
+      "the inline-direction sign (INLINE_SIGN, inlineSigned) moved out of " +
+      "Slider into utils/isBrowser.ts so Drawer and AvatarBadge use it too " +
+      "(Slider -18 B), and TEXT_DIRECTION_FROM_CONTENT for search fields. " +
+      "Drawer (its DrawerCloseButton chunk) +65 B: side start/end with " +
+      "logical insets, the slide signed by the page direction and the swipe " +
+      "read in the inline direction. Tooltip +58 B: the arrow is offset from " +
+      "inside the tooltip's border and a side arrow from the rotated box's " +
+      "centre. Avatar (AvatarBadge chunk) +51 B: badge and status corners " +
+      "start/end with logical insets and a signed overhang, the count and the " +
+      "surplus with dir=auto. ResizablePanel +33 B: resizeDirection start/end, " +
+      "default end, arrows and drag in the inline direction. Button " +
+      "(ButtonGroup chunk) +18 B: slideEnd/slideStart with their rtl: halves, " +
+      "and unstyled stops the icon animation. SearchableDropdown +9 B, " +
+      "MultiSelectSearchableDropdown +9 B, Table +8 B, CascadingDropdown +4 B: " +
+      "the search fields take their text direction from their text (Table's " +
+      "also renames pinnedRightColumns and its two slots to pinnedEnd*). " +
+      "InternationalPhoneInput +8 B: the dial code with dir=auto. TimePicker " +
+      "+3 B: the clock header with dir=auto. ToastProvider -4 B: corner " +
+      "classes start/end. The rest, -5 to +5 B on 9 files, is the chunks' new " +
+      "hashed names in import strings. InternationalPhoneInput's declared " +
+      "breach moved with it (below); Table's exclusive +5 B (16,752 -> " +
+      "16,757) stays inside its record's slack. No comments added to " +
+      "src/components or src/utils.",
   },
 ];
 
@@ -1753,7 +1787,7 @@ const DECLARED_BREACHES = new Map([
   [
     "InternationalPhoneInput",
     {
-      kb: 8.74,
+      kb: 8.75,
       why: "10.65 until the 193 countries were packed into a delimited string " +
         "parsed at module load: 4.06 KB gzipped of object literals became 1.90, " +
         "and four fifths of what was there was structure rather than " +
@@ -1777,7 +1811,11 @@ const DECLARED_BREACHES = new Map([
         "Each step measured on an archived build: S4 14b8cacf -8 B (8,952; " +
         "onClear no longer replaces the clear), A1 cfa00fec +3 B (8,955), " +
         "A1b 684ea8a1 -1 B (8,954, the shared menu chunk's new hashed name " +
-        "in an import string); unchanged since.",
+        "in an import string); unchanged since.\n\n" +
+        "8.74 -> 8.75 on 2026-10-31, A2d2 (exclusive 8,954 -> 8,961 B gzipped, " +
+        "+7 B; own chunk +8 B; measured on a build of 6eb6ccd5): the trigger's " +
+        "dial code carries dir=auto, so \"+44\" no longer paints \"44+\" in a " +
+        "right-to-left page.",
     },
   ],
   [

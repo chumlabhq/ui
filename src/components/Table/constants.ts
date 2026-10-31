@@ -82,8 +82,8 @@ export const DEFAULT_TABLE_CLASSES: Required<TableClasses> = {
   filterItemControl:
     "w-4 h-4 rounded border flex items-center justify-center shrink-0 border-cl-border-input data-[selected]:bg-cl-accent data-[selected]:border-cl-accent",
   expandTrigger: "",
-  pinnedRightRegion: "",
-  pinnedRightList: "",
+  pinnedEndRegion: "",
+  pinnedEndList: "",
   input:
     "border-cl-border-input hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-cl-border-input-focus",
   dragHandle: "",

@@ -168,6 +168,7 @@ const TOMBSTONES: Tombstone[] = [
 
   // A2f
   { old: "groupAriaLabel", now: "aria-label", components: ["OtpInput"], scope: "word" },
+  { old: "pinnedRightColumns", now: "pinnedEndColumns", components: ["Table"], scope: "word" },
 ];
 
 interface ValueTombstone {
@@ -185,7 +186,10 @@ interface ValueTombstone {
  * (`iconPosition: "left"`) in the component's directory and fixtures, in any
  * file that renders the component, and in its generated docs and snippets.
  */
-const ITEM_VALUE_TOMBSTONES = [{ component: "Breadcrumb", key: "iconPosition", old: ["left", "right"] }];
+const ITEM_VALUE_TOMBSTONES = [
+  { component: "Breadcrumb", key: "iconPosition", old: ["left", "right"] },
+  { component: "Avatar", key: "position", old: ["top-left", "top-right", "bottom-left", "bottom-right"] },
+];
 
 interface SlotTombstone {
   old: string;
@@ -223,6 +227,8 @@ const SLOT_TOMBSTONES: SlotTombstone[] = [
   { old: "valueText", now: "value", components: ["Slider"], scope: "component" },
   { old: "marker", now: "mark", components: ["Slider"], scope: "component" },
   { old: "labelGroup", now: "group", components: ["Checkbox", "Switch"], scope: "word" },
+  { old: "pinnedRightRegion", now: "pinnedEndRegion", components: ["Table"], scope: "word" },
+  { old: "pinnedRightList", now: "pinnedEndList", components: ["Table"], scope: "word" },
 ];
 
 const VALUE_TOMBSTONES: ValueTombstone[] = [
@@ -239,7 +245,11 @@ const VALUE_TOMBSTONES: ValueTombstone[] = [
   { component: "Accordion", prop: "selectionMode", old: [], now: ["single", "multiple"] },
   { component: "DatePicker", prop: "selectionMode", old: [], now: ["single", "range", "multiple"] },
   { component: "Toast", prop: "variant", old: [], now: ["success", "warning", "error", "info"] },
-  { component: "Drawer", prop: "side", old: [], now: ["left", "right", "top", "bottom"] },
+  { component: "Drawer", prop: "side", old: ["left", "right"], now: ["start", "end", "top", "bottom"] },
+  { component: "ResizablePanel", prop: "resizeDirection", old: ["left", "right"], now: ["start", "end", "top", "bottom"] },
+  { component: "ToastProvider", prop: "position", old: ["top-left", "top-right", "bottom-left", "bottom-right"], now: ["top-start", "top-end", "top-center", "bottom-start", "bottom-end", "bottom-center"] },
+  { component: "AvatarBadge", prop: "position", old: ["top-left", "top-right", "bottom-left", "bottom-right"], now: ["top-end", "top-start", "bottom-end", "bottom-start"] },
+  { component: "Button", prop: "iconAnimation", old: ["slideRight", "slideLeft"], now: ["none", "slideEnd", "slideStart", "slideUp", "slideDown", "bounce", "pulse", "spin"] },
   { component: "CascadingDropdown", prop: "submenuSide", old: ["left", "right"], now: ["start", "end"] },
 ];
 

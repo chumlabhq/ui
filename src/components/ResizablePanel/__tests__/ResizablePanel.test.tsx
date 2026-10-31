@@ -116,7 +116,7 @@ describe("ResizablePanel", () => {
     });
 
     it("separator has aria-orientation='vertical' for horizontal resize", () => {
-      renderPanel({ resizeDirection: "right" });
+      renderPanel({ resizeDirection: "end" });
       expect(screen.getByRole("separator")).toHaveAttribute(
         "aria-orientation",
         "vertical",
@@ -188,13 +188,13 @@ describe("ResizablePanel", () => {
   });
 
   describe("Keyboard Navigation", () => {
-    it("ArrowRight increases width for resizeDirection='right'", async () => {
+    it("ArrowRight increases width for resizeDirection='end'", async () => {
       const onValueChange = vi.fn();
       renderPanel({
         defaultValue: 300,
         step: 10,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -202,13 +202,13 @@ describe("ResizablePanel", () => {
       expect(onValueChange).toHaveBeenCalledWith(310);
     });
 
-    it("ArrowLeft decreases width for resizeDirection='right'", async () => {
+    it("ArrowLeft decreases width for resizeDirection='end'", async () => {
       const onValueChange = vi.fn();
       renderPanel({
         defaultValue: 300,
         step: 10,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -250,7 +250,7 @@ describe("ResizablePanel", () => {
         defaultValue: 300,
         step: 10,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -298,7 +298,7 @@ describe("ResizablePanel", () => {
         defaultValue: 300,
         step: 10,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -314,7 +314,7 @@ describe("ResizablePanel", () => {
         step: 10,
         onResizeStart,
         onResizeEnd,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -329,7 +329,7 @@ describe("ResizablePanel", () => {
         defaultValue: 300,
         disabled: true,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -345,7 +345,7 @@ describe("ResizablePanel", () => {
         minValue: 100,
         maxValue: 500,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       sep.focus();
@@ -357,7 +357,7 @@ describe("ResizablePanel", () => {
   describe("Pointer Interaction", () => {
     it("starts drag on primary button pointerdown", () => {
       const onResizeStart = vi.fn();
-      renderPanel({ defaultValue: 300, onResizeStart, resizeDirection: "right" });
+      renderPanel({ defaultValue: 300, onResizeStart, resizeDirection: "end" });
       const sep = screen.getByRole("separator");
       fireEvent.pointerDown(sep, { clientX: 100, button: 0, pointerId: 1 });
       expect(onResizeStart).toHaveBeenCalledWith(300);
@@ -403,7 +403,7 @@ describe("ResizablePanel", () => {
       renderPanel({
         defaultValue: 300,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       fireEvent.pointerDown(sep, { clientX: 100, button: 0, pointerId: 1 });
@@ -417,7 +417,7 @@ describe("ResizablePanel", () => {
         defaultValue: 300,
         maxValue: 500,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       fireEvent.pointerDown(sep, { clientX: 100, button: 0, pointerId: 1 });
@@ -439,7 +439,7 @@ describe("ResizablePanel", () => {
       renderPanel({
         defaultValue: 300,
         onValueChange,
-        resizeDirection: "right",
+        resizeDirection: "end",
       });
       const sep = screen.getByRole("separator");
       fireEvent.pointerDown(sep, { clientX: 100, button: 0, pointerId: 1 });
@@ -537,10 +537,10 @@ describe("ResizablePanel", () => {
     });
 
     it("sets data-direction on handle", () => {
-      renderPanel({ resizeDirection: "left" });
+      renderPanel({ resizeDirection: "start" });
       expect(screen.getByRole("separator")).toHaveAttribute(
         "data-direction",
-        "left",
+        "start",
       );
     });
 
@@ -560,6 +560,43 @@ describe("ResizablePanel", () => {
       expect(container.firstChild).toHaveAttribute("data-resizing", "true");
       fireEvent.pointerUp(document);
       expect(container.firstChild).not.toHaveAttribute("data-resizing");
+    });
+  });
+
+  describe("Right to left", () => {
+    const renderRtl = (props: Partial<React.ComponentPropsWithoutRef<typeof ResizablePanel>> = {}) =>
+      render(
+        <div dir="rtl">
+          <ResizablePanel defaultValue={300} minValue={100} maxValue={500} step={10} {...props}>
+            <div>Panel Content</div>
+          </ResizablePanel>
+        </div>,
+      );
+
+    it("puts the handle on the inline-end edge by default, the panel's inner edge in either direction", () => {
+      renderRtl();
+      const sep = screen.getByRole("separator");
+      expect(sep).toHaveAttribute("data-direction", "end");
+      expect(sep.className.split(" ")).toContain("-end-1");
+    });
+
+    it("widens on ArrowLeft, which points at the handle's own direction of travel", async () => {
+      const onValueChange = vi.fn();
+      renderRtl({ onValueChange });
+      screen.getByRole("separator").focus();
+      await userEvent.keyboard("{ArrowLeft}");
+      expect(onValueChange).toHaveBeenLastCalledWith(310);
+      await userEvent.keyboard("{ArrowRight}{ArrowRight}");
+      expect(onValueChange).toHaveBeenLastCalledWith(290);
+    });
+
+    it("widens when the handle is dragged left, away from the panel", () => {
+      const onValueChange = vi.fn();
+      renderRtl({ onValueChange });
+      const sep = screen.getByRole("separator");
+      fireEvent.pointerDown(sep, { clientX: 400, button: 0, pointerId: 1 });
+      fireEvent.pointerMove(document, { clientX: 350 });
+      expect(onValueChange).toHaveBeenCalledWith(350);
     });
   });
 });

@@ -202,8 +202,9 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     const updatePosition = useCallback(() => {
       if (isOpen && triggerNode && tooltipRef.current) {
+        const tooltip = tooltipRef.current;
         const triggerRect = triggerNode.getBoundingClientRect();
-        const tooltipRect = tooltipRef.current.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
         const newPosition = calculatePosition(
           triggerRect,
           tooltipRect,
@@ -212,9 +213,13 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           sideOffset,
           alignOffset,
           isRtl(triggerNode),
-          isRtl(tooltipRef.current),
+          isRtl(tooltip),
         );
-        setPosition(newPosition);
+        setPosition({
+          ...newPosition,
+          arrowLeft: newPosition.arrowLeft === undefined ? undefined : newPosition.arrowLeft - tooltip.clientLeft,
+          arrowTop: newPosition.arrowTop === undefined ? undefined : newPosition.arrowTop - tooltip.clientTop,
+        });
         setIsPositioned(true);
       } else {
         setIsPositioned(false);
@@ -512,7 +517,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           style.right = -svgHeight - rotationInset;
           style.top =
             position.arrowTop !== undefined
-              ? position.arrowTop - svgHeight
+              ? position.arrowTop - svgHeight / 2
               : "50%";
           if (position.arrowTop === undefined)
             style.transform += " translateY(-50%)";
@@ -521,7 +526,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           style.left = -svgHeight - rotationInset;
           style.top =
             position.arrowTop !== undefined
-              ? position.arrowTop - svgHeight
+              ? position.arrowTop - svgHeight / 2
               : "50%";
           if (position.arrowTop === undefined)
             style.transform += " translateY(-50%)";

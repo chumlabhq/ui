@@ -1079,3 +1079,10 @@ describe("Slider", () => {
     });
   });
 });
+
+describe("Slider tooltip reads in its own order in a right-to-left page", () => {
+  it("lets a signed value take its own direction, so -20 is not painted 20-", () => {
+    render(<Slider min={-50} max={50} defaultValue={-20} showTooltip tooltipAlways />);
+    expect(screen.getByText("-20")).toHaveAttribute("dir", "auto");
+  });
+});

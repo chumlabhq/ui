@@ -1,6 +1,8 @@
 import Toast from "../../components/Toast/Toast.js";
 import { Dismissable } from "./_harness.js";
 import type { Fixtures } from "./types.js";
+import { RtlBoundary } from "./_harness.js";
+import { ToastAt } from "./_toast.js";
 
 const fixtures: Fixtures<typeof Toast> = [
   { name: "default", props: { id: "t1", onDismiss: () => {}, message: "Saved" } },
@@ -53,6 +55,27 @@ const fixtures: Fixtures<typeof Toast> = [
     name: "no-close-button",
     props: { id: "t6", onDismiss: () => {}, message: "Saved", showCloseButton: false },
     note: "Removes the only interactive element in the toast.",
+  },
+  {
+    name: "provider-bottom-end",
+    props: { id: "t9", onDismiss: () => {}, message: "Saved" },
+    render: () => <ToastAt />,
+    note: "The provider's default corner, with one toast in it: the inline end, the right in a left-to-right page.",
+  },
+  {
+    name: "provider-top-start",
+    props: { id: "t10", onDismiss: () => {}, message: "Saved" },
+    render: () => <ToastAt position="top-start" />,
+  },
+  {
+    name: "provider-rtl",
+    props: { id: "t11", onDismiss: () => {}, message: "Saved" },
+    render: () => (
+      <RtlBoundary>
+        <ToastAt />
+      </RtlBoundary>
+    ),
+    note: "The default bottom-end corner in a right-to-left page is the bottom left.",
   },
 ];
 export default fixtures;

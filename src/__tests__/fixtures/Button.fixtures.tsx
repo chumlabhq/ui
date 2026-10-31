@@ -47,6 +47,28 @@ const fixtures: Fixtures<typeof Button> = [
   },
   { name: "full-width", props: { fullWidth: true }, children: "Save" },
   {
+    name: "icon-slide-end",
+    props: { iconAnimation: "slideEnd" as const, endIcon: <span>R</span> },
+    children: "Next",
+    note: "The trailing icon slides toward the inline end on hover.",
+  },
+  {
+    name: "icon-slide-start",
+    props: { iconAnimation: "slideStart" as const, animateIcon: "leading" as const, startIcon: <span>L</span> },
+    children: "Back",
+  },
+  {
+    name: "icon-slide-end-continuous",
+    props: { iconAnimation: "slideEnd" as const, animateOnHover: false, endIcon: <span>R</span> },
+    children: "Next",
+    note: "The same slide without hover, running on its own: the one form a touch screen shows.",
+  },
+  {
+    name: "icon-slide-start-continuous",
+    props: { iconAnimation: "slideStart" as const, animateOnHover: false, animateIcon: "leading" as const, startIcon: <span>L</span> },
+    children: "Back",
+  },
+  {
     // Every size with text alone, a leading icon, a trailing icon, an icon
     // alone and the loader. Each must stand as tall as its size's text-only
     // Button: the content span sat on a text baseline, so an icon whose

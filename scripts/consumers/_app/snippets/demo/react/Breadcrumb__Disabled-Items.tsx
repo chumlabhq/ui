@@ -52,7 +52,7 @@ export default function BreadcrumbExample() {
           }),
                           ellipsisTrigger: "flex items-center justify-center w-8 h-8 rounded-cl-md transition-colors cursor-pointer bg-cl-bg-hover hover:bg-cl-text/[0.14] text-cl-text-secondary",
                           content: "flex flex-col min-w-40 rounded-cl-md shadow-lg py-1 bg-cl-bg-elevated border border-cl-border",
-                          collapsedItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-left bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated"
+                          collapsedItem: "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer w-full text-start bg-transparent border border-none text-cl-text-secondary hover:bg-cl-bg-elevated"
                         }
         }
         onItemClick={handleItemClick}

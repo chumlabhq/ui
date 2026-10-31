@@ -21,7 +21,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }
         }
       />

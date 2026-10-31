@@ -1561,8 +1561,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "position",
             "type": "CornerPosition",
             "required": false,
-            "default": "\"top-right\"",
-            "description": "Corner position for the badge. Default: `\"top-right\"`."
+            "default": "\"top-end\"",
+            "description": "Corner position for the badge. Default: `\"top-end\"`."
           },
           {
             "name": "offset",
@@ -2678,7 +2678,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "iconAnimation",
-        "type": "\"none\" | \"slideRight\" | \"slideLeft\" | \"slideUp\" | \"slideDown\" | \"bounce\" | \"pulse\" | \"spin\"",
+        "type": "\"none\" | \"slideEnd\" | \"slideStart\" | \"slideUp\" | \"slideDown\" | \"bounce\" | \"pulse\" | \"spin\"",
         "required": false,
         "default": "\"none\"",
         "description": "Animation applied to icons on hover."
@@ -3255,7 +3255,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"start\" | \"end\"",
         "required": false,
         "default": "\"end\"",
-        "description": "The side submenus open on, logical: `\"end\"` is the right in a left-to-right page and the left in a right-to-left one, read from the closest `dir` attribute when the submenu opens, else the document's. RTL is not supported in 0.1.0; the values are logical so they need no rename when it is."
+        "description": "The side submenus open on, logical: `\"end\"` is the right in a left-to-right page and the left in a right-to-left one, read from the closest `dir` attribute when the submenu opens, else the document's. The chevron on an item with a submenu points to the same side."
       },
       {
         "name": "dropdownSide",
@@ -5899,9 +5899,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "side",
-        "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
+        "type": "\"start\" | \"end\" | \"top\" | \"bottom\"",
         "required": false,
-        "default": "\"left\"",
+        "default": "\"start\"",
         "description": "The edge the drawer slides in from."
       },
       {
@@ -5909,7 +5909,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "string",
         "required": false,
         "default": "\"300px\"",
-        "description": "CSS size value for the drawer panel (width for left/right, height for top/bottom)."
+        "description": "CSS size value for the drawer panel (width for start/end, height for top/bottom)."
       },
       {
         "name": "overlayColor",
@@ -6201,8 +6201,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "name": "data-side",
         "values": [
           "bottom",
-          "left",
-          "right",
+          "end",
+          "start",
           "top"
         ],
         "when": "always"
@@ -8851,7 +8851,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": "0.32",
-        "description": "How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted."
+        "description": "How strongly `overlayColor` tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so its blur is not diluted."
       },
       {
         "name": "animationDuration",
@@ -12123,10 +12123,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       },
       {
         "name": "resizeDirection",
-        "type": "\"left\" | \"right\" | \"top\" | \"bottom\"",
+        "type": "\"start\" | \"end\" | \"top\" | \"bottom\"",
         "required": false,
-        "default": "\"right\"",
-        "description": "Direction from which the panel can be resized."
+        "default": "\"end\"",
+        "description": "The panel edge the resize handle sits on. Not `orientation`."
       },
       {
         "name": "step",
@@ -14815,15 +14815,15 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "part": "Table",
-          "slot": "pinnedRightRegion",
+          "slot": "pinnedEndRegion",
           "element": "div",
-          "description": "Right-pinned column container."
+          "description": "End-pinned column container."
         },
         {
           "part": "Table",
-          "slot": "pinnedRightList",
+          "slot": "pinnedEndList",
           "element": "table",
-          "description": "The `<table>` element for right-pinned columns."
+          "description": "The `<table>` element for end-pinned columns."
         },
         {
           "part": "Table",
@@ -14933,7 +14933,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "array",
         "required": false,
         "default": null,
-        "description": "Column IDs to pin to the left side."
+        "description": "Column IDs to pin to the inline start: the left in a left-to-right page, the right in a right-to-left one."
       },
       {
         "name": "onPinnedColumnsChange",
@@ -15335,11 +15335,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Cell padding and text size."
       },
       {
-        "name": "pinnedRightColumns",
+        "name": "pinnedEndColumns",
         "type": "array",
         "required": false,
         "default": null,
-        "description": "Column IDs to pin to the right side."
+        "description": "Column IDs to pin to the inline end: the right in a left-to-right page, the left in a right-to-left one."
       },
       {
         "name": "editable",
@@ -15781,16 +15781,16 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Expand/collapse icon button."
           },
           {
-            "name": "pinnedRightRegion",
+            "name": "pinnedEndRegion",
             "type": "string",
             "required": false,
-            "description": "Right-pinned column container."
+            "description": "End-pinned column container."
           },
           {
-            "name": "pinnedRightList",
+            "name": "pinnedEndList",
             "type": "string",
             "required": false,
-            "description": "The `<table>` element for right-pinned columns."
+            "description": "The `<table>` element for end-pinned columns."
           },
           {
             "name": "input",
@@ -18164,8 +18164,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "position",
             "type": "ToastPosition",
             "required": false,
-            "default": "\"bottom-right\"",
-            "description": "Toast position on screen. Default: `\"bottom-right\"`."
+            "default": "\"bottom-end\"",
+            "description": "Toast position on screen. Default: `\"bottom-end\"`."
           },
           {
             "name": "maxToasts",

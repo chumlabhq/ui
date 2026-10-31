@@ -423,12 +423,12 @@ test.describe("Toast Position Tests", () => {
   });
 
   for (const position of [
-    "top-left",
+    "top-start",
     "top-center",
-    "top-right",
-    "bottom-left",
+    "top-end",
+    "bottom-start",
     "bottom-center",
-    "bottom-right",
+    "bottom-end",
   ]) {
     test(`should display toast at ${position} position`, async ({ page }) => {
       const positionButton = page.locator(`button:has-text("${position}")`);

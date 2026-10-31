@@ -451,7 +451,7 @@ const CheckboxDemo = () => {
             {String(controlled)}
           </span>
           <button
-            className={`ml-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`}
+            className={`ms-auto px-3 py-1 text-xs font-medium rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover cursor-pointer`}
             onClick={() => setControlled(!controlled)}
           >
             Toggle Externally

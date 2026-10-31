@@ -39,7 +39,7 @@ export default function TimePickerExample() {
              footer: "flex items-center justify-end gap-2 mt-4",
              cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover",
              confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
-             row: "flex flex-col gap-1 ml-3",
+             row: "flex flex-col gap-1 ms-3",
              periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover"
            }),
                          trigger: "flex items-center gap-2 w-full sm:w-56 px-3 py-2 border-2 rounded-full transition-colors border-cl-success bg-cl-success-bg text-cl-text"

@@ -38,7 +38,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }),
                           input: "w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
                           control: "rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover"
@@ -62,7 +62,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }),
                           input: "w-full bg-transparent outline-none text-sm resize-none cursor-not-allowed text-cl-text-tertiary placeholder:text-cl-text-tertiary",
                           control: "rounded-cl-lg border gap-2.5 opacity-50 cursor-not-allowed border-cl-border bg-cl-bg-hover"
@@ -86,7 +86,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }),
                           control: `${"rounded-cl-lg border gap-2.5 transition-all duration-150 text-cl-text-chrome border-cl-text/10 bg-cl-bg-input shadow-sm shadow-black/[0.04] focus-within:ring-2 focus-within:ring-cl-accent-halo focus-within:border-cl-border-input-focus"} cursor-default`
                         }

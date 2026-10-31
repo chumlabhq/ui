@@ -51,12 +51,10 @@ import { settle } from "./_surfaces";
  *   in chromium and firefox) and the thumb moves toward the arrow, or to the
  *   inline start for Home and the inline end for End, measured on the track.
  * - ResizablePanel, `default`: ArrowRight and ArrowLeft move the handle toward
- *   the arrow by the size they change. In a right-to-left page it is measured
- *   and then skipped while it is wrong: the default `resizeDirection="right"`
- *   is physical by name, so the handle sits on the panel's outer edge and
- *   cannot move. That is decision D2 (start/end values), A2d2's; once A2d2
- *   puts the handle on the free edge the rows go green and the skip stops
- *   applying.
+ *   the arrow by the size they change. Until A2d2 the default
+ *   `resizeDirection="right"` was physical by name, so in a right-to-left page
+ *   the handle sat on the panel's outer edge and could not move (decision D2);
+ *   its default is now `end`, the edge between the panes in either direction.
  * - TableResize, `resizable`, the first column's handle: ArrowRight, ArrowLeft,
  *   Home, End. The handle moves toward the arrow, the column widens when it
  *   moves toward the inline end, and Home and End move it to the narrowest and
@@ -440,10 +438,6 @@ for (const dir of ["ltr", "rtl"] as const) {
       );
       for (const r of rows) console.log(`RTL_KEYS_ROW ${info.project.name} ${dir} ${component} ${r.ok ? "ok   " : "WRONG"} ${r.name}: ${r.detail}`);
       expect(rows.length, "fewer rows than step 0 pressed: the walk lost rows").toBeGreaterThanOrEqual(FLOOR[component]);
-      test.skip(
-        component === "ResizablePanel" && dir === "rtl" && wrong.length > 0,
-        `D2, owner: A2d2. resizeDirection defaults to the physical "right", the panel's outer edge in RTL. Measured: ${wrong.map((r) => r.detail).join("; ")}`,
-      );
       expect(wrong.map((r) => `${r.name}: ${r.detail}`)).toEqual([]);
     });
   }

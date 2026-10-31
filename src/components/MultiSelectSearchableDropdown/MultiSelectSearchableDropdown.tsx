@@ -1,7 +1,7 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
 import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, TEXT_DIRECTION_FROM_CONTENT } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 import { FormValue } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
@@ -684,7 +684,7 @@ const MultiSelectSearchableDropdown = forwardRef<
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   onClick={(e) => e.stopPropagation()}
-                  className={cn(mergedClasses.searchInput) || undefined}
+                  className={cn(mergedClasses.searchInput, TEXT_DIRECTION_FROM_CONTENT)}
                 />
               </div>
             )}

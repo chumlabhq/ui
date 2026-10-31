@@ -225,7 +225,7 @@ const OtpInputDemo = () => {
               &quot;{controlled}&quot;
             </span>
             <Button
-              className={`ml-auto ${c.btn}`}
+              className={`ms-auto ${c.btn}`}
               onClick={() => setControlled("")}
             >
               Clear

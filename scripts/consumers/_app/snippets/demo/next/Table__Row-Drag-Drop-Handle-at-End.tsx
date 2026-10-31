@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useMemo } from "react";
 import { Table } from "@chumlab/ui/table";
 import { ColumnDef } from "@tanstack/react-table";
@@ -17,13 +19,13 @@ function getTableClasses() {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
+    headerCell: "px-4 py-3 h-[52px] text-start text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
     body: "",
     row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover",
     selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent-bg hover:bg-cl-accent-bg-hover",
     cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
     empty: "flex items-center justify-center py-12 text-cl-text-secondary",
-    pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+    pinnedContainer: "shrink-0 sticky start-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
     unpinnedTable: "w-full border-collapse",
@@ -35,8 +37,8 @@ function getTableClasses() {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinTrigger: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
-    pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
+    pinTrigger: "ms-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
+    pinnedPinButton: "ms-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
     shimmer: "w-full border rounded-cl-md overflow-hidden border-cl-border",
@@ -194,24 +196,31 @@ export default function TableExample() {
     <>
       {
         (() => {
-          const RightIconDemo = () => {
-            const [filter, setFilter] = React.useState("");
+          const RightDragDemo = () => {
+            const [data, setData] = React.useState(sampleData.slice(0, 5));
             return (
               <Table
                 columns={columns}
-                data={sampleData}
-                showSearch
-                searchIconPosition="end"
-                searchPlaceholder="Search users..."
-                globalFilter={filter}
-                onGlobalFilterChange={setFilter}
-                onSearchClear={() => setFilter("")}
+                data={data}
+                reorderable
+                dragColumnPosition="end"
+                onRowReorder={(from, to) => {
+                  setData((prev) => {
+                    const u = [...prev];
+                    const [m] = u.splice(from, 1);
+                    u.splice(to, 0, m);
+                    return u;
+                  });
+                }}
                 getRowId={(row) => row.id}
-                classes={s}
+                classes={{
+                  ...s,
+                  dragHandle: "text-cl-text-tertiary hover:text-cl-text-secondary"
+                }}
               />
             );
           };
-          return <RightIconDemo />;
+          return <RightDragDemo />;
         })()
       }
     </>

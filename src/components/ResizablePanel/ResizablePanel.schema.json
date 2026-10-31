@@ -41,13 +41,13 @@
     "resizeDirection": {
       "type": "string",
       "enum": [
-        "left",
-        "right",
+        "start",
+        "end",
         "top",
         "bottom"
       ],
-      "description": "Direction from which the panel can be resized.",
-      "default": "right"
+      "description": "The panel edge the resize handle sits on. Not `orientation`.",
+      "default": "end"
     },
     "step": {
       "type": "number",

@@ -147,7 +147,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "pinned-right",
-    props: { data: ROWS, columns: COLUMNS, pinnableColumns: ["name", "role"], pinnedRightColumns: ["role"] },
+    props: { data: ROWS, columns: COLUMNS, pinnableColumns: ["name", "role"], pinnedEndColumns: ["role"] },
   },
   {
     name: "pin-hover",

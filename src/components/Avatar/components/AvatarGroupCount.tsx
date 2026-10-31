@@ -204,7 +204,7 @@ export const AvatarGroupCount = forwardRef<
         onClick={onClick}
         {...rest}
       >
-        <span className={textClassName} style={textStyle}>
+        <span className={textClassName} style={textStyle} dir="auto">
           {displayCount}
         </span>
         {children}

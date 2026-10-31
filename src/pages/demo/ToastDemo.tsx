@@ -934,12 +934,12 @@ const ToastDemoContent = ({
             <div className="flex flex-wrap gap-2">
               {(
                 [
-                  "top-left",
+                  "top-start",
                   "top-center",
-                  "top-right",
-                  "bottom-left",
+                  "top-end",
+                  "bottom-start",
                   "bottom-center",
-                  "bottom-right",
+                  "bottom-end",
                 ] as const
               ).map((pos) => (
                 <Button
@@ -1186,7 +1186,7 @@ const ToastDemoContent = ({
 };
 
 const ToastDemo = () => {
-  const [position, setPosition] = useState<ToastPosition>("bottom-right");
+  const [position, setPosition] = useState<ToastPosition>("bottom-end");
 
   return (
     <ToastProvider key={position} position={position} maxToasts={5}>

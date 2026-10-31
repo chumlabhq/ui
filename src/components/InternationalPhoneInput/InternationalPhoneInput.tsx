@@ -306,7 +306,7 @@ const InternationalPhoneInput = forwardRef<
                 className={mergedClasses.flag || undefined}
                 style={{ height: Math.round((flagSize * 17) / 22) }}
               />
-              <span className={mergedClasses.value || undefined}>{country.dialCode}</span>
+              <span className={mergedClasses.value || undefined} dir="auto">{country.dialCode}</span>
             </div>
           ),
         })),

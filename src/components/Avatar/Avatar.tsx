@@ -168,7 +168,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const statusConfig = useMemo(() => {
       if (!status) return null;
       if (isStatusConfig(status)) return status;
-      return { type: status, position: "bottom-right" as const };
+      return { type: status, position: "bottom-end" as const };
     }, [status]);
 
     const tooltipConfig = useMemo(() => {
@@ -300,7 +300,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
                 statusConfig.color,
               ),
               ...getStatusPosition(
-                statusConfig.position ?? "bottom-right",
+                statusConfig.position ?? "bottom-end",
                 statusSize,
               ),
             }}

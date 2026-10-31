@@ -250,7 +250,7 @@ interface PropsTableProps {
 
 export const PropsTable: React.FC<PropsTableProps> = ({ children }) => (
   <div className="code-scroll overflow-x-auto w-full min-w-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-    <table className="w-full table-fixed text-left min-w-[600px]">
+    <table className="w-full table-fixed text-start [&_th]:text-start min-w-[600px]">
       <colgroup>
         <col className="w-[22%]" />
         <col className="w-[25%]" />

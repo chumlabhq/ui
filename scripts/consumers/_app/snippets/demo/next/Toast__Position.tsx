@@ -6,19 +6,19 @@ import { ToastPosition, ToastProvider, useToast } from "@chumlab/ui/toast";
 
 function ToastTrigger() {
   const toast = useToast();
-  const [position, setPosition] = useState<ToastPosition>("bottom-right");
+  const [position, setPosition] = useState<ToastPosition>("bottom-end");
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-wrap gap-2">
         {
           (
             [
-              "top-left",
+              "top-start",
               "top-center",
-              "top-right",
-              "bottom-left",
+              "top-end",
+              "bottom-start",
               "bottom-center",
-              "bottom-right"
+              "bottom-end"
             ] as const
           ).map((pos) => (
             <Button

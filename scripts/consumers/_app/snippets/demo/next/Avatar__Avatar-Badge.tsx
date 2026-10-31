@@ -87,10 +87,10 @@ export default function AvatarExample() {
       {
         (
           [
-            "top-right",
-            "top-left",
-            "bottom-right",
-            "bottom-left"
+            "top-end",
+            "top-start",
+            "bottom-end",
+            "bottom-start"
           ] as const
         ).map((pos) => (
           <div key={pos} className="text-center pt-2 pb-1">

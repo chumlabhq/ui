@@ -90,9 +90,9 @@ describe("Drawer", () => {
     });
 
     it("sets data-side attribute", () => {
-      renderDrawer({ side: "right" });
+      renderDrawer({ side: "end" });
       const dialog = screen.getByRole("dialog");
-      expect(dialog).toHaveAttribute("data-side", "right");
+      expect(dialog).toHaveAttribute("data-side", "end");
     });
 
     it("sets data-state='open' on root element when open", () => {
@@ -854,7 +854,7 @@ describe("Drawer", () => {
   });
 
   describe("Direction", () => {
-    it.each(["left", "right", "top", "bottom"] as const)(
+    it.each(["start", "end", "top", "bottom"] as const)(
       "sets data-side='%s' on the panel",
       (side) => {
         renderDrawer({ side });
@@ -901,8 +901,8 @@ describe("Drawer", () => {
 
   describe("Direction Styling", () => {
     it.each([
-      ["left", "translateX"],
-      ["right", "translateX"],
+      ["start", "translateX"],
+      ["end", "translateX"],
       ["top", "translateY"],
       ["bottom", "translateY"],
     ] as const)(
@@ -915,8 +915,8 @@ describe("Drawer", () => {
       },
     );
 
-    it("applies width style for left/right directions", () => {
-      renderDrawer({ side: "left", size: "400px" });
+    it("applies width style for start/end directions", () => {
+      renderDrawer({ side: "start", size: "400px" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.width).toBe("400px");
     });
@@ -954,7 +954,7 @@ describe("Drawer", () => {
     }
 
     it("sets touch-action on the panel when swipeable", () => {
-      renderDrawer({ swipeable: true, side: "left" });
+      renderDrawer({ swipeable: true, side: "start" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.touchAction).toBe("pan-y");
     });
@@ -991,13 +991,13 @@ describe("Drawer", () => {
     });
 
     it("leaves a side drawer's header to the browser", () => {
-      renderDrawer({ swipeable: true, side: "left" });
+      renderDrawer({ swipeable: true, side: "start" });
       const header = document.querySelector<HTMLElement>("[data-drawer-header]")!;
       expect(header.style.touchAction).toBeFalsy();
     });
 
     it("does not set touch-action when not swipeable", () => {
-      renderDrawer({ swipeable: false, side: "left" });
+      renderDrawer({ swipeable: false, side: "start" });
       const panel = screen.getByRole("dialog");
       expect(panel.style.touchAction).toBeFalsy();
     });
@@ -1012,7 +1012,7 @@ describe("Drawer", () => {
       const onOpenChange = vi.fn();
       renderDrawer({
         swipeable: true,
-        side: "right",
+        side: "end",
         swipeThreshold: 0.3,
         onOpenChange,
       });
@@ -1451,5 +1451,23 @@ describe("Drawer", () => {
 
       expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
+  });
+});
+
+describe("Drawer side follows the inline direction", () => {
+  it("anchors the default start panel to the inline start and signs its slide by the page direction", () => {
+    renderDrawer();
+    const panel = screen.getByRole("dialog");
+    expect(panel).toHaveAttribute("data-side", "start");
+    expect(panel.style.insetInlineStart).toBe("0");
+    expect(panel.style.left).toBe("");
+    expect(panel).toHaveClass("rtl:[--cl-inline-sign:-1]");
+  });
+
+  it("anchors an end panel to the inline end", () => {
+    renderDrawer({ side: "end" });
+    const panel = screen.getByRole("dialog");
+    expect(panel.style.insetInlineEnd).toBe("0");
+    expect(panel.style.right).toBe("");
   });
 });

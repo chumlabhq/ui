@@ -28,7 +28,7 @@ export default function PaginationExample() {
              content: "rounded-cl-md shadow-lg py-1 min-w-[64px] bg-cl-bg-panel border border-cl-border",
              icon: "w-4 h-4 transition-transform text-cl-text-secondary",
              positioner: "",
-             item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text"
+             item: "px-4 py-1.5 w-full text-start cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text"
            },
            label: "text-sm text-cl-text-secondary",
            pageInfo: "flex items-center"
@@ -42,7 +42,7 @@ export default function PaginationExample() {
                        trigger: "flex items-center gap-2 px-4 py-2 rounded-full shadow-sm hover:shadow transition-shadow cursor-pointer bg-cl-bg-panel border border-cl-border text-cl-text",
                        content: "rounded-cl-lg shadow-lg py-2 min-w-[80px] bg-cl-bg-panel border border-cl-border",
                        icon: "w-4 h-4 text-cl-text-secondary",
-                       item: "px-4 py-2 w-full text-left cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-accent/10 text-cl-text"
+                       item: "px-4 py-2 w-full text-start cursor-pointer transition-colors hover:bg-cl-accent/10 data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-accent/10 text-cl-text"
                      },
                      label: "text-sm font-medium text-cl-text-secondary",
                      ellipsis: "px-2 text-cl-text-tertiary",

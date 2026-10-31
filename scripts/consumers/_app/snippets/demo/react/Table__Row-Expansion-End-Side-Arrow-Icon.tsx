@@ -17,13 +17,13 @@ function getTableClasses() {
     container: "w-full border rounded-cl-md overflow-hidden border-cl-border",
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: "px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
+    headerCell: "px-4 py-3 h-[52px] text-start text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border",
     body: "",
     row: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover",
     selectedRow: "border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent-bg hover:bg-cl-accent-bg-hover",
     cell: "px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text",
     empty: "flex items-center justify-center py-12 text-cl-text-secondary",
-    pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+    pinnedContainer: "shrink-0 sticky start-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
     unpinnedTable: "w-full border-collapse",
@@ -35,8 +35,8 @@ function getTableClasses() {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinTrigger: "ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
-    pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
+    pinTrigger: "ms-2 p-1 rounded transition-colors hover:bg-cl-bg-hover",
+    pinnedPinButton: "ms-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
     shimmer: "w-full border rounded-cl-md overflow-hidden border-cl-border",
@@ -194,31 +194,80 @@ export default function TableExample() {
     <>
       {
         (() => {
-          const RightDragDemo = () => {
-            const [data, setData] = React.useState(sampleData.slice(0, 5));
+          const RightExpandDemo = () => {
+            const [ids, setIds] = React.useState<string[]>([]);
+            const ArrowIcon = ({
+              expanded,
+              className
+            }: {
+              expanded: boolean;
+              className?: string;
+            }) => (
+              <svg
+                className={`${className} transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            );
             return (
               <Table
                 columns={columns}
-                data={data}
-                reorderable
-                dragColumnPosition="end"
-                onRowReorder={(from, to) => {
-                  setData((prev) => {
-                    const u = [...prev];
-                    const [m] = u.splice(from, 1);
-                    u.splice(to, 0, m);
-                    return u;
-                  });
-                }}
+                data={sampleData.slice(0, 5)}
+                expandable
+                expandColumnPosition="end"
+                expandedRowIds={ids}
+                onExpandedRowIdsChange={setIds}
+                renderExpandIcon={(state) => <ArrowIcon {...state} />}
+                renderExpandedRow={(row) => (
+                  <div
+                    className={"px-6 py-4 bg-cl-accent-surface border-e-2 border-cl-border-input-focus"}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div
+                        className={"w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-cl-accent-bg text-cl-accent-hover"}
+                      >
+                        {row.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </div>
+                      <div>
+                        <p
+                          className={"text-sm font-medium text-cl-text"}
+                        >
+                          {row.name}
+                        </p>
+                        <p
+                          className={"text-xs mt-0.5 text-cl-text-secondary"}
+                        >
+                          {row.role} in {row.department}
+                        </p>
+                        <p
+                          className={"text-xs mt-0.5 text-cl-text-tertiary"}
+                        >
+                          {row.email}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 getRowId={(row) => row.id}
                 classes={{
                   ...s,
-                  dragHandle: "text-cl-text-tertiary hover:text-cl-text-secondary"
+                  expandTrigger: "text-cl-accent"
                 }}
               />
             );
           };
-          return <RightDragDemo />;
+          return <RightExpandDemo />;
         })()
       }
     </>

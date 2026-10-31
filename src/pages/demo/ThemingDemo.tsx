@@ -72,7 +72,7 @@ const ThemingDemo = () => {
         description="The full set of tokens. Override any of them to retheme without touching component source."
       >
         <div className="overflow-hidden" style={{ border: "0.5px solid var(--border-faint)" }}>
-          <table className="w-full text-left text-[13px]">
+          <table className="w-full text-start [&_th]:text-start text-[13px]">
             <thead className="bg-bg-elevated">
               <tr>
                 <th

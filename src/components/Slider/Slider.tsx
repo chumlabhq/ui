@@ -13,7 +13,7 @@ import {
   DEFAULT_SLIDER_CLASSES,
   UNSTYLED_SLIDER_CLASSES,
 } from "./utils/constants.js";
-import { isBrowser, isRtl } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl, INLINE_SIGN, inlineSigned } from "../../utils/isBrowser.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { FormValue } from "../../utils/FormValue.js";
 import { setRef } from "../../utils/mergeRefs.js";
@@ -37,8 +37,6 @@ function snapToStep(val: number, min: number, step: number) {
   );
 }
 
-const INLINE_SIGN = "rtl:[--cl-slider-sign:-1]";
-const signed = (pct: string) => `calc(var(--cl-slider-sign, 1) * ${pct})`;
 
 function valueToPercent(val: number, min: number, max: number) {
   return ((val - min) / (max - min)) * 100;
@@ -119,7 +117,7 @@ function Thumb({
     ? {
         insetInlineStart: `${pos}%`,
         top: "50%",
-        transform: `translate(${signed("-50%")}, -50%)`,
+        transform: `translate(${inlineSigned("-50%")}, -50%)`,
         transition: positionTransition,
       }
     : {
@@ -193,7 +191,7 @@ function Thumb({
           style={{ position: "absolute", ...tooltipStyle }}
           role="tooltip"
         >
-          {formatTooltip(value)}
+          <span dir="auto">{formatTooltip(value)}</span>
         </div>
       )}
     </div>
@@ -616,7 +614,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
               : mark.value <= values[0];
 
             const dotPositionStyle: CSSProperties = isHorizontal
-              ? { insetInlineStart: `${markPos}%`, top: "50%", transform: `translate(${signed("-50%")}, -50%)` }
+              ? { insetInlineStart: `${markPos}%`, top: "50%", transform: `translate(${inlineSigned("-50%")}, -50%)` }
               : { bottom: `${markPos}%`, left: "50%", transform: "translate(-50%, 50%)" };
 
             const customMark = renderMark?.({
@@ -674,7 +672,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                              * start, the last back from its end, and every
                              * label in between stays centred on its tick.
                              */
-                            transform: `translateX(${signed(markPos <= 0 ? "0%" : markPos >= 100 ? "-100%" : "-50%")})`,
+                            transform: `translateX(${inlineSigned(markPos <= 0 ? "0%" : markPos >= 100 ? "-100%" : "-50%")})`,
                             marginTop: "8px",
                           }
                         : { bottom: `${markPos}%`, insetInlineStart: "100%", transform: "translateY(50%)", marginInlineStart: "8px" }),

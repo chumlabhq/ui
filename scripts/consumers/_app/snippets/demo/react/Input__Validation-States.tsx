@@ -51,7 +51,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }
         }
       />
@@ -73,7 +73,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }), control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-error shadow-sm shadow-danger/0.04 focus-within:ring-2 focus-within:ring-cl-error/15" }
         }
       />
@@ -95,7 +95,7 @@ export default function InputExample() {
             description: "text-xs mt-1 mb-1.5 text-cl-text-tertiary",
             prefix: "text-sm select-none text-cl-text-tertiary",
             suffix: "text-sm select-none text-cl-text-tertiary",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }), control: "px-3.5 py-2.5 rounded-cl-lg border gap-2.5 transition-all duration-150 border-cl-success shadow-sm shadow-success/0.04 focus-within:ring-2 focus-within:ring-cl-success/15" }
         }
       />

@@ -30,8 +30,8 @@ export interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
   minValue?: number;
   /** Maximum allowed size in pixels. */
   maxValue?: number;
-  /** Resize handle direction. Not `orientation`. */
-  resizeDirection?: "left" | "right" | "top" | "bottom";
+  /** The panel edge the resize handle sits on. Not `orientation`. Default: `"end"`. */
+  resizeDirection?: "start" | "end" | "top" | "bottom";
   step?: number;
   disabled?: boolean;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */

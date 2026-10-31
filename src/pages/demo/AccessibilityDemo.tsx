@@ -57,7 +57,7 @@ const AccessibilityDemo = () => {
         title="ARIA & semantics"
         description="We use native HTML where we can and ARIA where we must."
       >
-        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
+        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc ps-5 marker:text-accent">
           <li>
             Roles & states (
             <code className="font-mono text-[12px] text-accent">
@@ -132,7 +132,7 @@ const AccessibilityDemo = () => {
       </Section>
 
       <Section title="Testing" description="What we run on every release.">
-        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc pl-5 marker:text-accent">
+        <ul className="space-y-2 text-[14px] text-fg-secondary leading-[1.6] max-w-2xl list-disc ps-5 marker:text-accent">
           <li>
             Automated axe-core scans over every component fixture — each
             component in each of its states, not just the pages in this site.

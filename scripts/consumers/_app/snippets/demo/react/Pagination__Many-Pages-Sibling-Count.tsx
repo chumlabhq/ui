@@ -22,7 +22,7 @@ export default function PaginationExample() {
                 content: "rounded-cl-md shadow-lg py-1 min-w-[64px] bg-cl-bg-panel border border-cl-border",
                 icon: "w-4 h-4 transition-transform text-cl-text-secondary",
                 positioner: "",
-                item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text"
+                item: "px-4 py-1.5 w-full text-start cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text"
               },
               label: "text-sm text-cl-text-secondary",
               pageInfo: "flex items-center"
@@ -47,7 +47,7 @@ export default function PaginationExample() {
                   content: "rounded-cl-md shadow-lg py-1 min-w-[64px] bg-cl-bg-panel border border-cl-border",
                   icon: "w-4 h-4 transition-transform text-cl-text-secondary",
                   positioner: "",
-                  item: "px-4 py-1.5 w-full text-left cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text"
+                  item: "px-4 py-1.5 w-full text-start cursor-pointer transition-colors hover:bg-cl-bg-hover data-[selected]:bg-cl-accent-bg data-[selected]:text-cl-accent-hover data-[highlighted]:bg-cl-bg-hover text-cl-text"
                 },
                 label: "text-sm text-cl-text-secondary",
                 pageInfo: "flex items-center"

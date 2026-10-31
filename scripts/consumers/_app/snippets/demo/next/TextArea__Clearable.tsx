@@ -25,7 +25,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }
         }
         className="flex flex-col"
@@ -46,7 +46,7 @@ export default function TextAreaExample() {
                colour token drops both variants and then only the last one survives,
                which is how every error message on this page rendered green. */
             message: "text-xs mt-1.5 flex items-center gap-1.5",
-            count: "text-[11px] mt-1 text-right tabular-nums text-cl-text-tertiary"
+            count: "text-[11px] mt-1 text-end tabular-nums text-cl-text-tertiary"
           }
         }
         className="flex flex-col"

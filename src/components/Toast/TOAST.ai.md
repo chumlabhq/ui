@@ -33,7 +33,7 @@ function rather than rendering an element.
 import { ToastProvider } from "@chumlab/ui/toast";
 
 export default function App({ children }) {
-  return <ToastProvider position="top-right">{children}</ToastProvider>;
+  return <ToastProvider position="top-end">{children}</ToastProvider>;
 }
 ```
 
@@ -94,7 +94,7 @@ function MyComponent() {
 | Prop | Constraint |
 |------|-----------|
 | `variant` | `"success"`, `"warning"`, `"error"`, `"info"` |
-| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-right"` (default), `"top-right"`, `"top-left"`, `"top-center"`, `"bottom-left"`, `"bottom-center"` |
+| `position` | Set on `<ToastProvider>`. 6 options: `"bottom-end"` (default), `"top-end"`, `"top-start"`, `"top-center"`, `"bottom-start"`, `"bottom-center"`. Start and end follow the page direction. |
 | `duration` | Milliseconds before auto-dismiss. `0` = persistent. Default `5000` for every type. |
 | `classes.root` | Class string for the toast's outer element. It does not replace the layout. |
 | `onDismiss` | Fires when the toast is dismissed, by timeout or the close button |
@@ -176,7 +176,7 @@ Generated from the types by `scripts/build-subcomponent-schemas.mjs`.
 | Prop | Type | Description |
 | --- | --- | --- |
 | `children` | `ReactNode` | Content rendered inside this element. |
-| `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-right"`. |
+| `position` | `ToastPosition \| undefined` | Toast position on screen. Default: `"bottom-end"`. |
 | `maxToasts` | `number \| undefined` | How many toasts may be visible at once. Older ones leave as new ones arrive. |
 | `containerClassName` | `string \| undefined` | Additional classes for the toast container. |
 | `defaultDuration` | `number \| undefined` | How long a toast stays up, in milliseconds, when it does not set its own. |

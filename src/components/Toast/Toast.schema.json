@@ -142,8 +142,8 @@
         },
         "position": {
           "type": "ToastPosition | undefined",
-          "description": "Toast position on screen. Default: `\"bottom-right\"`.",
-          "default": "bottom-right"
+          "description": "Toast position on screen. Default: `\"bottom-end\"`.",
+          "default": "bottom-end"
         },
         "maxToasts": {
           "type": "number | undefined",

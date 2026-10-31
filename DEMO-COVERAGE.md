@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 59 |
 | Library-authored props across the public surface | 1253 |
 | With no demo | 263 (21%) |
-| With no fixture | 691 (55%) |
+| With no fixture | 685 (55%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 54 |
@@ -96,7 +96,7 @@ listed here with no demo anywhere fails the generator.
 | AvatarGroupShimmer | 9 | 280 | 2 | 0 | 8 | 0 | `reduceMotion`, `asChild` | — |
 | AvatarShimmer | 6 | 280 | 2 | 1 | 1 | 0 | `unstyled` | `classes` |
 | Breadcrumb | 23 | 277 | 10 | 4 | 14 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `ellipsisIcon`, `tooltipOffset`, `dropdownZIndex`, `ellipsisAriaLabel` |
-| Button | 24 | 292 | 0 | 0 | 12 | 0 | — | — |
+| Button | 24 | 292 | 0 | 0 | 9 | 0 | — | — |
 | ButtonGroup | 2 | 279 | 0 | 0 | 0 | 0 | — | — |
 | CascadingDropdown | 60 | 2 | 23 | 13 | 28 | 0 | `dropdownSide`, `unstyled`, `portalContainer`, `keepMounted` | `open`, `onOpenChange`, `onBlur`, `onFocus`, `onKeyDown`, `shimmerCount`, `clearable`, `dropdownZIndex`, `dropdownOffset`, `clearIcon`, `renderTrigger`, `menuSearchAriaLabel`, `submenuSearchAriaLabel` |
 | Checkbox | 21 | 303 | 2 | 1 | 10 | 0 | `reduceMotion` | `indeterminateIcon` |
@@ -129,9 +129,9 @@ listed here with no demo anywhere fails the generator.
 | PulseLoader | 6 | 280 | 4 | 2 | 3 | 0 | `reduceMotion`, `unstyled` | `animationDuration`, `classes` |
 | RadioButton | 8 | 279 | 1 | 0 | 3 | 0 | `size` | — |
 | RadioGroup | 21 | 275 | 4 | 2 | 5 | 0 | `unstyled`, `reduceMotion` | `onFocus`, `onBlur` |
-| ResizablePanel | 14 | 279 | 2 | 0 | 11 | 0 | `reduceMotion`, `unstyled` | — |
+| ResizablePanel | 14 | 279 | 2 | 0 | 10 | 0 | `reduceMotion`, `unstyled` | — |
 | SearchableDropdown | 58 | 2 | 5 | 2 | 30 | 0 | `unstyled` | `searchInputAriaLabel`, `typeaheadTimeout` |
-| Slider | 36 | 273 | 5 | 0 | 18 | 0 | `unstyled` | — |
+| Slider | 36 | 273 | 5 | 0 | 16 | 0 | `unstyled` | — |
 | Slot | 1 | 279 | 1 | 0 | 1 | 0 | — | — |
 | Stepper | 32 | 2 | 7 | 1 | 19 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |
 | Switch | 28 | 277 | 5 | 2 | 11 | 0 | `reduceMotion` | `loader`, `loaderSize` |

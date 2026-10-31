@@ -322,7 +322,7 @@
     },
     {
       "component": "Table",
-      "title": "Built-in Search (Custom Filter Icon on Right)",
+      "title": "Built-in Search (Custom Filter Icon at End)",
       "reason": "code-less by decision: searchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
     },
     {

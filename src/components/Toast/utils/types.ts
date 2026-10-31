@@ -3,11 +3,11 @@ import type { ReactNode } from "react";
 export type ToastVariant = "success" | "warning" | "error" | "info";
 
 export type ToastPosition =
-  | "top-left"
-  | "top-right"
+  | "top-start"
+  | "top-end"
   | "top-center"
-  | "bottom-left"
-  | "bottom-right"
+  | "bottom-start"
+  | "bottom-end"
   | "bottom-center";
 
 export interface ToastClasses {
@@ -95,13 +95,13 @@ export interface ToastProps extends Omit<ToastConfig, "id"> {
  *
  * @example
  * ```tsx
- * <ToastProvider position="bottom-right"><App /></ToastProvider>
+ * <ToastProvider position="bottom-end"><App /></ToastProvider>
  * ```
  */
 export interface ToastProviderProps {
   /** Content rendered inside this element. */
   children: ReactNode;
-  /** Toast position on screen. Default: `"bottom-right"`. */
+  /** Toast position on screen. Default: `"bottom-end"`. */
   position?: ToastPosition;
   /** How many toasts may be visible at once. Older ones leave as new ones arrive. */
   maxToasts?: number;

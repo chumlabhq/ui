@@ -5,7 +5,7 @@ export default function AvatarExample() {
     <>
       {
         (
-          ["top-right", "top-left", "bottom-right", "bottom-left"] as const
+          ["top-end", "top-start", "bottom-end", "bottom-start"] as const
         ).map((pos) => (
           <div key={pos} className="text-center">
             <Avatar

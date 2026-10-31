@@ -109,8 +109,8 @@
       "type": "string",
       "enum": [
         "none",
-        "slideRight",
-        "slideLeft",
+        "slideEnd",
+        "slideStart",
         "slideUp",
         "slideDown",
         "bounce",

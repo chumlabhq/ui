@@ -56,7 +56,7 @@ const getClasses = () => ({
     footer: "flex items-center justify-end gap-2 mt-4",
     cancelTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-hover`,
     confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent/90",
-    row: "flex flex-col gap-1 ml-3",
+    row: "flex flex-col gap-1 ms-3",
     periodTrigger: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-hover`,
   } satisfies TimePickerClasses,
 });
@@ -134,7 +134,7 @@ const getEmeraldClockTheme = (): TimePickerClasses => ({
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-success text-white hover:bg-cl-success",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
 
@@ -158,7 +158,7 @@ const getRoseClockTheme = (): TimePickerClasses => ({
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
 
@@ -182,7 +182,7 @@ const getVioletClockTheme = (): TimePickerClasses => ({
   footer: "flex items-center justify-end gap-2 mt-4",
   cancelTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors text-cl-text-secondary hover:bg-cl-bg-elevated`,
   confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-accent text-cl-on-accent hover:bg-cl-accent",
-  row: "flex flex-col gap-1 ml-3",
+  row: "flex flex-col gap-1 ms-3",
   periodTrigger: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer transition-colors text-cl-text-tertiary hover:bg-cl-bg-elevated`,
 });
 
@@ -985,7 +985,7 @@ const TimePickerDemo = () => {
                 footer: "flex items-center justify-end gap-2 mt-4",
                 cancelTrigger: `px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary`,
                 confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent",
-                row: "flex flex-col gap-1 ml-3",
+                row: "flex flex-col gap-1 ms-3",
                 periodTrigger: `px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary`,
               }}
             />
@@ -1456,7 +1456,7 @@ const TimePickerDemo = () => {
             </div>
             <div className={`text-sm ${c.text}`}>
               <p className="mb-1 font-medium">Try typing:</p>
-              <ul className="list-disc pl-5 space-y-0.5 text-xs">
+              <ul className="list-disc ps-5 space-y-0.5 text-xs">
                 <li><code className="font-mono">2p</code> &rarr; 02:00 PM</li>
                 <li><code className="font-mono">930a</code> &rarr; 09:30 AM</li>
                 <li><code className="font-mono">14</code> &rarr; 02:00 PM</li>

@@ -55,9 +55,9 @@ const panelRootClass = (color: string) => {
     const map: Record<string, string> = {
       blue: `h-40 ${base} rounded-cl-md`,
       green: `h-40 ${base} rounded-cl-md`,
-      purple: `${base} rounded-l-lg`,
-      indigo: `${base} rounded-l-lg`,
-      teal: `${base} rounded-r-lg`,
+      purple: `${base} rounded-s-lg`,
+      indigo: `${base} rounded-s-lg`,
+      teal: `${base} rounded-e-lg`,
       amber: `h-40 ${base} rounded-cl-md`,
     };
     return map[color] ?? map.blue;

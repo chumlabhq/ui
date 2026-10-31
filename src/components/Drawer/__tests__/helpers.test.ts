@@ -17,20 +17,20 @@ describe("getSideStyles", () => {
   const fraction = 1; // fully open → closedPercent = 0
   const duration = 300;
 
-  it("returns correct styles for 'left' direction", () => {
-    const styles = getSideStyles("left", size, fraction, duration);
+  it("returns correct styles for 'start' direction", () => {
+    const styles = getSideStyles("start", size, fraction, duration);
     expect(styles.top).toBe(0);
-    expect(styles.left).toBe(0);
+    expect(styles.insetInlineStart).toBe(0);
     expect(styles.height).toBe("100vh");
     expect(styles.width).toBe(size);
     expect(String(styles.transform)).toContain("translateX");
     expect(String(styles.transition)).toContain("300ms");
   });
 
-  it("returns correct styles for 'right' direction", () => {
-    const styles = getSideStyles("right", size, fraction, duration);
+  it("returns correct styles for 'end' direction", () => {
+    const styles = getSideStyles("end", size, fraction, duration);
     expect(styles.top).toBe(0);
-    expect(styles.right).toBe(0);
+    expect(styles.insetInlineEnd).toBe(0);
     expect(styles.height).toBe("100vh");
     expect(styles.width).toBe(size);
     expect(String(styles.transform)).toContain("translateX");
@@ -39,7 +39,7 @@ describe("getSideStyles", () => {
   it("returns correct styles for 'top' direction", () => {
     const styles = getSideStyles("top", size, fraction, duration);
     expect(styles.top).toBe(0);
-    expect(styles.left).toBe(0);
+    expect(styles.insetInlineStart).toBe(0);
     expect(styles.width).toBe("100vw");
     expect(styles.height).toBe(size);
     expect(String(styles.transform)).toContain("translateY");
@@ -48,7 +48,7 @@ describe("getSideStyles", () => {
   it("returns correct styles for 'bottom' direction", () => {
     const styles = getSideStyles("bottom", size, fraction, duration);
     expect(styles.bottom).toBe(0);
-    expect(styles.left).toBe(0);
+    expect(styles.insetInlineStart).toBe(0);
     expect(styles.width).toBe("100vw");
     expect(styles.height).toBe(size);
     expect(String(styles.transform)).toContain("translateY");
@@ -56,40 +56,48 @@ describe("getSideStyles", () => {
 
   it("reflects fraction in the transform value", () => {
     // fraction = 0 → closedPercent = 100 (fully closed)
-    const closedStyles = getSideStyles("right", size, 0, duration);
+    const closedStyles = getSideStyles("end", size, 0, duration);
     expect(String(closedStyles.transform)).toContain("100%");
 
     // fraction = 1 → closedPercent = 0 (fully open)
-    const openStyles = getSideStyles("right", size, 1, duration);
+    const openStyles = getSideStyles("end", size, 1, duration);
     expect(String(openStyles.transform)).toContain("0%");
   });
 });
 
 describe("getClosingDelta", () => {
   it("returns deltaY for 'bottom'", () => {
-    expect(getClosingDelta("bottom", 10, 50)).toBe(50);
+    expect(getClosingDelta("bottom", 10, 50, false)).toBe(50);
   });
 
   it("returns -deltaY for 'top'", () => {
-    expect(getClosingDelta("top", 10, 50)).toBe(-50);
+    expect(getClosingDelta("top", 10, 50, false)).toBe(-50);
   });
 
-  it("returns -deltaX for 'left'", () => {
-    expect(getClosingDelta("left", 30, 0)).toBe(-30);
+  it("returns -deltaX for 'start' left to right", () => {
+    expect(getClosingDelta("start", 30, 0, false)).toBe(-30);
   });
 
-  it("returns deltaX for 'right'", () => {
-    expect(getClosingDelta("right", 30, 0)).toBe(30);
+  it("returns deltaX for 'end' left to right", () => {
+    expect(getClosingDelta("end", 30, 0, false)).toBe(30);
+  });
+
+  it("closes a 'start' drawer on a rightward drag right to left, where start is the right edge", () => {
+    expect(getClosingDelta("start", 30, 0, true)).toBe(30);
+  });
+
+  it("closes an 'end' drawer on a leftward drag right to left", () => {
+    expect(getClosingDelta("end", -30, 0, true)).toBe(30);
   });
 });
 
 describe("getTransformString", () => {
-  it("returns translateX with negative percent for 'left'", () => {
-    expect(getTransformString("left", 80)).toBe("translateX(-80%)");
+  it("returns translateX toward the inline start for 'start', signed by the page direction", () => {
+    expect(getTransformString("start", 80)).toBe("translateX(calc(var(--cl-inline-sign, 1) * -80%))");
   });
 
-  it("returns translateX with positive percent for 'right'", () => {
-    expect(getTransformString("right", 80)).toBe("translateX(80%)");
+  it("returns translateX toward the inline end for 'end', signed by the page direction", () => {
+    expect(getTransformString("end", 80)).toBe("translateX(calc(var(--cl-inline-sign, 1) * 80%))");
   });
 
   it("returns translateY with negative percent for 'top'", () => {
@@ -101,17 +109,17 @@ describe("getTransformString", () => {
   });
 
   it("handles 0% (fully open state)", () => {
-    expect(getTransformString("right", 0)).toBe("translateX(0%)");
+    expect(getTransformString("end", 0)).toBe("translateX(calc(var(--cl-inline-sign, 1) * 0%))");
   });
 });
 
 describe("isHorizontalSide", () => {
-  it("returns true for 'left'", () => {
-    expect(isHorizontalSide("left")).toBe(true);
+  it("returns true for 'start'", () => {
+    expect(isHorizontalSide("start")).toBe(true);
   });
 
-  it("returns true for 'right'", () => {
-    expect(isHorizontalSide("right")).toBe(true);
+  it("returns true for 'end'", () => {
+    expect(isHorizontalSide("end")).toBe(true);
   });
 
   it("returns false for 'top'", () => {
@@ -124,9 +132,9 @@ describe("isHorizontalSide", () => {
 });
 
 describe("getTouchAction", () => {
-  it("returns 'pan-y' for horizontal drawers (left/right)", () => {
-    expect(getTouchAction("left")).toBe("pan-y");
-    expect(getTouchAction("right")).toBe("pan-y");
+  it("returns 'pan-y' for horizontal drawers (start/end)", () => {
+    expect(getTouchAction("start")).toBe("pan-y");
+    expect(getTouchAction("end")).toBe("pan-y");
   });
 
   // A sheet's content scrolls along the axis it dismisses on, so the panel

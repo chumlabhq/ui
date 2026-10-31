@@ -64,7 +64,7 @@ export const DemoSnippetBlock: FC<{ component: string; title: string }> = ({ com
             <button
               type="button"
               onClick={copy}
-              className="px-2.5 py-1 rounded-md border border-border-soft text-[12px] text-fg-secondary hover:border-border-active transition-colors cursor-pointer ml-auto"
+              className="px-2.5 py-1 rounded-md border border-border-soft text-[12px] text-fg-secondary hover:border-border-active transition-colors cursor-pointer ms-auto"
             >
               {copied ? "Copied" : "Copy"}
             </button>

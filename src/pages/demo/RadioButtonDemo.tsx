@@ -665,7 +665,7 @@ const RadioButtonDemo = () => {
             </span>
             <Button
               size="sm"
-              className={`ml-auto rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover`}
+              className={`ms-auto rounded-cl-md bg-cl-bg-elevated text-cl-text border border-cl-border hover:border-cl-border-input-hover hover:bg-cl-bg-hover`}
               onClick={() =>
                 setControlled((prev) =>
                   prev === "option-a"

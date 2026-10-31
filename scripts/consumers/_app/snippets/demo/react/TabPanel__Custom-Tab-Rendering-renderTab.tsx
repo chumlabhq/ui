@@ -91,7 +91,7 @@ export default function TabPanelExample() {
             {defaultElement}
             {props.tab.count != null && props.tab.count > 0 && (
               <span
-                className={"absolute -top-1 -right-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error"}
+                className={"absolute -top-1 -end-1 w-4 h-4 rounded-full text-cl-bg text-[10px] flex items-center justify-center bg-cl-error"}
               >
                 {props.tab.count}
               </span>

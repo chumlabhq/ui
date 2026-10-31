@@ -2581,3 +2581,12 @@ describe("useTimePicker (additional coverage)", () => {
     });
   });
 });
+
+describe("TimePicker clock header reads in its own order in a right-to-left page", () => {
+  it("lets the hours, separator and minutes take their own direction, so 09:30 is not painted 30:09", async () => {
+    render(<TimePicker mode="clock" defaultOpen defaultValue="09:30" />);
+    await lazyLoaded();
+    const hours = await screen.findByRole("button", { name: "09" });
+    expect(hours.parentElement).toHaveAttribute("dir", "auto");
+  });
+});

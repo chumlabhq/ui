@@ -19,7 +19,7 @@ interface ToastState extends ToastConfig {
 
 export const ToastProvider = ({
   children,
-  position = "bottom-right",
+  position = "bottom-end",
   maxToasts = 5,
   containerClassName,
   defaultDuration = 5000,

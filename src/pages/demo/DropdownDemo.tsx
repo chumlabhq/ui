@@ -204,7 +204,7 @@ const CustomChevronIcon = ({
 const getClasses = () => ({
   dropdown: {
     root: "w-full",
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent data-[error]:border-cl-error has-[[data-error]]:border-cl-error data-[valid]:border-cl-success has-[[data-valid]]:border-cl-success`,
     content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border`,
     label: `block text-sm font-medium mb-1 text-cl-text-secondary`,
   } satisfies DropdownClasses,
@@ -219,7 +219,7 @@ const getClasses = () => ({
 const darkTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
@@ -237,7 +237,7 @@ const darkTheme = {
 const warmTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
   // The menu floats over page content, so its background has to be opaque -
   // a translucent tint lets the text underneath bleed through. color-mix keeps
@@ -258,7 +258,7 @@ const warmTheme = {
 const coolTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 focus:outline-none focus:ring-2 focus:ring-cl-accent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus",
@@ -275,7 +275,7 @@ const coolTheme = {
 
 const getMinimalTheme = () => ({
   wrapper: "relative",
-  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-text`,
+  trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-text`,
   triggerText: "flex-1 truncate",
   content: `rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border`,
   optionList: "max-h-60 overflow-y-auto",
@@ -505,7 +505,7 @@ const DropdownDemo = () => {
                 errorMessage="This field is required"
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error`,
                 }}
               />
             </div>
@@ -648,7 +648,7 @@ const DropdownDemo = () => {
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...triggerProps}
                   type="button"
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-start rounded-cl-lg border-2 transition-all ${
                     isOpen
                       ? "border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20"
                       : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"
@@ -865,7 +865,7 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:border-transparent`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:border-transparent`,
                   item: `hover:bg-violet-500/10 data-[highlighted]:bg-violet-500/10`,
                   itemIndicator: `w-4 h-4 shrink-0 text-violet-500`,
                 }}
@@ -881,7 +881,7 @@ const DropdownDemo = () => {
                 placeholder="Select a fruit..."
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-success focus-visible:border-transparent`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-cl-success focus-visible:border-transparent`,
                   item: `hover:bg-cl-success/10 data-[highlighted]:bg-cl-success/10`,
                   itemIndicator: `w-4 h-4 shrink-0 text-cl-success`,
                 }}
@@ -1076,7 +1076,7 @@ const DropdownDemo = () => {
               placeholder="Select a fruit..."
               classes={{
                 ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error`,
               }}
             />
           </div>
@@ -1232,7 +1232,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 transition-colors cursor-pointer bg-cl-bg-hover text-cl-text hover:bg-cl-bg-hover`,
-                value: "flex-1 text-left truncate",
+                value: "flex-1 text-start truncate",
               }}
             />
           </div>
@@ -1245,7 +1245,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-1 py-2 text-sm border-0 border-b-2 rounded-none transition-colors cursor-pointer border-cl-border text-cl-text hover:border-cl-border-input-focus focus-within:border-cl-border-input-focus`,
-                value: "flex-1 text-left truncate",
+                value: "flex-1 text-start truncate",
               }}
             />
           </div>
@@ -1258,7 +1258,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
                 trigger: `flex items-center gap-2 w-full px-3 py-2 text-sm rounded-cl-md border-0 bg-transparent transition-colors cursor-pointer text-cl-text-secondary hover:bg-cl-bg-hover`,
-                value: "flex-1 text-left truncate",
+                value: "flex-1 text-start truncate",
               }}
             />
           </div>
@@ -1272,7 +1272,7 @@ const DropdownDemo = () => {
               classes={{
                 ...c.dropdown,
  trigger: `flex items-center justify-between gap-2 w-full px-4 py-2 text-sm rounded-full transition-colors cursor-pointer border border-cl-border bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover shadow-sm`,
-                value: "flex-1 text-left truncate",
+                value: "flex-1 text-start truncate",
               }}
             />
           </div>

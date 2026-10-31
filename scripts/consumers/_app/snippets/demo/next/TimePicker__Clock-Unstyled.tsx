@@ -33,7 +33,7 @@ export default function TimePickerExample() {
             footer: "flex items-center justify-end gap-2 mt-4",
             cancelTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md text-cl-text-secondary",
             confirmTrigger: "px-3 py-1.5 text-xs font-medium rounded-cl-md bg-cl-accent text-cl-on-accent",
-            row: "flex flex-col gap-1 ml-3",
+            row: "flex flex-col gap-1 ms-3",
             periodTrigger: "px-2 py-1 text-xs font-medium rounded-cl-md cursor-pointer text-cl-text-secondary"
           }
         }

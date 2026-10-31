@@ -31,17 +31,17 @@
     "side": {
       "type": "string",
       "enum": [
-        "left",
-        "right",
+        "start",
+        "end",
         "top",
         "bottom"
       ],
       "description": "The edge the drawer slides in from.",
-      "default": "left"
+      "default": "start"
     },
     "size": {
       "type": "string",
-      "description": "CSS size value for the drawer panel (width for left/right, height for top/bottom).",
+      "description": "CSS size value for the drawer panel (width for start/end, height for top/bottom).",
       "default": "300px"
     },
     "overlayColor": {

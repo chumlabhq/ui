@@ -1214,3 +1214,12 @@ describe('SearchableDropdown - Edge Cases', () => {
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 });
+
+describe("SearchableDropdown search field takes its text direction from its text", () => {
+  it("lays out the placeholder and typed text by their first strong character", async () => {
+    render(<SearchableDropdown options={fruitOptions} defaultOpen />);
+    expect(screen.getByPlaceholderText("Search...").className.split(" ")).toEqual(
+      expect.arrayContaining(["[unicode-bidi:plaintext]", "placeholder:[unicode-bidi:plaintext]"]),
+    );
+  });
+});

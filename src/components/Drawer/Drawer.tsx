@@ -49,7 +49,7 @@ import { mergeSlot } from "../../utils/mergeSlot.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 
 import { useHydrated } from "../../utils/useHydrated.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl, INLINE_SIGN } from "../../utils/isBrowser.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -60,7 +60,7 @@ import { motionSafeClasses } from "../../utils/classLayers.js";
  * snap points, stacked drawer support, and accessible keyboard navigation.
  *
  * AI Usage Guidelines:
- * - Use `side` for the edge it slides in from (left/right/top/bottom)
+ * - Use `side` for the edge it slides in from (start/end/top/bottom)
  * - Use DrawerHeader/Body/Footer/CloseButton as children
  * - Use `swipeable` + `snapPoints` for bottom sheet patterns
  * - Focus is trapped and restored automatically
@@ -448,7 +448,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           dragRef.current.hasMoved = true;
         }
 
-        const closingDelta = getClosingDelta(side, deltaX, deltaY);
+        const closingDelta = getClosingDelta(side, deltaX, deltaY, isRtl(panel));
         const horizontal = isHorizontalSide(side);
         const panelSize = horizontal ? panel.offsetWidth : panel.offsetHeight;
         const baseFraction = hasSnapPoints ? snapPoints![clampedSnapIndex] : 1;
@@ -512,7 +512,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         const deltaX = e.clientX - startX;
         const deltaY = e.clientY - startY;
         const elapsed = Date.now() - startTime;
-        const closingDelta = getClosingDelta(side, deltaX, deltaY);
+        const closingDelta = getClosingDelta(side, deltaX, deltaY, isRtl(panel));
 
         if (closingDelta <= 0) return;
 
@@ -675,6 +675,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               className={
                 cn(
                   mergedClasses.content,
+                  INLINE_SIGN,
                   swipeable && SWIPEABLE_PANEL_CLASS,
                   modal && !lockScroll && "pointer-events-auto",
                   !modal &&

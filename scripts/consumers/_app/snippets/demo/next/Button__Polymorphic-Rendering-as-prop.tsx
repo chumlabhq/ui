@@ -67,7 +67,7 @@ export default function ButtonExample() {
         rel="noreferrer"
         className="cursor-pointer text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 underline-offset-4 text-cl-accent hover:text-cl-accent hover:underline focus-visible:ring-cl-accent focus-visible:ring-offset-cl-bg"
         endIcon={<ExternalLinkIcon />}
-        iconAnimation="slideRight"
+        iconAnimation="slideEnd"
       >
         External Link
       </Button>
@@ -91,7 +91,7 @@ export default function ButtonExample() {
         as="span"
         className="cursor-pointer text-sm font-medium transition-colors text-cl-text-tertiary hover:text-cl-text"
         endIcon={<ArrowRightIcon />}
-        iconAnimation="slideRight"
+        iconAnimation="slideEnd"
         onClick={() => setSpanActivations((n) => n + 1)}
       >
         Learn More

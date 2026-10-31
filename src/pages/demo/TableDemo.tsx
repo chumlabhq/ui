@@ -551,13 +551,13 @@ function getTableClasses() {
     container: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
     table: "w-full border-collapse",
     headerRow: "",
-    headerCell: `px-4 py-3 h-[52px] text-left text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border`,
+    headerCell: `px-4 py-3 h-[52px] text-start text-sm font-medium whitespace-nowrap border-b text-cl-text-chrome-quiet bg-cl-bg-elevated border-cl-border`,
     body: "",
     row: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border hover:bg-cl-bg-hover`,
     selectedRow: `border-b transition-colors data-[clickable]:cursor-pointer border-cl-border bg-cl-accent-bg hover:bg-cl-accent-bg-hover`,
     cell: `px-4 py-3 h-[52px] text-sm whitespace-nowrap text-cl-text`,
     empty: `flex items-center justify-center py-12 text-cl-text-secondary`,
-    pinnedContainer: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+    pinnedContainer: "shrink-0 sticky start-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
     pinnedTable: "border-collapse",
     unpinnedContainer: "min-w-0 flex-1 overflow-x-auto",
     unpinnedTable: "w-full border-collapse",
@@ -569,8 +569,8 @@ function getTableClasses() {
     // touching it.
     headerCellHover:
       "[box-shadow:inset_0_0_0_9999px_var(--cl-bg-hover)]",
-    pinTrigger: `ml-2 p-1 rounded transition-colors hover:bg-cl-bg-hover`,
-    pinnedPinButton: "ml-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
+    pinTrigger: `ms-2 p-1 rounded transition-colors hover:bg-cl-bg-hover`,
+    pinnedPinButton: "ms-2 p-1 rounded transition-colors hover:bg-cl-accent/10",
     pinIcon: "text-cl-text-tertiary",
     pinnedPinIcon: "text-cl-accent",
     shimmer: `w-full border rounded-cl-md overflow-hidden border-cl-border`,
@@ -585,8 +585,8 @@ function getPaginationClasses() {
     root: "flex items-center justify-between mt-4 px-2",
     selector: "flex items-center gap-2",
     selectorButton: `flex items-center gap-1 px-2 py-1 border rounded border-cl-border-input bg-cl-bg hover:bg-cl-bg-hover`,
-    selectorDropdown: `absolute bottom-full mb-1 left-0 z-50 border rounded shadow-lg min-w-[60px] bg-cl-bg border-cl-border`,
-    selectorOption: `w-full px-2 py-1 text-left text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium`,
+    selectorDropdown: `absolute bottom-full mb-1 start-0 z-50 border rounded shadow-lg min-w-[60px] bg-cl-bg border-cl-border`,
+    selectorOption: `w-full px-2 py-1 text-start text-sm hover:bg-cl-bg-hover data-[selected]:bg-cl-accent/10 data-[selected]:font-medium`,
     pageButton: `px-2 py-1 text-sm text-cl-text-tertiary hover:text-cl-text data-[active]:text-cl-accent-hover`,
     activePageButton: `px-2 py-1 text-sm font-medium rounded text-cl-accent-hover bg-cl-accent-bg border border-cl-border-input-focus`,
     navTrigger: `p-1 data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed text-cl-text-tertiary hover:text-cl-text`,
@@ -601,9 +601,9 @@ const darkPaginationRowSelectorStyle = "flex items-center gap-3";
 const darkPaginationButtonStyle =
  "flex items-center gap-2 px-3 py-1.5 bg-cl-bg-elevated border-cl-border rounded-cl-md text-cl-text hover:bg-cl-bg-elevated transition-colors";
 const darkPaginationDropdownStyle =
- "absolute bottom-full mb-1 left-0 z-50 bg-cl-bg-elevated border-cl-border rounded-cl-md shadow-xl min-w-[70px] overflow-hidden";
+ "absolute bottom-full mb-1 start-0 z-50 bg-cl-bg-elevated border-cl-border rounded-cl-md shadow-xl min-w-[70px] overflow-hidden";
 const darkPaginationOptionStyle =
-  "w-full px-3 py-2 text-left text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-cl-on-accent transition-colors";
+  "w-full px-3 py-2 text-start text-sm text-cl-text-secondary hover:bg-cl-bg-elevated data-[selected]:bg-cl-accent data-[selected]:text-cl-on-accent transition-colors";
 const darkPaginationPageStyle =
   "w-8 h-8 flex items-center justify-center text-sm text-cl-text-tertiary hover:text-white hover:bg-cl-bg-elevated rounded-cl-md transition-colors data-[active]:text-cl-accent-hover";
 const darkPaginationNavStyle =
@@ -998,7 +998,7 @@ function ServerApiDemo({
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-sm">
           <div
-            className={`absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
+            className={`absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
           >
             <svg
               width="15"
@@ -1019,7 +1019,7 @@ function ServerApiDemo({
             defaultValue={search}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder="Search products..."
- className={`w-full h-[38px] pl-9 pr-3 text-sm rounded-cl-md focus:outline-none focus:ring-2 bg-cl-bg-elevated border-cl-border text-cl-text placeholder-fg-muted focus:ring-cl-accent/40 focus:border-cl-border-input-focus/50`}
+ className={`w-full h-[38px] ps-9 pe-3 text-sm rounded-cl-md focus:outline-none focus:ring-2 bg-cl-bg-elevated border-cl-border text-cl-text placeholder-fg-muted focus:ring-cl-accent/40 focus:border-cl-border-input-focus/50`}
           />
         </div>
         {(selectedCategory || selectedStatuses.length > 0) && (
@@ -2326,8 +2326,8 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               ...s,
               root: `${s.container} overflow-x-auto`,
-              pinnedRegion: "shrink-0 sticky left-0 z-30 bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
-              pinTrigger: `ml-2 p-1 rounded transition-colors hover:bg-cl-success/15`,
+              pinnedRegion: "shrink-0 sticky start-0 z-30 bg-cl-bg [box-shadow:4px_0_0_0_var(--cl-success)] transition-shadow duration-200",
+              pinTrigger: `ms-2 p-1 rounded transition-colors hover:bg-cl-success/15`,
               pinIcon: "text-cl-text-tertiary",
             }}
           />
@@ -2340,7 +2340,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              border-r-4 border-cl-success
+              border-e-4 border-cl-success
             </code>
             ) instead of the default blue. The pin icon color, hover background,
             and button styles are all customized via{" "}
@@ -2704,7 +2704,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               root: `border rounded-cl-md border-cl-border`,
               list: "w-max border-collapse",
-              pinnedRegion: "shrink-0 sticky left-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
+              pinnedRegion: "shrink-0 sticky start-0 z-30 bg-cl-bg-elevated [box-shadow:2px_0_0_0_var(--cl-border-input-focus)] transition-shadow duration-200",
               scrollRegion: "",
               loading: "w-max min-w-[1600px]",
             }}
@@ -2720,7 +2720,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <p>
               <strong>Features demonstrated:</strong>
             </p>
-            <ul className="list-disc list-inside space-y-1 ml-2">
+            <ul className="list-disc list-inside space-y-1 ms-2">
               <li>Loading shimmer state (click "Simulate Loading")</li>
               <li>
                 Horizontal & vertical scrolling within the table (table
@@ -3313,7 +3313,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     className={`w-full px-4 py-2.5 text-sm border-2 rounded-cl-lg focus:outline-none bg-cl-bg border-cl-border text-cl-text placeholder:text-cl-text-tertiary focus:border-cl-success focus:shadow-[0_0_0_3px_rgba(16,185,129,0.15)]`}
                   />
                   <div
-                    className={`absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none ${filter ? ("text-cl-success") : "text-cl-text-secondary"}`}
+                    className={`absolute end-3 top-1/2 -translate-y-1/2 pointer-events-none ${filter ? ("text-cl-success") : "text-cl-text-secondary"}`}
                   >
                     <svg
                       width="18"
@@ -3346,7 +3346,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
-          Search icon on the <strong>right side</strong>, thicker border (
+          Search icon at the <strong>inline end</strong>, thicker border (
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
@@ -3369,7 +3369,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   placeholder="Type to filter..."
-                  className={`w-full max-w-xs px-3 py-2 text-sm border-b-2 border-t-0 border-l-0 border-r-0 rounded-none focus:outline-none bg-transparent border-cl-border text-cl-text placeholder:text-cl-text-tertiary focus:border-cl-border-input-focus`}
+                  className={`w-full max-w-xs px-3 py-2 text-sm border-b-2 border-t-0 border-s-0 border-e-0 rounded-none focus:outline-none bg-transparent border-cl-border text-cl-text placeholder:text-cl-text-tertiary focus:border-cl-border-input-focus`}
                 />
                 <Table
                   columns={columns}
@@ -3410,7 +3410,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 <div className="flex items-center gap-3">
                   <div className="relative flex-1 max-w-md">
                     <div
-                      className={`absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
+                      className={`absolute start-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-cl-text-tertiary`}
                     >
                       <svg
                         width="15"
@@ -3431,12 +3431,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                       placeholder="Filter table data..."
-                      className={`w-full pl-10 pr-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 bg-cl-bg-hover border border-cl-border-input text-cl-text placeholder:text-cl-text-tertiary focus:ring-cl-accent-halo focus:border-cl-border-input-focus`}
+                      className={`w-full ps-10 pe-4 py-2.5 text-sm rounded-full focus:outline-none focus:ring-2 bg-cl-bg-hover border border-cl-border-input text-cl-text placeholder:text-cl-text-tertiary focus:ring-cl-accent-halo focus:border-cl-border-input-focus`}
                     />
                     {filter && (
                       <button aria-label="Clear filter"
                         onClick={() => setFilter("")}
-                        className={`absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover`}
+                        className={`absolute end-3 top-1/2 -translate-y-1/2 p-0.5 rounded-full cursor-pointer transition-colors text-cl-text-tertiary hover:text-cl-text-secondary hover:bg-cl-bg-hover`}
                       >
                         <svg
                           width="14"
@@ -3600,7 +3600,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   renderExpandIcon={(state) => <ChevronIcon {...state} />}
                   renderExpandedRow={(row) => (
                     <div
-                      className="px-6 py-4 bg-cl-accent-surface border-l-2 border-cl-border-input-focus"
+                      className="px-6 py-4 bg-cl-accent-surface border-s-2 border-cl-border-input-focus"
                     >
                       <p
                         className={`text-sm text-cl-text-secondary`}
@@ -3707,7 +3707,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Row Expansion (Right Side, Arrow Icon)" isDarkMode={dark}>
+      <Section title="Row Expansion (End Side, Arrow Icon)" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           {(() => {
             const RightExpandDemo = () => {
@@ -3744,7 +3744,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   renderExpandIcon={(state) => <ArrowIcon {...state} />}
                   renderExpandedRow={(row) => (
                     <div
-                      className={`px-6 py-4 bg-cl-accent-surface border-r-2 border-cl-border-input-focus`}
+                      className={`px-6 py-4 bg-cl-accent-surface border-e-2 border-cl-border-input-focus`}
                     >
                       <div className="flex items-start gap-4">
                         <div
@@ -3790,7 +3790,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           className={`mt-3 text-sm space-y-1 text-cl-text-secondary`}
         >
           <span className="block">
-            Expand column placed on the <strong>right side</strong> using{" "}
+            Expand column placed at the <strong>inline end</strong> using{" "}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
@@ -4090,7 +4090,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className={`text-xs font-medium uppercase tracking-wider mr-1 text-cl-text-tertiary`}
+                    className={`text-xs font-medium uppercase tracking-wider me-1 text-cl-text-tertiary`}
                   >
                     Columns:
                   </span>
@@ -4110,7 +4110,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     </button>
                   ))}
                   <span
-                    className={`text-xs ml-2 text-cl-text-tertiary`}
+                    className={`text-xs ms-2 text-cl-text-tertiary`}
                   >
                     {visibleCount}/{allCols.length} visible
                   </span>
@@ -4211,7 +4211,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                     </button>
                     {open && (
                       <div
-                        className={`absolute top-full left-0 mt-1 rounded-cl-md border shadow-xl overflow-hidden min-w-[180px] z-50 bg-cl-bg border-cl-border`}
+                        className={`absolute top-full start-0 mt-1 rounded-cl-md border shadow-xl overflow-hidden min-w-[180px] z-50 bg-cl-bg border-cl-border`}
                       >
                         <div
                           className={`px-3 py-2 border-b border-cl-border`}
@@ -4513,7 +4513,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             data={sampleData.slice(0, 6)}
             striped
             stripedClassName={
-              "bg-cl-accent/10 border-l-2 border-l-accent"
+              "bg-cl-accent/10 border-s-2 border-s-accent"
             }
             getRowId={(row) => row.id}
             classes={s}
@@ -4532,7 +4532,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              border-l-2 border-l-accent
+              border-s-2 border-s-accent
             </code>{" "}
             for visual emphasis.
           </p>
@@ -4657,12 +4657,12 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </DemoWrapper>
       </Section>
 
-      <Section title="Right Column Pinning" isDarkMode={dark}>
+      <Section title="End Column Pinning" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           <Table
             columns={rightPinColumns}
             data={sampleData.slice(0, 5)}
-            pinnedRightColumns={["actions"]}
+            pinnedEndColumns={["actions"]}
             getRowId={(row) => row.id}
             maxWidth={600}
             classes={{
@@ -4670,7 +4670,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
               ...s,
               root: `border rounded-cl-md border-cl-border`,
               list: "w-max border-collapse",
-              pinnedRightRegion: `shrink-0 sticky right-0 z-20 border-l-2 border-cl-border-input-focus bg-cl-bg-elevated`,
+              pinnedEndRegion: `shrink-0 sticky end-0 z-20 border-s-2 border-cl-border-input-focus bg-cl-bg-elevated`,
             }}
           />
           <div
@@ -4682,11 +4682,11 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <p
             className={`mt-3 text-sm text-cl-text-secondary`}
           >
-            The "Actions" column is pinned to the right using{" "}
+            The "Actions" column is pinned to the inline end using{" "}
             <code
               className={`px-1 rounded bg-cl-bg-elevated`}
             >
-              pinnedRightColumns={'{["actions"]}'}
+              pinnedEndColumns={'{["actions"]}'}
             </code>
             . Scroll horizontally to see it stay fixed.
           </p>
@@ -4972,7 +4972,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 className={`text-sm text-cl-text-secondary`}
               >
                 <p className="font-medium">Edited cells:</p>
-                <ul className="list-disc list-inside ml-2">
+                <ul className="list-disc list-inside ms-2">
                   {editedCells.slice(-5).map((c, i) => (
                     <li key={i}>
                       Row {c.rowId}, column "{c.columnId}" = "{String(c.value)}"
@@ -5045,7 +5045,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
           <p
             className={`mt-3 text-sm text-cl-text-secondary`}
           >
-            Drag rows using the grip handle on the left to reorder. Current
+            Drag rows using the grip handle at the inline start to reorder. Current
             order: {dragDropData.map((d) => d.name).join(", ")}
           </p>
         </DemoWrapper>
@@ -5333,7 +5333,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Row Drag & Drop (Handle on Right)" isDarkMode={dark}>
+      <Section title="Row Drag & Drop (Handle at End)" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           {(() => {
             const RightDragDemo = () => {
@@ -5366,13 +5366,13 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
-          Drag handle placed on the <strong>right side</strong> using{" "}
+          Drag handle placed at the <strong>inline end</strong> using{" "}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
             dragColumnPosition="end"
           </code>
-          . Useful when the left side is reserved for selection checkboxes or
+          . Useful when the inline start is reserved for selection checkboxes or
           row numbers.
         </p>
       </Section>
@@ -5813,7 +5813,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                 {contextMenuInfo}
                 <button
                   onClick={() => setContextMenuInfo(null)}
-                  className={`ml-3 underline text-xs text-cl-text cursor-pointer`}
+                  className={`ms-3 underline text-xs text-cl-text cursor-pointer`}
                 >
                   Dismiss
                 </button>
@@ -6297,7 +6297,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         </p>
       </Section>
 
-      <Section title="Built-in Search (Icon on Right)" isDarkMode={dark}>
+      <Section title="Built-in Search (Icon at End)" isDarkMode={dark}>
         <DemoWrapper isDarkMode={dark}>
           {(() => {
             const RightIconDemo = () => {
@@ -6323,7 +6323,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
-          Search icon on the <strong>right side</strong> via{" "}
+          Search icon at the <strong>inline end</strong> via{" "}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
@@ -6410,7 +6410,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
       </Section>
 
       <Section
-        title="Built-in Search (Custom Filter Icon on Right)"
+        title="Built-in Search (Custom Filter Icon at End)"
         codeless="searchIcon and searchIconPosition together; each has its own snippet (Rose Theme, Icon on Right)"
         isDarkMode={dark}
       >
@@ -6454,7 +6454,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
         <p
           className={`mt-3 text-sm text-cl-text-secondary`}
         >
-          A funnel/filter icon on the right via{" "}
+          A funnel/filter icon at the inline end via{" "}
           <code
             className={`px-1 rounded bg-cl-bg-elevated`}
           >
@@ -6710,7 +6710,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                               {opt.label}
                               {selected && (
                                 <svg
-                                  className="w-4 h-4 ml-auto"
+                                  className="w-4 h-4 ms-auto"
                                   viewBox="0 0 24 24"
                                   fill="none"
                                   stroke="currentColor"
@@ -6942,7 +6942,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                           <span
                             className={`w-2.5 h-2.5 rounded-full shrink-0 ${opt.dot}`}
                           />
-                          <span className="flex-1 text-left">{opt.label}</span>
+                          <span className="flex-1 text-start">{opt.label}</span>
                           {selected && (
                             <svg
                               width="14"
@@ -7211,7 +7211,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
                   ? `${serverSorting[0].id} (${serverSorting[0].desc ? "desc" : "asc"})`
                   : "none"}
               </code>
-              {serverLoading && <span className="ml-2 italic">Loading...</span>}
+              {serverLoading && <span className="ms-2 italic">Loading...</span>}
             </p>
           </div>
           <p
@@ -7253,7 +7253,7 @@ import { Pagination } from "@chumlab/ui/pagination";`}
             <strong>dummyjson.com</strong> products API. All operations happen
             on the server:
           </p>
-          <ul className="list-disc list-inside space-y-1 ml-2 text-xs">
+          <ul className="list-disc list-inside space-y-1 ms-2 text-xs">
             <li>
               <strong>Server-side pagination</strong>:{" "}
               <code

@@ -19,7 +19,7 @@ import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useControllableState } from "../../utils/useControllableState.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl } from "../../utils/isBrowser.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 /**
@@ -40,7 +40,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       onResizeEnd,
       minValue = 200,
       maxValue = 800,
-      resizeDirection = "right",
+      resizeDirection = "end",
       step = 10,
       disabled = false,
       reduceMotion = "auto",
@@ -93,6 +93,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     const startPosRef = useRef(0);
     const startSizeRef = useRef(0);
     const startDirectionRef = useRef(resizeDirection);
+    const startRtlRef = useRef(false);
     const sizeRef = useRef(size);
     const minValueRef = useRef(minValue);
     const maxValueRef = useRef(maxValue);
@@ -162,9 +163,9 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         const isVert = dir === "top" || dir === "bottom";
         const delta = isVert
           ? e.clientY - startPosRef.current
-          : e.clientX - startPosRef.current;
+          : (e.clientX - startPosRef.current) * (startRtlRef.current ? -1 : 1);
         const newSize =
-          dir === "right" || dir === "bottom"
+          dir === "end" || dir === "bottom"
             ? startSizeRef.current + delta
             : startSizeRef.current - delta;
         setSizeRef.current(clamp(newSize));
@@ -212,6 +213,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         isResizingRef.current = true;
         setIsResizing(true);
         startDirectionRef.current = resizeDirection;
+        startRtlRef.current = isRtl(e.currentTarget);
         startPosRef.current = isVertical ? e.clientY : e.clientX;
         startSizeRef.current = sizeRef.current;
         if (isBrowser) {
@@ -238,19 +240,14 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
 
         switch (e.key) {
           case "ArrowRight":
-            if (isVertical) return;
-            e.preventDefault();
-            newSize = clamp(
-              sizeRef.current +
-                (resizeDirection === "right" ? resolvedStep : -resolvedStep),
-            );
-            break;
           case "ArrowLeft":
             if (isVertical) return;
             e.preventDefault();
             newSize = clamp(
               sizeRef.current +
-                (resizeDirection === "right" ? -resolvedStep : resolvedStep),
+                ((resizeDirection === "end") === ((e.key === "ArrowRight") !== isRtl(e.currentTarget))
+                  ? resolvedStep
+                  : -resolvedStep),
             );
             break;
           case "ArrowDown":
@@ -332,12 +329,12 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
           className={cn(
             isVertical
               ? cn(
-                  "left-0 w-full h-2",
+                  "start-0 w-full h-2",
                   resizeDirection === "bottom" ? "-bottom-1" : "-top-1",
                 )
               : cn(
                   "top-0 h-full w-2",
-                  resizeDirection === "right" ? "-right-1" : "-left-1",
+                  resizeDirection === "end" ? "-end-1" : "-start-1",
                 ),
             disabled
               ? "cursor-default"

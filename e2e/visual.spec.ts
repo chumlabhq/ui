@@ -310,6 +310,14 @@ const OPEN_WIDTHS = [320, 1024];
  * arrows and Breadcrumb's separators mirror inside `open-rtl` and
  * `collapsed-open-rtl` above, whose baselines A2d rewrote.
  *
+ * Then A2d2's: the props that named a side, now start and end — Drawer's
+ * `side` both ways, ToastProvider's default bottom-end corner, AvatarBadge's
+ * top-end corner with its `99+` cap, and ResizablePanel's default end handle
+ * between the panes. The text the library writes reads in its own order inside
+ * `with-surplus-rtl`, `country-open-rtl`, `open-clock-rtl`, and the "Search…"
+ * fields in `open-rtl`, `open-submenu-rtl` and `search-pinned-rtl` above, and
+ * Tooltip's arrow sits on its anchor in `align-start-rtl`; A2d2 rewrote those.
+ *
  * Each is an `-rtl` fixture, which sets `dir="rtl"` on the document the way a
  * consumer's page does. Two widths, as for the open surfaces: mirroring does
  * not depend on reflow, and 320 and 1024 are the narrowest and the first
@@ -337,6 +345,11 @@ const RTL_SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "Table", fixture: "expandable-rtl" },
   { component: "Pagination", fixture: "default-rtl" },
   { component: "CascadingDropdown", fixture: "open-submenu-rtl" },
+  { component: "Drawer", fixture: "open-rtl" },
+  { component: "Drawer", fixture: "open-end-rtl" },
+  { component: "Toast", fixture: "provider-rtl" },
+  { component: "Avatar/AvatarBadge", fixture: "count-overflow-rtl" },
+  { component: "ResizablePanel", fixture: "default-rtl" },
 ];
 
 const RTL_WIDTHS = OPEN_WIDTHS;
@@ -560,7 +573,13 @@ test.describe("visual baselines", () => {
             const portalled = await page
               .locator("[role='dialog'],[role='listbox'],[role='menu'],[role='tooltip']")
               .count();
-            const target = portalled > 0 ? page : subject;
+            // A subject whose whole render is portalled (ToastProvider's region)
+            // leaves `[data-fixture]` with no box to photograph, so the page is.
+            const empty = await subject.evaluate((el) => {
+              const r = el.getBoundingClientRect();
+              return r.width === 0 || r.height === 0;
+            });
+            const target = portalled > 0 || empty ? page : subject;
             // The budget and the threshold of the resting subjects above, for
             // the reasons given there.
             await expect(target).toHaveScreenshot(`${component}-${fixture}-${theme}-${width}.png`, {

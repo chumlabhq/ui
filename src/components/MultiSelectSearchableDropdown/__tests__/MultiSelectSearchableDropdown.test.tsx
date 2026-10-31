@@ -605,3 +605,12 @@ describe("placeholder state", () => {
     expect(screen.getByRole("combobox")).not.toHaveAttribute("data-placeholder");
   });
 });
+
+describe("MultiSelectSearchableDropdown search field takes its text direction from its text", () => {
+  it("lays out the placeholder and typed text by their first strong character", async () => {
+    render(<MultiSelectSearchableDropdown options={options} defaultOpen />);
+    expect(screen.getByPlaceholderText("Search...").className.split(" ")).toEqual(
+      expect.arrayContaining(["[unicode-bidi:plaintext]", "placeholder:[unicode-bidi:plaintext]"]),
+    );
+  });
+});

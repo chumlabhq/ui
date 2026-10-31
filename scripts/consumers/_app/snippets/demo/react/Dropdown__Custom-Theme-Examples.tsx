@@ -3,7 +3,7 @@ import { Dropdown, DropdownOption } from "@chumlab/ui/dropdown";
 
 const getMinimalTheme = () => ({
   wrapper: "relative",
-  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-text",
+  trigger: "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border-b bg-transparent focus:outline-none border border-cl-border-input text-cl-text hover:border-cl-border-input-hover focus:border-cl-text",
   triggerText: "flex-1 truncate",
   content: "rounded shadow-sm overflow-hidden border bg-cl-bg-panel border-cl-border",
   optionList: "max-h-60 overflow-y-auto",
@@ -21,7 +21,7 @@ const minimalTheme = getMinimalTheme();
 const coolTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 focus:outline-none focus:ring-2 focus:ring-cl-accent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border border-cl-border-input-focus rounded-cl-md bg-cl-accent/10 text-cl-text hover:bg-cl-accent/10 focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-[color-mix(in_oklab,var(--color-cl-accent)_10%,var(--color-cl-bg-elevated))] border border-cl-border-input-focus",
@@ -39,7 +39,7 @@ const coolTheme = {
 const warmTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
   // The menu floats over page content, so its background has to be opaque -
   // a translucent tint lets the text underneath bleed through. color-mix keeps
@@ -60,7 +60,7 @@ const warmTheme = {
 const darkTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",

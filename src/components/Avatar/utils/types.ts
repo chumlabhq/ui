@@ -16,7 +16,7 @@ export type AvatarStatus = "online" | "offline" | "away" | "busy";
 export type Direction = "ltr" | "rtl";
 
 /** Corner placement for status indicators and badges. */
-export type CornerPosition = "top-right" | "top-left" | "bottom-right" | "bottom-left";
+export type CornerPosition = "top-end" | "top-start" | "bottom-end" | "bottom-start";
 
 /** Preset sizes for badge elements. */
 export type BadgeSize = "xs" | "sm" | "md" | "lg";
@@ -265,7 +265,7 @@ export interface AvatarBadgeProps extends HTMLAttributes<HTMLSpanElement> {
   showZero?: boolean;
   /** Renders a small dot instead of a count. */
   dot?: boolean;
-  /** Corner position for the badge. Default: `"top-right"`. */
+  /** Corner position for the badge. Default: `"top-end"`. */
   position?: CornerPosition;
   /** Pixel offset from the default corner position. */
   offset?: BadgeOffset;

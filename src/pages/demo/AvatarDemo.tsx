@@ -422,7 +422,7 @@ const AvatarDemo = () => {
         <div className="space-y-4">
           <DemoWrapper isDarkMode={dark} layout="inline">
             {(
-              ["top-right", "top-left", "bottom-right", "bottom-left"] as const
+              ["top-end", "top-start", "bottom-end", "bottom-start"] as const
             ).map((pos) => (
               <div key={pos} className="text-center">
                 <Avatar
@@ -581,10 +581,10 @@ const AvatarDemo = () => {
             <DemoWrapper isDarkMode={dark} layout="inline" className="overflow-visible">
               {(
                 [
-                  "top-right",
-                  "top-left",
-                  "bottom-right",
-                  "bottom-left",
+                  "top-end",
+                  "top-start",
+                  "bottom-end",
+                  "bottom-start",
                 ] as const
               ).map((pos) => (
                 <div key={pos} className="text-center pt-2 pb-1">
@@ -813,7 +813,7 @@ const AvatarDemo = () => {
                 maxVisible={2}
                 renderSurplus={(count) => (
                   <span
-                    className={`ml-2 text-xs font-medium text-cl-text-secondary`}
+                    className={`ms-2 text-xs font-medium text-cl-text-secondary`}
                   >
                     and {count} more...
                   </span>

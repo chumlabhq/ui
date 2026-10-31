@@ -388,7 +388,7 @@ function treeShakingChecks(dir) {
     .join("\n");
   const markers = [
     ["Table", "data-table-filter-content"],
-    ["Table", "pinnedRightRegion"],
+    ["Table", "pinnedEndRegion"],
     ["DatePicker", "Days of the week"],
     ["DatePicker", "yearDropdownSelectedIcon"],
     ["CascadingDropdown", "submenu"],

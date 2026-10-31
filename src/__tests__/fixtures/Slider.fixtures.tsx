@@ -37,6 +37,11 @@ const fixtures: Fixtures<typeof Slider> = [
   },
   { name: "required", props: { label: "Volume", required: true } },
   {
+    name: "negative",
+    props: { min: -50, max: 50, defaultValue: -20, showTooltip: true, tooltipAlways: true },
+    note: "A signed value in the tooltip: `-20` reads in its own order in a right-to-left page.",
+  },
+  {
     name: "rtl",
     props: { defaultValue: 25, label: "Volume" },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,

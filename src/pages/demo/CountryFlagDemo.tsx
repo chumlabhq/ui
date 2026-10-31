@@ -363,7 +363,7 @@ const CountryFlagDemo = () => {
                 classes={c.flagGroup}
                 renderSurplus={(count) => (
                   <span
-                    className={`ml-2 text-xs font-medium text-cl-text-secondary`}
+                    className={`ms-2 text-xs font-medium text-cl-text-secondary`}
                   >
                     and {count} more
                   </span>

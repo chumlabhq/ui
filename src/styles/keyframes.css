@@ -26,7 +26,7 @@
 
 /* The four continuous icon slides `CONTINUOUS_ANIMATION_MAP` names.
  *
- * Nothing defined them. `animateOnHover={false}` with `iconAnimation="slideRight"`
+ * Nothing defined them. `animateOnHover={false}` with `iconAnimation="slideEnd"`
  * put `animate-slide-right` on the icon, no keyframes of that name existed in
  * either stylesheet, and `animation-name` computed to `none` — the icon simply
  * stood still while `spin` and `pulse` beside it ran, because those two are

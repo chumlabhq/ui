@@ -18,7 +18,7 @@ export default function OtpInputExample() {
           &quot;
         </span>
         <Button
-          className="ml-auto px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:bg-cl-bg-hover hover:border-cl-border-input-hover cursor-pointer"
+          className="ms-auto px-3 py-1.5 text-xs font-medium rounded-cl-md transition-colors bg-cl-bg-elevated text-cl-text border border-cl-border hover:bg-cl-bg-hover hover:border-cl-border-input-hover cursor-pointer"
           onClick={() => setControlled("")}
         >
           Clear

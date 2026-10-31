@@ -436,48 +436,39 @@ fixtured first, and the sweeps found five defects in them the moment they render
 
 ---
 
-## Right-to-left is not supported
+## Right-to-left
 
-`dir="rtl"` is out of scope for 0.1.0, and this is the statement of that rather than an
-omission. The components render and nothing is clipped — the viewport clamp is symmetrical
-because it works from both edges — but nothing mirrors.
+Components follow the page's direction: each reads the nearest `dir` (or the document's) and
+lays itself out from the inline start, so a `dir="rtl"` page mirrors without a prop. Every
+statement below is held by a gate: the `e2e/` specs run in chromium, firefox, webkit, Mobile
+Chrome and Mobile Safari unless the row says otherwise, and the contracts read the source in
+vitest.
 
-Measured, on 2026-09-06, across fourteen `dir="rtl"` fixtures. `e2e/rtl.spec.ts` keeps every
-one of these as a skipped assertion with the numbers in its skip reason, so the next person
-starts from evidence rather than from a re-measurement:
-
-| | Measured in RTL at 1024px |
+| What | Held by |
 | --- | --- |
-| `SearchableDropdown` | surface `[25..267]` against a trigger at `[24..1000]` — left-aligned |
-| `TimePicker` | surface `[777..999]` against a trigger at `[813..987]` |
-| `DatePicker` | surface `[24..338]` against a trigger at `[24..1000]` |
-| `Breadcrumb` | surface `[856..1016]` against a trigger at `[882..922]` |
-| `Table` filter menu | surface `[45..225]` against a trigger at `[45..59]` |
-| `CascadingDropdown` submenu | opens to the **right** of an item at `[25..283]` with room on both sides |
-| `Slider` | at `value: 25` the thumb sits 75% from the leading edge |
+| One direction reader; no component forces `dir` on itself (Accordion and AvatarGroup did) | `direction-reads.contract` |
+| Spacing, alignment and insets are logical (`ps-*`, `text-start`, `inset-inline-*`); every physical left/right that remains is listed with its reason | `physical-direction.contract` |
+| Every open surface (menus, the date and time pickers, Breadcrumb's overflow, Table's filter, Tooltip's `align`) aligns to its trigger's inline-start edge, or is pushed inside the viewport | `e2e/rtl-surfaces.spec.ts` |
+| Arrow keys move to the element they point at: DatePicker's and Table's grids, CascadingDropdown's submenu, RadioGroup, Slider, ResizablePanel and Table's column resize | `e2e/rtl-keys.spec.ts` |
+| Slider's thumb, fill and press, Switch's thumb and Table's resize handles are placed from the inline start | `e2e/rtl-paint.spec.ts`, `positions` |
+| Icons that point along the line mirror (Pagination, Breadcrumb's separators, CascadingDropdown's submenu chevron, DatePicker's month and year arrows, Table's expand icon); icons with no direction do not | `e2e/rtl-paint.spec.ts`, `icons` |
+| `start`/`end` values land on the edge they name: Drawer `side`, ToastProvider `position`, Avatar's badge and status corners, Button's `slideStart`/`slideEnd`, ResizablePanel `resizeDirection` | `e2e/rtl-paint.spec.ts`, `sides` and `ResizablePanel` |
+| Text the library writes reads in its own order (AvatarGroup's "+3", the badge's "99+", the dial code, TimePicker's clock header, a negative Slider value, the "Search…" placeholders) | `e2e/rtl-paint.spec.ts`, `bidi` |
+| Accordion's and TabPanel's horizontal arrow keys reverse | `Accordion.test.tsx`, `TabPanel.test.tsx` (jsdom) |
+| The right-to-left renders are photographed in both themes at 320 and 1024 | `e2e/visual.spec.ts`, chromium |
 
-`Dropdown`, `MultiSelectDropdown` and `Pagination` are not in the table because their surface
-is sized to the trigger, so both alignments coincide and the measurement says nothing.
+What stays the same in both directions, by decision:
 
-**It does not mirror; it does not mirror the wrong way.** `useAnchoredPosition` takes no
-direction input at all, so there is nothing to get wrong. The flip machinery works — the LTR
-near-edge fixtures prove a submenu picks the other side when the preferred one cannot hold it
-— and its only input is available space.
+- **OtpInput's boxes and InternationalPhoneInput's number** keep a left-to-right digit row: a
+  code and a phone number read left to right in Arabic and Hebrew interfaces too (`rtl-keys`,
+  the OtpInput and InternationalPhoneInput rows).
+- **Tooltip's `side="left"`/`"right"`** stay physical: a floating layer's side of its anchor,
+  as Floating UI and Radix name it. `align="start"`/`"end"` follow the direction
+  (`rtl-surfaces`).
+- **TimePicker's clock dial** reads clockwise in every script, so it does not mirror
+  (`physical-direction.contract`, its allowlist reason).
 
-### The order this has to be done in
-
-1. **Logical properties across the constants files.** `pl-*`/`pr-*`, `ml-*`/`mr-*`,
-   `text-left`, `left-*`/`right-*` become their `start`/`end` equivalents. This is the
-   largest part and it comes first, because mirroring the positioner while the padding stays
-   physical produces a surface in the right place with its contents on the wrong side — a bug
-   report per component.
-2. **A direction input to `useAnchoredPosition`.** The main-axis alignment and the flip
-   preference both read it; the clamp already needs no change.
-3. **Icon mirroring.** Chevrons, Breadcrumb separators and Pagination arrows, which are
-   markup rather than layout and are the part a user notices last and complains about first.
-
-`Drawer` is deliberately outside all three: its `side` is physical (`left`/`right`), not
-logical (`start`/`end`), so an RTL consumer swaps the value themselves.
+`top-center`/`bottom-center`, `top` and `bottom` have no inline direction and do not change.
 
 ---
 
@@ -521,7 +512,7 @@ now, and `dragging-alternatives.contract` covers all six drag surfaces in the pa
   `TimePicker`, whose combobox is an `<input>`, so an unnamed combobox there would have gone
   unreported. It is named, but by its `placeholder` in the unlabelled fixtures, which is a
   weak name that axe accepts.
-- **Right-to-left**, which is not supported in 0.1.0 and has its own section above with the
-  measurements and the order the work has to be done in.
+- **Right-to-left**, which has its own section above: what mirrors, the gate that holds each
+  part, and what stays the same in both directions by decision.
 - **Consumer overrides.** Every gate here measures the shipped defaults. `classes`,
   `unstyled` and token overrides can invalidate any row, and 1.4.3 in particular.

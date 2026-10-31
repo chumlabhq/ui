@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "path";
 import { readdirSync, readFileSync } from "fs";
+import { createRequire } from "module";
 
 // Components excluded from the npm library (site-only). These are built for the
 // marketing site and docs; shipping them bloats the tarball and, in ui/Button's
@@ -98,6 +99,36 @@ function copyTokens(): Plugin {
   };
 }
 
+// The dev server serves Tailwind's CSS unoptimized, and its variants stay
+// nested: `.hover\:x { &:hover { @media (hover: hover) { ... } } }`. WebKit does
+// not apply an @media nested inside `&:hover`, so every hover: and group-hover:
+// utility was dead in Playwright's WebKit while the shipped dist/styles.css,
+// which `generate:build` flattens through Lightning CSS, worked (FINDINGS F-3).
+// Running the same optimize here makes the dev server, and so every e2e gate,
+// paint the CSS consumers get. Resolved through @tailwindcss/vite so it is the
+// exact copy, with the exact browser targets, that the build uses.
+function optimizeServedTailwind(): Plugin {
+  const { optimize } = createRequire(
+    createRequire(import.meta.url).resolve("@tailwindcss/vite"),
+  )("@tailwindcss/node") as typeof import("@tailwindcss/node");
+  return {
+    name: "chumlab-optimize-served-tailwind",
+    apply: "serve",
+    enforce: "pre",
+    transform: {
+      filter: {
+        id: {
+          include: /\/src\/.*\.css(?:\?.*)?$/,
+          exclude: /[?&](?:worker|sharedworker|raw|url)\b/,
+        },
+      },
+      handler(code) {
+        return { code: optimize(code, { minify: false }).code, map: null };
+      },
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   if (mode === "lib") {
     const componentEntries = getComponentEntries();
@@ -156,7 +187,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), optimizeServedTailwind()],
     build: {
       // Not `dist`. Both builds defaulted there, so `npm run build` deleted the
       // library `npm run build:lib` had just produced — and every gate that

@@ -1,7 +1,7 @@
 import type { DrawerClasses, DrawerSide } from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 
-export const DEFAULT_SIDE: DrawerSide = "left";
+export const DEFAULT_SIDE: DrawerSide = "start";
 export const DEFAULT_SIZE = "300px";
 export const DEFAULT_OVERLAY_COLOR = "black";
 // Subtle scrim — keeps the page chrome (sidebar, toolbar) visible behind

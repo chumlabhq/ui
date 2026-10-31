@@ -21,7 +21,7 @@ export function TallContent({ autoFocusLast = false, lastRef }: { autoFocusLast?
   );
 }
 
-export function TallDrawer({ side, initialFocusLast = false, autoFocusLast = false, swipeable = false }: { side: "left" | "right" | "top" | "bottom"; initialFocusLast?: boolean; autoFocusLast?: boolean; swipeable?: boolean }) {
+export function TallDrawer({ side, initialFocusLast = false, autoFocusLast = false, swipeable = false }: { side: "start" | "end" | "top" | "bottom"; initialFocusLast?: boolean; autoFocusLast?: boolean; swipeable?: boolean }) {
   const last = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(true);
   return (

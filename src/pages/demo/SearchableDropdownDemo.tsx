@@ -223,7 +223,7 @@ const CustomChevronIcon = ({
 
 const getClasses = () => ({
   dropdown: {
-    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent`,
+    trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-border-input bg-cl-bg-panel text-cl-text hover:border-cl-border-input-hover focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent`,
     content: `rounded-cl-md shadow-lg overflow-hidden bg-cl-bg-panel border border-cl-border`,
     searchInput: `flex items-center gap-2 px-3 py-2 border-b border-cl-border bg-cl-bg-recessed`,
     searchIcon: `w-4 h-4 shrink-0 text-cl-text-tertiary`,
@@ -239,7 +239,7 @@ const getClasses = () => ({
 const darkTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-[#2a2f3a] bg-[#0a0d12] text-white hover:bg-[#11151c] focus:outline-none focus:ring-2 focus:ring-cl-accent",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-[#0a0d12] border border-[#2a2f3a]",
@@ -262,7 +262,7 @@ const darkTheme = {
 const warmTheme = {
   wrapper: "relative",
   trigger:
-    "flex items-center justify-between gap-2 w-full px-3 py-2 text-left border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
+    "flex items-center justify-between gap-2 w-full px-3 py-2 text-start border border-cl-warning rounded-cl-md bg-cl-warning/15 text-cl-text hover:bg-cl-warning/15 focus:outline-none focus:ring-2 focus:ring-cl-warning",
   triggerText: "flex-1 truncate",
   content:
     "rounded-cl-md shadow-lg overflow-hidden bg-cl-warning/15 border border-cl-warning",
@@ -501,7 +501,7 @@ const SearchableDropdownDemo = () => {
                 errorMessage="This field is required"
                 classes={{
                   ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text hover:border-cl-error focus:outline-none focus:ring-2 focus:ring-cl-error`,
                 }}
               />
             </div>
@@ -641,7 +641,7 @@ const SearchableDropdownDemo = () => {
                 <button
                   ref={ref as React.RefCallback<HTMLButtonElement>}
                   {...triggerProps}
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left rounded-cl-lg border-2 transition-all ${isOpen ? ("border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"} cursor-pointer`}
+                  className={`flex items-center gap-3 w-full px-4 py-3 text-start rounded-cl-lg border-2 transition-all ${isOpen ? ("border-cl-border-input-focus bg-cl-bg-input text-cl-text shadow-lg shadow-accent/20") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input"} cursor-pointer`}
                 >
                   <span
                     className={`text-xl ${selectedOption ? "" : "opacity-50"}`}
@@ -1030,7 +1030,7 @@ const SearchableDropdownDemo = () => {
               placeholder="Search fruits..."
               classes={{
                 ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors border border-cl-error bg-cl-bg-panel text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-error`,
               }}
             />
           </div>
@@ -1076,7 +1076,7 @@ const SearchableDropdownDemo = () => {
               placeholder="Search fruits..."
               classes={{
                 ...c.dropdown,
- trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-left rounded-cl-md transition-colors ${successValue ? ("border-cl-success bg-cl-bg-input text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`,
+ trigger: `flex items-center justify-between gap-2 w-full px-3 py-2 text-start rounded-cl-md transition-colors ${successValue ? ("border-cl-success bg-cl-bg-input text-cl-text focus:outline-none focus:ring-2 focus:ring-cl-success") : "border-cl-border-input bg-cl-bg-input text-cl-text hover:border-cl-border-input focus:outline-none focus:ring-2 focus:ring-cl-accent focus:border-transparent"}`,
               }}
             />
           </div>

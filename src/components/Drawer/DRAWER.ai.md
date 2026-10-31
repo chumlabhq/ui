@@ -55,7 +55,7 @@ export default function Example() {
 
 | Prop | Constraint |
 |------|-----------|
-| `side` | `"left"` (default), `"right"`, `"top"`, `"bottom"` |
+| `side` | `"start"` (default), `"end"`, `"top"`, `"bottom"`. Start is the left in a left-to-right page and the right in a right-to-left one. |
 | `snapPoints` | Array of percentages (0-1). Requires `swipeable={true}`. |
 | `swipeable` | By touch, a `left` or `right` drawer is dragged from anywhere on it. A `top` or `bottom` sheet is dragged from its handle or its `DrawerHeader`, because its content scrolls along the axis it dismisses on. A mouse drags from the handle on every side. |
 | `trapFocus` | Defaults `true` when `modal={true}`. |
@@ -67,7 +67,7 @@ export default function Example() {
 
 **Root:**
 - `data-state="open" | "closed"` — follows `open`; the panel slides and the overlay fades on it
-- `data-side="left" | "right" | "top" | "bottom"` — the edge the drawer comes from
+- `data-side="start" | "end" | "top" | "bottom"` — the edge the drawer comes from
 
 **Parts** (each a marker on its element, for a selector or a test; none of them is a state):
 - `data-drawer-overlay` — the backdrop, when `modal`
@@ -89,8 +89,8 @@ export default function Example() {
 | `onOpenChange` | object | — | (open: boolean) => void — Callback when the drawer's open state changes. |
 | `zIndex` | number | `9999` | Z-index of the drawer overlay and panel. |
 | `children` | object | — | React.ReactNode — Drawer content (DrawerHeader, DrawerBody, DrawerFooter). |
-| `side` | `"left"` \| `"right"` \| `"top"` \| `"bottom"` | `"left"` | The edge the drawer slides in from. |
-| `size` | string | `"300px"` | CSS size value for the drawer panel (width for left/right, height for top/bottom). |
+| `side` | `"start"` \| `"end"` \| `"top"` \| `"bottom"` | `"start"` | The edge the drawer slides in from. |
+| `size` | string | `"300px"` | CSS size value for the drawer panel (width for start/end, height for top/bottom). |
 | `overlayColor` | string | `"black"` | Background color of the overlay. |
 | `overlayOpacity` | number | `0.32` | How strongly overlayColor tints the page (0-1), applied as the background's alpha; the overlay element stays opaque so overlayBlur is not diluted. |
 | `overlayBlur` | number | `0` | Backdrop blur in pixels for the overlay. |

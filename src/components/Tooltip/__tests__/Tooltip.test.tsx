@@ -1945,3 +1945,25 @@ describe("align in right-to-left", () => {
     expect(physical.inlineStart).toBe(480 - 120);
   });
 });
+
+describe("Tooltip arrow sits on its anchor", () => {
+  it("measures the arrow from inside the tooltip's border, where its absolute offset starts", async () => {
+    const clientLeft = vi.spyOn(HTMLElement.prototype, "clientLeft", "get").mockReturnValue(1);
+    render(
+      <Tooltip content="Tip" defaultOpen showArrow>
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+    await waitFor(() => expect(screen.getByRole("tooltip").querySelector("svg")?.style.left).toBe("5px"));
+    clientLeft.mockRestore();
+  });
+
+  it("centres a side arrow on the trigger's midline: the rotated box's centre is half its height below its top", async () => {
+    render(
+      <Tooltip content="Tip" defaultOpen showArrow side="right">
+        <button>Trigger</button>
+      </Tooltip>,
+    );
+    await waitFor(() => expect(screen.getByRole("tooltip").querySelector("svg")?.style.top).toBe("9px"));
+  });
+});

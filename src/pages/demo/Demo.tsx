@@ -4,6 +4,7 @@ import { useDocumentTitle } from "../../hooks/useDocumentTitle.js";
 import { useCanonical, useJsonLd } from "../../hooks/useJsonLd.js";
 import { SiteHeader } from "../../components/SiteHeader.js";
 import { trackEvent } from "../../lib/analytics.js";
+import { DirectionToggle, useDemoDirection } from "./components/DirectionControl.js";
 
 interface NavItem {
   path: string;
@@ -122,6 +123,7 @@ const Demo = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [direction, setDirection] = useDemoDirection();
 
   const activeItem = ALL_ITEMS.find(
     (c) => location.pathname === `/${c.path}`,
@@ -210,8 +212,9 @@ const Demo = () => {
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
-      {/* Search */}
-      <div className="p-4 border-b border-border-faint">
+      {/* Search, and the one direction control every demo page shares */}
+      <div className="p-4 border-b border-border-faint flex flex-col gap-3">
+        <DirectionToggle direction={direction} onChange={setDirection} />
         <div className="relative">
           <svg
             viewBox="0 0 24 24"
@@ -220,7 +223,7 @@ const Demo = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-fg-tertiary pointer-events-none"
+            className="absolute start-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-fg-tertiary pointer-events-none"
             aria-hidden
           >
             <circle cx="11" cy="11" r="8" />
@@ -237,9 +240,9 @@ const Demo = () => {
             }}
             placeholder="Search"
             aria-label="Search documentation"
-            className="w-full pl-9 pr-9 py-2.5 rounded-md bg-bg-elevated border border-border-faint text-fg placeholder:text-fg-tertiary font-sans text-[13px] focus:outline-none focus:border-accent/40"
+            className="w-full ps-9 pe-9 py-2.5 rounded-md bg-bg-elevated border border-border-faint text-fg placeholder:text-fg-tertiary font-sans text-[13px] focus:outline-none focus:border-accent/40"
           />
-          <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 font-mono text-[10px] text-fg-tertiary px-1.5 py-0.5 rounded border border-border-faint bg-bg-base pointer-events-none">
+          <kbd className="absolute end-2.5 top-1/2 -translate-y-1/2 font-mono text-[10px] text-fg-tertiary px-1.5 py-0.5 rounded border border-border-faint bg-bg-base pointer-events-none">
             /
           </kbd>
         </div>
@@ -284,7 +287,7 @@ const Demo = () => {
                     >
                       <span className="truncate">{item.displayName}</span>
                       {item.isNew && (
-                        <span className="ml-auto font-mono text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20">
+                        <span className="ms-auto font-mono text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/20">
                           New
                         </span>
                       )}
@@ -312,8 +315,8 @@ const Demo = () => {
           />
         )}
         <aside
-          className={`lg:hidden fixed top-[var(--header-height)] bottom-0 left-0 z-50 w-[280px] max-w-[85vw] bg-bg-base border-r border-border-faint transition-transform duration-300 ease-out ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`lg:hidden fixed top-[var(--header-height)] bottom-0 start-0 z-50 w-[280px] max-w-[85vw] bg-bg-base border-e border-border-faint transition-transform duration-300 ease-out ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full"
           }`}
         >
           {sidebarContent}
@@ -321,7 +324,7 @@ const Demo = () => {
 
         {/* Desktop sidebar */}
         <aside
-          className="hidden lg:block sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] w-[260px] xl:w-[280px] shrink-0 border-r border-border-faint bg-bg-base"
+          className="hidden lg:block sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] w-[260px] xl:w-[280px] shrink-0 border-e border-border-faint bg-bg-base"
         >
           {sidebarContent}
         </aside>
@@ -331,7 +334,7 @@ const Demo = () => {
           type="button"
           onClick={() => setSidebarOpen(true)}
           aria-label="Open documentation menu"
-          className="lg:hidden fixed bottom-5 left-5 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-fg text-bg-base font-medium text-[13px] shadow-lg border border-border-faint cursor-pointer"
+          className="lg:hidden fixed bottom-5 start-5 z-30 flex items-center gap-2 px-4 py-2.5 rounded-full bg-fg text-bg-base font-medium text-[13px] shadow-lg border border-border-faint cursor-pointer"
           data-track-event="docs_mobile_menu_open"
         >
           <svg

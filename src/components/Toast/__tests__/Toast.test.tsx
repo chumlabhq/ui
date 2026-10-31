@@ -875,12 +875,24 @@ describe("Toast", () => {
   });
 
   describe("Position", () => {
+    it("pins the default bottom-end region to the inline end, which a right-to-left page puts on the left", () => {
+      renderWithProvider();
+      const region = screen.getByRole("region");
+      expect(region.className.split(" ")).toEqual(expect.arrayContaining(["bottom-4", "end-4"]));
+      expect(region.className).not.toMatch(/\b(left|right)-4\b/);
+    });
+
+    it("pins top-start to the inline start", () => {
+      renderWithProvider(undefined, { position: "top-start" });
+      expect(screen.getByRole("region").className.split(" ")).toEqual(expect.arrayContaining(["top-4", "start-4"]));
+    });
+
     it.each([
-      "top-left",
-      "top-right",
+      "top-start",
+      "top-end",
       "top-center",
-      "bottom-left",
-      "bottom-right",
+      "bottom-start",
+      "bottom-end",
       "bottom-center",
     ] as const)("renders toasts in %s position", async (position) => {
       let toastApi: ReturnType<typeof useToast>;

@@ -13,9 +13,9 @@ const panelRootClass = (color: string) => {
     const map: Record<string, string> = {
       blue: `h-40 ${base} rounded-cl-md`,
       green: `h-40 ${base} rounded-cl-md`,
-      purple: `${base} rounded-l-lg`,
-      indigo: `${base} rounded-l-lg`,
-      teal: `${base} rounded-r-lg`,
+      purple: `${base} rounded-s-lg`,
+      indigo: `${base} rounded-s-lg`,
+      teal: `${base} rounded-e-lg`,
       amber: `h-40 ${base} rounded-cl-md`,
     };
     return map[color] ?? map.blue;
@@ -60,7 +60,7 @@ export default function ResizablePanelExample() {
         </div>
       </ResizablePanel>
       <div
-        className="flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-r-lg sm:border-l-0 bg-cl-bg-hover border border-cl-border"
+        className="flex-1 p-4 rounded-b-lg sm:rounded-b-none sm:rounded-e-lg sm:border-s-0 bg-cl-bg-hover border border-cl-border"
       >
         <p className="font-medium text-cl-text">Main Content</p>
         <p className="text-sm mt-2 text-cl-text-secondary">

@@ -139,7 +139,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
 
   const displayContent = loading && loadingContent ? loadingContent : children;
 
-  const effectiveAnimation = effectiveReduceMotion ? "none" : iconAnimation;
+  const effectiveAnimation = effectiveReduceMotion || unstyled ? "none" : iconAnimation;
 
   const animationClasses = useMemo(() => {
     // No motionSafeClasses here: `effectiveAnimation` above is already forced to
