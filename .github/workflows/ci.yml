@@ -28,8 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           # `engines` allows >= 18. Only the current LTS is exercised here, and
           # README says so rather than implying every version is covered.
@@ -46,8 +46,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -64,11 +64,28 @@ jobs:
 
   e2e:
     name: e2e (chromium)
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest: that label moved to Ubuntu 26.04 from
+    # 2026-10-19, and Playwright 1.58 (the lockfile's) has no Chromium build or
+    # system dependencies for it, so `playwright install` failed before a test
+    # ran ("Playwright does not support chromium on ubuntu26.04-x64"). Move
+    # this when a Playwright upgrade that supports 26.04 lands.
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
+    # Four shards, because one job never fit: the chromium project is 72.8 min
+    # of tests on one worker, and its heaviest specs (icon-bounds,
+    # surface-fit, rtl-surfaces, focus-not-obscured, pointer-affordance, 5 to 8
+    # min each) are single tests, so the split is by test and not even. Summed
+    # per shard from one-worker timings: 26.2, 15.2, 24.8 and 6.6 min. Three
+    # shards were tried first: the longest took 20.3 min at two workers
+    # (playwright.config.ts), too close to this timeout once a slower runner and
+    # setup are added.
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -78,7 +95,7 @@ jobs:
       # node_modules under PLAYWRIGHT_BROWSERS_PATH=0, and `npm ci` deletes that
       # directory. Keyed on the lockfile because that is what pins the
       # Playwright version.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: browsers
         with:
           path: node_modules/playwright-core/.local-browsers
@@ -89,11 +106,11 @@ jobs:
       - if: steps.browsers.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/

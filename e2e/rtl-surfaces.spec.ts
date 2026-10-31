@@ -1,4 +1,3 @@
-import type { Page } from "@playwright/test";
 import { test, expect } from "./_test";
 import { gotoFixture, gotoFixtureIndex, servedRtl } from "./_nav";
 import { openSurfaces, settle, type Surface } from "./_surfaces";

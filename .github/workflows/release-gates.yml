@@ -37,14 +37,14 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
       - run: npm ci
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         id: browsers
         with:
           path: node_modules/playwright-core/.local-browsers
@@ -54,7 +54,7 @@ jobs:
 
       - run: npm run test:e2e:all
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: e2e-matrix-report
@@ -70,11 +70,14 @@ jobs:
   # ── the package, read from outside the repo ─────────────────────────────
   consumers:
     name: consumer matrix
-    runs-on: ubuntu-latest
+    # Pinned for the reason ci.yml's e2e job is: verify:consumers launches
+    # Chromium, and ubuntu-latest is Ubuntu 26.04, which Playwright 1.58 has
+    # no Chromium build for.
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -87,7 +90,7 @@ jobs:
       # warm cache those installs dominate: identical code has run in 60s and in
       # 2068s, and next-app alone went from 13s to 1137s between two runs. The
       # restore-keys fallback is what makes it survive a template edit.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.npm
           key: npm-consumers-${{ runner.os }}-${{ hashFiles('scripts/consumers/*/package.json') }}
@@ -95,6 +98,21 @@ jobs:
             npm-consumers-${{ runner.os }}-
 
       - run: npm ci
+
+      # The matrix renders and hydrates every consumer app in Chromium
+      # (verify-consumer-matrix.mjs and verify-consumer-runtime.mjs call
+      # `chromium.launch()`), and nothing else here installs it. The same
+      # steps as ci.yml's e2e job, for the same reasons.
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
       # Packs the library (which runs prepack, so this builds it too), installs
       # the tarball into nine framework apps, renders all thirty components in
       # the five general ones and hydrates each on its own route. It writes
@@ -118,8 +136,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm

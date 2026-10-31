@@ -38,24 +38,37 @@ if (typeof window !== "undefined" && window.self !== window.top) {
   };
 }
 
-const loaded = new Map<string, LazyExoticComponent<ComponentType>>();
+type PreviewProps = { example: string };
 
-function previewOf(component: string, example: string): LazyExoticComponent<ComponentType> {
-  const key = `${component}/${example}`;
-  let hit = loaded.get(key);
-  if (!hit) {
-    const load = modules[`./${component}.preview.tsx`];
-    hit = lazy(async () => ({ default: (load && (await load()).default[example]) || NotFound }));
-    loaded.set(key, hit);
-  }
-  return hit;
+/**
+ * One lazy component per preview file, made once when this module loads, so a
+ * route renders the same component on every render and only the example it is
+ * asked for changes.
+ */
+const previews: Record<string, LazyExoticComponent<ComponentType<PreviewProps>>> = Object.fromEntries(
+  Object.entries(modules).map(([path, load]) => [
+    path.slice("./".length, -".preview.tsx".length),
+    lazy(async () => {
+      const examples = (await load()).default;
+      return {
+        default: function Preview({ example }: PreviewProps) {
+          const Example = Object.hasOwn(examples, example) ? examples[example] : NotFound;
+          return <Example />;
+        },
+      };
+    }),
+  ]),
+);
+
+function NoPreview(_: PreviewProps) {
+  return <NotFound />;
 }
 
 export default function PreviewRoute() {
   const { component = "", example = "" } = useParams();
   // The phone frames on a docs page show the direction the page is in.
   useDemoDirection();
-  const Example = previewOf(component, example);
+  const Preview = Object.hasOwn(previews, component) ? previews[component] : NoPreview;
   return (
     <main data-preview={`${component}/${example}`} className="min-h-screen bg-cl-bg p-4 text-cl-text">
       <meta name="robots" content="noindex" />
@@ -63,7 +76,7 @@ export default function PreviewRoute() {
         <h1>{component} preview</h1>
       </header>
       <Suspense fallback={null}>
-        <Example />
+        <Preview example={example} />
       </Suspense>
     </main>
   );

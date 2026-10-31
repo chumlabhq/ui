@@ -8,12 +8,12 @@
 // command before any gate runs.
 //
 //   npm run gates          everything
-//   npm run gates:fast     the thirteen that finish in under ~90s each
+//   npm run gates:fast     the fifteen that finish in under ~90s each
 //   npm run gates:record   update the population record
 //
 // THE SPLIT, because the full run is too long to sit through:
 //
-//   per slice   `npm run gates:fast` — ~2 minutes, thirteen gates. It catches
+//   per slice   `npm run gates:fast` — ~2 minutes, fifteen gates. It catches
 //               every drift class that does not need a browser: types,
 //               generated files out of step, docs naming something that does
 //               not exist, a schema default that is not the code's, a
@@ -94,6 +94,16 @@ const pw = (args) => `PLAYWRIGHT_BROWSERS_PATH=0 npx playwright test ${args}`;
 const GATES = [
   // ── cheap: seconds ────────────────────────────────────────────────────
   { id: "typecheck", claims: { script: "assert-typecheck.mjs" }, cmd: "npm run typecheck" },
+  /**
+   * CI's static job runs `npm run lint` and no gate here did, so a slice was
+   * green locally while every push was red on lint from 2026-10-11 on: an
+   * unused import and a component created during render, neither visible to tsc.
+   */
+  { id: "lint", cmd: "npm run lint", claims: {} },
+  // The CI failures no local run can reproduce: the runner OS a workflow asks
+  // for, and a job that launches a browser it never installed. See the script.
+  { id: "ci-runners", cmd: "node scripts/assert-ci-runners.mjs",
+    claims: { script: "assert-ci-runners.mjs" }, pop: /✓ (\d+) Playwright job/ },
   { id: "doc-truth", claims: { vitest: "contracts" },
     cmd: "npx vitest run --project=contracts src/__tests__/contracts/doc-truth.contract.test.ts",
     pop: /collected (\d+)/ },

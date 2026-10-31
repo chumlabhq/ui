@@ -36,7 +36,14 @@ const config = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // CI: two, stated rather than inherited. At one, CI's chromium job never
+  // finished: its 660 tests take 72.8 min on one worker (measured locally with
+  // CI=true, 2026-10-31), and every run that reached them was killed by the
+  // job's 30-minute timeout at about test 188 — the same test this machine had
+  // reached at 30 minutes. Two is Playwright's own default on the 4-vCPU
+  // runner, and the job is also sharded four ways in .github/workflows/ci.yml.
+  // Locally, unset: half the cores.
+  workers: process.env.CI ? 2 : undefined,
   // `_reconcile-reporter` is last so its one-line verdict is the final thing
   // printed. The summary of the `list` reporter puts `N failed` above a long
   // failure list and `N passed` at the very bottom, which is why reading the
