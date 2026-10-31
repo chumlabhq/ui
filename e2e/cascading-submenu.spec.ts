@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "./_test";
 import { gotoFixture } from "./_nav";
+import { press, reveal } from "./_helpers";
 
 /**
  * The submenu stays in the frame, and flips when the anchor is near the edge.
@@ -206,15 +207,24 @@ test.describe("CascadingDropdown submenu keyboard focus", () => {
     });
   }
 
-  test("pointer hover opens the submenu and moves no DOM focus into it", async ({ page }) => {
+  // The pointer this project has: a hover where it can hover, the engine's own
+  // tap where it cannot (`press` and `reveal`). A tap on Apple would choose it
+  // and close the menu, so on a touch project the submenu is the one the tap on
+  // its parent opened, with nothing in it highlighted by a pointer.
+  test("a pointer opens the submenu and moves no DOM focus into it", async ({ page }) => {
     await gotoFixture(page, "CascadingDropdown", "closed");
-    await page.locator("[data-fixture] button[aria-haspopup]").first().click();
-    await page.locator('[role="menuitem"]', { hasText: "Fruit" }).hover();
+    await press(page, page.locator("[data-fixture] button[aria-haspopup]").first());
+    await reveal(page, page.locator('[role="menuitem"]', { hasText: "Fruit" }));
     const apple = page.locator(`${SURFACE} [role^="menuitem"]`, { hasText: "Apple" });
-    await apple.hover();
-    await expect(apple).toHaveAttribute("data-highlighted");
-    const hovered = await active(page);
-    console.log(`SUBMENU_FOCUS hover: "${hovered.label}" inSubmenu=${hovered.inSubmenu}`);
-    expect(hovered.inSubmenu, "hover moved DOM focus into the submenu").toBe(false);
+    const canHover = await page.evaluate(() => matchMedia("(hover: hover)").matches);
+    if (canHover) {
+      await apple.hover();
+      await expect(apple).toHaveAttribute("data-highlighted");
+    } else {
+      await expect(apple, "a tap on the parent opened no submenu").toBeVisible();
+    }
+    const pointed = await active(page);
+    console.log(`SUBMENU_FOCUS ${canHover ? "hover" : "tap"}: "${pointed.label}" inSubmenu=${pointed.inSubmenu}`);
+    expect(pointed.inSubmenu, `${canHover ? "hover" : "a tap"} moved DOM focus into the submenu`).toBe(false);
   });
 });

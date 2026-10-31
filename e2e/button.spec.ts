@@ -1,7 +1,7 @@
 import { gotoFixture } from "./_nav";
 import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
-import { activateByTouch, watchClicks, skipWithoutTouchEvents } from "./_helpers";
+import { activateByTouch, press, watchClicks, skipWithoutTouchEvents } from "./_helpers";
 
 /**
  * Waits for a button that is actually on screen.
@@ -177,29 +177,54 @@ test.describe("Keyboard Navigation", () => {
   });
 
   test.describe("Icon Animations", () => {
-    test("should apply animation classes on hover", async ({
+    /**
+     * The slide, as painted: the icon's own computed `translate` plus the x of
+     * its `transform`, read the way rtl-paint's Button rows read it.
+     *
+     * This used to hover the first button carrying `.transition-transform` and
+     * then assert that the element with that class was visible, which it is
+     * with or without a slide; and in Firefox the hover was a dispatched
+     * `mouseenter`, which moves no pointer and so matches no `:hover`. Hover
+     * rules live inside `@media (hover: hover)`, so where the device cannot
+     * hover the icon must stay where it rests, a tap included.
+     */
+    test("the slideEnd icon slides toward the inline end on hover, and rests where the device cannot hover", async ({
       page,
-      browserName,
     }) => {
-      const buttonWithIcon = page
-        .locator("button:has(.transition-transform)")
-        .first();
+      const section = page.locator("section").filter({
+        has: page.getByRole("heading", { name: "Icon Animations (On Hover)", exact: true }),
+      });
+      const button = section.getByRole("button", { name: "Slide Right", exact: true });
+      const icon = button.locator("span[aria-hidden='true']:has(svg)");
+      await expect(icon).toHaveCount(1);
+      await button.scrollIntoViewIfNeeded();
+      await expect(button).toBeVisible();
 
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(buttonWithIcon.first()).toBeVisible();
-      await buttonWithIcon.waitFor({ state: "visible", timeout: 5000 });
+      const offset = () =>
+        icon.evaluate((el) => {
+          const cs = getComputedStyle(el);
+          const translate = cs.translate === "none" ? 0 : parseFloat(cs.translate);
+          const transform = cs.transform === "none" ? 0 : new DOMMatrix(cs.transform).m41;
+          return translate + transform;
+        });
+      const toward = await button.evaluate((el) => (getComputedStyle(el).direction === "rtl" ? -1 : 1));
+      const canHover = await page.evaluate(() => matchMedia("(hover: hover)").matches);
 
-      // Hover to trigger animation - use dispatchEvent for Firefox reliability
-      if (browserName === "firefox") {
-        await buttonWithIcon.dispatchEvent("mouseenter");
-        await page.waitForTimeout(100); // Wait for Firefox to process
+      if (canHover) await page.mouse.move(0, 0);
+      const rest = await offset();
+      expect(rest, "the icon is offset before any pointer reaches it").toBe(0);
+
+      if (canHover) {
+        await button.hover();
+        await expect
+          .poll(async () => (await offset()) * toward, { message: "the icon did not slide toward the inline end", timeout: 2000 })
+          .toBeGreaterThanOrEqual(2);
       } else {
-        await buttonWithIcon.hover();
+        await press(page, button);
+        await page.waitForTimeout(400);
+        expect(await offset(), "a tap left the icon slid on a device that cannot hover").toBe(0);
       }
-
-      const iconContainer = buttonWithIcon.locator(".transition-transform");
-      await expect(iconContainer).toBeVisible();
+      console.log(`BUTTON_SLIDE ${canHover ? "hover" : "tap"}: rest ${rest}px, then ${(await offset()).toFixed(1)}px, toward ${toward}`);
     });
   });
 });

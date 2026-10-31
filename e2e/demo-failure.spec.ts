@@ -1,4 +1,5 @@
 import { test, expect, type Locator, type Page } from "./_test";
+import { press, reveal } from "./_helpers";
 
 /**
  * Failure on demand, and the two other states a demo used to be unable to show.
@@ -20,13 +21,19 @@ import { test, expect, type Locator, type Page } from "./_test";
  * off the step, is. And the uncontrolled Modal and Drawer: Show it mounts the
  * overlay open, its own close button closes it with no page state involved,
  * and Show it mounts it open again.
+ *
+ * Every step the reader takes with a pointer goes through `press` and `reveal`
+ * (_helpers.ts): a click and a hover where the device can hover, the engine's
+ * own tap where it cannot. On Mobile Chrome and Mobile Safari a `.click()` is a
+ * mouse no touch user has, and a `.hover()` is a pointer they cannot point
+ * with, so the failure path was proved there for a mouse and never for a tap.
  */
 
 const sectionOf = (page: Page, title: string) =>
   page.locator("section").filter({ has: page.getByRole("heading", { name: title, exact: true }) });
 
 const failNext = async (section: Locator) => {
-  await section.getByRole("button", { name: "Fail", exact: true }).click();
+  await press(section.page(), section.getByRole("button", { name: "Fail", exact: true }));
   await expect(section.getByRole("button", { name: "Fail", exact: true })).toHaveAttribute("aria-pressed", "true");
 };
 
@@ -43,16 +50,15 @@ interface FailureCase {
 }
 
 const openList = async (section: Locator, page: Page) => {
-  await section.getByRole("combobox").click();
-  void page;
+  await press(page, section.getByRole("combobox"));
 };
 const closeAndReopen = async (section: Locator, page: Page) => {
   await page.keyboard.press("Escape");
   await expect(section.getByRole("combobox")).toHaveAttribute("aria-expanded", "false");
-  await section.getByRole("combobox").click();
+  await press(page, section.getByRole("combobox"));
 };
 const searchFor = (text: string) => async (section: Locator, page: Page) => {
-  if ((await section.getByRole("combobox").getAttribute("aria-expanded")) !== "true") await section.getByRole("combobox").click();
+  if ((await section.getByRole("combobox").getAttribute("aria-expanded")) !== "true") await press(page, section.getByRole("combobox"));
   await page.keyboard.type(text);
 };
 
@@ -76,19 +82,19 @@ const CASES: FailureCase[] = [
   {
     route: "cascading-dropdown",
     load: async (section, page) => {
-      await section.locator("button[aria-haspopup]").click();
-      await page.getByText("Design", { exact: true }).hover();
+      await press(page, section.locator("button[aria-haspopup]"));
+      await reveal(page, page.getByText("Design", { exact: true }));
     },
     retry: async (_section, page) => {
-      await page.getByText("Sales", { exact: true }).hover();
-      await page.getByText("Design", { exact: true }).hover();
+      await reveal(page, page.getByText("Sales", { exact: true }));
+      await reveal(page, page.getByText("Design", { exact: true }));
     },
     error: /Couldn't load that department's teams/, loaded: (page) => page.getByText("Design North", { exact: true }),
   },
   {
     route: "table",
-    load: async (section) => section.getByRole("button", { name: "Reload", exact: true }).click(),
-    retry: async (section) => section.getByRole("button", { name: "Try again", exact: true }).click(),
+    load: async (section, page) => press(page, section.getByRole("button", { name: "Reload", exact: true })),
+    retry: async (section, page) => press(page, section.getByRole("button", { name: "Try again", exact: true })),
     error: /Couldn't load the orders/, loaded: (page) => sectionOf(page, "When loading fails").getByText("Ada Lovelace", { exact: true }),
   },
 ];
