@@ -67,7 +67,7 @@ export const CountryFlag = forwardRef<HTMLSpanElement, CountryFlagProps>(
 
     const groupContext = useCountryFlagGroupContext();
     const effectiveUnstyled = unstyled || !!groupContext?.unstyled;
-    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const effectiveReduceMotion = useReducedMotion(reduceMotion, effectiveUnstyled);
 
     const normalizedCode = code?.toLowerCase() || "";
     const effectiveSize = size ?? groupContext?.size ?? "md";

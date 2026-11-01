@@ -100,6 +100,11 @@ const SUBJECTS: Array<{ component: string; fixture: string }> = [
   { component: "SearchableDropdown", fixture: "closed" },
   { component: "Slider", fixture: "default" },
   { component: "Stepper", fixture: "horizontal-numbered" },
+  // Vertical had only its right-to-left picture, which is why nothing caught
+  // the item centring its trigger in the row and the connector painting
+  // nothing: 6dd19258 merged the per-orientation item keys into one centred
+  // column and dropped the connector's size. Both orientations now.
+  { component: "Stepper", fixture: "vertical" },
   { component: "Switch", fixture: "labelled" },
   { component: "TabPanel", fixture: "default" },
   // `iconPosition` had never been rendered by a fixture, so it had never been

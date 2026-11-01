@@ -26,7 +26,7 @@ const LinearLoader = forwardRef<HTMLDivElement, LinearLoaderProps>(
     },
     ref,
   ) => {
-    const prefersReducedMotion = useReducedMotion(reduceMotion);
+    const prefersReducedMotion = useReducedMotion(reduceMotion, unstyled);
     // The default track is the indicator's colour at 20%, painted on the track
     // alone. It was `currentColor` with `opacity: 0.2` on the root, and the bar
     // is inside the root, so the bar faded with it: 1:1, nothing visible moving.

@@ -1617,7 +1617,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 161.89,
-    commit: "this slice",
+    commit: "1fbb3b54",
     date: "2026-10-31",
     attribution: "attributed",
     reason:
@@ -1648,6 +1648,29 @@ const LIBRARY_TOTAL_HISTORY = [
       "breach moved with it (below); Table's exclusive +5 B (16,752 -> " +
       "16,757) stays inside its record's slack. No comments added to " +
       "src/components or src/utils.",
+  },
+  {
+    kb: 162.01,
+    commit: "(uncommitted)",
+    date: "2026-11-01",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.12 KB (165,772 -> 165,896 B gzipped, +124 B on a build of " +
+      "a70149f5), 83 files held, no chunk's module imports changed, no chunk " +
+      "up 0.10 KB or more. B run. Phase 1, DatePicker's header row wraps at " +
+      "280 px: DatePicker +10 B, its declared breach raised 12.66 -> 12.67 " +
+      "(below). Phase 2a, Stepper's connectors get a size per orientation and " +
+      "a vertical item stretches: Stepper +32 B. Phase 2b with phase 3, " +
+      "AvatarGroup flattens Fragments through one Children.map and Avatar " +
+      "passes unstyled to useReducedMotion: AvatarBadge chunk +37 B (the first " +
+      "version, toArray with re-keyed cloneElement, measured +105 B). Phase 3, " +
+      "unstyled removes inline motion through useReducedMotion's new unstyled " +
+      "argument: useReducedMotion +10 B, CountryFlag +10 B, PulseLoader chunk " +
+      "(the three loaders) +10 B, ToastProvider chunk (Toast) +10 B, Slider " +
+      "+6 B, DrawerCloseButton chunk (Drawer) +6 B, Accordion exclusive +2 B. " +
+      "The rest, -4 to +4 B on 30 files, is the chunks' new hashed names in " +
+      "import strings. Accordion's record was tightened 9.29 -> 9.25 in the " +
+      "same run. No comments added to src/components or src/utils.",
   },
 ];
 
@@ -1821,8 +1844,12 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.66,
-      why: "12.59 before its optional halves moved into chunks of their own: " +
+      kb: 12.67,
+      why: "2026-11-01, B run: 12.66 -> 12.67 (exclusive 12,967 -> 12,977 B gzipped, +10 B; own " +
+        "chunk +10 B; measured on a build of a70149f5): the calendar header row wraps its month " +
+        "and year pickers under the arrows when they do not fit, which in a 280 px viewport " +
+        "they did not in months with a long name. " +
+        "12.59 before its optional halves moved into chunks of their own: " +
         "the presets panel with the default-preset helper it now resolves, and " +
         "the marker tooltip's subtree. 0.03 over, and the last 0.18 KB of it is " +
         "comment text — this gate measures the unminified dist, which a " +
@@ -1902,8 +1929,12 @@ const DECLARED_BREACHES = new Map([
   [
     "Accordion",
     {
-      kb: 9.29,
-      why: "2026-10-12, L15 accordion trigger id: 9.24 -> 9.29 (exclusive 9,457 -> 9,510 B gzipped, +53 B): " +
+      kb: 9.25,
+      why: "2026-11-01, B run: 9.29 -> 9.25, tightened to what it measures: exclusive 9.25 on a " +
+        "build of a70149f5, 0.04 under the record and inside the 0.25 slack, so nothing " +
+        "flagged it. " +
+        "No code change behind this line. " +
+        "2026-10-12, L15 accordion trigger id: 9.24 -> 9.29 (exclusive 9,457 -> 9,510 B gzipped, +53 B): " +
         "a consumer id on AccordionTrigger left the panel's aria-labelledby dangling; the trigger " +
         "reports its id to its item and the panel follows it. " +
         "2026-10-12, L14 idrefs: 9.23 -> 9.24 (exclusive 9,448 -> 9,457 B gzipped, +9 B): " +

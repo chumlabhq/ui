@@ -4,7 +4,7 @@ import { structuralOnly } from "../../../utils/classLayers.js";
 export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   root: "",
   list: "list-none m-0 p-0",
-  item: "shrink-0 flex flex-col items-center",
+  item: "shrink-0 flex flex-col items-center data-[orientation=vertical]:items-stretch",
   trigger: "flex items-center gap-1.5 sm:gap-2 transition-colors motion-reduce:transition-none cursor-pointer data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed",
   // Every step's status, folded onto the surviving keys as `data-state`
   // variants — the replacement ADR 002 specified for `indicatorActive`,
@@ -32,7 +32,7 @@ export const DEFAULT_STEPPER_CLASSES: Required<StepperClasses> = {
   // literal `bg-black/[0.08] dark:bg-white/15` pair was reaching for and the
   // reason that pair does not come back with it.
   separator:
-    "transition-colors motion-reduce:transition-none bg-cl-border data-[state=active]:bg-cl-accent/30 data-[state=completed]:bg-cl-accent",
+    "data-[orientation=horizontal]:w-full data-[orientation=horizontal]:h-0.5 data-[orientation=vertical]:w-0.5 data-[orientation=vertical]:h-6 transition-colors motion-reduce:transition-none bg-cl-border data-[state=active]:bg-cl-accent/30 data-[state=completed]:bg-cl-accent",
 };
 
 export const UNSTYLED_STEPPER_CLASSES: Required<StepperClasses> =

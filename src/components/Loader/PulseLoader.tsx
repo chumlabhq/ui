@@ -36,7 +36,7 @@ const PulseLoader = forwardRef<HTMLDivElement, PulseLoaderProps>(
 
     const ringElements = Array.from({ length: rings });
 
-    const prefersReducedMotion = useReducedMotion(reduceMotion);
+    const prefersReducedMotion = useReducedMotion(reduceMotion, unstyled);
 
     const baseClassesRaw = unstyled
       ? UNSTYLED_PULSE_LOADER_CLASSES

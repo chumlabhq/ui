@@ -1009,3 +1009,44 @@ describe("Library text reads in its own order in a right-to-left page", () => {
     expect(screen.getByText("99+")).toHaveAttribute("dir", "auto");
   });
 });
+
+describe("AvatarGroup counts the avatars in a Fragment", () => {
+  // Children.toArray flattens arrays and leaves a Fragment whole, so a group
+  // handed `<>…</>` counted one member, showed every avatar, and never drew
+  // its surplus.
+  const four = (
+    <>
+      <Avatar name="Ada" />
+      <Avatar name="Grace" />
+      <Avatar name="Alan" />
+      <Avatar name="Edsger" />
+    </>
+  );
+
+  it("counts each avatar inside a Fragment, and caps them at maxVisible", () => {
+    render(<AvatarGroup maxVisible={2}>{four}</AvatarGroup>);
+    const group = screen.getByRole("group");
+    expect(group).toHaveAttribute("aria-label", "Avatar group with 4 members, 2 more not shown");
+    expect(screen.getByText("+2")).toBeInTheDocument();
+    expect(group.children).toHaveLength(3);
+  });
+
+  it("gives each avatar its own overlapping wrapper, nested Fragments too", () => {
+    render(
+      <AvatarGroup>
+        <>
+          <Avatar name="Ada" />
+          <>
+            <Avatar name="Grace" />
+            <Avatar name="Alan" />
+          </>
+        </>
+        <Avatar name="Edsger" />
+      </AvatarGroup>,
+    );
+    const group = screen.getByRole("group");
+    expect(group).toHaveAttribute("aria-label", "Avatar group with 4 members");
+    expect(group.children).toHaveLength(4);
+    expect([...group.children].map((w) => (w as HTMLElement).style.zIndex)).toEqual(["4", "3", "2", "1"]);
+  });
+});

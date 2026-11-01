@@ -225,18 +225,18 @@ test.describe("Switch - Cross Browser", () => {
     await expect(basicSwitch).toHaveAttribute("aria-checked", "false");
   });
 
-  test("keyboard toggle works across browsers", async ({ page, browserName }) => {
+  // Both keys in every engine. WebKit used to press Space only, as if Enter did
+  // not toggle there; measured in webkit on the Switch's <button>, Enter turns
+  // it on and Space turns it off again, as in chromium.
+  test("keyboard toggle works across browsers", async ({ page }) => {
     const basicSwitch = page.getByRole("switch").first();
 
     await basicSwitch.focus();
 
-    if (browserName === "webkit") {
-      await page.keyboard.press("Space");
-    } else {
-      await page.keyboard.press("Enter");
-    }
-
+    await page.keyboard.press("Enter");
     await expect(basicSwitch).toHaveAttribute("aria-checked", "true");
+    await page.keyboard.press("Space");
+    await expect(basicSwitch).toHaveAttribute("aria-checked", "false");
   });
 
   test("focus visible state is applied", async ({ page }) => {

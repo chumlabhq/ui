@@ -124,7 +124,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const announcerRef = useRef<HTMLDivElement>(null);
 
-  const effectiveReduceMotion = useReducedMotion(reduceMotion);
+  const effectiveReduceMotion = useReducedMotion(reduceMotion, unstyled);
 
   // One <style> for every Accordion on the page, not one each.
   usePrintStyles(expandOnPrint);

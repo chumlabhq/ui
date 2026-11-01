@@ -265,9 +265,7 @@ const StepItem = memo(function StepItem({
     (showLabels ? (statusSuffix ? `${stepLabelText}${statusSuffix}` : undefined) : undefined);
 
   if (!isHorizontal) {
-    // Connector margin: step padding-left (8px from px-2) + half indicator width
-    const stepPaddingLeft = 8; // px-2 = 0.5rem = 8px
-    const connectorMarginLeft = stepPaddingLeft + indicatorPx / 2;
+    const connectorMarginLeft = indicatorPx / 2 - 1;
 
     const verticalConnector =
       showConnectors && !isLast ? (

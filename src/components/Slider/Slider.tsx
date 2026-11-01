@@ -297,7 +297,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
       commitRef.current = onValueCommit;
     });
 
-    const prefersReducedMotion = useReducedMotion();
+    const prefersReducedMotion = useReducedMotion("auto", unstyled);
     const animationDuration = prefersReducedMotion ? 0 : animationDurationProp;
     const baseClassesRaw = unstyled
       ? UNSTYLED_SLIDER_CLASSES

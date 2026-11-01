@@ -25,7 +25,7 @@ const DotLoader = forwardRef<HTMLDivElement, DotLoaderProps>(
     },
     ref,
   ) => {
-    const prefersReducedMotion = useReducedMotion(reduceMotion);
+    const prefersReducedMotion = useReducedMotion(reduceMotion, unstyled);
     const dots = Array.from({ length: count });
 
     const baseClassesRaw = unstyled

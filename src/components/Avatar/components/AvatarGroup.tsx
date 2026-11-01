@@ -10,6 +10,13 @@ import {
 import { AvatarGroupContext } from "../utils/context.js";
 import { cn } from "../../../utils/scopedCn.js";
 
+const flattenChildren = (nodes: React.ReactNode): React.ReactNode[] =>
+  React.Children.map(nodes, (child) =>
+    React.isValidElement<{ children?: React.ReactNode }>(child) && child.type === React.Fragment
+      ? flattenChildren(child.props.children)
+      : child,
+  ) ?? [];
+
 const layoutClassNames = {
   stack: "flex items-center",
   grid: "flex flex-wrap items-center gap-2",
@@ -54,7 +61,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
 
     const { visibleChildren, remainingChildren, remainingCount, totalCount } =
       useMemo(() => {
-        const childArray = React.Children.toArray(children || []);
+        const childArray = flattenChildren(children);
         const orderedArray = reverseOrder
           ? [...childArray].reverse()
           : childArray;

@@ -16,14 +16,6 @@ const faces = (
   </>
 );
 
-/** The same four as separate children: the group counts a Fragment as one member. */
-const faceList = [
-  <Avatar key="ada" name="Ada" />,
-  <Avatar key="grace" name="Grace" />,
-  <Avatar key="alan" name="Alan" />,
-  <Avatar key="edsger" name="Edsger" />,
-];
-
 const fixtures: Fixtures<typeof AvatarGroup> = [
   { name: "stack", props: { layout: "stack" }, children: faces },
   { name: "grid", props: { layout: "grid" }, children: faces },
@@ -32,7 +24,7 @@ const fixtures: Fixtures<typeof AvatarGroup> = [
   {
     name: "with-surplus-rtl",
     props: { layout: "stack", maxVisible: 2 },
-    children: faceList,
+    children: faces,
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     note: "No `dir` of its own: the stack inherits the page's right-to-left and overlaps from the right, the surplus count last.",
   },

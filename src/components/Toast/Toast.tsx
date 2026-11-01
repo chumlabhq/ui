@@ -62,9 +62,8 @@ const Toast = memo(forwardRef<HTMLDivElement, ToastProps>(function Toast({
   const isPaused = hovered || focused;
   const [progressPercent, setProgressPercent] = useState(100);
   const [animDuration, setAnimDuration] = useState(duration);
-  const prefersReducedMotion = useReducedMotion();
-
   const isUnstyled = unstyled || providerUnstyled;
+  const prefersReducedMotion = useReducedMotion("auto", isUnstyled);
   const baseClasses = isUnstyled ? UNSTYLED_TOAST_CLASSES : DEFAULT_TOAST_CLASSES;
   const mergedClasses: Required<ToastClasses> = useMemo(() => ({
     root: mergeSlot(baseClasses.root, classesProp?.root ?? providerClasses?.root),

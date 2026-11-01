@@ -105,7 +105,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const effectiveShape = shape ?? groupCtx?.shape ?? DEFAULT_SHAPE;
     const effectiveBordered = bordered ?? groupCtx?.bordered;
 
-    const effectiveReduceMotion = useReducedMotion(reduceMotion);
+    const effectiveReduceMotion = useReducedMotion(reduceMotion, unstyled);
 
     const [imageError, setImageError] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);

@@ -13,7 +13,7 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   description: "text-xs text-cl-text-tertiary mb-1.5",
   content: "bg-cl-bg-panel border border-cl-border rounded-cl-lg shadow-xl p-1.5 sm:p-4",
   header: "flex items-center justify-between mb-4",
-  row: "flex items-center gap-1",
+  row: "flex flex-wrap items-center justify-center gap-1 min-w-0",
   navTrigger: "p-1 sm:p-1.5 rounded-cl-md hover:bg-cl-bg-hover transition-colors text-cl-text-chrome-quiet hover:text-cl-text cursor-pointer",
   listRow: "flex gap-8",
   list: "",

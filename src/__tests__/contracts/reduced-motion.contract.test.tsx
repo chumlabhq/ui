@@ -219,14 +219,14 @@ describe("reduced motion contract", () => {
       // two must not depend on each other: either alone, or both together, must
       // leave nothing moving.
       //
-      // Class motion only, as before inline styles were read. With motion
-      // allowed, `unstyled` keeps the inline motion of 10 components (the three
-      // loaders, Accordion, Avatar, CountryFlag, CountryFlagGroup,
-      // InternationalPhoneInput, Drawer, Slider, Toast). Whether ADR 001's
-      // "unstyled removes motion" reaches an inline `style` is an open
-      // decision, not settled here.
+      // Inline styles too. Until 2026-11-01 this read classes only, because
+      // `unstyled` kept the inline motion of 10 components (the three loaders,
+      // Accordion, Avatar, CountryFlag, CountryFlagGroup,
+      // InternationalPhoneInput, Drawer, Slider, Toast): each gated its
+      // inline transition or animation on reduced motion alone. ADR 001 says
+      // `unstyled` removes motion, and a style attribute is no exception.
       const unstyledOnly = motionOf(
-        await tokensUnder(component, fixtures, false, { unstyled: true }, false),
+        await tokensUnder(component, fixtures, false, { unstyled: true }),
       );
       const both = motionOf(
         await tokensUnder(component, fixtures, true, { unstyled: true }),

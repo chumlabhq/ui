@@ -680,3 +680,46 @@ describe("Stepper", () => {
     });
   });
 });
+
+describe("Stepper connectors and the vertical item (6dd19258)", () => {
+  // jsdom resolves no CSS, so the classes an element ends up with for its own
+  // data-orientation are read the way Tailwind orders them: a matching
+  // `data-[orientation=…]:` variant comes after the bare utility and wins.
+  const effective = (el: Element) => {
+    const orientation = el.getAttribute("data-orientation");
+    const tokens = (el.getAttribute("class") ?? "").split(/\s+/).filter(Boolean);
+    const prefix = `data-[orientation=${orientation}]:`;
+    return [
+      ...tokens.filter((t) => !t.includes(":")),
+      ...tokens.filter((t) => t.startsWith(prefix)).map((t) => t.slice(prefix.length)),
+    ];
+  };
+  const last = (tokens: string[], re: RegExp) => tokens.filter((t) => re.test(t)).at(-1);
+
+  it.each(["horizontal", "vertical"] as const)(
+    "%s: every connector has a width and a height, so it paints",
+    (orientation) => {
+      const { container } = renderStepper({ orientation });
+      const connectors = [...container.querySelectorAll("[data-next-status]")];
+      expect(connectors).toHaveLength(3);
+      for (const connector of connectors) {
+        const tokens = effective(connector);
+        expect(last(tokens, /^w-/), `${orientation} connector width`).toBe(orientation === "horizontal" ? "w-full" : "w-0.5");
+        expect(last(tokens, /^h-/), `${orientation} connector height`).toBe(orientation === "horizontal" ? "h-0.5" : "h-6");
+      }
+    },
+  );
+
+  it("starts a vertical step at the inline start rather than centring it", () => {
+    const { container } = renderStepper({ orientation: "vertical" });
+    for (const item of container.querySelectorAll("ol > li")) {
+      expect(last(effective(item), /^items-/)).toBe("items-stretch");
+    }
+  });
+
+  it("centres the vertical connector under the indicator", () => {
+    const { container } = renderStepper({ orientation: "vertical" });
+    const connector = container.querySelector<HTMLElement>("[data-next-status]")!;
+    expect(connector.style.marginInlineStart).toBe("15px");
+  });
+});

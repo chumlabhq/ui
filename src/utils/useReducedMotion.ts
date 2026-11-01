@@ -43,6 +43,7 @@ const getSnapshot = (): boolean => mediaQuery()?.matches ?? false;
  */
 export function useReducedMotion(
   reduceMotion: boolean | "auto" = "auto",
+  unstyled = false,
 ): boolean {
   const prefersReducedMotion = useSyncExternalStore(
     subscribe,
@@ -51,7 +52,7 @@ export function useReducedMotion(
     // first client render correct it.
     () => false,
   );
-  return reduceMotion === "auto" ? prefersReducedMotion : reduceMotion;
+  return unstyled || (reduceMotion === "auto" ? prefersReducedMotion : reduceMotion);
 }
 
 /** Test-only: the module-level MediaQueryList outlives a stubbed matchMedia. */

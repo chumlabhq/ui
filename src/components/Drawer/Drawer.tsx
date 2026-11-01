@@ -143,7 +143,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
     });
-    const prefersReducedMotion = useReducedMotion(reduceMotionProp);
+    const prefersReducedMotion = useReducedMotion(reduceMotionProp, unstyled);
 
     const safeActiveSnap =
       snapPointIndex !== undefined
