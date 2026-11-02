@@ -119,6 +119,19 @@ const config = defineConfig({
     {
       name: "firefox",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
+      /**
+       * Two workers, measured on the whole project (661 tests), sampling
+       * every 15 s, 2026-11-02. Each firefox worker runs about five content
+       * processes, and at the default four the machine sat far above its 8
+       * cores: load1 p50 13.7, p90 17.1, peak 21.1, and 5-6 tests failed that
+       * pass alone, a different set each run (icon-bounds out of its 15 min,
+       * table, rtl-keys, toast, disabled-acts). Three: p50 10.2, p90 13.4,
+       * peak 24.2, icon-bounds, stepper and toast failing. Two: p50 5.5, p90
+       * 6.5, peak 7.8, and every one of those passed. Memory is not what
+       * changes: free sat at 30-38% at every count, as each worker's browser
+       * grows over a longer run (1.4 to 2.5 GB at two). 1.2 h against 58 min.
+       */
+      workers: 2,
       use: { ...devices["Desktop Firefox"] },
     },
     {

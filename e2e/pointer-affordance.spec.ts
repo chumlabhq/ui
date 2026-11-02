@@ -1,4 +1,4 @@
-import { expect, test } from "./_test";
+import { expect, test, type Page } from "./_test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { markPortalRoots, PORTAL_MARK } from "./_portals.js";
 
@@ -160,6 +160,29 @@ const sweepCursors = ({ scopes, interactive, allowed, surfaces, removed, autoOnT
   return { bad, bound, seen };
 };
 
+/**
+ * Waits for `path` to become a fixture or to say why it will not, whichever
+ * comes first, and names `path` either way.
+ *
+ * This waited 15s for `[data-fixture]` alone. A fixture route that misses
+ * renders `[data-fixture-error]` instead of throwing, so a miss spent the whole
+ * timeout and then reported a bare locator with no path: one timed out in
+ * Mobile Safari, one in Firefox (S4), each passing when run alone, and neither
+ * said which of the walk's pages it was on. The same markers `gotoFixture` and
+ * `visual.spec.ts` wait on; not `gotoFixture` itself, which takes a component
+ * and fixture rather than the index's path, and whose redirect poll would add
+ * its 1.5s to each of the walk's 545 pages.
+ */
+const awaitFixture = async (page: Page, path: string) => {
+  await expect(
+    page.locator("[data-fixture], [data-fixture-error], [data-route-404]").first(),
+    `"${path}" rendered neither its fixture nor an error page`,
+  ).toBeAttached({ timeout: 15000 });
+  const error = page.locator("[data-fixture-error], [data-route-404]").first();
+  const said = (await error.count()) ? (await error.innerText()).replace(/\s+/g, " ").trim() : null;
+  expect(said, `"${path}" rendered an error page instead of its fixture`).toBeNull();
+};
+
 test("everything clickable declares a cursor", async ({ page, browserName }) => {
   test.setTimeout(1_800_000);
   await gotoFixtureIndex(page);
@@ -189,7 +212,7 @@ test("everything clickable declares a cursor", async ({ page, browserName }) => 
      * fixture. 30s: the accessibility-full audit's 20s for the act, plus the
      * harness's 1.5s quiet cap and 3s holds-still deadline, with margin.
      */
-    await expect(page.locator("[data-fixture]")).toBeAttached({ timeout: 15000 });
+    await awaitFixture(page, path);
     const settled = await page
       .waitForFunction(
         () => {
@@ -282,4 +305,23 @@ test("a cursor: auto button still fails, a text input passes", async ({ page, br
   console.log(`POINTER_AFFORDANCE_PLANT ${browserName}: ${cursors.join(" ")}; findings ${JSON.stringify(r.bad)}`);
   expect(r.bad.some((b) => b.startsWith("<button> cursor=auto") && b.includes("Planted")), "the planted cursor: auto button was accepted").toBe(true);
   expect(r.bad.some((b) => b.startsWith("<input")), "the planted text input was reported").toBe(false);
+});
+
+/**
+ * A missing fixture fails the walk at once, with its path and what the page
+ * said, rather than after the 15s the wait allows.
+ */
+test("a missing fixture fails at once, naming its path", async ({ page }) => {
+  const path = "/__fixtures/Button/no-such-fixture";
+  await page.goto(path, { waitUntil: "domcontentloaded" });
+  const started = Date.now();
+  const failure = await awaitFixture(page, path).then(
+    () => "",
+    (e: Error) => e.message,
+  );
+  const elapsed = Date.now() - started;
+  console.log(`POINTER_AFFORDANCE_MISSING ${elapsed}ms: ${failure.split("\n")[0]}`);
+  expect(failure, "the failure did not name the path and call the page an error page").toContain(`"${path}" rendered an error page`);
+  expect(failure, "the failure did not carry what the page said").toContain("Fixture not found");
+  expect(elapsed, "the miss waited out the timeout instead of failing at once").toBeLessThan(5000);
 });

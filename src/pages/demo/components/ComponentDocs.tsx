@@ -57,7 +57,7 @@ export const ComponentDocs: FC<{ name: string }> = ({ name }) => {
     <>
       <Section
         title="API Reference"
-        description={`Generated from ${doc.name}.schema.json. Required props are marked with an asterisk. Standard HTML and ARIA attributes are forwarded to the underlying element and are not listed.`}
+        description={`Generated from ${doc.name}.schema.json. Required props are marked with an asterisk. The ARIA attributes listed are the ones the component documents; every other standard HTML and ARIA attribute is forwarded to the underlying element too.`}
       >
         {/* Loader has no root props — all four loaders are sub-components — and
             an empty table with headers and no rows reads as a documentation

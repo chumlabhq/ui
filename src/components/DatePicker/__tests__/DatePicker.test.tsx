@@ -1275,6 +1275,102 @@ describe("DatePicker", () => {
     });
   });
 
+  describe("Marked days line", () => {
+    const JAN = new Date(2026, 0, 15);
+    const markerList = () => document.querySelector("[data-marker-list]");
+
+    it("lists the visible month's marked days with their labels, in date order", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <DatePicker
+          value={JAN}
+          markers={[
+            { date: new Date(2026, 0, 30), label: "Freeze" },
+            { date: new Date(2026, 0, 24), label: "Release" },
+          ]}
+        />,
+      );
+      await openCalendar(user);
+
+      expect(markerList()?.textContent).toBe("24 Release · 30 Freeze");
+    });
+
+    it("follows the month and is absent for a month with no marked days", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <DatePicker
+          value={JAN}
+          markers={[
+            { date: new Date(2026, 0, 24), label: "Release" },
+            { date: new Date(2026, 1, 3), label: "Review" },
+          ]}
+        />,
+      );
+      await openCalendar(user);
+      expect(markerList()?.textContent).toBe("24 Release");
+
+      await user.click(screen.getByRole("button", { name: "Next month" }));
+      expect(markerList()?.textContent).toBe("3 Review");
+
+      await user.click(screen.getByRole("button", { name: "Next month" }));
+      expect(markerList()).toBeNull();
+    });
+
+    it("leaves out a marked day the grid shows from a neighbouring month", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <DatePicker
+          value={JAN}
+          markers={[
+            { date: new Date(2025, 11, 30), label: "Outside" },
+            { date: new Date(2026, 0, 24), label: "Release" },
+          ]}
+        />,
+      );
+      await openCalendar(user);
+
+      expect(document.querySelector('[data-outside][data-marked]')).not.toBeNull();
+      expect(markerList()?.textContent).toBe("24 Release");
+    });
+
+    it("is plain text whose every entry isolates its own direction", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <DatePicker
+          value={JAN}
+          markers={[
+            { date: new Date(2026, 0, 24), label: "إصدار" },
+            { date: new Date(2026, 0, 30), label: "Freeze" },
+          ]}
+        />,
+      );
+      await openCalendar(user);
+
+      const list = markerList()!;
+      expect(list.querySelectorAll("a, button, input, select, textarea, [tabindex]")).toHaveLength(0);
+      const entries = [...list.querySelectorAll("[dir]")];
+      expect(entries.map((e) => [e.getAttribute("dir"), e.textContent])).toEqual([
+        ["auto", "24 إصدار"],
+        ["auto", "30 Freeze"],
+      ]);
+    });
+
+    it("takes its class from classes.markerList, and unstyled keeps none of the default", async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const markers = [{ date: new Date(2026, 0, 24), label: "Release" }];
+      const { unmount } = render(
+        <DatePicker value={JAN} markers={markers} classes={{ markerList: "ovr-marker-list" }} />,
+      );
+      await openCalendar(user);
+      expect(markerList()).toHaveClass("ovr-marker-list");
+      unmount();
+
+      render(<DatePicker value={JAN} markers={markers} unstyled />);
+      await openCalendar(user);
+      expect(markerList()?.getAttribute("class") ?? "").not.toMatch(/text-cl-/);
+    });
+  });
+
   describe("Week Numbers", () => {
     it("displays week numbers when showWeekNumbers is true", async () => {
       const user = userEvent.setup({

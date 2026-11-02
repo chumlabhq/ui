@@ -38,8 +38,15 @@ const describeLanding = async (page: Page, requested: string) => {
   );
 };
 
-/** Navigates and asserts only that the resolved URL is the one requested. */
-async function gotoAsserted(page: Page, url: string): Promise<void> {
+/**
+ * Navigates and asserts only that the resolved URL is the one requested.
+ *
+ * `rendered` names every finished page the route can render. With it, the wait
+ * ends when one of them is in the document or the URL changes, whichever comes
+ * first; without it, the redirect window below runs its full 1.5s, because a
+ * caller's own marker (`body`, say) can attach before a 404 page has rendered.
+ */
+async function gotoAsserted(page: Page, url: string, rendered?: string): Promise<void> {
   // The query string carries the `classes` probe; only the path identifies the
   // page, and comparing the whole URL would fail every probed navigation.
   const path = url.split("?")[0];
@@ -53,23 +60,75 @@ async function gotoAsserted(page: Page, url: string): Promise<void> {
   // early is how a guard against silent redirects would itself be silent.
   // Polling the pathname rather than waiting for `networkidle`, which the dev
   // server's HMR socket can keep from ever settling.
-  await page
-    .waitForFunction(
-      (expected) => window.location.pathname !== expected,
-      path,
-      { timeout: 1500 },
-    )
-    .catch(() => {
-      /* no redirect within the window is the good case */
-    });
+  //
+  // A fixture route says when it has become its fixture: `data-fixture-act`
+  // leaves "pending" once its act has run, and is "none" from the first commit
+  // of a fixture without one; a miss renders the error or 404 page instead.
+  // Then every finite animation and transition on the page has to have ended,
+  // and stayed ended for 150 ms, so a drawer that slides in on mount is where
+  // it will stay. One that would outlast the wait is the page's resting state,
+  // not its arrival, and is not waited on: a spinner that loops forever, or a
+  // toast's countdown, 600 s in the Toast provider fixtures. The 150 ms is
+  // three polls, not a delay: Drawer/tall-left reports its act "none" at
+  // 739 ms and starts its 300 ms slide one frame later, at 767.
+  //
+  // The window was 1.5s of every `gotoFixture` call: 10.5 of the 12 s the
+  // TimePicker typing test took alone in firefox, seven calls in one test.
+  // Under the full firefox project at four workers it and loader-paint, a call
+  // per Loader fixture, both ran out their 30 s inside it. Each half of the
+  // condition was measured missing: on `[data-fixture]` alone, Table/
+  // cell-editing's act double-clicked the cell after the caller's own
+  // double-click, so Enter left an editor open; on the act alone, Drawer/
+  // tall-left and tall-bottom were still sliding in when overlay-reach read
+  // where the last control was. Polled on an interval rather than on frames:
+  // `data-fixture-still`, which waits on frames, once stayed pending past 15 s
+  // on a page that had rendered.
+  if (rendered) {
+    await page
+      .waitForFunction(
+        ({ expected, selector }) => {
+          if (window.location.pathname !== expected) return true;
+          const held = window as unknown as { gotoHeldSince?: number };
+          const finished =
+            !!document.querySelector(selector) &&
+            document.getAnimations().every((a) => {
+              const timing = a.effect?.getComputedTiming();
+              return a.playState !== "running" || !timing || Number(timing.endTime) - Number(timing.localTime ?? 0) > 15000;
+            });
+          if (!finished) {
+            held.gotoHeldSince = undefined;
+            return false;
+          }
+          held.gotoHeldSince ??= performance.now();
+          return performance.now() - held.gotoHeldSince >= 150;
+        },
+        { expected: path, selector: rendered },
+        { timeout: 15000, polling: 50 },
+      )
+      .catch(() => {
+        throw new Error(
+          `"${path}" did not render one of ${rendered} with its animations ended in 15s, and its URL did not change`,
+        );
+      });
+  } else {
+    await page
+      .waitForFunction(
+        (expected) => window.location.pathname !== expected,
+        path,
+        { timeout: 1500 },
+      )
+      .catch(() => {
+        /* no redirect within the window is the good case */
+      });
+  }
 
   const landed = new URL(page.url()).pathname;
   if (landed !== path) {
     expect(landed, await describeLanding(page, path)).toBe(path);
   }
 
-  // The redirect poll above has already waited out its window, so the app has
-  // rendered and this needs no timeout of its own.
+  // The app has rendered by now — one of its pages is in the document, or the
+  // redirect window has run out — so this needs no timeout of its own.
   const notFound = await page.locator("[data-route-404]").count();
   expect(
     notFound,
@@ -130,7 +189,11 @@ export async function gotoFixture(
   const path =
     fixturePath(component, fixture) +
     (probe ? `?classes=${encodeURIComponent(JSON.stringify(probe.classes))}` : "");
-  await gotoAsserted(page, path);
+  await gotoAsserted(
+    page,
+    path,
+    'main[data-fixture-act]:not([data-fixture-act="pending"]), [data-fixture-error], [data-route-404]',
+  );
 
   // Checked before the marker, not after: the route renders a diagnostic page
   // rather than throwing on a miss, so waiting for a marker that will never

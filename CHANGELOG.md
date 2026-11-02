@@ -33,6 +33,11 @@ branch or a local link, these are the changes that will reach you.
 - `reduceMotion`, `keepMounted`, `asChild` and `portalContainer` where each applies.
 - `.ai.md` knowledge files and `.schema.json` schemas per component, plus `llms.txt` and
   `llms-full.txt`.
+- DatePicker lists the visible month's marked days and their labels under the grid
+  ("24 Release · 30 Freeze"), so a marker's label can be read without hover or long-press.
+  The line follows the month, is absent for a month with none, adds no focus stop, and each
+  entry is `dir="auto"` so its day reads in order in either direction. Styled through
+  `classes.markerList`; `[data-marker-list]` selects it.
 
 ### Changed
 
@@ -727,6 +732,10 @@ The physical values are retired, not aliased: start and end follow the page's di
 
 ### Fixed
 
+- Stepper's connectors run through the indicators' centres at every width. Below 640 px they
+  sat off the indicators' centres, by 2 px for numbered, 4 px for icon and 1 px for dot, because the
+  offset used the indicator's size from 640 px up. `indicatorSize` still overrides it, now
+  at every width.
 - Modal warns once in development when it is open with no accessible name: no `title` it renders, no `aria-label` and no `aria-labelledby`. It was silent, while Drawer and every form field warned; a closed Modal does not warn, and a `title` with `showHeader={false}` still names it when it is a string.
 - CountryFlagGroup takes `unstyled` and passes it to every flag and every `CountryFlagShimmer` it renders. It was the only top-level component without it, and its loading flags kept `animate-pulse` whatever the group was given. A flag or shimmer is unstyled when either it or its group says so: a flag's own `unstyled` still applies inside a styled group, and `unstyled={false}` on a flag does not restyle it inside an unstyled one.
 - Table's pin control for an unpinned column shows while its header cell has focus, and always on a screen without hover. It was revealed only by hover, so a keyboard user focused an invisible button and a touch user could hit it only by luck; on a screen with hover it still appears on hover.
@@ -1015,6 +1024,10 @@ The physical values are retired, not aliased: start and end follow the page's di
 
 ### Fixed (documentation)
 
+- **The site's API Reference lists the ARIA attributes each component documents.** The 44
+  `aria-*` props in the schemas, on 15 components, had no row on the site, while the `.ai.md`
+  files and `llms-full.txt` listed them; the page's note now says every other standard HTML and
+  ARIA attribute is forwarded too.
 - **Right-to-left is documented as it now works.** README, ACCESSIBILITY.md and the site's FAQ said `dir="rtl"` was not supported in 0.1.0; they now say what mirrors and name the gate that holds each part (rtl-surfaces, rtl-keys, rtl-paint, the direction contracts), and what stays the same in both directions by decision. CascadingDropdown's `submenuSide`, Table's pinned columns and the ResizablePanel, TabPanel, Table and Accordion examples describe start and end, not left and right.
 - **Every demo field is named for what it holds, or by the caption beside it.** 257 names on 17 demo pages named their example's variant ("Date, German locale", "Fruits (ghost)", "Small switch", "Required Field") and 6 gave an instruction ("Type anything"). 71 now point at the visible caption beside the field by `aria-labelledby`, the caption carrying an `id` its snippet keeps; the rest name what the field holds ("Date", "Fruits", "Email"). The Initial Focus modal's two native labels were not linked to their inputs at all; they are now.
 - **`aria-labelledby` and `aria-describedby` are documented wherever they are accepted.** Dropdown, SearchableDropdown and MultiSelectDropdown take `aria-labelledby`, and their pages pass it, but their schemas and All Props tables did not list it, so DEMO-COVERAGE.md counted 3 demonstrated but undocumented props. The same two props were missing from CascadingDropdown and MultiSelectSearchableDropdown, and `aria-describedby` from Slider. The count reads 0, and `audit-demo-coverage.mjs --check` now fails when it is above 0, with the count and its population printed beside the verdict.

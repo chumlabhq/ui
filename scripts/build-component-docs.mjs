@@ -293,21 +293,18 @@ function renderType(schema) {
 }
 
 /**
- * ARIA attributes are not rows.
+ * ARIA attributes the schema declares are rows, like every other prop.
  *
- * Six of them had rows — `aria-label`, `aria-live`, `aria-describedby`,
- * `aria-labelledby`, `aria-busy`, `aria-valuetext` — purely because those
- * components happened to declare them explicitly, while every component
- * forwards the whole set. A table that lists six of fifty teaches a reader that
- * `aria-label` is supported and `aria-pressed` is not, which is false. The
- * forwarding is stated once per component instead.
+ * They were filtered out once, because a table listing six of fifty taught
+ * that the other forty-four were unsupported. The rows were the wrong thing
+ * to remove: a declared `aria-*` prop carries a description the schema wrote
+ * for it (which part it lands on, what it announces), and the filter hid all
+ * 44 of them. The page's sentence now says the rest are forwarded too, and
+ * `--check` holds every declared one to a row (rule 6).
  */
-const isAriaAttribute = (prop) => /^aria-/.test(prop);
-
 function propsFrom(properties = {}, required = []) {
   const req = new Set(required);
   return Object.entries(properties)
-    .filter(([prop]) => !isAriaAttribute(prop))
     .map(([prop, value]) => ({
     name: prop,
     type: dropUndefined(renderType(value)),
@@ -877,7 +874,7 @@ if (!CHECK) {
  *   3  markdown that reached the page as literal asterisks and backticks
  *   4  internal rule numbers and ADR citations in the shipped types
  *   5  158 props showing "-" for a default the source defines
- *   6  one prop rendering two ways, and six of fifty ARIA attributes as rows
+ *   6  one prop rendering two ways; and the schema's ARIA attributes with no row
  *   7  RTL claims days after RTL was recorded unsupported
  *   8  (a section silently disappearing — a guard, not something observed)
  */
@@ -951,6 +948,20 @@ function sourceDefaults(tag, files) {
   return new Set();
 }
 
+/** `Owner.aria-x` for every ARIA attribute a component's schema declares, read the way the tables are built. */
+function declaredAriaOf(name) {
+  const schemaPath = join(SRC, name, `${name}.schema.json`);
+  if (!existsSync(schemaPath)) return [];
+  const schema = JSON.parse(readFileSync(schemaPath, "utf8"));
+  const owners = [
+    [name, schema.properties],
+    ...Object.entries(schema.subComponents ?? {}).map(([tag, sub]) => [tag, sub?.properties]),
+    ...(schema.oneOf ?? []).filter((b) => b.title).map((b) => [b.title, b.properties]),
+  ];
+  return [...new Set(owners.flatMap(([owner, properties]) =>
+    Object.keys(properties ?? {}).filter((p) => /^aria-/.test(p)).map((p) => `${owner}.${p}`)))];
+}
+
 function auditDocs(docs, opts = {}) {
   const found = [];
   const add = (n, where, msg) => found.push({ n, where, msg });
@@ -1003,7 +1014,16 @@ function auditDocs(docs, opts = {}) {
       }
     }
 
-    // 6. one vocabulary for types, and no ARIA rows.
+    // 6. one vocabulary for types, and a row for every ARIA attribute the
+    // schema declares. The floor is the schema's own list, so a filter that
+    // comes back fails here instead of reading as a clean regeneration.
+    const declared = (opts.declaredAria ?? declaredAriaOf)(doc.name);
+    const rows = new Set([
+      ...doc.props.map((p) => `${doc.name}.${p.name}`),
+      ...doc.subComponents.flatMap((sc) => sc.props.map((p) => `${sc.name}.${p.name}`)),
+    ]);
+    for (const at of declared)
+      if (!rows.has(at)) add(6, doc.name, `${at} is declared in the schema and has no row`);
     //
     // Not "one rendering per prop name": two components may genuinely take
     // different types for a `size`, and flagging that would be noise. What made
@@ -1015,7 +1035,6 @@ function auditDocs(docs, opts = {}) {
     for (const [sub, props] of groups)
       for (const p of props) {
         const at = `${sub ? sub + "." : ""}${p.name}`;
-        if (/^aria-/.test(p.name)) add(6, doc.name, `${at} is documented as a prop row`);
         if (p.type === "object")
           add(6, doc.name, `${at} renders as "object" — a JSON-Schema word that names nothing a reader can import`);
         // Only a top-level `| undefined`, which is what the renderer strips.
@@ -1071,7 +1090,7 @@ function auditSelfCheck() {
   for (const n of run({ keyboard: { note: "", rows: [{ keys: "Key", description: "Behaviour" }] } })) bit.add(n);
   for (const n of run({ accessibility: ["a *lone* asterisk and an unclosed ` backtick"] })) bit.add(n);
   for (const n of run({ accessibility: ["ADR 002 R9 ancestor clause"] })) bit.add(n);
-  for (const n of run({ props: [{ name: "aria-label", type: "string", required: false, default: null, description: "x" }] })) bit.add(n);
+  for (const n of run({}, { declaredAria: () => ["Planted.aria-label"] })) bit.add(n);
   for (const n of run({ accessibility: ["Full RTL support with reversed keyboard navigation"] })) bit.add(n);
   for (const n of run({}, { record: { Planted: ["Anatomy", "Keyboard Interactions"] } })) bit.add(n);
   // 5 needs a real component: Accordion's own source assigns `loop`.

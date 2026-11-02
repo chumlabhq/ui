@@ -1576,7 +1576,7 @@ const STATE_PAINT_HOOKS: Record<string, string[]> = {
   Breadcrumb: ["data-breadcrumb-dropdown-id", "data-position", "data-side"],
   CascadingDropdown: ["data-cascading-submenu", "data-side"],
   CountryFlag: ["data-code"],
-  DatePicker: ["data-marker-type", "data-side"],
+  DatePicker: ["data-marker-list", "data-marker-type", "data-side"],
   Drawer: ["data-drawer-overlay", "data-drawer-panel", "data-drawer-handle", "data-drawer-header", "data-drawer-body", "data-drawer-footer", "data-drawer-close", "data-side"],
   Dropdown: ["data-dropdown-id", "data-position", "data-side", "data-value"],
   Input: ["data-slot"],
@@ -1632,7 +1632,6 @@ exempt(["Dropdown", "InternationalPhoneInput", "SearchableDropdown"], "data-stat
 exempt(["Breadcrumb"], "data-dropdown-open", `${SHOWN} the collapsed-items menu is open`);
 exempt(["Breadcrumb"], "data-truncated", `${SHOWN} the hidden crumbs are replaced by the ellipsis item`);
 exempt(["CascadingDropdown"], "data-has-submenu", `${SHOWN} the item renders a chevron`);
-exempt(["DatePicker"], "data-marked", `${SHOWN} the marked day renders its marker dot, a child`);
 exempt(["DatePicker", "Table"], "data-highlighted", "the roving keyboard position; it is drawn by the focus ring whenever focus is in the grid, which CONTRAST_NONTEXT measures");
 exempt(["Table"], "data-expanded", `${SHOWN} the expand control changes its icon and its label, not its paint`);
 exempt(["Table"], "data-editing", `${SHOWN} the cell holds the edit input in place of its text`);

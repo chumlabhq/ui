@@ -414,6 +414,20 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "(event: FocusEvent) => void"
       },
       {
+        "name": "aria-busy",
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "ARIA busy state for async content."
+      },
+      {
+        "name": "aria-live",
+        "type": "\"off\" | \"polite\" | \"assertive\"",
+        "required": false,
+        "default": null,
+        "description": "ARIA live region behavior."
+      },
+      {
         "name": "announceExpanded",
         "type": "boolean",
         "required": false,
@@ -459,6 +473,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "required": false,
             "default": null,
             "description": "Fires when the item's expanded state changes."
+          },
+          {
+            "name": "aria-describedby",
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Identifies the element (or elements) that describes the object."
           }
         ]
       },
@@ -527,6 +548,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "required": false,
             "default": null,
             "description": "Content placed after the label and before the icon."
+          },
+          {
+            "name": "aria-describedby",
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Identifies the element (or elements) that describes the object."
           }
         ]
       },
@@ -1511,6 +1539,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Inline styles for the count text."
           },
           {
+            "name": "aria-live",
+            "type": "\"off\" | \"polite\" | \"assertive\"",
+            "required": false,
+            "default": null,
+            "description": "ARIA live region behavior for screen readers."
+          },
+          {
             "name": "asChild",
             "type": "boolean",
             "required": false,
@@ -1619,6 +1654,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "required": false,
             "default": "false",
             "description": "Hides the badge while preserving its DOM presence."
+          },
+          {
+            "name": "aria-live",
+            "type": "\"off\" | \"polite\" | \"assertive\"",
+            "required": false,
+            "default": null,
+            "description": "ARIA live region behavior for screen readers."
           },
           {
             "name": "asChild",
@@ -2186,6 +2228,13 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "(item: BreadcrumbItem) => void — Called when a breadcrumb item is clicked."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the breadcrumb nav element."
       },
       {
         "name": "classes",
@@ -3417,6 +3466,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "\"Search submenu\"",
         "description": "Accessible label for the submenu search input."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the dropdown."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Lands on the trigger, joined with the component's own error message."
       }
     ],
     "subComponents": [],
@@ -4782,6 +4852,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "part": "DatePicker",
+          "slot": "markerList",
+          "element": "p",
+          "description": "The line under a month's grid listing its marked days and their labels"
+        },
+        {
+          "part": "DatePicker",
           "slot": "monthSelect",
           "element": "button",
           "description": "Month select button"
@@ -4987,7 +5063,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "array",
         "required": false,
         "default": null,
-        "description": "Array of date markers to display on the calendar."
+        "description": "Array of date markers to display on the calendar. A month with marked days lists them under its grid as plain text, each day with its label (\"24 Release · 30 Freeze\"), so a label can be read without hover or long-press."
       },
       {
         "name": "showMarkerIndicator",
@@ -5392,6 +5468,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "description": "Marker indicator dot"
           },
           {
+            "name": "markerList",
+            "type": "string",
+            "required": false,
+            "description": "The line under a month's grid listing its marked days and their labels"
+          },
+          {
             "name": "monthSelect",
             "type": "string",
             "required": false,
@@ -5696,6 +5778,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "when day.isMarked"
       },
       {
+        "name": "data-marker-list",
+        "values": [],
+        "when": "always"
+      },
+      {
         "name": "data-marker-type",
         "values": [],
         "when": "when day.marker?.type"
@@ -5752,6 +5839,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "**Naming:** the trigger is named by `label`, and falls back to the element showing the selected date or placeholder — `combobox` is not a name-from-content role. The clear control is a real `<button>` beside the trigger, not a `role=\"button\"` span inside it.",
       "**ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role=\"grid\"`, day cells use `role=\"gridcell\"` with `aria-selected`/`aria-disabled`/`aria-current=\"date\"`",
       "**Focus management:** Focus moves to the selected day (or today) when the reader opens the calendar, follows the roving tabindex as you navigate, and returns to the trigger on close without scrolling the page. The panel is `role=\"dialog\"`, `aria-modal=\"true\"` once it holds the focus, and traps Tab in both directions. A calendar open at mount (`defaultOpen`, or `open` already true) takes no focus and does not scroll the page, like a native `<select>`; focus moves in the next time the reader opens it.",
+      "**Marked days:** each month with marked days lists them under its grid as plain text, day then label (`24 Release · 30 Freeze`), so a label is readable without hover or long-press and no focus stop is added. Each entry is `dir=\"auto\"`, so a label in another script keeps its digits in order in either page direction.",
       "**Reduced motion:** `reduceMotion` defaults to `\"auto\"`, which follows the OS `prefers-reduced-motion` setting. `true` always reduces motion. `false` always animates — **including for a user who has asked their OS for less motion**, so pass it only when you know more than the OS setting does. The value governs the decorative classes as well as the animation timings."
     ],
     "keyboard": {
@@ -6641,6 +6729,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "500",
         "description": "Timeout in milliseconds for keyboard typeahead matching."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the dropdown."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Lands on the trigger, joined with the component's own error message."
       },
       {
         "name": "onBlur",
@@ -8929,6 +9038,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "The dialog element's id."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the modal dialog."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "ID of the element that labels the modal dialog."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "ID of the element that describes the modal dialog."
       }
     ],
     "subComponents": [
@@ -9600,6 +9730,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "500",
         "description": "Timeout in milliseconds for keyboard typeahead matching."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the dropdown."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Lands on the trigger, joined with the component's own error message."
       },
       {
         "name": "onBlur",
@@ -10393,6 +10544,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "false",
         "description": "Keeps the dropdown DOM mounted when closed."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the dropdown."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Lands on the trigger, joined with the component's own error message."
       },
       {
         "name": "onBlur",
@@ -12712,6 +12884,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether to lock body scroll when the dropdown is open."
       },
       {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the dropdown."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the field by another element, and wins over `label` and `aria-label`. Lands on the trigger."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Lands on the trigger, joined with the component's own error message."
+      },
+      {
         "name": "onBlur",
         "type": "((event: FocusEvent<HTMLElement, Element>) => void)",
         "required": false,
@@ -13342,6 +13535,34 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": "false",
         "description": "When true, removes all default styling."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the slider."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "ID of the element that labels the slider."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Lands on the thumbs, joined with the description and the error message."
+      },
+      {
+        "name": "aria-valuetext",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Human-readable text alternative for the current value."
       }
     ],
     "subComponents": [],
@@ -13725,6 +13946,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Whether the stepper expands to fill its container."
       },
       {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the stepper."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that name the navigation; wins over `aria-label`."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that describe the navigation."
+      },
+      {
         "name": "showTooltips",
         "type": "boolean",
         "required": false,
@@ -13743,7 +13985,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "number",
         "required": false,
         "default": null,
-        "description": "Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32."
+        "description": "Override indicator size in pixels for connector alignment, at every breakpoint. Defaults: dot 10 (12 from sm), icon 32 (40 from sm), numbered 28 (32 from sm)."
       },
       {
         "name": "reduceMotion",
@@ -14174,7 +14416,9 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "when": "always"
       }
     ],
-    "cssVariables": [],
+    "cssVariables": [
+      "--cl-step"
+    ],
     "accessibility": [
       "`role=\"navigation\"` with `aria-label=\"Progress\"` on root (configurable)",
       "Semantic `<ol>/<li>` markup for step sequence",
@@ -14978,11 +15222,32 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "React.ReactNode — Content shown when the table has no data."
       },
       {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": "\"Data table\"",
+        "description": "The grid's accessible name; pinned parts append \" - Pinned columns\" and so on."
+      },
+      {
         "name": "id",
         "type": "string",
         "required": false,
         "default": null,
         "description": "The region's id."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that name the region; wins over `aria-label`."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that describe the region."
       },
       {
         "name": "caption",
@@ -16277,6 +16542,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "(props: TabRenderProps, defaultElement: React.ReactElement) => ReactNode — Custom tab render function."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label for the tab list."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "ID of the element that labels the tab list."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that describe the tab list."
       },
       {
         "name": "classes",
@@ -18135,6 +18421,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "description": "Accessible label for the close button."
       },
       {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name of the toast's status region."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that name the toast's status region."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that describe the toast's status region."
+      },
+      {
         "name": "classes",
         "type": "ToastClasses",
         "required": false,
@@ -18736,6 +19043,27 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "required": false,
         "default": null,
         "description": "Id of the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name of the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
+      },
+      {
+        "name": "aria-labelledby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that name the element that takes focus: the child it wraps, or the wrapper around plain text. Wins over the child's own."
+      },
+      {
+        "name": "aria-describedby",
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of the elements that describe the element that takes focus: the child it wraps, or the wrapper around plain text; joined after the child's own and before the tooltip's id while it is open."
       },
       {
         "name": "classes",

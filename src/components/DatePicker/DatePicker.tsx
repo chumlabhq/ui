@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useRef,
   useEffect,
   useId,
@@ -557,6 +558,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       footer: mergeSlot(baseClasses.footer, classesProp?.footer),
       todayTrigger: mergeSlot(baseClasses.todayTrigger, classesProp?.todayTrigger),
       markerIndicator: mergeSlot(baseClasses.markerIndicator, classesProp?.markerIndicator),
+      markerList: mergeSlot(baseClasses.markerList, classesProp?.markerList),
       monthSelect: mergeSlot(baseClasses.monthSelect, classesProp?.monthSelect),
       yearSelect: mergeSlot(baseClasses.yearSelect, classesProp?.yearSelect),
       subContent: mergeSlot(baseClasses.subContent, classesProp?.subContent),
@@ -987,6 +989,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                 {calendarMonths.map((calendarMonth, monthIndex) => {
                   const monthYear = getYear(calendarMonth.month);
                   const monthIdx = getMonth(calendarMonth.month);
+                  const markedDays = calendarMonth.weeks.flat().filter((day) => day.isMarked && !day.isOutside);
 
                   return (
                     <div
@@ -1147,6 +1150,16 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                           </div>
                         ))}
                       </div>
+                      {markedDays.length > 0 && (
+                        <p data-marker-list className={mergedClasses.markerList}>
+                          {markedDays.map((day, i) => (
+                            <Fragment key={day.dayOfMonth}>
+                              {i > 0 && " · "}
+                              <span dir="auto">{day.dayOfMonth} {day.marker?.label}</span>
+                            </Fragment>
+                          ))}
+                        </p>
+                      )}
                     </div>
                   );
                 })}

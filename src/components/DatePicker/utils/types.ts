@@ -131,6 +131,8 @@ export interface DatePickerClasses {
   todayTrigger?: string;
   /** Marker indicator dot */
   markerIndicator?: string;
+  /** The line under a month's grid listing its marked days and their labels */
+  markerList?: string;
   /** Month select button */
   monthSelect?: string;
   /** Year select button */

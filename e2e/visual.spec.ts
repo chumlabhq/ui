@@ -247,6 +247,10 @@ const OPEN_SUBJECTS: Array<{
   // The fixture itself stays as it is: "open with nothing selected" is a state
   // the contract tier needs, and it is the subject that has to move.
   { component: "DatePicker", fixture: "open-with-value" },
+  // The line under the grid that lists the month's marked days, "15 Release ·
+  // 30 Freeze": the one place a marker's label paints without hover. Its value
+  // pins January 2026, so the picture does not follow the wall clock.
+  { component: "DatePicker", fixture: "with-markers" },
   { component: "TimePicker", fixture: "open" },
   // The clock face was left out on the first pass: `open-clock` passed no
   // `defaultValue`, so the dial rendered the CURRENT time and the hand sat at a

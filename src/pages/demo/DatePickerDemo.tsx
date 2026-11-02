@@ -461,7 +461,7 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
       {/* ─── Markers ────────────────────────────────────────────────────── */}
       <Section
         title="Date Markers"
-        description="Highlight specific dates with colored indicator dots and hover tooltips showing event details."
+        description="Highlight specific dates with colored indicator dots and hover tooltips showing event details. Each month also lists its marked days and their labels under the grid, so a label can be read without hovering."
         isDarkMode={dark}
       >
         <div className="space-y-4">
@@ -548,6 +548,29 @@ import { DatePicker } from "@chumlab/ui/date-picker";`}
                   ]}
                   showMarkerIndicator
                   showMarkerTooltip={false}
+                  classes={c.datepicker}
+                />
+              </div>
+            </DemoWrapper>
+          </div>
+          <div>
+            <p className={`text-xs font-medium mb-2 ${c.label}`}>
+              Marked days listed under the grid (open on load)
+            </p>
+            <DemoWrapper
+              isDarkMode={dark}
+              layout="block"
+              className="overflow-visible"
+            >
+              <div className="w-full sm:max-w-xs">
+                <DatePicker
+                  label="Release date"
+                  defaultValue={new Date(2026, 9, 20)}
+                  defaultOpen
+                  markers={[
+                    { date: new Date(2026, 9, 24), label: "Release", color: "#6366f1" },
+                    { date: new Date(2026, 9, 30), label: "Freeze", color: "#ef4444" },
+                  ]}
                   classes={c.datepicker}
                 />
               </div>

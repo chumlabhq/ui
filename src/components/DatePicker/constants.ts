@@ -26,6 +26,7 @@ export const DEFAULT_DATEPICKER_CLASSES: Required<DatePickerClasses> = {
   footer: "flex justify-center pt-4 mt-4 border-t border-cl-border",
   todayTrigger: "flex items-center gap-2 px-4 py-2 text-sm font-semibold text-cl-accent hover:bg-cl-accent-bg-hover hover:text-cl-accent-hover rounded-cl-md transition-all cursor-pointer",
   markerIndicator: "w-1 h-1 rounded-full bg-cl-accent absolute bottom-1 left-1/2 -translate-x-1/2",
+  markerList: "w-0 min-w-full mt-2 text-xs text-start text-cl-text-secondary",
   // Same defect as Slider's value tooltip: white text on the panel token, which
   // is white in the light theme.
   monthSelect: "flex items-center gap-1 px-1 sm:px-2 py-1.5 text-sm font-semibold bg-transparent border-0 cursor-pointer text-cl-text hover:bg-cl-bg-hover rounded-cl-md transition-colors",

@@ -10,6 +10,7 @@ import {
   type ReactNode,
   type KeyboardEvent,
   type FocusEvent,
+  type CSSProperties,
 } from "react";
 import type {
   StepperProps,
@@ -33,6 +34,7 @@ import {
   UNSTYLED_STEPPER_CLASSES,
   INDICATOR_SIZE,
   ICON_SIZE,
+  INDICATOR_VAR,
 } from "./utils/constants.js";
 import { structuralOnly, motionSafeClasses } from "../../utils/classLayers.js";
 
@@ -54,12 +56,7 @@ const defaultIsStepClickable = (
   status: StepStatus,
 ): boolean => status === "completed" || status === "active";
 
-/** Default indicator pixel sizes per variant (used for connector alignment) */
-const INDICATOR_PX: Record<string, number> = {
-  dot: 12,
-  icon: 40,
-  numbered: 32,
-};
+const CONNECTOR_OFFSET = "calc(var(--cl-step) / 2 - 1px)";
 
 interface StepItemInternalProps {
   step: Step;
@@ -71,7 +68,6 @@ interface StepItemInternalProps {
   isTabbable: boolean;
   isLast: boolean;
   variant: "numbered" | "icon" | "dot";
-  indicatorPx: number;
   orientation: "horizontal" | "vertical";
   labelPosition: "bottom" | "end";
   showLabels: boolean;
@@ -114,7 +110,6 @@ const StepItem = memo(function StepItem({
   isTabbable,
   isLast,
   variant,
-  indicatorPx,
   orientation,
   labelPosition,
   showLabels,
@@ -265,15 +260,13 @@ const StepItem = memo(function StepItem({
     (showLabels ? (statusSuffix ? `${stepLabelText}${statusSuffix}` : undefined) : undefined);
 
   if (!isHorizontal) {
-    const connectorMarginLeft = indicatorPx / 2 - 1;
-
     const verticalConnector =
       showConnectors && !isLast ? (
         <div
           className={cn(
             classes.separator,
           )}
-          style={{ marginInlineStart: connectorMarginLeft }}
+          style={{ marginInlineStart: CONNECTOR_OFFSET }}
           data-orientation={orientation}
           data-status={status}
       {...stateAttrsFor(status)}
@@ -760,8 +753,10 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
             orientation === "horizontal"
               ? `flex w-full overflow-x-auto ${labelPosition === "bottom" ? "items-start" : "items-center"}`
               : "flex flex-col",
+            indicatorSizeProp === undefined && INDICATOR_VAR[variant],
             mergedClasses.list,
           )}
+          style={indicatorSizeProp === undefined ? undefined : { "--cl-step": `${indicatorSizeProp}px` } as CSSProperties}
           data-orientation={orientation}
           onFocus={handleListFocus}
           onBlur={handleListBlur}
@@ -787,7 +782,6 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
               isTabbable,
               isLast,
               variant,
-              indicatorPx: indicatorSizeProp ?? INDICATOR_PX[variant] ?? 32,
               sizeClasses: variantSizeClasses,
               orientation,
               labelPosition,
@@ -831,9 +825,8 @@ const Stepper = forwardRef<HTMLDivElement, StepperProps>(
             // For labelPosition="bottom" + items-start, offset the connector to
             // align with indicator center.
             if (orientation === "horizontal" && showConnectors && !isLast) {
-              const indicatorPx = indicatorSizeProp ?? INDICATOR_PX[variant] ?? 32;
               const connectorStyle = labelPosition === "bottom"
-                ? { marginTop: indicatorPx / 2 - 1 }
+                ? { marginTop: CONNECTOR_OFFSET }
                 : undefined;
 
               return (

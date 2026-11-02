@@ -1651,7 +1651,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 162.01,
-    commit: "(uncommitted)",
+    commit: "9eac438b",
     date: "2026-11-01",
     attribution: "attributed",
     reason:
@@ -1671,6 +1671,37 @@ const LIBRARY_TOTAL_HISTORY = [
       "The rest, -4 to +4 B on 30 files, is the chunks' new hashed names in " +
       "import strings. Accordion's record was tightened 9.29 -> 9.25 in the " +
       "same run. No comments added to src/components or src/utils.",
+  },
+  {
+    kb: 162.04,
+    commit: "this slice",
+    date: "2026-11-01",
+    attribution: "attributed",
+    reason:
+      "INCREASE, +0.03 KB (165,896 -> 165,926 B gzipped, +30 B on a build of " +
+      "9eac438b), 83 files held, no chunk's module imports changed. C1 slice, " +
+      "F-1: Stepper's connector offset follows the indicator's size at both " +
+      "breakpoints (a per-variant --cl-step custom property on the list, read " +
+      "through calc()) instead of one pixel number per variant in JS: Stepper " +
+      "exclusive 5,671 -> 5,697 B (+26 B), the only chunk that moved. The other " +
+      "shape measured, a per-variant margin class per orientation, was +55 B JS " +
+      "and +107 B CSS against this one's +26 B and +58 B. No comments added to " +
+      "src/components or src/utils.",
+  },
+  {
+    kb: 162.19,
+    commit: "this slice",
+    date: "2026-11-02",
+    attribution: "attributed",
+    reason:
+      "INCREASE, APPROVAL PENDING, +0.15 KB (165,926 -> 166,079 B gzipped, +153 B), 83 files " +
+      "held, no chunk's module imports changed. C run, M1-L2: DatePicker lists the visible " +
+      "month's marked days and their labels under the grid (exclusive 12,977 -> 13,144 B, " +
+      "+167 B; see its DECLARED_BREACHES entry for the two smaller shapes measured). The total " +
+      "moves 14 B less than that because it is one gzip of the 83 files concatenated; per " +
+      "file, the only other moves are the renamed chunk's hash in three import strings " +
+      "(DatePicker entry -2 B, index -1 B, PresetsPanel -3 B). No comments added to " +
+      "src/components or src/utils.",
   },
 ];
 
@@ -1844,8 +1875,18 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.67,
-      why: "2026-11-01, B run: 12.66 -> 12.67 (exclusive 12,967 -> 12,977 B gzipped, +10 B; own " +
+      kb: 12.84,
+      why: "2026-11-02, C run, APPROVAL PENDING (+0.16 KB, at or over the 0.10 KB line): 12.67 -> " +
+        "12.84 (exclusive 12,977 -> 13,144 B gzipped, +167 B; own chunk shared/DatePicker.js " +
+        "12,771 -> 12,937 B, +166 B, styles.css +10 B; no chunk's imports changed; measured on a " +
+        "build of 9eac438b plus this slice against the same tree with HEAD's DatePicker): M1-L2, " +
+        "each month lists its marked days and their labels under the grid as plain text, so a " +
+        "marker's label is reachable without hover or long-press. The bytes are the per-month " +
+        "filter, the line's markup (one dir=auto entry per day) and its classes.markerList slot. " +
+        "Smaller shapes measured on the same tree: without `text-start` +163 B (alignment then " +
+        "inherits from the consumer's page); without the slot +149 B (classes and unstyled no " +
+        "longer reach the line).\n\n" +
+        "2026-11-01, B run: 12.66 -> 12.67 (exclusive 12,967 -> 12,977 B gzipped, +10 B; own " +
         "chunk +10 B; measured on a build of a70149f5): the calendar header row wraps its month " +
         "and year pickers under the arrows when they do not fit, which in a 280 px viewport " +
         "they did not in months with a long name. " +

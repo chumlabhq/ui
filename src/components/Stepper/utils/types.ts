@@ -179,7 +179,7 @@ export interface StepperProps {
   "aria-describedby"?: string;
   showTooltips?: boolean;
   tooltipDefaults?: StepperTooltipDefaults;
-  /** Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. */
+  /** Override indicator size in pixels for connector alignment, at every breakpoint. Defaults: dot 10 (12 from sm), icon 32 (40 from sm), numbered 28 (32 from sm). */
   indicatorSize?: number;
   /** Controls motion preferences. `"auto"` respects the user's OS setting. */
   reduceMotion?: boolean | "auto";

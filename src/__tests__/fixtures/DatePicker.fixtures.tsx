@@ -27,8 +27,15 @@ const fixtures: Fixtures<typeof DatePicker> = [
   },
   {
     name: "with-markers",
-    props: { defaultOpen: true, value: D, markers: [{ date: D, label: "Release", color: "#f00", type: "event" }] },
-    note: "`value` pins the calendar to the marker's month. Without it the grid opened on today and the marked day was never rendered, so data-marked had no fixture.",
+    props: {
+      defaultOpen: true,
+      value: D,
+      markers: [
+        { date: D, label: "Release", color: "#f00", type: "event" },
+        { date: new Date(2026, 0, 30), label: "Freeze" },
+      ],
+    },
+    note: "`value` pins the calendar to the markers' month. Without it the grid opened on today and the marked day was never rendered, so data-marked had no fixture. Two markers, so the line under the grid shows its separator and its order.",
   },
   {
     name: "marker-tooltip",

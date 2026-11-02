@@ -189,7 +189,7 @@
     },
     "markers": {
       "type": "array",
-      "description": "Array of date markers to display on the calendar.",
+      "description": "Array of date markers to display on the calendar. A month with marked days lists them under its grid as plain text, each day with its label (\"24 Release · 30 Freeze\"), so a label can be read without hover or long-press.",
       "items": {
         "type": "object",
         "properties": {
@@ -415,6 +415,9 @@
           "type": "string"
         },
         "markerIndicator": {
+          "type": "string"
+        },
+        "markerList": {
           "type": "string"
         },
         "monthSelect": {

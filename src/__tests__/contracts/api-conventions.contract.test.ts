@@ -78,7 +78,7 @@ const SLOT_VOCABULARY = new Set([
   "headerRow", "icon", "image", "indicator", "indicatorTrigger", "input", "item", "itemControl", "itemIcon",
   "itemIndicator", "itemRow", "itemText", "label", "link", "list", "listHeader", "listRow", "loading",
   "loadingBar", "loadingFooter", "loadingItem", "loadingItemControl", "loadingRow", "mark", "markLabel",
-  "markerIndicator", "message", "mobileCard", "monthSelect", "navIcon", "navTrigger", "overlay", "pageInfo",
+  "markerIndicator", "markerList", "message", "mobileCard", "monthSelect", "navIcon", "navTrigger", "overlay", "pageInfo",
   "periodTrigger", "pinIcon", "pinTrigger", "pinnedList", "pinnedRegion", "pinnedEndList",
   "pinnedEndRegion", "positioner", "prefix", "presetGroup", "presetTrigger", "range", "resizeHandle",
   "resizeIndicator", "root", "row", "rowsPerPage", "scrollRegion", "searchControl", "searchIcon",

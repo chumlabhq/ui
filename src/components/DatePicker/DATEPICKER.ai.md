@@ -54,7 +54,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `selectionMode` | Determines `value` and `onValueChange` types. `"single"` = `Date \| null`, `"range"` = `DateRange \| null`, `"multiple"` = `Date[] \| null`. |
 | `showPresets` | Only shows presets panel if `true`. Uses built-in presets unless `presets` is provided. |
 | `presets` | Must match the mode. Single presets return `Date`, range presets return `DateRange`, multiple return `Date[]`. |
-| `markers` | Only visible when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. |
+| `markers` | The dot shows when `showMarkerIndicator` is `true` (default). Tooltips require `showMarkerTooltip`. The line of marked days under the grid shows whenever the visible month has one, whatever either of those is set to. |
 | `clearable` | Shows the clear button in the trigger when a value is set. Defaults to `true`. |
 | `open` + `onOpenChange` | Controlled open state -- both are needed together. |
 | `outsideDaysSelectable` | Only works when `showOutsideDays` is `true` (default). |
@@ -88,6 +88,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 - `data-highlighted` -- keyboard-focused day
 - `data-marked` -- day with a marker
 - `data-marker-type` -- marker type string (e.g. `"meeting"`, `"deadline"`)
+- `data-marker-list` -- the line under a month's grid listing its marked days; absent when the month has none
 
 ### Preset buttons
 - `data-active` -- the preset matching the current value; it takes the accent fill
@@ -132,7 +133,7 @@ These props have dependencies -- using them wrong causes silent bugs:
 | `fixedWeeks` | boolean | `false` | Always shows 6 weeks per month for consistent height. |
 | `showPresets` | boolean | `false` | Shows preset date selection buttons. |
 | `presets` | array | — | Array of date presets. |
-| `markers` | array | — | Array of date markers to display on the calendar. |
+| `markers` | array | — | Array of date markers to display on the calendar. A month with marked days lists them under its grid as plain text, each day with its label ("24 Release · 30 Freeze"), so a label can be read without hover or long-press. |
 | `showMarkerIndicator` | boolean | `true` | Shows dots on marked dates. |
 | `showMarkerTooltip` | boolean | `true` | Shows tooltips on marked dates. |
 | `id` | string | — | HTML id attribute. |
@@ -231,7 +232,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 | Day cells | `item` | Individual calendar days |
 | Range highlighting | `dayRangeStart`, `dayRangeEnd`, `dayRangeMiddle` | Range mode visual |
 | Keyboard focus | — | The focused day carries `data-highlighted` |
-| Marked days | `markerIndicator` | Marker visuals |
+| Marked days | `markerIndicator`, `markerList` | The dot, and the line under each month listing its marked days |
 | Week numbers | `weekNumber` | Week number column |
 | Presets | `presetGroup`, `presetTrigger` | Preset buttons panel |
 | Footer / today button | `footer`, `todayTrigger` | Calendar footer |
@@ -418,6 +419,7 @@ const ref = useRef<HTMLButtonElement>(null);
   control is a real `<button>` beside the trigger, not a `role="button"` span inside it.
 - **ARIA:** Trigger has `aria-expanded` + `aria-haspopup`, calendar grid uses `role="grid"`, day cells use `role="gridcell"` with `aria-selected`/`aria-disabled`/`aria-current="date"`
 - **Focus management:** Focus moves to the selected day (or today) when the reader opens the calendar, follows the roving tabindex as you navigate, and returns to the trigger on close without scrolling the page. The panel is `role="dialog"`, `aria-modal="true"` once it holds the focus, and traps Tab in both directions. A calendar open at mount (`defaultOpen`, or `open` already true) takes no focus and does not scroll the page, like a native `<select>`; focus moves in the next time the reader opens it.
+- **Marked days:** each month with marked days lists them under its grid as plain text, day then label (`24 Release · 30 Freeze`), so a label is readable without hover or long-press and no focus stop is added. Each entry is `dir="auto"`, so a label in another script keeps its digits in order in either page direction.
 - **Reduced motion:** `reduceMotion` defaults to `"auto"`, which follows the OS
   `prefers-reduced-motion` setting. `true` always reduces motion. `false` always
   animates — **including for a user who has asked their OS for less motion**, so

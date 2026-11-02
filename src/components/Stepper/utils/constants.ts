@@ -54,3 +54,9 @@ export const ICON_SIZE: Record<string, string> = {
   icon: "w-4 h-4 sm:w-5 sm:h-5",
   numbered: "w-3.5 h-3.5 sm:w-4 sm:h-4",
 };
+
+export const INDICATOR_VAR: Record<string, string> = {
+  dot: "[--cl-step:10px] sm:[--cl-step:12px]",
+  icon: "[--cl-step:32px] sm:[--cl-step:40px]",
+  numbered: "[--cl-step:28px] sm:[--cl-step:32px]",
+};

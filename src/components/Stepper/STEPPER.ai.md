@@ -141,7 +141,7 @@ DOM nesting: `root(nav) > ol(list) > li(stepContainer) > button/div(step) > indi
 | `aria-describedby` | string | — | Ids of the elements that describe the navigation. |
 | `showTooltips` | boolean | `false` | Whether to show tooltips on steps. |
 | `tooltipDefaults` | object | `{}` | Default tooltip configuration applied to all step tooltips. |
-| `indicatorSize` | number | — | Override indicator size in pixels for connector alignment. Defaults: dot=12, icon=40, numbered=32. |
+| `indicatorSize` | number | — | Override indicator size in pixels for connector alignment, at every breakpoint. Defaults: dot 10 (12 from sm), icon 32 (40 from sm), numbered 28 (32 from sm). |
 | `reduceMotion` | boolean \| `"auto"` | `"auto"` | Controls motion preferences. 'auto' respects the user's OS setting. |
 | `classes` | object | — | CSS class overrides for sub-elements. |
 | `unstyled` | boolean | `false` | When true, removes all default styling. |

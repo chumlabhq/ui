@@ -717,9 +717,46 @@ describe("Stepper connectors and the vertical item (6dd19258)", () => {
     }
   });
 
-  it("centres the vertical connector under the indicator", () => {
-    const { container } = renderStepper({ orientation: "vertical" });
-    const connector = container.querySelector<HTMLElement>("[data-next-status]")!;
-    expect(connector.style.marginInlineStart).toBe("15px");
+  const spacingPx = (tokens: string[], prefix: string) => {
+    const t = tokens.find((x) => new RegExp(`^${prefix}w-\\d+(\\.\\d+)?$`).test(x));
+    return t ? `${Number(t.slice(prefix.length + 2)) * 4}px` : undefined;
+  };
+  const stepVar = (tokens: string[], prefix: string) =>
+    tokens.find((x) => x.startsWith(`${prefix}[--cl-step:`))?.slice(prefix.length + 11, -1);
+
+  it.each([
+    ["numbered", "vertical", "marginInlineStart"],
+    ["icon", "vertical", "marginInlineStart"],
+    ["dot", "vertical", "marginInlineStart"],
+    ["numbered", "horizontal", "marginTop"],
+    ["icon", "horizontal", "marginTop"],
+    ["dot", "horizontal", "marginTop"],
+  ] as const)(
+    "%s %s: the connector is offset by half the indicator's size at every breakpoint",
+    (variant, orientation, side) => {
+      const { container } = renderStepper({ variant, orientation, labelPosition: "bottom" });
+      const indicator = [...container.querySelectorAll("ol [data-state]")].find(
+        (el) => el.classList.contains("rounded-full") && !el.classList.contains("cursor-pointer"),
+      )!;
+      const sizes = (indicator.getAttribute("class") ?? "").split(/\s+/);
+      const list = (container.querySelector("ol")!.getAttribute("class") ?? "").split(/\s+/);
+      expect(spacingPx(sizes, "")).toBeDefined();
+      expect(spacingPx(sizes, "sm:")).toBeDefined();
+      expect(stepVar(list, "")).toBe(spacingPx(sizes, ""));
+      expect(stepVar(list, "sm:")).toBe(spacingPx(sizes, "sm:"));
+      for (const connector of container.querySelectorAll<HTMLElement>("[data-next-status]")) {
+        expect(connector.style[side]).toBe("calc(var(--cl-step) / 2 - 1px)");
+      }
+    },
+  );
+
+  it("an indicatorSize override sets the offset at every breakpoint", () => {
+    const { container } = renderStepper({ orientation: "vertical", indicatorSize: 48 });
+    const ol = container.querySelector("ol")!;
+    expect(ol.style.getPropertyValue("--cl-step")).toBe("48px");
+    expect(stepVar((ol.getAttribute("class") ?? "").split(/\s+/), "sm:")).toBeUndefined();
+    expect(container.querySelector<HTMLElement>("[data-next-status]")!.style.marginInlineStart).toBe(
+      "calc(var(--cl-step) / 2 - 1px)",
+    );
   });
 });
