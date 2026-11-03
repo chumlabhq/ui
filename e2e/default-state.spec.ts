@@ -1288,7 +1288,8 @@ test("a custom checkbox icon is a keyboard checkbox like the default", async ({ 
         }, recipe.label);
         const before = (await read()).checked;
         await page.keyboard.press("Space");
-        await page.waitForTimeout(150);
+        // `o.space` reports a control Space never moved; this only waits for one it does.
+        await expect.poll(async () => (await read()).checked, { timeout: 2000 }).not.toBe(before).catch(() => {});
         const afterSpaceRead = await read();
         const afterSpace = afterSpaceRead.checked;
         o.keepsFocusAfterSpace = afterSpaceRead.focused;
@@ -1505,10 +1506,16 @@ test("a field or selection control's resting boundary clears 3:1 on every librar
         type Row = { per: Record<string, number>; border: string; fill: string; disabled: boolean };
         let rows: Row[] = [];
         // Popups and lazy chunks arrive late; wait for the slot, then read it.
-        for (let i = 0; i < 25 && !rows.length; i += 1) {
-          rows = (await page.evaluate(`${MEASURE_BOUNDARY}(${JSON.stringify(signature)})`)) as Row[];
-          if (!rows.length) await page.waitForTimeout(200);
-        }
+        await expect
+          .poll(
+            async () => {
+              rows = (await page.evaluate(`${MEASURE_BOUNDARY}(${JSON.stringify(signature)})`)) as Row[];
+              return rows.length;
+            },
+            { timeout: 5000, intervals: [200] },
+          )
+          .toBeGreaterThan(0)
+          .catch(() => {});
         const at = `${site.key} /${fixture} ${theme}`;
         if (!rows.length) { unmeasured.push(at); console.log(`CONTROL_BOUNDARY ${at}: UNMEASURED — no element carries the slot's classes`); continue; }
         measured += rows.length;

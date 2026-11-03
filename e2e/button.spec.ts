@@ -2,6 +2,7 @@ import { gotoFixture } from "./_nav";
 import { test, expect } from "./_test";
 import { injectAxe } from "axe-playwright";
 import { activateByTouch, press, watchClicks, skipWithoutTouchEvents } from "./_helpers";
+import { motionEnded } from "./_motion";
 
 /**
  * Waits for a button that is actually on screen.
@@ -221,7 +222,7 @@ test.describe("Keyboard Navigation", () => {
           .toBeGreaterThanOrEqual(2);
       } else {
         await press(page, button);
-        await page.waitForTimeout(400);
+        await motionEnded(page);
         expect(await offset(), "a tap left the icon slid on a device that cannot hover").toBe(0);
       }
       console.log(`BUTTON_SLIDE ${canHover ? "hover" : "tap"}: rest ${rest}px, then ${(await offset()).toFixed(1)}px, toward ${toward}`);
@@ -311,7 +312,6 @@ test.describe("Button Accessibility Tests", () => {
   test("button groups should have role='group'", async ({ page }) => {
     const groupHeading = page.getByRole("heading", { name: "Button Group" }).first();
     await groupHeading.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
 
     const groups = page.locator('[role="group"]');
     await expect(groups.first()).toBeAttached({ timeout: 5000 });

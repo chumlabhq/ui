@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { test, expect } from "./_test";
+import { PINNED_NOW, test, expect } from "./_test";
 import { gotoFixture, gotoFixtureIndex } from "./_nav";
 import { openSurfaces, settle, type Surface } from "./_surfaces";
 
@@ -121,6 +121,35 @@ test("every open surface lies inside the viewport and holds its content", async 
   for (const o of outside) console.log(`SURFACE_FIT_FINDING ${o}`);
   expect(open.size, "fewer fixtures with an open surface than step 0 counted: the walk lost surfaces").toBeGreaterThanOrEqual(FLOOR);
   expect(outside, "a surface past the viewport, or one whose content spills out of it").toEqual([]);
+});
+
+/**
+ * The month this gate reads is the hardest one for the layout to hold.
+ *
+ * A calendar with no value opens on the page's current month, and `_test.ts`
+ * pins that. If the pin stopped reaching the page, or a font change made another
+ * month wider, surface-fit would go back to passing on whatever fits: so the
+ * header is read here, and the twelve names are measured in the font it paints.
+ */
+test("the calendar opens on the pinned month, the widest name its header holds", async ({ page }) => {
+  await gotoFixture(page, "DatePicker", "open");
+  const month = page.locator('[aria-label="Select month"]').first();
+  const pinned = PINNED_NOW.toLocaleString("en-US", { month: "long" });
+  await expect(month, "the page is not on the pinned date").toContainText(pinned);
+
+  const widths = await month.evaluate((el) => {
+    const painted = el.querySelector("span") ?? el;
+    const pen = document.createElement("canvas").getContext("2d")!;
+    pen.font = getComputedStyle(painted).font;
+    return Array.from({ length: 12 }, (_, i) => {
+      const name = new Date(2026, i, 1).toLocaleString("en-US", { month: "long" });
+      return [name, Math.round(pen.measureText(name).width * 100) / 100] as const;
+    });
+  });
+  const widest = [...widths].sort((a, b) => b[1] - a[1])[0];
+  console.log(`SURFACE_FIT_MONTH pinned ${pinned}, widest ${widest[0]} ${widest[1]} px, of ${widths.length}: ${widths.map(([n, w]) => `${n} ${w}`).join(", ")}`);
+  expect(widths, "twelve month names were not measured").toHaveLength(12);
+  expect(widest[0], `${widest[0]} is wider than the pinned ${pinned}; pin the widest (_test.ts)`).toBe(pinned);
 });
 
 /**

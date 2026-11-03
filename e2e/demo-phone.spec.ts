@@ -197,7 +197,6 @@ test("every phone-width frame loads its preview at 360 px or the page's width, i
 
     if (want.open) {
       await inner.locator(want.open).first().click();
-      await inner.waitForTimeout(400);
     }
     await settled(inner);
     const popups = await popupsOf(inner);

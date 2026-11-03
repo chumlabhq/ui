@@ -61,10 +61,8 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       const trigger2 = triggers.nth(1);
 
       await trigger1.click();
-      await page.waitForTimeout(100);
 
       await trigger2.click();
-      await page.waitForTimeout(100);
 
       await expect(trigger2).toHaveAttribute("aria-expanded", "true");
     });
@@ -312,15 +310,15 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
           const isExpanded = await trigger.getAttribute("aria-expanded");
           if (isExpanded === "true") {
             await trigger.click();
-            await page.waitForTimeout(50);
+            await expect(trigger).toHaveAttribute("aria-expanded", "false");
           }
         }
 
         await triggers.first().click();
-        await page.waitForTimeout(100);
+        await expect(triggers.first()).toHaveAttribute("aria-expanded", "true");
 
         await triggers.nth(1).click();
-        await page.waitForTimeout(100);
+        await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "true");
 
         // Both should now be expanded (multiple mode allows this)
         const state1 = await triggers.first().getAttribute("aria-expanded");
@@ -338,7 +336,6 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       await expect(accordion).toBeVisible();
 
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.waitForTimeout(300);
 
       await expect(accordion).toBeAttached();
 
@@ -356,10 +353,11 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       await trigger.click();
       const stateBeforeResize = await trigger.getAttribute("aria-expanded");
 
+      const innerWidth = () => page.evaluate(() => window.innerWidth);
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.waitForTimeout(200);
+      await expect.poll(innerWidth).toBe(375);
       await page.setViewportSize({ width: 1280, height: 720 });
-      await page.waitForTimeout(200);
+      await expect.poll(innerWidth).toBe(1280);
 
       const stateAfterResize = await trigger.getAttribute("aria-expanded");
       expect(stateAfterResize).toBe(stateBeforeResize);
@@ -430,7 +428,7 @@ test.describe("Accessibility Tests", () => {
     const isExpanded = await trigger.getAttribute("aria-expanded");
     if (isExpanded === "false") {
       await trigger.click();
-      await page.waitForTimeout(100);
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
     }
 
     const contentId = await trigger.getAttribute("aria-controls");

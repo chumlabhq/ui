@@ -8,12 +8,12 @@
 // command before any gate runs.
 //
 //   npm run gates          everything
-//   npm run gates:fast     the fifteen that finish in under ~90s each
+//   npm run gates:fast     the sixteen that finish in under ~90s each
 //   npm run gates:record   update the population record
 //
 // THE SPLIT, because the full run is too long to sit through:
 //
-//   per slice   `npm run gates:fast` — ~2 minutes, fifteen gates. It catches
+//   per slice   `npm run gates:fast` — ~2 minutes, sixteen gates. It catches
 //               every drift class that does not need a browser: types,
 //               generated files out of step, docs naming something that does
 //               not exist, a schema default that is not the code's, a
@@ -100,6 +100,9 @@ const GATES = [
    * unused import and a component created during render, neither visible to tsc.
    */
   { id: "lint", cmd: "npm run lint", claims: {} },
+  // A fixed wait is a guess at how long something takes; see the script.
+  { id: "e2e-waits", cmd: "npm run verify:e2e-waits && npm run verify:e2e-waits:self-check",
+    claims: { script: "assert-e2e-waits.mjs" }, pop: /E2E_WAITS found (\d+)/ },
   // The CI failures no local run can reproduce: the runner OS a workflow asks
   // for, and a job that launches a browser it never installed. See the script.
   { id: "ci-runners", cmd: "node scripts/assert-ci-runners.mjs",
@@ -283,6 +286,29 @@ const restSpecs = specs.filter((s) => !claimed.spec.has(s));
       `✗ ${misordered.length} gate(s) would read a build this run did not make:\n` +
         misordered.map((m) => `    ${m}\n`).join("") +
         "  A gate that reads a leftover build passes or fails on local state. Move it below the gate that provides it.\n",
+    );
+    process.exit(1);
+  }
+}
+
+/**
+ * A spec a gate names exists.
+ *
+ * Playwright reads a path argument as a filter, so a wrong one among right ones
+ * filters to the right ones and exits 0: `playwright test e2e/demo-names.spec.ts
+ * e2e/modal.spec.ts` ran demo-names, printed "collected 1" and passed, with no
+ * modal.spec.ts in the repo (2026-10-21). Checked before anything runs, in both
+ * modes. A run launched by hand or through the matrix is held by the reconcile
+ * reporter instead, which fails on the same thing.
+ */
+{
+  const named = GATES.flatMap((g) => (typeof g.cmd === "string" ? [...g.cmd.matchAll(/\be2e\/[\w./-]+\.spec\.ts\b/g)].map((m) => [g.id, m[0]]) : []));
+  const missing = named.filter(([, path]) => !existsSync(join(root, path)));
+  if (missing.length) {
+    process.stderr.write(
+      `✗ ${missing.length} of ${named.length} spec path(s) the gates name do not exist:\n` +
+        missing.map(([id, path]) => `    ${id}: ${path}\n`).join("") +
+        "  Playwright reads a path as a filter, so a run naming this would pass on whatever else it matched.\n",
     );
     process.exit(1);
   }

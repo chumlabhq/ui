@@ -254,12 +254,17 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
         };
       });
 
+    // Until the page says `settled`, or for 5 s: a row that never settles is
+    // reported by its `check`, with what the page says, not by this wait.
+    const until = (cell: Locator, settled: (s: Awaited<ReturnType<typeof read>>) => boolean) =>
+      expect.poll(() => read(cell).then(settled), { timeout: 5000 }).toBe(true).catch(() => {});
+
     for (const surface of EDIT_SURFACES) {
       // The fixture page's own act — a dispatched dblclick at an unfocused cell.
       if (surface.act) {
         const { cell } = await open(surface);
         await expect(page.locator("main[data-fixture-act]")).not.toHaveAttribute("data-fixture-act", /none|pending/);
-        await page.waitForTimeout(100);
+        await until(cell, (r) => r.editor && r.editorFocused);
         const s = await read(cell);
         check(surface, "act opens the editor", s.editor && s.editorFocused, `editor=${s.editor} focused=${s.editorFocused} active=${s.active}`);
       }
@@ -272,7 +277,7 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
           await cell.focus();
           await page.keyboard.press(how);
         }
-        await page.waitForTimeout(100);
+        await until(cell, (r) => r.editor && r.inCell && r.editorFocused);
         const s = await read(cell);
         check(surface, `${how} opens the editor`, s.editor && s.inCell && s.editorFocused, `editor=${s.editor} in-cell=${s.inCell} focused=${s.editorFocused} active=${s.active}`);
         if (how === "double-click") {
@@ -300,7 +305,7 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
         const expected = before.slice(0, -1) + "Q" + before.slice(-1);
         check(surface, "typing edits at the caret", typed.value === expected, `value=${JSON.stringify(typed.value)} expected ${JSON.stringify(expected)}`);
         await page.keyboard.press("Enter");
-        await page.waitForTimeout(100);
+        await until(cell, (r) => !r.editor && r.cellFocused);
         const s = await read(cell);
         check(surface, "Enter closes the editor", !s.editor, `editor still open`);
         check(surface, "focus returns to the cell after commit", s.cellFocused, `active=${s.active}`);
@@ -314,13 +319,13 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
         await cell.dblclick();
         await page.keyboard.type("Z");
         await page.keyboard.press("Escape");
-        await page.waitForTimeout(100);
+        await until(cell, (r) => !r.editor && r.cellFocused);
         const s = await read(cell);
         check(surface, "Escape closes the editor", !s.editor, `editor still open`);
         check(surface, "Escape restores the value", s.text === before, `cell reads ${JSON.stringify(s.text)}, was ${JSON.stringify(before)}`);
         check(surface, "focus returns to the cell after cancel", s.cellFocused, `active=${s.active}`);
         await cell.dblclick();
-        await page.waitForTimeout(50);
+        await until(cell, (r) => r.editor);
         const reopened = await read(cell);
         check(surface, "Escape leaves nothing behind", reopened.value === before, `reopened editor holds ${JSON.stringify(reopened.value)}`);
       }
@@ -442,11 +447,12 @@ test.describe("Table grid keys", () => {
         await control.focus();
         const before = await state();
         await page.keyboard.press(key);
-        await page.waitForTimeout(150);
+        // A row reports a control that never answers; this only waits for one that does.
+        await expect.poll(state, { timeout: 2000 }).not.toBe(before).catch(() => {});
         const after = await state();
         row(`${fixture}: ${key} activates the first header control`, before !== after, `${before} -> ${after}`);
         await page.keyboard.press("Escape");
-        await page.waitForTimeout(100);
+        await expect(page.locator("[data-table-filter-content]")).toHaveCount(0);
       }
       finish(`header-${fixture}`);
     });
@@ -516,8 +522,9 @@ test.describe("Table grid keys", () => {
       const label0 = await pin.getAttribute("aria-label");
       await pin.focus();
       await page.keyboard.press(key);
-      await page.waitForTimeout(150);
-      const label1 = await section("With Pinned Columns (Interactive)").locator("thead button[aria-label*='column']").first().getAttribute("aria-label");
+      const pinLabel = () => section("With Pinned Columns (Interactive)").locator("thead button[aria-label*='column']").first().getAttribute("aria-label");
+      await expect.poll(pinLabel, { timeout: 2000 }).not.toBe(label0).catch(() => {});
+      const label1 = await pinLabel();
       row(`pin: ${key} activates a header pin button`, label1 !== label0, `${label0} -> ${label1}`);
     }
 

@@ -1,6 +1,7 @@
 import { test, expect } from "./_test";
 import { injectAxe, checkA11y } from "axe-playwright";
 import { gotoFixture } from "./_nav";
+import { motionEnded } from "./_motion";
 
 /**
  * Repointed from /drawer to fixture pages, then cut to what needs a browser.
@@ -90,7 +91,7 @@ test.describe("Drawer", () => {
       // becomes a `translateY` percentage, so the observable is the top edge.
       const topAt = async (index: number) => {
         await page.locator(`[data-harness-index="${index}"]`).click();
-        await page.waitForTimeout(500);
+        await motionEnded(page);
         return (await dialog.boundingBox())!.y;
       };
 

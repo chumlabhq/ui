@@ -1,5 +1,6 @@
 import { expect, test } from "./_test";
 import { gotoFixture } from "./_nav";
+import { motionEnded } from "./_motion";
 
 /**
  * The target a pointer can actually hit, not the one the rect declares.
@@ -115,7 +116,7 @@ test("every target is hittable at its declared size", async ({ page }) => {
     await page.locator("[data-fixture]").waitFor({ state: "attached", timeout: 15000 }).catch(() => {});
     if (dismiss) {
       await page.keyboard.press("Escape");
-      await page.waitForTimeout(250);
+      await motionEnded(page);
     }
     const r = await page.evaluate(
       ([sel]) => {

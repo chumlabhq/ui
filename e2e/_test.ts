@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { test as base, type Browser, type BrowserContext, type Route } from "@playwright/test";
+import { test as base, type Browser, type BrowserContext, type Page, type Route } from "@playwright/test";
 
 export * from "@playwright/test";
 
@@ -149,7 +149,43 @@ async function answerDemoData(route: Route) {
  */
 export const WEBKIT_PAGES_PER_BROWSER = 48;
 
-export const test = base.extend<{ blockThirdParty: void }>({
+/**
+ * The date every page in the suite wakes up on.
+ *
+ * A calendar with no value opens on the current month, so a gate that reads it
+ * measures today. surface-fit held DatePicker's header to 280 px on every open
+ * fixture, and whether its row overflowed depended on the month's name: run B
+ * found the overflow in a long month, by which point the gate had passed on
+ * short ones. The same holds for "today" cells, relative demo values and the
+ * demo's timestamps, in every sweep that walks them, so the date is fixed here
+ * rather than spec by spec, and a new fixture that reads the clock is covered
+ * the day it lands.
+ *
+ * September: the widest month name the header must hold, in all three engines
+ * (surface-fit.spec.ts measures that and fails if another month overtakes it).
+ * The 15th, so no month-boundary arithmetic is in the picture.
+ *
+ * `Date` alone, in an init script, with the real clock's offset. Time still
+ * passes, because Drawer's swipe velocity and Toast's countdown are differences
+ * of `Date.now()` and `clock.setFixedTime` reads as no time at all. And timers
+ * stay real, because `clock.install` fakes those too: the harness's "the document
+ * has held still" then runs on a clock that catches up in lumps and answers
+ * early. Measured 2026-11-03, 150 settled reads of the open Drawers in firefox:
+ * under `install` 8 were mid-slide and failed surface-fit, without it none.
+ */
+export const PINNED_NOW = new Date(2026, 8, 15, 12);
+
+/**
+ * From here on the page's time moves only by `page.clock.runFor`, for a test
+ * about what a component does with a timer: a wall-clock wait measures how far
+ * a loaded browser got through it. Called before the timer it holds is set.
+ */
+export async function holdClock(page: Page): Promise<void> {
+  await page.clock.install({ time: PINNED_NOW });
+  await page.clock.pauseAt(new Date(PINNED_NOW.getTime() + 3_600_000));
+}
+
+export const test = base.extend<{ blockThirdParty: void; pinnedDate: void }>({
   browser: [
     async ({ browser, browserName, playwright }, use) => {
       if (browserName !== "webkit") {
@@ -195,6 +231,27 @@ export const test = base.extend<{ blockThirdParty: void }>({
       await current.close();
     },
     { scope: "worker", timeout: 0 },
+  ],
+  pinnedDate: [
+    async ({ context }, use) => {
+      await context.addInitScript((pinned) => {
+        const RealDate = Date;
+        const offset = pinned - RealDate.now();
+        const now = () => RealDate.now() + offset;
+        function PinnedDate(this: unknown, ...args: unknown[]) {
+          if (!new.target) return new RealDate(now()).toString();
+          return Reflect.construct(RealDate, args.length ? args : [now()], new.target);
+        }
+        Object.setPrototypeOf(PinnedDate, RealDate);
+        PinnedDate.prototype = RealDate.prototype;
+        // Not enumerable, as the built-in's is: `clock.install` copies a Date's
+        // enumerable statics onto its own, and would keep this `now` over its fake.
+        Object.defineProperty(PinnedDate, "now", { value: now, writable: true, configurable: true });
+        globalThis.Date = PinnedDate as unknown as DateConstructor;
+      }, PINNED_NOW.getTime());
+      await use();
+    },
+    { auto: true },
   ],
   blockThirdParty: [
     async ({ context }, use) => {

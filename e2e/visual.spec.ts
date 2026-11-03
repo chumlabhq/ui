@@ -455,7 +455,6 @@ test.describe("focus baselines", () => {
             await el.evaluate((node: HTMLElement) => node.focus());
             if (drive) {
               await page.keyboard.press(drive);
-              await page.waitForTimeout(120);
             }
             await expect(page).toHaveScreenshot(
               `focus-${component}-${fixture}-${theme}-${width}.png`,

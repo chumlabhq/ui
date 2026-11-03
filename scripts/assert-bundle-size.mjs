@@ -1674,7 +1674,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 162.04,
-    commit: "this slice",
+    commit: "8e247c62",
     date: "2026-11-01",
     attribution: "attributed",
     reason:
@@ -1690,7 +1690,7 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 162.19,
-    commit: "this slice",
+    commit: "8e247c62",
     date: "2026-11-02",
     attribution: "attributed",
     reason:

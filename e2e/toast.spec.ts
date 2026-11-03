@@ -1,17 +1,59 @@
 import { gotoFixture } from "./_nav";
 import { activateByTouch, conceal, press, reveal, skipWithoutTouchEvents } from "./_helpers";
-import { test, expect } from "./_test";
+import { holdClock, test, expect, type Page } from "./_test";
 import { injectAxe } from "axe-playwright";
 
 const TOAST_SELECTOR = "[data-toast-id]";
 
-async function waitForToastVisible(page: import("@playwright/test").Page) {
+/** The demo provider's `animationDuration`: a dismissed toast leaves the DOM this long after its exit starts. */
+const EXIT_MS = 500;
+
+/*
+ * The toast's timers run on the test's clock instead of the wall's.
+ *
+ * Its countdown and its removal are `setTimeout`s, and a loaded content process
+ * runs them late: "should resume progress on mouse leave" failed the full
+ * firefox project three runs in five with the toast still there 5 s after the
+ * pointer left, and passed alone. Nothing about the toast was slow but the
+ * timers. A test holding the clock asserts what the toast does with the time
+ * it is given, not how much of it a busy machine got through.
+ */
+
+/** The countdown bar: inline `animation` while it runs, none while it is held. */
+const countdown = (page: Page) => page.locator(`${TOAST_SELECTOR} .absolute.bottom-0 > *`).first();
+
+/** The bar is counting down from `ms`. Computed longhands, because engines serialise the shorthand in different orders. */
+const countdownFrom = (page: Page, ms: number, message: string) =>
+  expect
+    .poll(
+      () =>
+        countdown(page).evaluate((el) => {
+          const { animationName, animationDuration } = getComputedStyle(el);
+          return `${animationName} ${parseFloat(animationDuration) * 1000}`;
+        }),
+      { message },
+    )
+    .toBe(`chumlab-toast-progress ${ms}`);
+
+async function triggerQuickToast(page: Page, how: "click" | "press") {
+  const quickButton = page.locator('button:has-text("2 Seconds")').first();
+  await expect(quickButton).toBeVisible();
+  await quickButton.scrollIntoViewIfNeeded();
+  if (how === "press") await press(page, quickButton);
+  else await quickButton.click();
+  await waitForToastVisible(page);
+  // Started: the countdown effect has run, so the first `runFor` counts against it.
+  await countdownFrom(page, 2000, "the countdown did not start");
+  return page.locator(TOAST_SELECTOR).first();
+}
+
+async function waitForToastVisible(page: Page) {
   const toast = page.locator(TOAST_SELECTOR).first();
   await toast.waitFor({ state: "visible", timeout: 10000 });
 }
 
 async function triggerToast(
-  page: import("@playwright/test").Page,
+  page: Page,
   variant: "success" | "error" | "warning" | "info" = "success",
 ) {
   const buttonText =
@@ -92,23 +134,18 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
     });
 
     test("should auto-dismiss after duration", async ({ page }) => {
-      const quickButton = page.locator('button:has-text("2 Seconds")').first();
+      await holdClock(page);
+      const toast = await triggerQuickToast(page, "click");
 
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(quickButton.first()).toBeVisible();
-      await quickButton.scrollIntoViewIfNeeded();
-      await quickButton.click();
-      await waitForToastVisible(page);
+      await page.clock.runFor(1999);
+      await expect(toast, "gone before its 2 s were up").toBeVisible();
 
-      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
-
-      await page.waitForTimeout(2500);
-
+      await page.clock.runFor(1 + EXIT_MS);
       await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
     });
 
     test("should not auto-dismiss persistent toasts", async ({ page }) => {
+      await holdClock(page);
       const persistentButton = page
         .locator('button:has-text("Persistent (Infinity)")')
         .first();
@@ -120,7 +157,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       await persistentButton.click();
       await waitForToastVisible(page);
 
-      await page.waitForTimeout(3000);
+      await page.clock.runFor(60_000);
 
       await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
     });
@@ -147,43 +184,37 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
 
   test.describe("Pause on Hover", () => {
     test("should pause progress on hover", async ({ page }) => {
-      const quickButton = page.locator('button:has-text("2 Seconds")').first();
+      await holdClock(page);
+      const toast = await triggerQuickToast(page, "press");
 
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(quickButton.first()).toBeVisible();
-      await quickButton.scrollIntoViewIfNeeded();
-      await press(page, quickButton);
-      await waitForToastVisible(page);
-
-      const toast = page.locator(TOAST_SELECTOR).first();
       await reveal(page, toast);
+      await expect(countdown(page), "the hover did not stop the countdown").not.toHaveAttribute("style", /animation/);
 
-      await page.waitForTimeout(3000);
+      await page.clock.runFor(60_000);
       await expect(toast).toBeVisible();
     });
 
+    // The countdown restarts at what was left, so the bar names the resume
+    // itself: 500 ms into a 2 s toast, held, then released, is 1500 ms to go.
     test("should resume progress on mouse leave", async ({ page }) => {
-      const quickButton = page.locator('button:has-text("2 Seconds")').first();
+      await holdClock(page);
+      const toast = await triggerQuickToast(page, "press");
 
-      // The guard used to make this pass when the element was absent, which is
-      // the failure the test exists to catch. Assert presence, then behaviour.
-      await expect(quickButton.first()).toBeVisible();
-      await quickButton.scrollIntoViewIfNeeded();
-      await press(page, quickButton);
-      await waitForToastVisible(page);
-
-      const toast = page.locator(TOAST_SELECTOR).first();
+      await page.clock.runFor(500);
       await reveal(page, toast);
+      await expect(countdown(page), "the hover did not stop the countdown").not.toHaveAttribute("style", /animation/);
 
-      await page.waitForTimeout(1000);
+      await page.clock.runFor(60_000);
       await expect(toast).toBeVisible();
 
       await conceal(page);
+      await countdownFrom(page, 1500, "leaving did not restart the countdown at what was left");
 
-      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0, {
-        timeout: 5000,
-      });
+      await page.clock.runFor(1499);
+      await expect(toast, "gone before the 1500 ms it had left").toBeVisible();
+
+      await page.clock.runFor(1 + EXIT_MS);
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
     });
   });
 
@@ -192,21 +223,21 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
   // left a 2 s toast to go at 2.82 s, against 2.83 s untouched.
   test.describe("Pause on Focus", () => {
     test("holds the toast while focus is inside it and releases it when focus leaves", async ({ page }) => {
-      const quickButton = page.locator('button:has-text("2 Seconds")').first();
-      await expect(quickButton).toBeVisible();
-      await quickButton.scrollIntoViewIfNeeded();
-      await quickButton.click();
-      await waitForToastVisible(page);
-
-      const toast = page.locator(TOAST_SELECTOR).first();
+      await holdClock(page);
+      const toast = await triggerQuickToast(page, "click");
       const close = toast.getByRole("button", { name: "Close notification" });
-      await close.focus();
 
-      await page.waitForTimeout(3000);
+      await close.focus();
+      await expect(countdown(page), "focus did not stop the countdown").not.toHaveAttribute("style", /animation/);
+
+      await page.clock.runFor(60_000);
       await expect(toast, "focus inside should hold the toast past its 2 s").toBeVisible();
 
       await close.evaluate((el) => (el as HTMLElement).blur());
-      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0, { timeout: 5000 });
+      await countdownFrom(page, 2000, "blur did not restart the countdown");
+
+      await page.clock.runFor(2000 + EXIT_MS);
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
     });
   });
 
@@ -325,6 +356,7 @@ test.describe("Toast Keyboard Navigation", () => {
   test("keeps the toast on Escape when its provider sets closeOnEscape={false}", async ({
     page,
   }) => {
+    await holdClock(page);
     const withoutEscape = page.getByRole("button", { name: "Without Escape Dismissal" });
     await withoutEscape.scrollIntoViewIfNeeded();
     await withoutEscape.click();
@@ -335,8 +367,9 @@ test.describe("Toast Keyboard Navigation", () => {
 
     await page.keyboard.press("Escape");
 
-    // Past the 500ms exit transition, so a dismissal would have finished.
-    await page.waitForTimeout(800);
+    // Past the exit, so a dismissal would have finished. Its duration is
+    // Infinity, so nothing else would end it.
+    await page.clock.runFor(EXIT_MS);
     await expect(toast).toBeVisible();
   });
 
@@ -547,6 +580,7 @@ test.describe("Toast - Bulk Dismissal", () => {
   test("should smoothly dismiss multiple toasts", async ({ page }) => {
     await page.goto("/toast");
     await page.waitForLoadState("domcontentloaded");
+    await holdClock(page);
 
     for (let i = 0; i < 3; i++) {
       await triggerToast(page, "success");
@@ -562,7 +596,7 @@ test.describe("Toast - Bulk Dismissal", () => {
     await dismissAllButton.scrollIntoViewIfNeeded();
     await dismissAllButton.click();
 
-    await page.waitForTimeout(500);
+    await page.clock.runFor(EXIT_MS);
 
     await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
   });

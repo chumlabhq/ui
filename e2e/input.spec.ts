@@ -295,11 +295,6 @@ test.describe("Input Responsive Tests", () => {
     await page.goto("/input");
     await page.waitForLoadState("domcontentloaded");
 
-    // Firefox needs extra time for rendering after viewport changes
-    if (browserName === "firefox") {
-      await page.waitForTimeout(500);
-    }
-
     // Wait for inputs to be attached to DOM with longer timeout for Firefox
     const input = page.locator("input").first();
     const timeout = browserName === "firefox" ? 10000 : 5000;

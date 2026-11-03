@@ -193,7 +193,6 @@ test.describe("Pagination Keyboard Navigation", () => {
       await expect(highlighted).toBeVisible();
 
       await page.keyboard.press("ArrowDown");
-      await page.waitForTimeout(100);
 
       const newHighlighted = listbox.locator('[role="option"][data-highlighted="true"]');
       await expect(newHighlighted).toBeVisible();
@@ -584,9 +583,9 @@ test.describe("Pagination - Repeated Interaction", () => {
 
     for (let i = 0; i < 3; i++) {
       await tapOrClick(trigger);
-      await page.waitForTimeout(100);
+      await expect(trigger).toHaveAttribute("aria-expanded", "true");
       await tapOrClick(trigger);
-      await page.waitForTimeout(100);
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
     }
 
     await expect(trigger).toBeVisible();

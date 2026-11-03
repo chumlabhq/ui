@@ -1,6 +1,7 @@
 import { gotoFixture } from "./_nav";
 import { test, expect } from "./_test";
 import { injectAxe, checkA11y } from "axe-playwright";
+import { motionEnded } from "./_motion";
 
 async function waitForSwitchVisible(page: import("@playwright/test").Page) {
   const switchEl = page.getByRole("switch").first();
@@ -145,7 +146,7 @@ test.describe("Switch Component", () => {
       await slowSwitch.click();
       await expect(slowSwitch).toHaveAttribute("aria-checked", "true");
 
-      await page.waitForTimeout(600);
+      await motionEnded(page);
       await expect(slowSwitch).toHaveAttribute("aria-checked", "true");
     });
   });

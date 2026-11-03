@@ -3,6 +3,7 @@ import { test, expect } from "./_test";
 import { gotoFixture, servedRtl } from "./_nav";
 import { settle } from "./_surfaces";
 import { decodePng } from "./_png";
+import { motionEnded } from "./_motion";
 
 /**
  * What a value puts on the inline axis is painted on the inline axis, and an
@@ -336,13 +337,14 @@ async function sides(page: Page, dir: Dir): Promise<Row[]> {
     await settle(page, `Button/${fixture}`);
     const glyph = page.locator("[data-fixture] button span", { hasText: new RegExp(`^${icon}$`) }).first();
     await page.mouse.move(0, 0);
-    await page.waitForTimeout(100);
+    await motionEnded(page);
     const before = (await glyph.boundingBox())!.x;
     let moved = 0;
     let seen = "";
     if (how === "on hover") {
       await page.locator("[data-fixture] button").first().hover();
-      await page.waitForTimeout(400);
+      await expect.poll(async () => Math.abs((await glyph.boundingBox())!.x - before), { timeout: 3000 }).toBeGreaterThanOrEqual(2).catch(() => {});
+      await motionEnded(page);
       moved = (await glyph.boundingBox())!.x - before;
     } else {
       // servedRtl stills every animation in a right-to-left page; this one is

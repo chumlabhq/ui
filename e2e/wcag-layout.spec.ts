@@ -192,8 +192,9 @@ test.describe("SC 2.4.11 Focus Not Obscured (Minimum)", () => {
 
   for (const [component, fixture] of OVERLAYS) {
     test(`${component}/${fixture} keeps the focused element unobscured`, async ({ page }) => {
+      // gotoFixture returns 150 ms after the page stops moving; the overlays take
+      // focus on a 10 ms timer from mount (Modal.tsx, DatePicker.tsx).
       await gotoFixture(page, component, fixture);
-      await page.waitForTimeout(400);
 
       const obscured = await page.evaluate(() => {
         const focused = document.activeElement as HTMLElement | null;

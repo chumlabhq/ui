@@ -1,5 +1,6 @@
 import { test, expect } from "./_test";
 import { gotoFixture } from "./_nav";
+import { motionEnded } from "./_motion";
 
 /**
  * Focus reaching the inside of a floating surface when it opens.
@@ -197,12 +198,15 @@ test.describe("a mouse open leaves focus somewhere real", () => {
       ).toBe(true);
 
       await trigger.click();
-      await page.waitForTimeout(150);
-      expect(
-        await page.locator(SURFACE_SELECTOR).count(),
+      const message =
         `${surface.component}: a second click on the trigger should leave the ` +
-          `surface ${surface.secondClick === "closes" ? "closed" : "open"}`,
-      ).toBe(surface.secondClick === "closes" ? 0 : 1);
+        `surface ${surface.secondClick === "closes" ? "closed" : "open"}`;
+      if (surface.secondClick === "closes") await expect(page.locator(SURFACE_SELECTOR), message).toHaveCount(0);
+      else {
+        // A surface on its way out is still counted until its exit has ended.
+        await motionEnded(page);
+        expect(await page.locator(SURFACE_SELECTOR).count(), message).toBe(1);
+      }
     });
   }
 });

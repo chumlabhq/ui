@@ -39,7 +39,6 @@ test("every Loader indicator shows against its track and the surface, both theme
         document.documentElement.setAttribute("data-theme", t);
         document.documentElement.classList.toggle("dark", t === "dark");
       }, theme);
-      await page.waitForTimeout(50);
       const r = await page.evaluate(() => {
         const cv = document.createElement("canvas"); cv.width = cv.height = 1;
         const cx = cv.getContext("2d", { willReadFrequently: true })!;

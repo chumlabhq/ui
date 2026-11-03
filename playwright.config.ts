@@ -130,9 +130,20 @@ const config = defineConfig({
        * 6.5, peak 7.8, and every one of those passed. Memory is not what
        * changes: free sat at 30-38% at every count, as each worker's browser
        * grows over a longer run (1.4 to 2.5 GB at two). 1.2 h against 58 min.
+       *
+       * No video: recording is what grew that browser, and what hung its page
+       * loads late in a run (FD-1). The same 100 tests of 8 page loads each, in
+       * one browser, 2026-11-03: with video the parent process's malloc heap
+       * reached 10,096 MB and its cycle collector's graph 4.16M GC things, each
+       * test slowed from 3.9 to 5.1 s, and free memory fell to 31%; without,
+       * 126 MB, 61,690, a flat 4.0 s and 75%. HMR off changed none of this
+       * (7,833 MB, 4.16M). Closing the video's context does not return it, so
+       * after 16-22 minutes the parent's main thread was busy for 5-14 s at a
+       * time, most of it cycle collection, delivering nothing to the page. A
+       * failure still leaves its screenshot and error context.
        */
       workers: 2,
-      use: { ...devices["Desktop Firefox"] },
+      use: { ...devices["Desktop Firefox"], video: "off" },
     },
     {
       name: "webkit",

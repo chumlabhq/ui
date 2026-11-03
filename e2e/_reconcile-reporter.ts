@@ -1,4 +1,4 @@
-import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import type {
   FullConfig,
@@ -36,6 +36,61 @@ import type {
 /** The three terminal statuses that are not a pass. */
 const NOT_PASSED = new Set(["failed", "timedOut", "interrupted"]);
 
+/** `playwright test` options that take the next argument as their value; that argument is not a path. */
+const OPTIONS_WITH_VALUE = new Set([
+  "-c", "--config", "-g", "--grep", "--grep-invert", "--project", "--reporter", "-j", "--workers",
+  "--timeout", "--global-timeout", "--repeat-each", "--retries", "--output", "--max-failures", "--shard",
+  "--trace", "--tsconfig", "-u", "--update-snapshots", "--update-source-method", "--test-list",
+  "--test-list-invert", "--only-changed", "--browser", "--ui-host", "--ui-port",
+]);
+
+/**
+ * The path arguments on this run's command line that match no spec file.
+ *
+ * Playwright reads a path as a regex over each file's absolute path (a trailing
+ * `:line` or `:line:column` aside). A wrong one among right ones just filters to
+ * the right ones and the run passes: `playwright test e2e/demo-names.spec.ts
+ * e2e/modal.spec.ts` ran demo-names and said "collected 1", with no modal.spec.ts
+ * in the repo (2026-10-21). Read against the files on disk rather than the tests
+ * collected, because a spec another project owns is a real path with no tests in
+ * this run's project.
+ */
+export function unmatchedPaths(argv: string[], specFiles: string[]): { named: number; unmatched: string[] } {
+  const start = argv.indexOf("test");
+  if (start < 0) return { named: 0, unmatched: [] };
+  const paths: string[] = [];
+  const args = argv.slice(start + 1);
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === "--") continue;
+    if (arg.startsWith("-")) {
+      if (OPTIONS_WITH_VALUE.has(arg)) i++;
+      continue;
+    }
+    paths.push(arg);
+  }
+  const unmatched = paths.filter((path) => {
+    const pattern = path.replace(/:\d+(:\d+)?$/, "").replace(/\\/g, "/");
+    let matches: (file: string) => boolean;
+    try {
+      const regex = new RegExp(pattern, "i");
+      matches = (file) => regex.test(file);
+    } catch {
+      matches = (file) => file.includes(pattern);
+    }
+    return !specFiles.some(matches);
+  });
+  return { named: paths.length, unmatched };
+}
+
+function specFilesUnder(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) return specFilesUnder(path);
+    return /\.spec\.tsx?$/.test(entry.name) ? [path] : [];
+  });
+}
+
 interface Row {
   title: string;
   project: string;
@@ -49,13 +104,20 @@ export default class ReconcileReporter implements Reporter {
   private readonly seen = new Map<string, Row>();
   private readonly byStatus = new Map<string, number>();
   private readonly unexplainedSkips: string[] = [];
+  private paths: { named: number; unmatched: string[]; files: number } = { named: 0, unmatched: [], files: 0 };
 
   private static id(test: TestCase): string {
     return `${test.titlePath().join(" › ")}`;
   }
 
-  onBegin(_config: FullConfig, suite: Suite): void {
+  onBegin(config: FullConfig, suite: Suite): void {
     this.collected = suite.allTests().length;
+    const files = [...new Set(config.projects.map((p) => p.testDir))].flatMap(specFilesUnder);
+    this.paths = { ...unmatchedPaths(process.argv, files), files: files.length };
+    // Now as well as at the end: the rest of the run can take an hour.
+    if (this.paths.unmatched.length) {
+      process.stderr.write(`e2e reconciliation: no spec file matches ${this.paths.unmatched.map((p) => `"${p}"`).join(", ")}; this run will fail.\n`);
+    }
   }
 
   onTestEnd(test: TestCase, result: TestResult): void {
@@ -225,6 +287,17 @@ export default class ReconcileReporter implements Reporter {
       if (notPassedTests.length > 30) {
         lines.push(`    … and ${notPassedTests.length - 30} more`);
       }
+    }
+
+    if (this.paths.named > 0) {
+      lines.push(`  spec paths named ${this.paths.named}, matching a file ${this.paths.named - this.paths.unmatched.length}, of ${this.paths.files} spec files on disk`);
+    }
+    if (this.paths.unmatched.length > 0) {
+      failed = true;
+      lines.push(
+        `  NO SPEC FILE MATCHES ${this.paths.unmatched.map((p) => `"${p}"`).join(", ")}.`,
+        "  Playwright reads a path as a filter, so the rest of this run says nothing about it.",
+      );
     }
 
     const emptyProjects = [...byProject.entries()].filter(([, n]) => n === 0);
