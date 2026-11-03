@@ -1,5 +1,4 @@
 import { MultiSelectSearchableDropdown } from "../../../components/MultiSelectSearchableDropdown/index.js";
-import type { Previews } from "./types.js";
 
 const SKILLS = [
   { value: "css", label: "CSS" },
@@ -12,10 +11,8 @@ const SKILLS = [
   { value: "typescript", label: "TypeScript" },
 ];
 
-function Phone() {
+export function Phone() {
   return (
     <MultiSelectSearchableDropdown label="Skills" options={SKILLS} defaultValue={["react", "typescript"]} defaultOpen />
   );
 }
-
-export default { phone: Phone } satisfies Previews;

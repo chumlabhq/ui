@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Modal } from "../../../components/Modal/index.js";
 import { Button } from "../../../components/Button/index.js";
-import type { Previews } from "./types.js";
 
 const SECONDARY = "border border-cl-border bg-cl-bg-elevated text-cl-text";
 const PRIMARY = "bg-cl-text text-cl-bg hover:opacity-90";
 
-function Phone() {
+export function Phone() {
   const [open, setOpen] = useState(true);
   return (
     <>
@@ -23,7 +22,7 @@ function Phone() {
 
 const CLAUSES = Array.from({ length: 24 }, (_, i) => `Clause ${i + 1}. These terms cover how the service is provided, what you agree to when you use it, and how either of us can end the agreement.`);
 
-function Tall() {
+export function Tall() {
   const [open, setOpen] = useState(true);
   return (
     <>
@@ -41,5 +40,3 @@ function Tall() {
     </>
   );
 }
-
-export default { phone: Phone, tall: Tall } satisfies Previews;

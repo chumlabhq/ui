@@ -1,7 +1,6 @@
 import { ResizablePanel } from "../../../components/ResizablePanel/index.js";
-import type { Previews } from "./types.js";
 
-function Phone() {
+export function Phone() {
   return (
     <ResizablePanel
       defaultValue={200}
@@ -13,5 +12,3 @@ function Phone() {
     </ResizablePanel>
   );
 }
-
-export default { phone: Phone } satisfies Previews;

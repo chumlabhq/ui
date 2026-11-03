@@ -166,6 +166,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `item` carries the base AND 2 state variants. Overriding it
 // replaces all of them, so write them together:
 <Breadcrumb
+  items={items}
   classes={{
     item:
       "rounded-cl-md px-2 py-1 " +           // base
@@ -227,7 +228,7 @@ Default classes use Tailwind `dark:` prefix. Activated by `<html class="dark">`.
 
 ```tsx
 // Highlight active item with data-state
-<Breadcrumb classes={{
+<Breadcrumb items={items} classes={{
   item: "[&[data-state=active]]:font-bold [&[data-state=active]]:text-blue-600",
 }} />
 ```
@@ -275,8 +276,8 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
 
 ```tsx
 const items: BreadcrumbItem[] = [
-  { id: "home", label: "Home", itemIcon: <HomeIcon className="w-4 h-4" /> },
-  { id: "docs", label: "Docs", itemIcon: <FolderIcon className="w-4 h-4" /> },
+  { id: "home", label: "Home", icon: <HomeIcon className="w-4 h-4" /> },
+  { id: "docs", label: "Docs", icon: <FolderIcon className="w-4 h-4" /> },
   { id: "api", label: "API Reference" },
 ];
 

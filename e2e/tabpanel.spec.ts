@@ -300,6 +300,7 @@ test.describe("TabPanel Component - Cross-Browser Tests", () => {
       const tablist = page.getByRole("tablist").first();
       const tabs = tablist.getByRole("tab");
       const tabCount = await tabs.count();
+      expect(tabCount).toBeGreaterThan(0);
 
       for (let i = 0; i < tabCount; i++) {
         const controlsId = await tabs.nth(i).getAttribute("aria-controls");

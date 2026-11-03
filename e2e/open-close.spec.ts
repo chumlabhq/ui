@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "./_test";
+import { servedRtl } from "./_nav";
 
 /**
  * Opening and closing a popup never move the page by themselves.
@@ -268,3 +269,84 @@ test("opening and closing a popup never moves the page", async ({ page, browserN
   expect(components).toBeGreaterThanOrEqual(FLOOR);
   expect(problems).toEqual([]);
 });
+
+/**
+ * A modal locks the page's scroll and pads the side its root scrollbar was on, so
+ * nothing behind it moves when the scrollbar goes.
+ *
+ * Which side depends on the browser and the page's direction, and only a classic
+ * scrollbar has a side at all. macOS has overlay bars everywhere: gutter 0, nothing
+ * padded, and this holds only that the page stays put. The classic bar is Windows
+ * and Linux Firefox's, so `release-gates.yml` runs this on windows-latest with
+ * SCROLL_LOCK_GUTTER_FLOOR=1, because there a gutter of 0 would pass without
+ * having measured anything. Run A2 measured the same four numbers in a one-off.
+ */
+for (const dir of ["ltr", "rtl"] as const) {
+  test(`a modal's scroll lock never moves the page (${dir})`, async ({ page, browserName }) => {
+    await page.setViewportSize({ width: 1024, height: 600 });
+    if (dir === "rtl") await servedRtl(page);
+    const modal = SUBJECTS.find((s) => s.name === "Modal")!;
+    await load(page, modal, false);
+    const trigger = page.locator(`[data-subject] ${modal.trigger}`).first();
+    await trigger.scrollIntoViewIfNeeded();
+
+    const read = () =>
+      page.evaluate(() => {
+        const html = document.documentElement;
+        const probe = document.createElement("div");
+        probe.style.cssText = "position:fixed;top:0;left:0;width:0;height:0";
+        document.body.appendChild(probe);
+        const probeLeft = probe.getBoundingClientRect().left;
+        probe.remove();
+        const subject = document.querySelector("[data-subject]")!.getBoundingClientRect();
+        return {
+          direction: getComputedStyle(html).direction,
+          gutter: window.innerWidth - html.clientWidth,
+          clientLeft: html.clientLeft,
+          probeLeft,
+          scrollY: window.scrollY,
+          left: subject.left,
+          right: subject.right,
+          overflow: document.body.style.overflow,
+          paddingLeft: document.body.style.paddingLeft,
+          paddingRight: document.body.style.paddingRight,
+        };
+      });
+
+    const before = await read();
+    expect(before.direction).toBe(dir);
+    expect(before.scrollY, "the page did not scroll to its trigger, so nothing could move").toBeGreaterThan(0);
+    const floor = Number(process.env.SCROLL_LOCK_GUTTER_FLOOR ?? 0);
+    expect(before.gutter, `this run has to measure a classic scrollbar of at least ${floor} px`).toBeGreaterThanOrEqual(floor);
+
+    await trigger.click();
+    await expect(page.locator(modal.surface)).toBeVisible();
+    await settle(page);
+    const open = await read();
+    const padded = open.paddingLeft ? "left" : open.paddingRight ? "right" : "none";
+    const side = before.gutter === 0 ? "none" : before.probeLeft > 0 ? "left" : "right";
+    console.log(
+      `SCROLL_LOCK ${browserName} ${dir} gutter=${before.gutter} clientLeft=${before.clientLeft} probeLeft=${before.probeLeft} ` +
+        `padded=${padded} (expected ${side}) moved x=${open.left - before.left} y=${open.scrollY - before.scrollY} (floor gutter ${floor})`,
+    );
+    expect(open.overflow, "the modal did not lock the page").toBe("hidden");
+    expect(padded, "the lock padded the side without the scrollbar").toBe(side);
+    if (side !== "none") expect(side === "left" ? open.paddingLeft : open.paddingRight).toBe(`${before.gutter}px`);
+    expect({ left: open.left, right: open.right, scrollY: open.scrollY }, "opening moved the page").toEqual({
+      left: before.left,
+      right: before.right,
+      scrollY: before.scrollY,
+    });
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator(modal.surface)).toHaveCount(0);
+    await settle(page);
+    const closed = await read();
+    expect(closed.overflow, "closing did not release the lock").toBe("");
+    expect({ left: closed.left, right: closed.right, scrollY: closed.scrollY }, "closing moved the page").toEqual({
+      left: before.left,
+      right: before.right,
+      scrollY: before.scrollY,
+    });
+  });
+}

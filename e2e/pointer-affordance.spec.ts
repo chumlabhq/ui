@@ -190,6 +190,7 @@ test("everything clickable declares a cursor", async ({ page, browserName }) => 
     els.map((e) => new URL((e as HTMLAnchorElement).href).pathname),
   );
 
+  expect(paths.length, "the fixture index listed nothing").toBeGreaterThan(0);
   const findings: Finding[] = [];
   let handlerBound = 0;
   let checked = 0;

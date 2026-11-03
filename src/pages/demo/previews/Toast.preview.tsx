@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ToastProvider, useToast } from "../../../components/Toast/index.js";
 import { Button } from "../../../components/Button/index.js";
-import type { Previews } from "./types.js";
 
 function Saved() {
   const toast = useToast();
@@ -23,12 +22,10 @@ function Saved() {
   );
 }
 
-function Phone() {
+export function Phone() {
   return (
     <ToastProvider>
       <Saved />
     </ToastProvider>
   );
 }
-
-export default { phone: Phone } satisfies Previews;

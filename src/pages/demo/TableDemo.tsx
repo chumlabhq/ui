@@ -16,7 +16,8 @@ import type { SortingState } from "../../components/Table/index.js";
 import { Button } from "../../components/Button/index.js";
 import { Input } from "../../components/Input/index.js";
 import { useTheme } from "./ThemeContext.js";
-import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
+import { NextLoadControl } from "./components/FakeLoader.js";
+import { useFakeLoader } from "./components/useFakeLoader.js";
 import {
   DocsHero,
   Section,
@@ -1158,17 +1159,17 @@ const TableDemo = () => {
   const [orderRows, setOrderRows] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [orderAttempt, setOrderAttempt] = useState(0);
+  const { load: loadOrders, onLoadError: onOrdersLoadError } = orders;
   useEffect(() => {
     let live = true;
-    orders
-      .load()
+    loadOrders()
       .then((rows) => {
         if (live) setOrderRows(rows);
       })
       .catch((error: unknown) => {
         if (!live) return;
         setOrderRows([]);
-        orders.onLoadError(error);
+        onOrdersLoadError(error);
       })
       .finally(() => {
         if (live) setOrdersLoading(false);
@@ -1176,7 +1177,7 @@ const TableDemo = () => {
     return () => {
       live = false;
     };
-  }, [orders.load, orders.onLoadError, orderAttempt]);
+  }, [loadOrders, onOrdersLoadError, orderAttempt]);
   const reloadOrders = () => {
     setOrdersLoading(true);
     setOrderAttempt((n) => n + 1);

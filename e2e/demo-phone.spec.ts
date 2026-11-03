@@ -200,6 +200,7 @@ test("every phone-width frame loads its preview at 360 px or the page's width, i
     }
     await settled(inner);
     const popups = await popupsOf(inner);
+    if (want.open) expect(popups.length, `${f.route}: ${want.open} opened nothing`).toBeGreaterThan(0);
     for (const p of popups) {
       const across = p.left >= -0.5 && p.right <= width.client + 0.5;
       const down = p.role === "dialog" || (p.top >= -0.5 && p.bottom <= p.height + 0.5);

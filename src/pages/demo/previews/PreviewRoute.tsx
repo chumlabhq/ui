@@ -2,7 +2,7 @@ import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "re
 import { useParams } from "react-router-dom";
 import NotFound from "../../NotFound.js";
 import type { Previews } from "./types.js";
-import { useDemoDirection } from "../components/DirectionControl.js";
+import { useDemoDirection } from "../components/useDemoDirection.js";
 
 /**
  * `/preview/:component/:example`: one demo example on a page of its own, with
@@ -14,7 +14,7 @@ import { useDemoDirection } from "../components/DirectionControl.js";
  * index.html sends no page view from it, so each frame on a docs page is not
  * counted as a visit.
  */
-const modules = import.meta.glob<{ default: Previews }>("./*.preview.tsx");
+const modules = import.meta.glob<Previews>("./*.preview.tsx");
 
 /**
  * In a frame, a preview takes no focus until the reader uses it.
@@ -49,10 +49,11 @@ const previews: Record<string, LazyExoticComponent<ComponentType<PreviewProps>>>
   Object.entries(modules).map(([path, load]) => [
     path.slice("./".length, -".preview.tsx".length),
     lazy(async () => {
-      const examples = (await load()).default;
+      const examples = await load();
       return {
         default: function Preview({ example }: PreviewProps) {
-          const Example = Object.hasOwn(examples, example) ? examples[example] : NotFound;
+          const name = example.replace(/(^|-)(\w)/g, (_, _dash, letter: string) => letter.toUpperCase());
+          const Example = Object.hasOwn(examples, name) ? examples[name] : NotFound;
           return <Example />;
         },
       };

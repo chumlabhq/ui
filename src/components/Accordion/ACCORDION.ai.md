@@ -236,7 +236,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 ```tsx
 // Adds to the trigger's default classes; a utility here that conflicts
 // with a default (another padding, another background) replaces it:
-<Accordion classes={{ trigger: "my-custom-trigger px-6" }} />
+<Accordion selectionMode="single" classes={{ trigger: "my-custom-trigger px-6" }}>{items}</Accordion>
 
 // The other slots (item, body, icon, etc.) keep their defaults.
 ```
@@ -327,10 +327,12 @@ The default classes use Tailwind's `dark:` prefix. Dark mode activates when `<ht
 // trigger: "text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
 
 // When overriding, always provide both light and dark variants:
-<Accordion classes={{
+<Accordion selectionMode="single" classes={{
   trigger: "text-gray-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800",
   body: "text-gray-600 dark:text-gray-300",
-}} />
+}}>
+  {items}
+</Accordion>
 ```
 
 ### Styling via data attributes (CSS/Tailwind)
@@ -339,11 +341,13 @@ Every item and trigger expose `data-state="open|closed"`. Use this for state-dep
 
 ```tsx
 // Tailwind arbitrary variants:
-<Accordion classes={{
+<Accordion selectionMode="single" classes={{
   item: "[&[data-state=open]]:bg-blue-50 dark:[&[data-state=open]]:bg-blue-900/20 border-b border-gray-200 dark:border-gray-700",
   trigger: "[&[data-state=open]]:text-blue-600 dark:[&[data-state=open]]:text-blue-400 [&[data-state=open]]:font-semibold",
   icon: "[&[data-state=open]]:text-blue-600 dark:[&[data-state=open]]:text-blue-400",
-}} />
+}}>
+  {items}
+</Accordion>
 ```
 
 Or in plain CSS:
@@ -367,6 +371,8 @@ Or in plain CSS:
   content: "overflow-hidden transition-[max-height,opacity,visibility]",
   icon: "h-5 w-5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
 }}>
+  {items}
+</Accordion>
 ```
 
 ### Complete themed example: "macOS Settings" style
@@ -384,8 +390,7 @@ Or in plain CSS:
     itemText: "flex-1 text-left",
     body: "px-4 pb-3 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed",
     content: "overflow-hidden transition-[max-height,opacity,visibility]",
-    icon: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
-    icon: "shrink-0",
+    icon: "h-3.5 w-3.5 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200",
   }}
   animationDuration={200}
   animationEasing="ease-out"
@@ -449,8 +454,8 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 `AccordionContent`'s `keepMounted` takes three values: `"visited"` (default) mounts the panel's children on the first expand and keeps them, `true` mounts them from the start (an exit animation or a measurement has a node to read), and `false` unmounts them each time the panel collapses.
 
 ```tsx
-<AccordionContent keepMounted>{/* in the DOM before the first expand */}</AccordionContent>
-<AccordionContent keepMounted={false}>{/* gone whenever collapsed */}</AccordionContent>
+<AccordionContent keepMounted>In the DOM before the first expand.</AccordionContent>
+<AccordionContent keepMounted={false}>Gone whenever collapsed.</AccordionContent>
 ```
 
 ### Persist to localStorage

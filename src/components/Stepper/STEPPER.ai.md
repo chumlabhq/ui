@@ -177,6 +177,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `separator` carries the base AND 6 state variants. Overriding it
 // replaces all of them, so write them together:
 <Stepper
+  steps={steps}
   classes={{
     separator:
       "rounded-cl-md px-2 py-1 " +           // base

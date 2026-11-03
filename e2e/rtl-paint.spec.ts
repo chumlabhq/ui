@@ -130,6 +130,7 @@ async function positions(page: Page, dir: Dir): Promise<Row[]> {
   await load(page, dir, "Table", "resizable");
   const handle = "[data-fixture] [data-resize-handle]";
   const count = await page.locator(handle).count();
+  expect(count, "the resizable table rendered no handle").toBeGreaterThan(0);
   for (let i = 0; i < count; i++) {
     const h = await box(page, handle, i);
     const th = await page.locator(handle).nth(i).evaluate((el) => {

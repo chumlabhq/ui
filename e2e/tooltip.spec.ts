@@ -203,6 +203,7 @@ test.describe("Tooltip Component - Cross-Browser Tests", () => {
 
       const tooltip = page.getByRole("tooltip", { name: "This tooltip is controlled programmatically" });
       const initialVisible = await tooltip.isVisible().catch(() => false);
+      if (initialVisible) await expect(tooltip).toBeVisible();
 
       await toggleButton.click();
 

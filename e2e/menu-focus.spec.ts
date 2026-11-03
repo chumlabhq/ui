@@ -197,6 +197,7 @@ test.describe("a mouse open leaves focus somewhere real", () => {
           `it landed on <${landed.tag.toLowerCase()}>`,
       ).toBe(true);
 
+      await expect(page.locator(SURFACE_SELECTOR)).not.toHaveCount(0);
       await trigger.click();
       const message =
         `${surface.component}: a second click on the trigger should leave the ` +

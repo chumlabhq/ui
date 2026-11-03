@@ -56,3 +56,17 @@ export const DotsGlyph = () => (
     <path d="M3 8h.01M8 8h.01M13 8h.01" strokeWidth={2.5} />
   </Glyph>
 );
+
+/** A stroke icon that fills its slot, as an icon library's SVG does. */
+export const SlotFillGlyph = () => (
+  <svg viewBox="0 0 16 16" aria-hidden="true" className="h-full w-full" fill="none" stroke="currentColor" strokeWidth={2}>
+    <path d="M3 8h10M8 3v10" />
+  </svg>
+);
+
+/** A shape rather than a glyph: the fixture is about placement, not iconography. */
+export const CircleIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+    <circle cx="8" cy="8" r="6" />
+  </svg>
+);

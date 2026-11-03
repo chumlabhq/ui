@@ -122,7 +122,7 @@ test("every When loading fails section fails on demand, announces it, and recove
 
     await c.retry(section, page);
     await expect(c.loaded(page).first(), `${c.route}: the retry did not load`).toBeVisible({ timeout: 5000 });
-    await expect(section.getByRole("alert").filter({ hasText: c.error }), `${c.route}: the error stayed after a good load`).toHaveCount(0);
+    await expect(alert, `${c.route}: the error stayed after a good load`).toHaveCount(0);
     recovered += 1;
     console.log(`DEMO_FAILURE_SECTION /${c.route} failed=alert "${c.error.source}" recovered=true`);
     await page.keyboard.press("Escape");

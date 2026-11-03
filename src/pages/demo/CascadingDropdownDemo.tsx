@@ -24,7 +24,8 @@ import {
 } from "./components/index.js";
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
-import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
+import { NextLoadControl } from "./components/FakeLoader.js";
+import { useFakeLoader } from "./components/useFakeLoader.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
 
 /**

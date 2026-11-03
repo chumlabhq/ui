@@ -8,12 +8,12 @@
 // command before any gate runs.
 //
 //   npm run gates          everything
-//   npm run gates:fast     the sixteen that finish in under ~90s each
+//   npm run gates:fast     the eighteen that finish in under ~90s each
 //   npm run gates:record   update the population record
 //
 // THE SPLIT, because the full run is too long to sit through:
 //
-//   per slice   `npm run gates:fast` — ~2 minutes, sixteen gates. It catches
+//   per slice   `npm run gates:fast` — ~2 minutes, eighteen gates. It catches
 //               every drift class that does not need a browser: types,
 //               generated files out of step, docs naming something that does
 //               not exist, a schema default that is not the code's, a
@@ -103,6 +103,8 @@ const GATES = [
   // A fixed wait is a guess at how long something takes; see the script.
   { id: "e2e-waits", cmd: "npm run verify:e2e-waits && npm run verify:e2e-waits:self-check",
     claims: { script: "assert-e2e-waits.mjs" }, pop: /E2E_WAITS found (\d+)/ },
+  { id: "e2e-absence", cmd: "npm run verify:e2e-absence && npm run verify:e2e-absence:self-check",
+    claims: { script: "assert-e2e-absence.mjs" }, pop: /E2E_ABSENCE found (\d+)/ },
   // The CI failures no local run can reproduce: the runner OS a workflow asks
   // for, and a job that launches a browser it never installed. See the script.
   { id: "ci-runners", cmd: "node scripts/assert-ci-runners.mjs",
@@ -144,6 +146,8 @@ const GATES = [
   { id: "site-build", cmd: "npm run build", claims: {}, provides: ["dist", "dist-site"] },
   { id: "snippet-shape", cmd: "node scripts/build-demo-snippets.mjs --check", needs: ["dist"],
     claims: { script: "build-demo-snippets.mjs" }, pop: /(\d+) of \d+ sections/ },
+  { id: "doc-examples", cmd: "npm run verify:doc-examples && npm run verify:doc-examples:self-check", needs: ["dist"],
+    claims: { script: "typecheck-doc-examples.mjs" }, pop: /DOC_EXAMPLES found (\d+)/ },
   { id: "playground-removed", cmd: "npm run verify:playground-removed", needs: ["dist-site"],
     claims: { script: "assert-playground-removed.mjs" } },
 
@@ -466,7 +470,8 @@ if (RECORD) {
 
 const failed = results.filter((r) => r.status === "FAIL");
 const mins = ((Date.now() - started) / 60000).toFixed(1);
-process.stdout.write(`\n── ${results.length} gates, ${mins} min ──\n`);
+const skippedCount = results.filter((r) => r.status === "skipped").length;
+process.stdout.write(`\n── ${results.length - skippedCount} ran, ${skippedCount} skipped, ${results.length} total, ${mins} min ──\n`);
 process.stdout.write(`   e2e:rest covers ${restSpecs.length} specs: ${restSpecs.join(" ")}\n`);
 
 if (fell.length) {

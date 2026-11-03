@@ -90,6 +90,7 @@ export default function Example() {
 // `control` carries the base AND 2 state variants. Overriding it
 // replaces all of them, so write them together:
 <RadioButton
+  value="monthly"
   classes={{
     control:
       "rounded-full border w-4 h-4 " +      // base

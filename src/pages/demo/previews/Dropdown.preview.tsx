@@ -1,5 +1,4 @@
 import { Dropdown } from "../../../components/Dropdown/index.js";
-import type { Previews } from "./types.js";
 
 const COUNTRIES = [
   { value: "au", label: "Australia" },
@@ -12,8 +11,6 @@ const COUNTRIES = [
   { value: "us", label: "United States" },
 ];
 
-function Phone() {
+export function Phone() {
   return <Dropdown label="Country" options={COUNTRIES} placeholder="Choose a country" defaultOpen />;
 }
-
-export default { phone: Phone } satisfies Previews;

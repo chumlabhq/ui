@@ -1,5 +1,4 @@
 import { Stepper } from "../../../components/Stepper/index.js";
-import type { Previews } from "./types.js";
 
 const CHECKOUT = [
   { id: "cart", label: "Cart", description: "Review items" },
@@ -8,8 +7,6 @@ const CHECKOUT = [
   { id: "done", label: "Done", description: "Order placed" },
 ];
 
-function Phone() {
+export function Phone() {
   return <Stepper steps={CHECKOUT} value={1} showDescriptions />;
 }
-
-export default { phone: Phone } satisfies Previews;

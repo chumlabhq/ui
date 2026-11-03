@@ -80,9 +80,9 @@ To serve flags yourself instead — a CDN, or a directory you control — pass
 ```tsx
 import { CountryFlag, CHUMLAB_FLAG_CDN } from "@chumlab/ui/country-flag";
 
-<CountryFlag code="in" />                        {/* packaged, no network */}
-<CountryFlag code="in" basePath="/flags" />      {/* your own directory */}
-<CountryFlag code="in" basePath={CHUMLAB_FLAG_CDN} /> {/* Chumlab's CDN */}
+<CountryFlag code="in" />;                        // packaged, no network
+<CountryFlag code="in" basePath="/flags" />;      // your own directory
+<CountryFlag code="in" basePath={CHUMLAB_FLAG_CDN} />; // Chumlab's CDN
 ```
 
 The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,

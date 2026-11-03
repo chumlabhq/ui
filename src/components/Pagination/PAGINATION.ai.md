@@ -248,6 +248,7 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
+  totalPages={20}
   renderEllipsis={({ onValueChange }) => (
     <input
       type="number"
@@ -263,6 +264,7 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
+  totalPages={20}
   renderPageInfo={({ value, totalPages }) => (
     <span>Page {value} of {totalPages}</span>
   )}
@@ -273,6 +275,7 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
+  totalPages={20}
   rowsPerPagePrefix="Afficher"
   rowsPerPageSuffix="lignes"
   dropdownAriaLabel="Lignes par page"
@@ -286,7 +289,7 @@ const [rows, setRows] = useState(10);
 ### Section reordering
 
 ```tsx
-<Pagination sectionOrder={["row", "pageInfo", "rowsPerPage"]} />
+<Pagination totalPages={20} sectionOrder={["nav", "pageInfo", "selector"]} />
 ```
 
 ---

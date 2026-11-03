@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerHeader } from "../../../components/Drawer/index.js";
 import { Button } from "../../../components/Button/index.js";
-import type { Previews } from "./types.js";
 
 const SECONDARY = "border border-cl-border bg-cl-bg-elevated text-cl-text";
 const PRIMARY = "bg-cl-text text-cl-bg hover:opacity-90";
@@ -23,7 +22,7 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Phone() {
+export function Phone() {
   const [open, setOpen] = useState(true);
   return (
     <>
@@ -43,7 +42,7 @@ function Phone() {
 
 const ITEMS = Array.from({ length: 30 }, (_, i) => `Item ${i + 1}: Notebook, A5, dotted`);
 
-function LongSheet() {
+export function LongSheet() {
   const [open, setOpen] = useState(true);
   return (
     <>
@@ -63,5 +62,3 @@ function LongSheet() {
     </>
   );
 }
-
-export default { phone: Phone, "long-sheet": LongSheet } satisfies Previews;

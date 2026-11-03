@@ -263,6 +263,7 @@ test.describe("Table cell editing (every editable cell, every path)", () => {
       // The fixture page's own act — a dispatched dblclick at an unfocused cell.
       if (surface.act) {
         const { cell } = await open(surface);
+        await expect(page.locator("main[data-fixture-act]")).toHaveAttribute("data-fixture-act");
         await expect(page.locator("main[data-fixture-act]")).not.toHaveAttribute("data-fixture-act", /none|pending/);
         await until(cell, (r) => r.editor && r.editorFocused);
         const s = await read(cell);

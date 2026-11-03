@@ -149,6 +149,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `item` carries the base AND 3 state variants. Overriding it
 // replaces all of them, so write them together:
 <TabPanel
+  tabs={tabs}
   classes={{
     item:
       "rounded-cl-md px-2 py-1 " +           // base
@@ -202,7 +203,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(item) => ...}</TabPanel>
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(item) => <p>{item.label}</p>}</TabPanel>
 ```
 
 ### With icons and badges

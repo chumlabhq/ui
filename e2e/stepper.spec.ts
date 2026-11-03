@@ -148,6 +148,7 @@ test.describe("Stepper Component", () => {
       const globalSection = page.locator("section").filter({ hasText: "Globally Disabled" });
       const stepper = globalSection.getByRole("navigation");
       const buttons = stepper.getByRole("button");
+      await expect(stepper).toBeVisible();
       await expect(buttons).toHaveCount(0);
     });
   });

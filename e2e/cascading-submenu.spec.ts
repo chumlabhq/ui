@@ -190,6 +190,7 @@ test.describe("CascadingDropdown submenu keyboard focus", () => {
       await expect(page.locator(`${SURFACE} [role^="menuitem"]`, { hasText: "Apple" })).toBeFocused();
       expect(entered.stops, "exactly one tab stop, on the focused item").toEqual(["Apple"]);
 
+      await expect(page.locator(SURFACE)).not.toHaveCount(0);
       await page.keyboard.press("ArrowLeft");
       await expect(page.locator(SURFACE)).toHaveCount(0);
       await expect(page.locator('[role="menuitem"]', { hasText: "Fruit" })).toBeFocused();

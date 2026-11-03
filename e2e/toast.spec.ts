@@ -128,6 +128,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       const closeButton = page.locator(
         `${TOAST_SELECTOR} button[aria-label="Close notification"]`,
       );
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
       await closeButton.click();
 
       await expect(page.locator(TOAST_SELECTOR)).toHaveCount(0);
@@ -136,6 +137,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
     test("should auto-dismiss after duration", async ({ page }) => {
       await holdClock(page);
       const toast = await triggerQuickToast(page, "click");
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
 
       await page.clock.runFor(1999);
       await expect(toast, "gone before its 2 s were up").toBeVisible();
@@ -175,6 +177,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       // The guard used to make this pass when the element was absent, which is
       // the failure the test exists to catch. Assert presence, then behaviour.
       await expect(dismissAllButton.first()).toBeVisible();
+      await expect(page.locator(TOAST_SELECTOR)).not.toHaveCount(0);
       await dismissAllButton.scrollIntoViewIfNeeded();
       await dismissAllButton.click();
 
@@ -187,6 +190,7 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       await holdClock(page);
       const toast = await triggerQuickToast(page, "press");
 
+      await expect(countdown(page)).toHaveCount(1);
       await reveal(page, toast);
       await expect(countdown(page), "the hover did not stop the countdown").not.toHaveAttribute("style", /animation/);
 
@@ -200,6 +204,8 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       await holdClock(page);
       const toast = await triggerQuickToast(page, "press");
 
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
+      await expect(countdown(page)).toHaveCount(1);
       await page.clock.runFor(500);
       await reveal(page, toast);
       await expect(countdown(page), "the hover did not stop the countdown").not.toHaveAttribute("style", /animation/);
@@ -227,6 +233,8 @@ test.describe("Toast Component - Cross-Browser Tests", () => {
       const toast = await triggerQuickToast(page, "click");
       const close = toast.getByRole("button", { name: "Close notification" });
 
+      await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
+      await expect(countdown(page)).toHaveCount(1);
       await close.focus();
       await expect(countdown(page), "focus did not stop the countdown").not.toHaveAttribute("style", /animation/);
 
@@ -321,6 +329,7 @@ test.describe("Toast Keyboard Navigation", () => {
     const closeButton = page.locator(
       `${TOAST_SELECTOR} button[aria-label="Close notification"]`,
     );
+    await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
     await closeButton.focus();
     await page.keyboard.press("Enter");
 
@@ -333,6 +342,7 @@ test.describe("Toast Keyboard Navigation", () => {
     const closeButton = page.locator(
       `${TOAST_SELECTOR} button[aria-label="Close notification"]`,
     );
+    await expect(page.locator(TOAST_SELECTOR)).toHaveCount(1);
     await closeButton.focus();
     await page.keyboard.press("Space");
 
@@ -593,6 +603,7 @@ test.describe("Toast - Bulk Dismissal", () => {
     // The guard used to make this pass when the element was absent, which is
     // the failure the test exists to catch. Assert presence, then behaviour.
     await expect(dismissAllButton.first()).toBeVisible();
+    await expect(page.locator(TOAST_SELECTOR)).not.toHaveCount(0);
     await dismissAllButton.scrollIntoViewIfNeeded();
     await dismissAllButton.click();
 

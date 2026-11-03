@@ -11,25 +11,13 @@ const answerSkills = (query: string) =>
 
 type NextLoad = "succeed" | "fail" | "slow" | "empty";
 
-interface FakeLoader<A extends unknown[], T> {
-  /** What the next load will do; it goes back to "succeed" once that load settles. */
-  next: NextLoad;
-  setNext: (mode: NextLoad) => void;
-  /** Hand this to the component: `loadOptions`, `searchOptions`, `loadChildren`, or your own fetch. */
-  load: (...args: A) => Promise<T[]>;
-  /** Hand this to the component's `onLoadError`: it sets `error`, and the next good load clears it. */
-  onLoadError: (error: unknown) => void;
-  /** What to show in the field's `errorMessage` after a failed load; null once a load succeeds. */
-  error: string | null;
-}
-
 const MODES: Array<{ mode: Exclude<NextLoad, "succeed">; label: string; says: string }> = [
   { mode: "fail", label: "Fail", says: "The next load fails." },
   { mode: "slow", label: "Be slow", says: "The next load takes 3 seconds." },
   { mode: "empty", label: "Return nothing", says: "The next load returns no items." },
 ];
 
-function NextLoadControl({ loader }: { loader: Pick<FakeLoader<never, unknown>, "next" | "setNext"> }) {
+function NextLoadControl({ loader }: { loader: { next: NextLoad; setNext: (mode: NextLoad) => void } }) {
   return (
     <div role="group" aria-label="Next load" className="space-y-2" data-demo-next-load={loader.next}>
       <div className="flex flex-wrap items-center gap-2">
@@ -50,6 +38,18 @@ function NextLoadControl({ loader }: { loader: Pick<FakeLoader<never, unknown>, 
       </p>
     </div>
   );
+}
+
+interface FakeLoader<A extends unknown[], T> {
+  /** What the next load will do; it goes back to "succeed" once that load settles. */
+  next: NextLoad;
+  setNext: (mode: NextLoad) => void;
+  /** Hand this to the component: `loadOptions`, `searchOptions`, `loadChildren`, or your own fetch. */
+  load: (...args: A) => Promise<T[]>;
+  /** Hand this to the component's `onLoadError`: it sets `error`, and the next good load clears it. */
+  onLoadError: (error: unknown) => void;
+  /** What to show in the field's `errorMessage` after a failed load; null once a load succeeds. */
+  error: string | null;
 }
 
 function useFakeLoader<A extends unknown[], T>(answer: (...args: A) => T[], failedText: string, latency = 400): FakeLoader<A, T> {

@@ -23,7 +23,8 @@ import {
 import { FormDemo } from "./components/FormDemo.js";
 import { COUNTRIES, type Country } from "./lib/countryCatalog.js";
 import { PhoneFrame } from "./components/PhoneFrame.js";
-import { NextLoadControl, useFakeLoader } from "./components/FakeLoader.js";
+import { NextLoadControl } from "./components/FakeLoader.js";
+import { useFakeLoader } from "./components/useFakeLoader.js";
 
 /**
  * The async examples' data source: a static country list, filtered here and

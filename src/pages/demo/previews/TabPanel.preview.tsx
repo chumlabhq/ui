@@ -1,5 +1,4 @@
 import { TabPanel } from "../../../components/TabPanel/index.js";
-import type { Previews } from "./types.js";
 
 const TABS = [
   { id: "overview", label: "Overview" },
@@ -9,8 +8,6 @@ const TABS = [
   { id: "billing", label: "Billing" },
 ];
 
-function Phone() {
+export function Phone() {
   return <TabPanel tabs={TABS}>{(tab) => <p className="pt-4 text-sm text-cl-text-secondary">{tab.label} panel</p>}</TabPanel>;
 }
-
-export default { phone: Phone } satisfies Previews;

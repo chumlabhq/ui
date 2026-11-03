@@ -304,29 +304,28 @@ test.describe("Accordion Component - Cross-Browser Tests", () => {
       const triggers = multiAccordion.getByRole("button");
       const triggerCount = await triggers.count();
 
-      if (triggerCount >= 2) {
-        for (let i = 0; i < triggerCount; i++) {
-          const trigger = triggers.nth(i);
-          const isExpanded = await trigger.getAttribute("aria-expanded");
-          if (isExpanded === "true") {
-            await trigger.click();
-            await expect(trigger).toHaveAttribute("aria-expanded", "false");
-          }
+      expect(triggerCount).toBeGreaterThanOrEqual(2);
+      for (let i = 0; i < triggerCount; i++) {
+        const trigger = triggers.nth(i);
+        const isExpanded = await trigger.getAttribute("aria-expanded");
+        if (isExpanded === "true") {
+          await trigger.click();
+          await expect(trigger).toHaveAttribute("aria-expanded", "false");
         }
-
-        await triggers.first().click();
-        await expect(triggers.first()).toHaveAttribute("aria-expanded", "true");
-
-        await triggers.nth(1).click();
-        await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "true");
-
-        // Both should now be expanded (multiple mode allows this)
-        const state1 = await triggers.first().getAttribute("aria-expanded");
-        const state2 = await triggers.nth(1).getAttribute("aria-expanded");
-
-        expect(state1).toBe("true");
-        expect(state2).toBe("true");
       }
+
+      await triggers.first().click();
+      await expect(triggers.first()).toHaveAttribute("aria-expanded", "true");
+
+      await triggers.nth(1).click();
+      await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "true");
+
+      // Both should now be expanded (multiple mode allows this)
+      const state1 = await triggers.first().getAttribute("aria-expanded");
+      const state2 = await triggers.nth(1).getAttribute("aria-expanded");
+
+      expect(state1).toBe("true");
+      expect(state2).toBe("true");
     });
   });
 

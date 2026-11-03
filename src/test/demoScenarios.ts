@@ -159,7 +159,7 @@ export function loaderHelpers(): string[] {
   if (LOADER_HELPERS) return LOADER_HELPERS;
   LOADER_HELPERS = [];
   const dir = join(ROOT, "src/pages/demo/components");
-  for (const file of readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+  for (const file of readdirSync(dir).filter((f) => /\.tsx?$/.test(f))) {
     const sf = ts.createSourceFile(file, readFileSync(join(dir, file), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     for (const st of sf.statements) {
       if (!ts.isFunctionDeclaration(st) || !st.name || !st.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;

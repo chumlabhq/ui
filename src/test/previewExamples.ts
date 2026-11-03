@@ -4,8 +4,8 @@ import { join } from "node:path";
 
 /**
  * The examples `/preview/<Component>/<example>` can render, read from
- * `src/pages/demo/previews/<Component>.preview.tsx`: the keys of the object
- * each one exports by default.
+ * `src/pages/demo/previews/<Component>.preview.tsx`: the functions each one
+ * exports, `LongSheet` being the example `long-sheet`.
  *
  * Read from source rather than imported, so the demo-scenarios contract and
  * the e2e specs agree on the list without loading the components.
@@ -17,13 +17,9 @@ export function previewExamples(root = process.cwd()): Map<string, Set<string>> 
     const sf = ts.createSourceFile(file, readFileSync(join(dir, file), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     const ids = new Set<string>();
     for (const st of sf.statements) {
-      if (!ts.isExportAssignment(st)) continue;
-      let e: ts.Expression = st.expression;
-      while (ts.isSatisfiesExpression(e) || ts.isAsExpression(e) || ts.isParenthesizedExpression(e)) e = e.expression;
-      if (!ts.isObjectLiteralExpression(e)) continue;
-      for (const prop of e.properties) {
-        if (prop.name && (ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name))) ids.add(prop.name.text);
-      }
+      if (!ts.isFunctionDeclaration(st) || !st.name) continue;
+      if (!st.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
+      ids.add(st.name.text.replace(/[A-Z]/g, (letter, at: number) => `${at ? "-" : ""}${letter.toLowerCase()}`));
     }
     out.set(file.replace(/\.preview\.tsx$/, ""), ids);
   }

@@ -259,6 +259,7 @@ export const COMPONENTS: ComponentUnderContract[] = entries.flatMap((entry) => {
  * one side only, so a flag that stops matching the types cannot turn a test
  * into a skip that passes in every run.
  */
+// eslint-disable-next-line react-refresh/only-export-components -- vitest only: nothing the dev server serves imports this file, so there is nothing to refresh
 export function expectRanAsDeclared(
   contract: string,
   capability: Capability,
@@ -281,6 +282,7 @@ export function expectRanAsDeclared(
 }
 
 /** Every class token in a subtree, deduplicated. */
+// eslint-disable-next-line react-refresh/only-export-components -- vitest only: nothing the dev server serves imports this file, so there is nothing to refresh
 export const classTokens = (root: Element | null): Set<string> => {
   const out = new Set<string>();
   if (!root) return out;

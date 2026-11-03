@@ -47,6 +47,7 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     }) => {
       const groups = page.locator('[role="group"]');
       const groupCount = await groups.count();
+      expect(groupCount).toBeGreaterThan(0);
 
       for (let i = 0; i < groupCount; i++) {
         const group = groups.nth(i);
@@ -64,6 +65,7 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     test("every flag has role=img and an aria-label", async ({ page }) => {
       const flags = page.locator('[role="img"]');
       const count = Math.min(await flags.count(), 10);
+      expect(count).toBeGreaterThan(0);
 
       for (let i = 0; i < count; i++) {
         const flag = flags.nth(i);
@@ -75,6 +77,7 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     test("every group has role=group and an aria-label", async ({ page }) => {
       const groups = page.locator('[role="group"]');
       const count = await groups.count();
+      expect(count).toBeGreaterThan(0);
 
       for (let i = 0; i < count; i++) {
         const label = await groups.nth(i).getAttribute("aria-label");
@@ -85,6 +88,7 @@ test.describe("CountryFlag Component - Cross-Browser Tests", () => {
     test("inner img elements are aria-hidden", async ({ page }) => {
       const imgs = page.locator('[role="img"] img');
       const count = Math.min(await imgs.count(), 5);
+      expect(count).toBeGreaterThan(0);
 
       for (let i = 0; i < count; i++) {
         await expect(imgs.nth(i)).toHaveAttribute("aria-hidden", "true");

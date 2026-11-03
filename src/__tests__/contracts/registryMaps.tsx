@@ -107,8 +107,7 @@ const TYPED_REQUIRED_PROPS = {
 } satisfies RequiredPropsShape;
 
 /** Widened: both call sites look up an arbitrary registry name. */
-export const REQUIRED_PROPS: Record<string, Record<string, unknown>> =
-  TYPED_REQUIRED_PROPS;
+export const REQUIRED_PROPS: Record<string, Record<string, unknown>> = { ...TYPED_REQUIRED_PROPS };
 /**
  * Sub-components that throw outside a parent context. Hand-maintained like
  * REQUIRED_PROPS, and just as small: a RadioButton outside its RadioGroup

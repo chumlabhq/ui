@@ -321,7 +321,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 ```tsx
 // Adds to the trigger's default classes; a utility here that conflicts
 // with a default (another padding, another background) replaces it:
-<Accordion classes={{ trigger: "my-custom-trigger px-6" }} />
+<Accordion selectionMode="single" classes={{ trigger: "my-custom-trigger px-6" }}>{items}</Accordion>
 
 // The other slots (item, body, icon, etc.) keep their defaults.
 ```
@@ -412,10 +412,12 @@ The default classes use Tailwind's `dark:` prefix. Dark mode activates when `<ht
 // trigger: "text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
 
 // When overriding, always provide both light and dark variants:
-<Accordion classes={{
+<Accordion selectionMode="single" classes={{
   trigger: "text-gray-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800",
   body: "text-gray-600 dark:text-gray-300",
-}} />
+}}>
+  {items}
+</Accordion>
 ```
 
 #### Styling via data attributes (CSS/Tailwind)
@@ -424,11 +426,13 @@ Every item and trigger expose `data-state="open|closed"`. Use this for state-dep
 
 ```tsx
 // Tailwind arbitrary variants:
-<Accordion classes={{
+<Accordion selectionMode="single" classes={{
   item: "[&[data-state=open]]:bg-blue-50 dark:[&[data-state=open]]:bg-blue-900/20 border-b border-gray-200 dark:border-gray-700",
   trigger: "[&[data-state=open]]:text-blue-600 dark:[&[data-state=open]]:text-blue-400 [&[data-state=open]]:font-semibold",
   icon: "[&[data-state=open]]:text-blue-600 dark:[&[data-state=open]]:text-blue-400",
-}} />
+}}>
+  {items}
+</Accordion>
 ```
 
 Or in plain CSS:
@@ -452,6 +456,8 @@ Or in plain CSS:
   content: "overflow-hidden transition-[max-height,opacity,visibility]",
   icon: "h-5 w-5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
 }}>
+  {items}
+</Accordion>
 ```
 
 #### Complete themed example: "macOS Settings" style
@@ -469,8 +475,7 @@ Or in plain CSS:
     itemText: "flex-1 text-left",
     body: "px-4 pb-3 text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed",
     content: "overflow-hidden transition-[max-height,opacity,visibility]",
-    icon: "h-3.5 w-3.5 text-gray-400 dark:text-gray-500 transition-transform duration-200",
-    icon: "shrink-0",
+    icon: "h-3.5 w-3.5 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200",
   }}
   animationDuration={200}
   animationEasing="ease-out"
@@ -534,8 +539,8 @@ const [openItem, setOpenItem] = useState<string | null>("settings");
 `AccordionContent`'s `keepMounted` takes three values: `"visited"` (default) mounts the panel's children on the first expand and keeps them, `true` mounts them from the start (an exit animation or a measurement has a node to read), and `false` unmounts them each time the panel collapses.
 
 ```tsx
-<AccordionContent keepMounted>{/* in the DOM before the first expand */}</AccordionContent>
-<AccordionContent keepMounted={false}>{/* gone whenever collapsed */}</AccordionContent>
+<AccordionContent keepMounted>In the DOM before the first expand.</AccordionContent>
+<AccordionContent keepMounted={false}>Gone whenever collapsed.</AccordionContent>
 ```
 
 #### Persist to localStorage
@@ -1294,6 +1299,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `item` carries the base AND 2 state variants. Overriding it
 // replaces all of them, so write them together:
 <Breadcrumb
+  items={items}
   classes={{
     item:
       "rounded-cl-md px-2 py-1 " +           // base
@@ -1355,7 +1361,7 @@ Default classes use Tailwind `dark:` prefix. Activated by `<html class="dark">`.
 
 ```tsx
 // Highlight active item with data-state
-<Breadcrumb classes={{
+<Breadcrumb items={items} classes={{
   item: "[&[data-state=active]]:font-bold [&[data-state=active]]:text-blue-600",
 }} />
 ```
@@ -1403,8 +1409,8 @@ nav[data-dropdown-open="true"] .ellipsis-btn { background: blue; }
 
 ```tsx
 const items: BreadcrumbItem[] = [
-  { id: "home", label: "Home", itemIcon: <HomeIcon className="w-4 h-4" /> },
-  { id: "docs", label: "Docs", itemIcon: <FolderIcon className="w-4 h-4" /> },
+  { id: "home", label: "Home", icon: <HomeIcon className="w-4 h-4" /> },
+  { id: "docs", label: "Docs", icon: <FolderIcon className="w-4 h-4" /> },
   { id: "api", label: "API Reference" },
 ];
 
@@ -2033,6 +2039,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `item` carries the base AND 2 state variants. Overriding it
 // replaces all of them, so write them together:
 <CascadingDropdown
+  options={options}
   classes={{
     item:
       "rounded-cl-md px-2 py-1 " +           // base
@@ -2618,9 +2625,9 @@ To serve flags yourself instead — a CDN, or a directory you control — pass
 ```tsx
 import { CountryFlag, CHUMLAB_FLAG_CDN } from "@chumlab/ui/country-flag";
 
-<CountryFlag code="in" />                        {/* packaged, no network */}
-<CountryFlag code="in" basePath="/flags" />      {/* your own directory */}
-<CountryFlag code="in" basePath={CHUMLAB_FLAG_CDN} /> {/* Chumlab's CDN */}
+<CountryFlag code="in" />;                        // packaged, no network
+<CountryFlag code="in" basePath="/flags" />;      // your own directory
+<CountryFlag code="in" basePath={CHUMLAB_FLAG_CDN} />; // Chumlab's CDN
 ```
 
 The flag renders as an `<img>` in every mode, so `classes.image`, `onLoad`,
@@ -3587,7 +3594,7 @@ const [value, setValue] = useState<string | null>(null);
     const res = await fetch("/api/options");
     return res.json();
   }}
-  onLoadError={(err) => console.message(err)}
+  onLoadError={(err) => console.error(err)}
   placeholder="Click to load..."
 />
 ```
@@ -5809,6 +5816,7 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
+  totalPages={20}
   renderEllipsis={({ onValueChange }) => (
     <input
       type="number"
@@ -5824,6 +5832,7 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
+  totalPages={20}
   renderPageInfo={({ value, totalPages }) => (
     <span>Page {value} of {totalPages}</span>
   )}
@@ -5834,6 +5843,7 @@ const [rows, setRows] = useState(10);
 
 ```tsx
 <Pagination
+  totalPages={20}
   rowsPerPagePrefix="Afficher"
   rowsPerPageSuffix="lignes"
   dropdownAriaLabel="Lignes par page"
@@ -5847,7 +5857,7 @@ const [rows, setRows] = useState(10);
 #### Section reordering
 
 ```tsx
-<Pagination sectionOrder={["row", "pageInfo", "rowsPerPage"]} />
+<Pagination totalPages={20} sectionOrder={["nav", "pageInfo", "selector"]} />
 ```
 
 ---
@@ -5950,6 +5960,7 @@ export default function Example() {
 // `control` carries the base AND 2 state variants. Overriding it
 // replaces all of them, so write them together:
 <RadioButton
+  value="monthly"
   classes={{
     control:
       "rounded-full border w-4 h-4 " +      // base
@@ -6771,6 +6782,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `separator` carries the base AND 6 state variants. Overriding it
 // replaces all of them, so write them together:
 <Stepper
+  steps={steps}
   classes={{
     separator:
       "rounded-cl-md px-2 py-1 " +           // base
@@ -7535,6 +7547,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `item` carries the base AND 3 state variants. Overriding it
 // replaces all of them, so write them together:
 <TabPanel
+  tabs={tabs}
   classes={{
     item:
       "rounded-cl-md px-2 py-1 " +           // base
@@ -7588,7 +7601,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both varia
 
 ```tsx
 const [active, setActive] = useState("home");
-<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(item) => ...}</TabPanel>
+<TabPanel tabs={tabs} value={active} onValueChange={setActive}>{(item) => <p>{item.label}</p>}</TabPanel>
 ```
 
 #### With icons and badges
@@ -8143,9 +8156,10 @@ function rather than rendering an element.
 
 ```tsx
 // app root — once, around everything
+import type { ReactNode } from "react";
 import { ToastProvider } from "@chumlab/ui/toast";
 
-export default function App({ children }) {
+export default function App({ children }: { children: ReactNode }) {
   return <ToastProvider position="top-end">{children}</ToastProvider>;
 }
 ```
@@ -8219,10 +8233,10 @@ function MyComponent() {
 
 ```tsx
 const toast = useToast();
-toast.success("title", options?);
-toast.warning("title", options?);
-toast.error("title", options?);
-toast.info("title", options?);
+toast.success("title", options);
+toast.warning("title", options);
+toast.error("title", options);
+toast.info("title", options);
 toast.toast({ variant, message, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();

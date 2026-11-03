@@ -7,7 +7,7 @@ import { CheckboxPair } from "./_table.js";
 
 type Row = (typeof ROWS)[number];
 
-const GET_ID = (r: Row) => r.id;
+const getRowId = (r: Row) => r.id;
 
 /**
  * A grid big enough to tell the navigation keys apart. On `default`'s two rows
@@ -67,7 +67,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "default", props: { data: ROWS, columns: COLUMNS } },
   {
     name: "keyboard-grid",
-    props: { data: GRID_ROWS as unknown as Row[], columns: GRID_COLUMNS, getRowId: GET_ID },
+    props: { data: GRID_ROWS as unknown as Row[], columns: GRID_COLUMNS, getRowId: getRowId },
   },
   { name: "empty", props: { data: [], columns: COLUMNS } },
   { name: "loading", props: { data: [], columns: COLUMNS, loading: true } },
@@ -78,7 +78,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "editing-cell",
-    props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID, onCellEdit: () => {} },
+    props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: getRowId, onCellEdit: () => {} },
     note: "Attempts editInput: edit mode opens on double-click.",
     act: (c, ui) => ui.dblClick(c.ownerDocument.querySelector("tbody td")),
   },
@@ -113,11 +113,11 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "selectable",
-    props: { data: ROWS, columns: COLUMNS, selectionMode: "multiple", getRowId: GET_ID, selectedRowIds: ["1"] },
+    props: { data: ROWS, columns: COLUMNS, selectionMode: "multiple", getRowId: getRowId, selectedRowIds: ["1"] },
   },
   {
     name: "expandable",
-    props: { data: ROWS, columns: COLUMNS, expandable: true, getRowId: GET_ID, expandedRowIds: ["1"], renderExpandedRow: () => <div>More</div> },
+    props: { data: ROWS, columns: COLUMNS, expandable: true, getRowId: getRowId, expandedRowIds: ["1"], renderExpandedRow: () => <div>More</div> },
   },
   { name: "sortable", props: { data: ROWS, columns: COLUMNS, sortable: true } },
   { name: "resizable", props: { data: ROWS, columns: COLUMNS, resizable: true } },
@@ -127,8 +127,8 @@ const fixtures: Fixture<TableProps<Row>>[] = [
     note: "Drives both the pinned container and the unpinned remainder.",
   },
   { name: "filterable", props: { data: ROWS, columns: COLUMNS, filterable: true, filterableColumns: FILTERABLE } },
-  { name: "editable", props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID } },
-  { name: "draggable", props: { data: ROWS, columns: COLUMNS, reorderable: true, getRowId: GET_ID } },
+  { name: "editable", props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: getRowId } },
+  { name: "draggable", props: { data: ROWS, columns: COLUMNS, reorderable: true, getRowId: getRowId } },
   { name: "grouped", props: { data: ROWS, columns: COLUMNS, groupBy: ["role"] } },
   { name: "mobile", props: { data: ROWS, columns: COLUMNS, renderMobileCard: () => <div>Card</div>, responsiveBreakpoint: 9999 } },
   {
@@ -173,7 +173,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "cell-editing",
-    props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: GET_ID },
+    props: { data: ROWS, columns: COLUMNS, editable: true, editableColumns: ["name"], getRowId: getRowId },
     act: (c, ui) => ui.dblClick(c.querySelector("tbody td")),
   },
   {
@@ -196,7 +196,7 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   {
     name: "expandable-rtl",
-    props: { data: ROWS, columns: COLUMNS, expandable: true, getRowId: GET_ID, expandedRowIds: ["1"], renderExpandedRow: () => <div>More</div> },
+    props: { data: ROWS, columns: COLUMNS, expandable: true, getRowId: getRowId, expandedRowIds: ["1"], renderExpandedRow: () => <div>More</div> },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     note: "A collapsed row's expand icon points to the inline end, the left; the expanded row's icon points down and does not mirror.",
   },

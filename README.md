@@ -145,7 +145,9 @@ or not.
 ```tsx
 // Full library
 import { Button, Modal, Table } from "@chumlab/ui";
+```
 
+```tsx
 // Per-component (recommended — only ships what you use)
 import { Button } from "@chumlab/ui/button";
 import { Modal } from "@chumlab/ui/modal";

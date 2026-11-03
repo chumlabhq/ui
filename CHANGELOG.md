@@ -92,7 +92,7 @@ branch or a local link, these are the changes that will reach you.
   strips the decorative defaults and keeps the structural ones, then add your own:
 
   ```tsx
-  <Accordion unstyled classes={{ trigger: "px-6 py-3 my-own-styles" }} />
+  <Accordion selectionMode="single" unstyled classes={{ trigger: "px-6 py-3 my-own-styles" }}>{items}</Accordion>
   ```
 
   Nothing about `unstyled` changed.

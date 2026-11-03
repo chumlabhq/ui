@@ -42,7 +42,7 @@ function WithTrigger({ label, children }: { label: string; children: (open: bool
  * `render(false)` mounts it closed, with a trigger the spec opens it from.
  * The four without `defaultOpen` are only ever opened by the spec.
  */
-export const OPEN_CLOSE: Record<string, { defaultOpen: boolean; render: (open: boolean) => ReactNode }> = {
+const OPEN_CLOSE: Record<string, { defaultOpen: boolean; render: (open: boolean) => ReactNode }> = {
   Dropdown: { defaultOpen: true, render: (open) => <Dropdown label="Fruit" options={OPTIONS} defaultOpen={open} /> },
   SearchableDropdown: { defaultOpen: true, render: (open) => <SearchableDropdown label="Fruit" options={OPTIONS} defaultOpen={open} showSearch /> },
   MultiSelectDropdown: { defaultOpen: true, render: (open) => <MultiSelectDropdown label="Fruit" options={OPTIONS} defaultOpen={open} /> },

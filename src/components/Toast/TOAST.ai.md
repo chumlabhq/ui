@@ -30,9 +30,10 @@ function rather than rendering an element.
 
 ```tsx
 // app root — once, around everything
+import type { ReactNode } from "react";
 import { ToastProvider } from "@chumlab/ui/toast";
 
-export default function App({ children }) {
+export default function App({ children }: { children: ReactNode }) {
   return <ToastProvider position="top-end">{children}</ToastProvider>;
 }
 ```
@@ -106,10 +107,10 @@ function MyComponent() {
 
 ```tsx
 const toast = useToast();
-toast.success("title", options?);
-toast.warning("title", options?);
-toast.error("title", options?);
-toast.info("title", options?);
+toast.success("title", options);
+toast.warning("title", options);
+toast.error("title", options);
+toast.info("title", options);
 toast.toast({ variant, message, ...options }); // generic
 toast.dismiss(id);
 toast.dismissAll();

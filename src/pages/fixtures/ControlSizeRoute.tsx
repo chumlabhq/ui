@@ -40,7 +40,7 @@ const options = (t: string) => [
 ];
 
 /** Every component that draws a fixed-size visual in a row beside text a reader writes. */
-export const CONTROL_SIZE: Record<string, (t: string) => ReactNode> = {
+const CONTROL_SIZE: Record<string, (t: string) => ReactNode> = {
   Checkbox: (t) => <Checkbox label={t} description={t} defaultChecked />,
   Switch: (t) => <Switch label={t} description={t} defaultChecked />,
   RadioButton: (t) => (

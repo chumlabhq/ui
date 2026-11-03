@@ -220,7 +220,7 @@ const Accordion = forwardRef<AccordionRef, AccordionProps>((props, ref) => {
       triggerActions: mergeSlot(baseClasses.triggerActions, classesProp?.triggerActions),
       header: mergeSlot(baseClasses.header, classesProp?.header),
     }),
-    [classesProp, sizeClasses, variantClasses, baseClasses, unstyled],
+    [classesProp, sizeClasses, variantClasses, baseClasses],
   );
 
   const toggle = useCallback(

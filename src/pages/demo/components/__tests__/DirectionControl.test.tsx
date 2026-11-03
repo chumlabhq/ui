@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { DEMO_DIRECTION_KEY, DirectionToggle, useDemoDirection } from "../DirectionControl.js";
+import { DirectionToggle } from "../DirectionControl.js";
+import { DEMO_DIRECTION_KEY, useDemoDirection } from "../useDemoDirection.js";
 
 function Harness() {
   const [direction, setDirection] = useDemoDirection();

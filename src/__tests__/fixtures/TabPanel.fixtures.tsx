@@ -2,13 +2,7 @@ import { TabPanel } from "../../components/TabPanel/index.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
 import { TABS } from "./_data.js";
-
-/** A shape rather than a glyph: the fixture is about placement, not iconography. */
-const CircleIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
-    <circle cx="8" cy="8" r="6" />
-  </svg>
-);
+import { CircleIcon } from "./_icons.js";
 
 const fixtures: Fixtures<typeof TabPanel> = [
   { name: "default", props: { tabs: TABS }, children: (tab) => `${tab.label} panel` },

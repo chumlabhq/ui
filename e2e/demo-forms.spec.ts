@@ -53,25 +53,37 @@ const PAGES: Page_[] = [
     route: "dropdown", section: "In a form", focus: "[role=combobox]",
     fill: (form, page) => pick(form, page, "[role=combobox]", "Banana"),
     submits: [/^fruit=b$/],
-    defaultShown: async (form) => expect(form.locator("[role=combobox]")).not.toContainText("Banana"),
+    defaultShown: async (form) => {
+      await expect(form.locator("[role=combobox]")).toBeVisible();
+      await expect(form.locator("[role=combobox]")).not.toContainText("Banana");
+    },
   },
   {
     route: "searchable-dropdown", section: "In a form", focus: "[role=combobox]",
     fill: (form, page) => pick(form, page, "[role=combobox]", "Banana"),
     submits: [/^fruit=b$/],
-    defaultShown: async (form) => expect(form.locator("[role=combobox]")).not.toContainText("Banana"),
+    defaultShown: async (form) => {
+      await expect(form.locator("[role=combobox]")).toBeVisible();
+      await expect(form.locator("[role=combobox]")).not.toContainText("Banana");
+    },
   },
   {
     route: "multi-select-dropdown", section: "In a form", focus: "[role=combobox]",
     fill: async (form, page) => { await pick(form, page, "[role=combobox]", "Banana"); await page.getByRole("option", { name: "Cherry", exact: true }).click(); await page.keyboard.press("Escape"); },
     submits: [/^fruits=b$/, /^fruits=c$/],
-    defaultShown: async (form) => expect(form).not.toContainText("Cherry"),
+    defaultShown: async (form) => {
+      await expect(form).toBeVisible();
+      await expect(form).not.toContainText("Cherry");
+    },
   },
   {
     route: "multi-select-searchable-dropdown", section: "In a form", focus: "[role=combobox]",
     fill: async (form, page) => { await pick(form, page, "[role=combobox]", "Banana"); await page.getByRole("option", { name: "Cherry", exact: true }).click(); await page.keyboard.press("Escape"); },
     submits: [/^fruits=b$/, /^fruits=c$/],
-    defaultShown: async (form) => expect(form).not.toContainText("Cherry"),
+    defaultShown: async (form) => {
+      await expect(form).toBeVisible();
+      await expect(form).not.toContainText("Cherry");
+    },
   },
   {
     route: "cascading-dropdown", section: "In a form", focus: "button[aria-haspopup]",
@@ -82,7 +94,10 @@ const PAGES: Page_[] = [
       await page.keyboard.press("Escape");
     },
     submits: [/^produce=\{"veg":"c"\}$/],
-    defaultShown: async (form) => expect(form.locator("button[aria-haspopup]")).not.toContainText("Carrot"),
+    defaultShown: async (form) => {
+      await expect(form.locator("button[aria-haspopup]")).toBeVisible();
+      await expect(form.locator("button[aria-haspopup]")).not.toContainText("Carrot");
+    },
   },
   {
     route: "date-picker", section: "In a form", focus: "[role=combobox] >> nth=0",
@@ -99,7 +114,10 @@ const PAGES: Page_[] = [
       await page.keyboard.press("Escape");
     },
     submits: [/^day=\d{4}-\d{2}-15$/, /^stay=\d{4}-\d{2}-10\/\d{4}-\d{2}-12$/, /^days=\d{4}-\d{2}-03$/, /^days=\d{4}-\d{2}-05$/],
-    defaultShown: async (form) => expect(form.locator("[role=combobox]").first()).not.toContainText("15"),
+    defaultShown: async (form) => {
+      await expect(form.locator("[role=combobox]").first()).toBeVisible();
+      await expect(form.locator("[role=combobox]").first()).not.toContainText("15");
+    },
   },
   {
     route: "time-picker", section: "In a form", focus: "input[role=combobox]",
@@ -136,13 +154,19 @@ const PAGES: Page_[] = [
     route: "radio-button", section: "In a form", focus: "input[type=radio] >> nth=0",
     fill: async (form) => form.getByText("Pro", { exact: true }).click(),
     submits: [/^plan=pro$/],
-    defaultShown: async (form) => expect(form.locator("input[type=radio]:checked")).toHaveCount(0),
+    defaultShown: async (form) => {
+      await expect(form.locator("input[type=radio]").first()).toBeAttached();
+      await expect(form.locator("input[type=radio]:checked")).toHaveCount(0);
+    },
   },
   {
     route: "checkbox", section: "In a form", focus: "input[type=checkbox]",
     fill: async (form) => form.locator("input[type=checkbox]").check(),
     submits: [/^terms=on$/],
-    defaultShown: async (form) => expect(form.locator("input[type=checkbox]")).not.toBeChecked(),
+    defaultShown: async (form) => {
+      await expect(form.locator("input[type=checkbox]")).toBeAttached();
+      await expect(form.locator("input[type=checkbox]")).not.toBeChecked();
+    },
   },
   {
     route: "input", section: "In a form", focus: "input[name=email]",

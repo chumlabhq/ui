@@ -1393,7 +1393,9 @@ function TableInner<TData>(
       );
     },
     [
+      filterDropdownId,
       handleResizeKeyDown,
+      resizeIndicatorClassName,
       startResize,
       headerCellClassName,
       headerCellContentClassName,

@@ -1694,7 +1694,7 @@ const LIBRARY_TOTAL_HISTORY = [
     date: "2026-11-02",
     attribution: "attributed",
     reason:
-      "INCREASE, APPROVAL PENDING, +0.15 KB (165,926 -> 166,079 B gzipped, +153 B), 83 files " +
+      "INCREASE, approved by Aditya 2026-11-02, +0.15 KB (165,926 -> 166,079 B gzipped, +153 B), 83 files " +
       "held, no chunk's module imports changed. C run, M1-L2: DatePicker lists the visible " +
       "month's marked days and their labels under the grid (exclusive 12,977 -> 13,144 B, " +
       "+167 B; see its DECLARED_BREACHES entry for the two smaller shapes measured). The total " +
@@ -1876,7 +1876,7 @@ const DECLARED_BREACHES = new Map([
     "DatePicker",
     {
       kb: 12.84,
-      why: "2026-11-02, C run, APPROVAL PENDING (+0.16 KB, at or over the 0.10 KB line): 12.67 -> " +
+      why: "2026-11-02, C run, approved by Aditya 2026-11-02 (+0.16 KB, at or over the 0.10 KB line): 12.67 -> " +
         "12.84 (exclusive 12,977 -> 13,144 B gzipped, +167 B; own chunk shared/DatePicker.js " +
         "12,771 -> 12,937 B, +166 B, styles.css +10 B; no chunk's imports changed; measured on a " +
         "build of 9eac438b plus this slice against the same tree with HEAD's DatePicker): M1-L2, " +

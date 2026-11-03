@@ -449,7 +449,6 @@ export function ClockFace({
       selectionMode,
       displayValue,
       cls.clockNumber,
-      cls.clockNumber,
       reduceMotion,
       isHourDisabled,
       isMinuteDisabled,

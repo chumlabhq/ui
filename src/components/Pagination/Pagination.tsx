@@ -347,7 +347,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
     const fitRef = useRef(fit);
     const step = fit ?? 0;
     const shownSiblings = Math.max(fit ?? siblingCount, 0);
-    const stepDown = () => {
+    const stepDown = useCallback(() => {
       const list = listRef.current;
       const rendered = fitRef.current;
       if (!list) return;
@@ -358,7 +358,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         const c = current.getBoundingClientRect();
         list.scrollLeft += c.left - l.left - (l.width - c.width) / 2;
       }
-    };
+    }, [siblingCount]);
     useIsomorphicLayoutEffect(() => {
       fitRef.current = fit;
       stepDown();
@@ -376,7 +376,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       observer.observe(nav);
       observer.observe(host);
       return () => observer.disconnect();
-    }, [siblingCount]);
+    }, [stepDown]);
 
     const visiblePages = useMemo(
       () => getVisiblePages(safeTotalPages, safeCurrentPage, shownSiblings),

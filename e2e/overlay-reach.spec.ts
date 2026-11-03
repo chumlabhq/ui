@@ -229,6 +229,7 @@ test.describe("CascadingDropdown roving tab stop", () => {
       const trigger = page.locator("[data-fixture] button[aria-haspopup]").first();
       if (select) {
         await trigger.click();
+        await expect(page.locator('[role="menu"]')).toBeVisible();
         await page.locator('[role^="menuitem"]', { hasText: "Veg" }).click();
         await page.locator('[role^="menuitem"]', { hasText: "Carrot" }).click();
         await expect(page.locator('[role="menu"]')).toHaveCount(0);

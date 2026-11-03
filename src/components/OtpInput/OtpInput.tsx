@@ -311,7 +311,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           "data-filled": valueArray[index] ? true : undefined,
         };
       },
-      [inputClassNames, inputId, inputType, inputPattern, digitsOnly, length, error, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, loading, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
+      [inputClassNames, inputId, inputType, inputPattern, digitsOnly, length, error, success, required, errorMessage, errorId, valueArray, handleChange, handleKeyDown, handleFocus, disabled, loading, mergedClasses, inputAriaLabel, allowPaste, mergedRef],
     );
 
     const renderSingleInput = (index: number) => {

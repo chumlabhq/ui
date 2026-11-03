@@ -3,13 +3,7 @@ import { BUTTON_SIZE_CLASSES } from "../../components/Button/utils/constants.js"
 import type { ButtonSize } from "../../components/Button/utils/types.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
-
-/** A stroke icon that fills its slot, as an icon library's SVG does. */
-const Glyph = () => (
-  <svg viewBox="0 0 16 16" aria-hidden="true" className="h-full w-full" fill="none" stroke="currentColor" strokeWidth={2}>
-    <path d="M3 8h10M8 3v10" />
-  </svg>
-);
+import { SlotFillGlyph } from "./_icons.js";
 
 const fixtures: Fixtures<typeof Button> = [
   { name: "default", props: {}, children: "Save" },
@@ -85,9 +79,9 @@ const fixtures: Fixtures<typeof Button> = [
         {(Object.keys(BUTTON_SIZE_CLASSES) as ButtonSize[]).map((size) => (
           <div key={size}>
             <Button size={size} data-matrix={`${size}|text`}>Save</Button>{" "}
-            <Button size={size} data-matrix={`${size}|startIcon`} startIcon={<Glyph />}>Save</Button>{" "}
-            <Button size={size} data-matrix={`${size}|endIcon`} endIcon={<Glyph />}>Save</Button>{" "}
-            <Button size={size} data-matrix={`${size}|iconOnly`} startIcon={<Glyph />} aria-label="Add" />{" "}
+            <Button size={size} data-matrix={`${size}|startIcon`} startIcon={<SlotFillGlyph />}>Save</Button>{" "}
+            <Button size={size} data-matrix={`${size}|endIcon`} endIcon={<SlotFillGlyph />}>Save</Button>{" "}
+            <Button size={size} data-matrix={`${size}|iconOnly`} startIcon={<SlotFillGlyph />} aria-label="Add" />{" "}
             <Button size={size} data-matrix={`${size}|loading`} loading>Save</Button>
           </div>
         ))}

@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Tooltip } from "../../../components/Tooltip/index.js";
 import { Button } from "../../../components/Button/index.js";
-import type { Previews } from "./types.js";
 
-function Phone() {
+export function Phone() {
   const [open, setOpen] = useState(true);
   return (
     <div className="pt-12">
@@ -13,5 +12,3 @@ function Phone() {
     </div>
   );
 }
-
-export default { phone: Phone } satisfies Previews;

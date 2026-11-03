@@ -106,6 +106,7 @@ test.describe("Avatar (fixtures)", () => {
 
     const avatars = page.locator(AVATAR);
     const count = await avatars.count();
+    expect(count).toBeGreaterThan(0);
     for (let i = 0; i < count; i++) {
       const box = (await avatars.nth(i).boundingBox())!;
       expect(box.x).toBeGreaterThanOrEqual(-1);

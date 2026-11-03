@@ -62,6 +62,17 @@ describe("OtpInput", () => {
     });
   });
 
+  describe("Validity after a render", () => {
+    it("marks the inputs valid when `success` turns on with nothing else changing", () => {
+      const { rerender, container } = render(<OtpInput length={4} />);
+      const inputs = () => [...container.querySelectorAll("input[data-index]")];
+      expect(inputs()).toHaveLength(4);
+      expect(inputs().filter((i) => i.hasAttribute("data-valid"))).toHaveLength(0);
+      rerender(<OtpInput length={4} success />);
+      expect(inputs().filter((i) => i.hasAttribute("data-valid"))).toHaveLength(4);
+    });
+  });
+
   describe("Grouped Inputs", () => {
     it("renders inputs in groups when groups prop provided", () => {
       render(<OtpInput groups={[3, 3]} classes={{ group: "otp-group" }} />);

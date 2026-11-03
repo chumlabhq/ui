@@ -1,5 +1,4 @@
 import { Breadcrumb } from "../../../components/Breadcrumb/index.js";
-import type { Previews } from "./types.js";
 
 const TRAIL = [
   { id: "home", label: "Home", href: "#" },
@@ -10,8 +9,6 @@ const TRAIL = [
   { id: "breadcrumb", label: "Breadcrumb" },
 ];
 
-function Phone() {
+export function Phone() {
   return <Breadcrumb items={TRAIL} maxVisible={3} />;
 }
-
-export default { phone: Phone } satisfies Previews;

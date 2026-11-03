@@ -27,7 +27,7 @@ async function waitForPaginationVisible(page: import("@playwright/test").Page) {
 }
 
 function getBasicPagination(page: import("@playwright/test").Page) {
-  const section = page.locator("section").filter({ hasText: "Basic Pagination" }).first();
+  const section = page.locator("section").filter({ hasText: "Basic Usage" }).first();
   return section.locator(NAV_SELECTOR).first();
 }
 
@@ -317,7 +317,9 @@ test.describe("Pagination Accessibility Tests", () => {
   test("should have aria-label on all page buttons", async ({ page }) => {
     const pagination = getBasicPagination(page);
     const pageButtons = pagination.locator('button[aria-label^="Page "]');
+    await expect(pageButtons.first()).toBeVisible();
     const count = await pageButtons.count();
+    expect(count).toBeGreaterThan(0);
 
     for (let i = 0; i < count; i++) {
       const label = await pageButtons.nth(i).getAttribute("aria-label");
@@ -376,6 +378,7 @@ test.describe("Pagination Accessibility Tests", () => {
     const listbox = page.locator(`#${escapeCSS(listboxId!)}`);
     const options = listbox.locator('[role="option"]');
     const count = await options.count();
+    expect(count).toBeGreaterThan(0);
 
     for (let i = 0; i < count; i++) {
       const option = options.nth(i);
@@ -470,6 +473,7 @@ test.describe("Pagination Advanced Features", () => {
 
     const pagination = externalSection.locator(NAV_SELECTOR).first();
     const dropdown = pagination.locator('button[aria-haspopup="listbox"]');
+    await expect(pagination).toBeVisible();
     await expect(dropdown).toHaveCount(0);
 
     const extButton50 = externalSection.locator("button").filter({ hasText: "50" });

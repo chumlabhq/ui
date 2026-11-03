@@ -204,6 +204,7 @@ pass that state's own variant (`data-[state=checked]:bg-green-500`). Defaults in
 // `item` carries the base AND 2 state variants. Overriding it
 // replaces all of them, so write them together:
 <CascadingDropdown
+  options={options}
   classes={{
     item:
       "rounded-cl-md px-2 py-1 " +           // base

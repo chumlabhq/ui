@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { SR_ONLY_STYLE } from "./srOnlyStyle.js";
 
+// eslint-disable-next-line react-refresh/only-export-components -- shipped as one chunk with FormValue: its own module grows the library 0.06 KB and a file for a dev-only refresh of a hook no demo page edits
 export function useFormReset(
   ref: RefObject<HTMLElement | null>,
   onReset: (() => unknown) | undefined,

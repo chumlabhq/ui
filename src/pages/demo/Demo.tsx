@@ -4,7 +4,8 @@ import { useDocumentTitle } from "../../hooks/useDocumentTitle.js";
 import { useCanonical, useJsonLd } from "../../hooks/useJsonLd.js";
 import { SiteHeader } from "../../components/SiteHeader.js";
 import { trackEvent } from "../../lib/analytics.js";
-import { DirectionToggle, useDemoDirection } from "./components/DirectionControl.js";
+import { DirectionToggle } from "./components/DirectionControl.js";
+import { useDemoDirection } from "./components/useDemoDirection.js";
 
 interface NavItem {
   path: string;

@@ -288,7 +288,7 @@ const [value, setValue] = useState<string | null>(null);
     const res = await fetch("/api/options");
     return res.json();
   }}
-  onLoadError={(err) => console.message(err)}
+  onLoadError={(err) => console.error(err)}
   placeholder="Click to load..."
 />
 ```

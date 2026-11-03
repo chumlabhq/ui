@@ -1,5 +1,4 @@
 import { MultiSelectDropdown } from "../../../components/MultiSelectDropdown/index.js";
-import type { Previews } from "./types.js";
 
 const TOPPINGS = [
   { value: "basil", label: "Basil" },
@@ -12,10 +11,8 @@ const TOPPINGS = [
   { value: "tomato", label: "Tomato" },
 ];
 
-function Phone() {
+export function Phone() {
   return (
     <MultiSelectDropdown label="Toppings" options={TOPPINGS} defaultValue={["mushroom", "olive", "pepper"]} defaultOpen />
   );
 }
-
-export default { phone: Phone } satisfies Previews;
