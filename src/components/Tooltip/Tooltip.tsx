@@ -33,7 +33,7 @@ import {
   type Position,
 } from "./utils/helpers.js";
 import { TooltipAsChildTrigger } from "./components/TooltipAsChildTrigger.js";
-import { isBrowser, isRtl } from "../../utils/isBrowser.js";
+import { isBrowser, isRtl, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { useHydrated } from "../../utils/useHydrated.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -45,6 +45,8 @@ const INTERACTIVE_ELEMENT_TYPES = new Set([
   "textarea",
   "select",
 ]);
+
+const TOOLTIP_FOCUSABLE = "a[href],button,input,select,textarea,[tabindex]:not([tabindex='-1'])";
 
 const isFocusVisible = (element: EventTarget): boolean => {
   try {
@@ -303,6 +305,23 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }
     }, [disabled, delayDuration, setOpen]);
 
+    const focusIsInBubble = useCallback(
+      () => !!tooltipRef.current?.contains(tooltipRef.current.ownerDocument.activeElement),
+      [],
+    );
+
+    const handOffFocus = useRef(false);
+
+    const triggerControl = useCallback(
+      () => triggerNode?.querySelector<HTMLElement>(TOOLTIP_FOCUSABLE) ?? triggerNode,
+      [triggerNode],
+    );
+
+    const focusTrigger = useCallback(() => {
+      handOffFocus.current = true;
+      triggerControl()?.focus();
+    }, [triggerControl]);
+
     const handleMouseLeave = useCallback(() => {
       if (delayTimeoutRef.current) {
         clearTimeout(delayTimeoutRef.current);
@@ -310,9 +329,9 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       }
 
       hideTimeoutRef.current = setTimeout(() => {
-        setOpen(false);
+        if (!focusIsInBubble()) setOpen(false);
       }, hideDelayDuration);
-    }, [setOpen, hideDelayDuration]);
+    }, [setOpen, hideDelayDuration, focusIsInBubble]);
 
     const touchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -365,8 +384,20 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     }, [hoverableContent]);
 
     const handleTooltipMouseLeave = useCallback(() => {
-      setOpen(false);
-    }, [setOpen]);
+      if (!focusIsInBubble()) setOpen(false);
+    }, [setOpen, focusIsInBubble]);
+
+    const handleTooltipKeyDown = useCallback(
+      (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== "Tab") return;
+        const items = event.currentTarget.querySelectorAll<HTMLElement>(TOOLTIP_FOCUSABLE);
+        const edge = items[event.shiftKey ? 0 : items.length - 1];
+        if (edge && event.currentTarget.ownerDocument.activeElement !== edge) return;
+        focusTrigger();
+        if (event.shiftKey) event.preventDefault();
+      },
+      [focusTrigger],
+    );
 
     // Focus opens the tip only when the browser would draw a focus ring for
     // it. A click, a tap, or focus a closing dialog hands back to its trigger
@@ -376,6 +407,10 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const handleFocus = useCallback(
       (event: React.FocusEvent) => {
         if (disabled) return;
+        if (handOffFocus.current) {
+          handOffFocus.current = false;
+          return;
+        }
         if (!isFocusVisible(event.target)) return;
         setOpen(true);
       },
@@ -414,11 +449,20 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         if (event.key !== "Escape") return;
         event.preventDefault();
         event.stopPropagation();
+        if (focusIsInBubble()) focusTrigger();
         setOpen(false);
       };
+      const handlePress = (event: MouseEvent) => {
+        if (!focusIsInBubble() || tooltipRef.current?.contains(event.target as Node)) return;
+        returnFocusAfterOutsidePress(triggerControl(), event);
+      };
       window.addEventListener("keydown", handleEscape, true);
-      return () => window.removeEventListener("keydown", handleEscape, true);
-    }, [isOpen, setOpen]);
+      window.addEventListener("mousedown", handlePress, true);
+      return () => {
+        window.removeEventListener("keydown", handleEscape, true);
+        window.removeEventListener("mousedown", handlePress, true);
+      };
+    }, [isOpen, setOpen, focusIsInBubble, focusTrigger, triggerControl]);
 
     const computedMaxWidth =
       typeof maxWidth === "number" ? `${maxWidth}px` : maxWidth;
@@ -594,6 +638,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         onMouseEnter={handleTooltipMouseEnter}
         onMouseLeave={handleTooltipMouseLeave}
         onBlur={hoverableContent ? handleTooltipBlur : undefined}
+        onKeyDown={hoverableContent ? handleTooltipKeyDown : undefined}
       >
         {truncate ? children : content}
         {arrowElement}

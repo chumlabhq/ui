@@ -37,6 +37,7 @@ import {
   INDICATOR_VAR,
 } from "./utils/constants.js";
 import { structuralOnly, motionSafeClasses } from "../../utils/classLayers.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 const EMPTY_TOOLTIP_DEFAULTS: StepperTooltipDefaults = {};
 
@@ -172,6 +173,9 @@ const StepItem = memo(function StepItem({
   const stepAriaLabel = needsAriaLabel
     ? `${stepLabelText}${statusSuffix}`
     : undefined;
+  const statusText = !needsAriaLabel && status !== "active" && statusSuffix ? (
+    <span style={SR_ONLY_STYLE}>{statusSuffix}</span>
+  ) : null;
 
   const wrapWithTooltip = (content: ReactNode): ReactNode => {
     if (!showTooltips || !step.tooltip) return content;
@@ -400,6 +404,7 @@ const StepItem = memo(function StepItem({
     >
       {indicator}
       {labelContent}
+      {statusText}
     </button>
   ) : (
     <div
@@ -415,6 +420,7 @@ const StepItem = memo(function StepItem({
     >
       {indicator}
       {labelContent}
+      {statusText}
     </div>
   );
 

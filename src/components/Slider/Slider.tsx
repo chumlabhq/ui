@@ -23,6 +23,7 @@ import { mergeSlot } from "../../utils/mergeSlot.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 function clamp(val: number, min: number, max: number) {
   return Math.min(max, Math.max(min, val));
@@ -159,7 +160,7 @@ function Thumb({
       aria-valuetext={ariaValueText ?? formatTooltip(value)}
       aria-orientation={orientation}
       aria-disabled={disabled || undefined}
-      aria-label={ariaLabel ?? (index === 0 ? "Minimum" : "Maximum")}
+      aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
       id={id}
@@ -551,6 +552,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         .filter(Boolean)
         .join(" ") || undefined;
     const labelledBy = ariaLabelledBy ?? (label ? labelId : undefined);
+    const named = !!labelledBy || !!ariaLabel;
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "production" && !named) console.warn("Slider: no accessible name.");
+    }, [named]);
 
     return (
       <div
@@ -559,6 +564,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         data-disabled={disabled || undefined}
         data-error={error || undefined}
         data-loading={loading || undefined}
+        aria-busy={loading || undefined}
         data-valid={(!error && success) || undefined}
         data-orientation={orientation}
         {...rest}
@@ -707,8 +713,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 renderThumb={renderThumb}
                 id={thumbIdOf(0)}
                 ariaDescribedBy={ariaDescribedBy}
-                ariaLabel={ariaLabel}
-                ariaLabelledBy={labelledBy}
+                ariaLabel={ariaLabel ?? "Minimum"}
+                ariaLabelledBy={labelledBy && `${labelledBy} ${thumbIdOf(0)}`}
                 ariaValueText={ariaValueText}
                 onPointerDown={handleThumbPointerDown}
                 onKeyDown={handleKeyDown}
@@ -731,8 +737,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
                 renderThumb={renderThumb}
                 id={thumbIdOf(1)}
                 ariaDescribedBy={ariaDescribedBy}
-                ariaLabel={ariaLabel}
-                ariaLabelledBy={labelledBy}
+                ariaLabel={ariaLabel ?? "Maximum"}
+                ariaLabelledBy={labelledBy && `${labelledBy} ${thumbIdOf(1)}`}
                 ariaValueText={ariaValueText}
                 onPointerDown={handleThumbPointerDown}
                 onKeyDown={handleKeyDown}
@@ -781,6 +787,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           />
         )}
 
+        {loading && <span role="status" style={SR_ONLY_STYLE}>Loading</span>}
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mc.message || undefined}>
             {errorMessage}

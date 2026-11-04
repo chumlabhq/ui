@@ -1096,7 +1096,7 @@ For grouped avatars, match `ringColor` to your background:
 
 ### Keyboard Interactions
 
-Only an avatar with `onClick` is focusable; a plain one is an image and takes no keyboard input.
+Only an avatar with `onClick` is focusable, as `role="button"`; a plain one is an image and takes no keyboard input.
 
 | Key | Behaviour |
 |-----|-----------|
@@ -1460,7 +1460,8 @@ const items: BreadcrumbItem[] = [
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves through the crumbs, and to the ellipsis trigger when the trail is collapsed. |
-| `Enter`, `Space` | Follows a crumb, or opens the collapsed-items menu from the ellipsis. |
+| `Enter` | Follows a link crumb, as a native link does, and activates a button crumb. |
+| `Enter`, `Space` | Activates a button crumb, opens the collapsed-items menu from the ellipsis, and follows the focused item inside that menu. Focus then returns to the ellipsis. |
 | `ArrowDown`, `ArrowUp` | Moves between items inside the open menu. |
 | `Home`, `End` | Jumps to the first or last item in the menu. |
 | `Escape` | Closes the menu and returns focus to the ellipsis. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu. |
@@ -5347,7 +5348,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, provide both light and da
 | `Home`, `End` | Jumps to the first or last filtered option. |
 | `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
-| Printable characters | Types into the search box and filters the list. |
+| Printable characters | Types into the search box and filters the list. On a closed trigger, opens it and starts the search with that character. |
 
 ---
 
@@ -5566,8 +5567,8 @@ filter is now derived from the same pattern, so all four agree.
 | `Tab` | Moves to the next box. Every box is in the tab order — there is no roving tabindex, so tabbing out of the field takes as many presses as it has boxes. |
 | `ArrowLeft`, `ArrowRight` | Moves between boxes. |
 | `Home`, `End` | Jumps to the first or last box. |
-| `Backspace` | Clears the current box and steps back. On a box that is already empty it steps back and clears that one instead. |
-| `Delete` | Clears the current box without moving. |
+| `Backspace` | Removes the current box's digit and steps back. On a box that is already empty it steps back and removes that digit instead. The value is one string, so later digits close up. |
+| `Delete` | Removes the current box's digit without moving focus. The value is one string, so later digits close up. |
 | Printable characters | Fills the box and advances. A paste of the full code fills every box at once. |
 
 ---
@@ -6101,7 +6102,7 @@ The handle is `role="separator"` and focusable, so resizing never requires a dra
 | `Tab` | Moves focus to the handle. |
 | `ArrowLeft`, `ArrowRight` | Resizes in steps. A vertical panel uses `ArrowUp`/`ArrowDown`. |
 | `Home`, `End` | Jumps to the minimum or maximum size. |
-| `Escape` | Abandons the resize and restores the size it started at. |
+| `Escape` | During a pointer drag, abandons it and restores the size it started at. A keyboard resize is already committed, step by step, so Escape does not undo it. |
 
 ---
 
@@ -6421,7 +6422,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | `Backspace`, `Delete` | Clears the selection when the search box is empty and `clearable` is set. |
-| Printable characters | Filters the list. |
+| Printable characters | Filters the list. On a closed trigger, opens it and starts the search with that character. |
 
 ---
 
@@ -6894,7 +6895,7 @@ const steps = [
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves focus into the step list. |
-| `ArrowRight`, `ArrowDown` | Moves to the next step. `ArrowLeft`/`ArrowUp` move back. `loop` wraps past the ends. |
+| `ArrowRight`, `ArrowLeft` | Moves to the next or previous step in a horizontal stepper, stepping over disabled ones. A vertical stepper uses `ArrowDown`/`ArrowUp`. `loop` wraps past the ends. |
 | `Home`, `End` | Jumps to the first or last step. |
 | `Enter`, `Space` | Activates the focused step, when the step is clickable. |
 
@@ -7397,6 +7398,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `Ctrl+Home`, `Ctrl+End` | Moves to the first cell in the first row, or the last cell in the last row. The header row is not part of this navigation: its sort, filter and pin buttons are reached with `Tab`. |
 | `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. |
 | `F2` | Opens the focused cell's editor when `editable` is set. |
+| `Tab`, `Shift+Tab` in the filter dialog | Move through its controls. Past either end the dialog closes and focus moves on from its trigger. |
 | `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress and returns focus to the cell. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |
 | `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
 
@@ -8506,6 +8508,7 @@ Defaults include `dark:` variants. Content uses `bg-white dark:bg-gray-800`, `te
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves focus to the trigger, which shows the tooltip — hover is not the only way in. |
-| `Escape` | Hides it while the trigger keeps focus. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible. |
+| `Escape` | Hides it while the trigger keeps focus. From a link inside the tooltip, focus returns to the trigger. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible. |
+| `Tab`, `Shift+Tab` inside the tooltip | Past either end of its content, focus goes back through the trigger, so it is never left on the page body. |
 
 ---

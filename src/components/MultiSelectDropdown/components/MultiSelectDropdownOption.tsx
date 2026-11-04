@@ -46,6 +46,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       data-selected={isSelected || undefined}
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
+      onMouseDown={(e) => e.preventDefault()}
       onClick={() => onToggle(option)}
       onMouseEnter={option.disabled ? undefined : () => onHover(index)}
     >

@@ -228,7 +228,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
             orientation === "horizontal" ? "flex-row flex-wrap gap-4" : "flex-col gap-2",
           ) || undefined}>
             {children}
-            {loading && <CircularLoader size={16} thickness={2} reduceMotion={reduceMotion} unstyled={unstyled} aria-hidden="true" />}
+            {loading && <CircularLoader size={16} thickness={2} reduceMotion={reduceMotion} unstyled={unstyled} />}
           </div>
 
           {error && errorMessage && (

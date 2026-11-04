@@ -23,7 +23,7 @@ import {
 import SearchableDropdownShimmer from "./components/SearchableDropdownShimmer.js";
 import { SearchableDropdownOption as SearchableDropdownOptionComponent } from "./components/SearchableDropdownOption.js";
 import { cn } from "../../utils/scopedCn.js";
-import { TEXT_DIRECTION_FROM_CONTENT } from "../../utils/isBrowser.js";
+import { TEXT_DIRECTION_FROM_CONTENT, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import {
   DEFAULT_SEARCHABLEDROPDOWN_CLASSES,
@@ -417,6 +417,7 @@ const SearchableDropdown = forwardRef<
       );
       if (portalDropdown) return;
       handleClose();
+      returnFocusAfterOutsidePress(triggerNode, event);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -433,6 +434,7 @@ const SearchableDropdown = forwardRef<
 
     const handleDocumentKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape" && event.key !== "Tab") return;
+      if (event.key === "Tab") triggerNode?.focus();
       handleClose();
       if (event.key === "Escape") {
         event.preventDefault();
@@ -445,7 +447,7 @@ const SearchableDropdown = forwardRef<
     return () => {
       document.removeEventListener("keydown", handleDocumentKeyDown, true);
     };
-  }, [isOpen, handleClose, shouldRestoreFocusRef]);
+  }, [isOpen, handleClose, shouldRestoreFocusRef, triggerNode]);
 
   useEffect(() => {
     if (!isOpen && shouldRestoreFocusRef.current) {

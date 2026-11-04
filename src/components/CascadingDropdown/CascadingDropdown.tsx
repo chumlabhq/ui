@@ -7,7 +7,7 @@ import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
-import { isBrowser, MIRROR_IN_LTR, MIRROR_IN_RTL, TEXT_DIRECTION_FROM_CONTENT } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_LTR, MIRROR_IN_RTL, TEXT_DIRECTION_FROM_CONTENT, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
@@ -542,10 +542,12 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         : undefined;
 
     const prevOpenRef = useRef(false);
+    const tabbingAwayRef = useRef(false);
     useEffect(() => {
-      if (prevOpenRef.current && !isOpen) {
+      if (prevOpenRef.current && !isOpen && !tabbingAwayRef.current) {
         triggerNode?.focus({ preventScroll: true });
       }
+      tabbingAwayRef.current = false;
       prevOpenRef.current = isOpen;
     }, [isOpen, triggerNode]);
 
@@ -570,13 +572,14 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         if (containerRef.current?.contains(target)) return;
         if (inMenuSurface(target)) return;
         handleClose();
+        returnFocusAfterOutsidePress(triggerNode, event);
       };
 
       document.addEventListener("mousedown", handleClickOutside);
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
-    }, [isOpen, handleClose, inMenuSurface]);
+    }, [isOpen, handleClose, inMenuSurface, triggerNode]);
 
     useEffect(() => {
       if (!lockScroll || !isOpen || !isBrowser) return;
@@ -656,10 +659,14 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
         onKeyDownProp?.(event);
         pointerRef.current = false;
         if (!event.defaultPrevented) {
+          if (event.key === "Tab" && isOpen) {
+            tabbingAwayRef.current = true;
+            triggerNode?.focus();
+          }
           handleKeyDown(event);
         }
       },
-      [handleKeyDown, onKeyDownProp],
+      [handleKeyDown, onKeyDownProp, isOpen, triggerNode],
     );
 
     const handleClear = clearValue;

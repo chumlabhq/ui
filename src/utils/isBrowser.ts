@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 export const isBrowser = typeof window !== "undefined";
 
 export type Direction = "ltr" | "rtl";
@@ -31,3 +33,45 @@ export const readLayoutWidth = (): number => document.documentElement.clientWidt
 
 export const toInlineStart = (left: number, width: number, rtl: boolean, layoutWidth: number): number =>
   rtl ? layoutWidth - left - width : left;
+
+const PRESS_TAKES_FOCUS =
+  "a[href],button,input,select,textarea,summary,[tabindex],[contenteditable]";
+
+/**
+ * Puts focus back on `trigger` after a mouse press outside its surface.
+ *
+ * Call it from the press handler that closes the surface. A press on nothing
+ * focusable moves focus to `<body>` once the handler returns, so the return runs
+ * after that default. A press on a focusable element keeps its focus, a touch is
+ * left alone because focusing a field on a tap raises the on-screen keyboard, and
+ * a trigger scrolled out of view is left alone because the press must not move the page.
+ */
+export function returnFocusAfterOutsidePress(
+  trigger: HTMLElement | null | undefined,
+  event: Event,
+): void {
+  if (!trigger || event.type !== "mousedown") return;
+  const target = event.target;
+  if (target instanceof Element && target.closest(PRESS_TAKES_FOCUS)) return;
+  setTimeout(() => {
+    const doc = trigger.ownerDocument;
+    if (!trigger.isConnected) return;
+    if (doc.activeElement && doc.activeElement !== doc.body) return;
+    const { top, bottom } = trigger.getBoundingClientRect();
+    if (bottom < 0 || top > doc.documentElement.clientHeight) return;
+    trigger.focus({ preventScroll: true });
+    trigger.scrollIntoView({ block: "nearest", inline: "nearest" });
+  });
+}
+
+export const SR_ONLY_STYLE: CSSProperties = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clipPath: "inset(50%)",
+  whiteSpace: "nowrap",
+  border: 0,
+};

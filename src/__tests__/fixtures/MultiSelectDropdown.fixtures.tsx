@@ -10,6 +10,7 @@ import {
   resolvesTo,
   settleAsync,
 } from "./_async.js";
+import { withNeighbours, KEY_OPTIONS } from "./_keys.js";
 
 
 const fixtures: Fixtures<typeof MultiSelectDropdown> = [
@@ -104,5 +105,6 @@ const fixtures: Fixtures<typeof MultiSelectDropdown> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
   { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
+  { name: "keys", props: { options: KEY_OPTIONS }, wrap: withNeighbours },
 ];
 export default fixtures;

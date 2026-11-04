@@ -3,6 +3,7 @@ import type { Fixtures } from "./types.js";
 import { RtlBoundary } from "./_harness.js";
 import { PortalTarget } from "./_harness.js";
 import { ModalFromTooltip, NEVER } from "./_tooltip.js";
+import { withNeighbours } from "./_keys.js";
 
 const fixtures: Fixtures<typeof Tooltip> = [
   { name: "closed", props: { content: "Tip" }, children: <button>Trigger</button> },
@@ -78,6 +79,12 @@ const fixtures: Fixtures<typeof Tooltip> = [
     props: { content: "Copied to clipboard", open: true, align: "start" as const, showArrow: true },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     children: <button>Trigger</button>,
+  },
+  {
+    name: "focusable-bubble",
+    props: { content: <a href="#in-bubble">Inside</a>, delayDuration: 0, hideDelayDuration: 100 },
+    children: <button>Trigger</button>,
+    wrap: withNeighbours,
   },
 ];
 export default fixtures;

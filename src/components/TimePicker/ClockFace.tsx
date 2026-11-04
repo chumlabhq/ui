@@ -582,6 +582,7 @@ export function ClockFace({
         tabIndex={disabled ? -1 : 0}
       >
         <svg
+          aria-hidden="true"
           className={cls.clockHand}
           viewBox="0 0 100 100"
           style={{

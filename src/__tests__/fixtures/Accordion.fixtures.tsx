@@ -5,6 +5,7 @@ import AccordionContent from "../../components/Accordion/components/AccordionCon
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
 import { RtlBoundary } from "./_harness.js";
+import { withNeighbours } from "./_keys.js";
 
 /** The parts under `item` only exist when real items are nested inside. */
 const items = (
@@ -85,5 +86,17 @@ const fixtures: Fixtures<typeof Accordion> = [
     note: "The only fixture that overrides a slot; without it the cursor and focus-ring gates never see the case the defect lived in.",
   },
   { name: "expand-on-print", props: { selectionMode: "single", expandOnPrint: true }, children: items },
+  {
+    name: "keys",
+    props: { selectionMode: "single", collapsible: true },
+    children: (
+      <>
+        <AccordionItem value="one"><AccordionTrigger>One</AccordionTrigger><AccordionContent>One body</AccordionContent></AccordionItem>
+        <AccordionItem value="two" disabled><AccordionTrigger>Two</AccordionTrigger><AccordionContent>Two body</AccordionContent></AccordionItem>
+        <AccordionItem value="three"><AccordionTrigger>Three</AccordionTrigger><AccordionContent>Three body</AccordionContent></AccordionItem>
+      </>
+    ),
+    wrap: withNeighbours,
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

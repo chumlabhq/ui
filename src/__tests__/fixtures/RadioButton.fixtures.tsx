@@ -2,6 +2,7 @@ import { RadioGroup } from "../../components/RadioButton/index.js";
 import { RadioButton } from "../../components/RadioButton/index.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
+import { withNeighbours } from "./_keys.js";
 
 /**
  * RadioGroup takes RadioButton children, not an `options` array — passing
@@ -49,5 +50,18 @@ const fixtures: Fixtures<typeof RadioGroup> = [
     ),
   },
   { name: "required", props: { label: "Fruit", required: true }, children: radios },
+  {
+    name: "keys",
+    props: { defaultValue: "b" },
+    children: (
+      <>
+        <RadioButton value="a" label="Apple" disabled />
+        <RadioButton value="b" label="Banana" />
+        <RadioButton value="c" label="Cherry" disabled />
+        <RadioButton value="d" label="Damson" />
+      </>
+    ),
+    wrap: withNeighbours,
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -1,6 +1,7 @@
 import type { AvatarSize, AvatarStatus, AvatarClasses , AvatarShimmerClasses} from "./types.js";
 import { structuralOnly } from "../../../utils/classLayers.js";
 
+export const AVATAR_ACTION = "cursor-pointer";
 export const DEFAULT_SIZE: AvatarSize = "md";
 export const DEFAULT_SHAPE = "circle" as const;
 export const DEFAULT_SPACING = -8;

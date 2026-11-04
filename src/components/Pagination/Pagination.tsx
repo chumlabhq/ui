@@ -17,7 +17,7 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icon
 import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { isBrowser, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -260,6 +260,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
         const portalEl = document.getElementById(listboxId);
         if (portalEl?.contains(target)) return;
         setIsDropdownOpen(false);
+        returnFocusAfterOutsidePress(triggerRef.current, event);
       };
 
       document.addEventListener("mousedown", handleClickOutside);
@@ -383,17 +384,32 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       [safeTotalPages, safeCurrentPage, shownSiblings],
     );
 
-    const handlePrevPage = useCallback(() => {
+    const disablingArrowRef = useRef<HTMLElement | null>(null);
+
+    const handlePrevPage = useCallback((event: React.MouseEvent<HTMLElement>) => {
       if (safeCurrentPage > 1) {
+        if (safeCurrentPage === 2) disablingArrowRef.current = event.currentTarget;
         resolvedOnPageChange?.(safeCurrentPage - 1);
       }
     }, [safeCurrentPage, resolvedOnPageChange]);
 
-    const handleNextPage = useCallback(() => {
+    const handleNextPage = useCallback((event: React.MouseEvent<HTMLElement>) => {
       if (safeCurrentPage < safeTotalPages) {
+        if (safeCurrentPage === safeTotalPages - 1) disablingArrowRef.current = event.currentTarget;
         resolvedOnPageChange?.(safeCurrentPage + 1);
       }
     }, [safeCurrentPage, safeTotalPages, resolvedOnPageChange]);
+
+    useEffect(() => {
+      const arrow = disablingArrowRef.current;
+      disablingArrowRef.current = null;
+      const active = document.activeElement;
+      if (!arrow || (active && active !== document.body && active !== arrow)) return;
+      const row = arrow.closest("nav");
+      const next: HTMLElement | null | undefined =
+        row?.querySelector('[aria-current="page"]') ?? row?.querySelector("button:not(:disabled)");
+      next?.focus();
+    }, [safeCurrentPage]);
 
     const dropdownIconClass = cn(mergedClasses.rowsPerPage.icon, isDropdownOpen && "rotate-180") || undefined;
 

@@ -18,6 +18,7 @@ import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.j
 import { mergeRefs } from "../../utils/mergeRefs.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 /**
  * Component: Checkbox
  *
@@ -217,6 +218,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               name={name}
               checked={isChecked}
               disabled={disabled || loading}
+              aria-busy={loading || undefined}
               readOnly={readOnly}
               aria-readonly={readOnly || undefined}
               required={required}
@@ -259,6 +261,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           )}
         </label>
 
+        {loading && <span role="status" style={SR_ONLY_STYLE}>Loading</span>}
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>
             {errorMessage}

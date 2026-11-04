@@ -81,7 +81,7 @@ The handle is `role="separator"` and focusable, so resizing never requires a dra
 | `Tab` | Moves focus to the handle. |
 | `ArrowLeft`, `ArrowRight` | Resizes in steps. A vertical panel uses `ArrowUp`/`ArrowDown`. |
 | `Home`, `End` | Jumps to the minimum or maximum size. |
-| `Escape` | Abandons the resize and restores the size it started at. |
+| `Escape` | During a pointer drag, abandons it and restores the size it started at. A keyboard resize is already committed, step by step, so Escape does not undo it. |
 
 ---
 

@@ -43,6 +43,7 @@ import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.j
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
 import { FormValue } from "../../utils/FormValue.js";
+import { returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -411,6 +412,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
         );
         if (portalDropdown) return;
         handleClose();
+        returnFocusAfterOutsidePress(triggerNode, event);
       };
 
       document.addEventListener("mousedown", handleClickOutside);

@@ -2109,7 +2109,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "**Reduced motion:** `reduceMotion` defaults to `\"auto\"`, which follows the OS `prefers-reduced-motion` setting. `true` always reduces motion. `false` always animates — **including for a user who has asked their OS for less motion**, so pass it only when you know more than the OS setting does. The value governs the decorative classes as well as the animation timings."
     ],
     "keyboard": {
-      "note": "Only an avatar with `onClick` is focusable; a plain one is an image and takes no keyboard input.",
+      "note": "Only an avatar with `onClick` is focusable, as `role=\"button\"`; a plain one is an image and takes no keyboard input.",
       "rows": [
         {
           "keys": "`Tab`",
@@ -2195,7 +2195,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "Breadcrumb",
           "slot": "collapsedItem",
-          "element": "button",
+          "element": "a, button",
           "description": "One item inside that menu."
         }
       ]
@@ -2559,8 +2559,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           "description": "Moves through the crumbs, and to the ellipsis trigger when the trail is collapsed."
         },
         {
+          "keys": "`Enter`",
+          "description": "Follows a link crumb, as a native link does, and activates a button crumb."
+        },
+        {
           "keys": "`Enter`, `Space`",
-          "description": "Follows a crumb, or opens the collapsed-items menu from the ellipsis."
+          "description": "Activates a button crumb, opens the collapsed-items menu from the ellipsis, and follows the focused item inside that menu. Focus then returns to the ellipsis."
         },
         {
           "keys": "`ArrowDown`, `ArrowUp`",
@@ -10900,7 +10904,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "Printable characters",
-          "description": "Types into the search box and filters the list."
+          "description": "Types into the search box and filters the list. On a closed trigger, opens it and starts the search with that character."
         }
       ]
     },
@@ -11301,11 +11305,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Backspace`",
-          "description": "Clears the current box and steps back. On a box that is already empty it steps back and clears that one instead."
+          "description": "Removes the current box's digit and steps back. On a box that is already empty it steps back and removes that digit instead. The value is one string, so later digits close up."
         },
         {
           "keys": "`Delete`",
-          "description": "Clears the current box without moving."
+          "description": "Removes the current box's digit without moving focus. The value is one string, so later digits close up."
         },
         {
           "keys": "Printable characters",
@@ -12416,7 +12420,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Abandons the resize and restores the size it started at."
+          "description": "During a pointer drag, abandons it and restores the size it started at. A keyboard resize is already committed, step by step, so Escape does not undo it."
         }
       ]
     },
@@ -13222,7 +13226,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "Printable characters",
-          "description": "Filters the list."
+          "description": "Filters the list. On a closed trigger, opens it and starts the search with that character."
         }
       ]
     },
@@ -14444,8 +14448,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           "description": "Moves focus into the step list."
         },
         {
-          "keys": "`ArrowRight`, `ArrowDown`",
-          "description": "Moves to the next step. `ArrowLeft`/`ArrowUp` move back. `loop` wraps past the ends."
+          "keys": "`ArrowRight`, `ArrowLeft`",
+          "description": "Moves to the next or previous step in a horizontal stepper, stepping over disabled ones. A vertical stepper uses `ArrowDown`/`ArrowUp`. `loop` wraps past the ends."
         },
         {
           "keys": "`Home`, `End`",
@@ -16331,6 +16335,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "keys": "`F2`",
           "description": "Opens the focused cell's editor when `editable` is set."
+        },
+        {
+          "keys": "`Tab`, `Shift+Tab` in the filter dialog",
+          "description": "Move through its controls. Past either end the dialog closes and focus moves on from its trigger."
         },
         {
           "keys": "`Escape`",
@@ -19146,7 +19154,11 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Escape`",
-          "description": "Hides it while the trigger keeps focus. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible."
+          "description": "Hides it while the trigger keeps focus. From a link inside the tooltip, focus returns to the trigger. Always: there is no prop to turn it off, because WCAG 1.4.13 requires hover or focus content to be dismissible."
+        },
+        {
+          "keys": "`Tab`, `Shift+Tab` inside the tooltip",
+          "description": "Past either end of its content, focus goes back through the trigger, so it is never left on the page body."
         }
       ]
     },

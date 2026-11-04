@@ -211,6 +211,7 @@ export const ToastProvider = ({
               )}
               style={{ gap: 0 }}
               role="region"
+              aria-live="polite"
               aria-label={containerAriaLabel}
             >
               {toasts.map((toast) => {

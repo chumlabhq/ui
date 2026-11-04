@@ -58,7 +58,7 @@ import { useHydrated } from "../../utils/useHydrated.js";
 import { useLazyComponent } from "../../utils/useLazyComponent.js";
 import type { PresetsPanelProps } from "./PresetsPanel.js";
 import type { MarkerTooltipProps } from "./MarkerTooltip.js";
-import { isBrowser, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { createPortal } from "react-dom";
@@ -68,6 +68,7 @@ import {
   DEFAULT_DATEPICKER_CLASSES,
   UNSTYLED_DATEPICKER_CLASSES,
 } from "./constants.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 interface DropdownProps {
   value: number;
@@ -672,6 +673,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         if (containerRef.current?.contains(target)) return;
         if (calendarRef.current?.contains(target)) return;
         handleClose();
+        returnFocusAfterOutsidePress(triggerRef.current, event);
       };
 
       if (isOpen) {
@@ -922,7 +924,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             </span>
             <div className={mergedClasses.triggerActions || undefined}>
               {loading ? (
-                <CircularLoader size={16} thickness={2} reduceMotion={reduceMotion} unstyled={unstyled} aria-hidden="true" />
+                <CircularLoader size={16} thickness={2} reduceMotion={reduceMotion} unstyled={unstyled} />
               ) : (
                 showCalendarIcon &&
                 (calendarIcon || (
@@ -1022,6 +1024,9 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                           </>
                         )}
 
+                        <div role="status" style={SR_ONLY_STYLE}>
+                          {formatDate(calendarMonth.month, "MMMM yyyy", locale)}
+                        </div>
                         <div className={mergedClasses.row}>
                           <CustomDropdown
                             value={monthIdx}

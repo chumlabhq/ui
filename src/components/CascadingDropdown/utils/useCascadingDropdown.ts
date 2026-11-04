@@ -410,6 +410,7 @@ export const useCascadingDropdown = ({
     activeIndex: focusedIndex,
     onActiveIndexChange: setFocusedIndex,
     isDisabled: (option) => !!option.disabled,
+    typeahead: { getLabel: (option) => option.label },
     onSelect: (option) => {
       // Committing a parent from the keyboard opens its submenu *and* lands on
       // the first item, so arrows can carry straight on. Hover and click open
@@ -433,6 +434,7 @@ export const useCascadingDropdown = ({
     activeIndex: submenuFocusedIndex,
     onActiveIndexChange: setSubmenuFocusedIndex,
     isDisabled: (option) => !!option.disabled,
+    typeahead: { getLabel: (option) => option.label },
     onSelect: (option) => {
       if (activeParent) handleSubmenuItemClick(activeParent, option);
     },
@@ -480,11 +482,28 @@ export const useCascadingDropdown = ({
         case "Tab":
           handleClose();
           return;
+        case "Enter":
+        case " ":
+          if (!isOpen) {
+            event.preventDefault();
+            handleToggle();
+            setFocusedIndex(menuNav.firstEnabledIndex);
+            return;
+          }
+          break;
+        default:
+          if (
+            event.key.length === 1 &&
+            (!isOpen || (event.target as HTMLElement).tagName === "INPUT")
+          ) {
+            return;
+          }
       }
 
       (isInSubmenu ? submenuNav : menuNav).onKeyDown(event);
     },
     [
+      handleToggle,
       disabled,
       submenuSide,
       isOpen,

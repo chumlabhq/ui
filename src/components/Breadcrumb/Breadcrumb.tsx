@@ -22,7 +22,7 @@ import BreadcrumbItemContent from "./components/BreadcrumbItemContent.js";
 import Tooltip from "../Tooltip/Tooltip.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
-import { isBrowser, MIRROR_IN_RTL } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -43,18 +43,32 @@ function CollapsedDropdownItem({
   itemClassName?: string;
   itemDisabledClassName?: string;
   iconClassName?: string;
-  onClick: (item: BreadcrumbItem) => void;
+  onClick: (item: BreadcrumbItem, event?: React.MouseEvent) => void;
   onKeyDown: (e: React.KeyboardEvent, index: number) => void;
-  setRef: (index: number, el: HTMLButtonElement | null) => void;
+  setRef: (index: number, el: HTMLElement | null) => void;
   index: number;
 }) {
   const isDisabled = !!item.disabled;
 
-  const handleClick = () => {
-    if (!isDisabled) onClick(item);
+  const handleClick = (event: React.MouseEvent) => {
+    if (!isDisabled) onClick(item, event);
   };
 
-  const button = (
+  const content = <BreadcrumbItemContent item={item} iconClassName={iconClassName} />;
+
+  const button = item.href && !isDisabled ? (
+    <a
+      ref={(el) => setRef(index, el)}
+      href={item.href}
+      role="menuitem"
+      tabIndex={-1}
+      className={itemClassName || undefined}
+      onClick={handleClick}
+      onKeyDown={(e) => onKeyDown(e, index)}
+    >
+      {content}
+    </a>
+  ) : (
     <button
       ref={(el) => setRef(index, el)}
       type="button"
@@ -67,7 +81,7 @@ function CollapsedDropdownItem({
       data-disabled={isDisabled || undefined}
       aria-disabled={isDisabled || undefined}
     >
-      <BreadcrumbItemContent item={item} iconClassName={iconClassName} />
+      {content}
     </button>
   );
 
@@ -119,8 +133,8 @@ function DropdownPortal({
   gap: number;
   onItemClick: (item: BreadcrumbItem) => void;
   onMenuKeyDown: (e: React.KeyboardEvent, index: number) => void;
-  setMenuItemRef: (index: number, el: HTMLButtonElement | null) => void;
-  menuItemRefs: React.RefObject<(HTMLButtonElement | null)[]>;
+  setMenuItemRef: (index: number, el: HTMLElement | null) => void;
+  menuItemRefs: React.RefObject<(HTMLElement | null)[]>;
   portalContainer?: HTMLElement | null;
   keepMounted?: boolean;
 }) {
@@ -128,7 +142,7 @@ function DropdownPortal({
 
   useEffect(() => {
     if (menuItemRefs.current.length > 0) {
-      const firstEnabled = menuItemRefs.current.find((el) => el && !el.disabled);
+      const firstEnabled = menuItemRefs.current.find((el) => el && !el.hasAttribute("disabled"));
       firstEnabled?.focus();
     }
   }, [menuItemRefs]);
@@ -233,7 +247,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const shouldRestoreFocusRef = useRef(false);
     const ellipsisButtonRef = useRef<HTMLButtonElement>(null);
-    const menuItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    const menuItemRefs = useRef<(HTMLElement | null)[]>([]);
     // Tight gap so the dropdown reads as anchored to the ellipsis trigger
     // rather than floating away from it. 4 px felt visually closer to 20 px
     // once the dropdown's own py-1 padding stacked on top.
@@ -308,6 +322,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
         );
         if (portalDropdown) return;
         setDropdownOpen(false);
+        returnFocusAfterOutsidePress(ellipsisButtonRef.current, event);
       },
       [dropdownId, setDropdownOpen],
     );
@@ -362,10 +377,12 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     }, [isDropdownOpen, dropdownId, setDropdownOpen]);
 
     const handleItemClick = useCallback(
-      (item: BreadcrumbItem) => {
+      (item: BreadcrumbItem, event?: React.MouseEvent) => {
         if (item.disabled) return;
+        if (item.onClick || onItemClick) event?.preventDefault();
         item.onClick?.();
         onItemClick?.(item);
+        if (openRef.current) shouldRestoreFocusRef.current = true;
         setDropdownOpen(false);
       },
       [onItemClick, setDropdownOpen],
@@ -387,7 +404,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     );
 
     const setMenuItemRef = useCallback(
-      (index: number, el: HTMLButtonElement | null) => {
+      (index: number, el: HTMLElement | null) => {
         menuItemRefs.current[index] = el;
       },
       [],
@@ -433,7 +450,7 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       items: collapsedItems,
       isOpen: isDropdownOpen,
       isDisabled: (item) => !!item.disabled,
-      onSelect: handleItemClick,
+      onSelect: (item) => handleItemClick(item),
       onClose: (reason) => {
         setDropdownOpen(false);
         // Escape returns to the trigger; Tab is already leaving.
@@ -464,6 +481,11 @@ const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       (e: React.KeyboardEvent, index: number) => {
         // The item under the pointer is the one the keys act from.
         if (activeItemIndex !== index) setActiveItemIndex(index);
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          (e.currentTarget as HTMLElement).click();
+          return;
+        }
         onMenuKeyDown(e);
       },
       [activeItemIndex, setActiveItemIndex, onMenuKeyDown],

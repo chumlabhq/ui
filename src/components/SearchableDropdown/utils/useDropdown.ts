@@ -299,7 +299,10 @@ export function useDropdown({
     isDisabled: (option) => !!option.disabled,
     onSelect: handleOptionSelect,
     onOpen: handleOpen,
-    onClose: () => handleClose(),
+    onClose: (reason) => {
+      handleClose();
+      if (reason === "tab") shouldRestoreFocusRef.current = false;
+    },
     typeahead: { getLabel: (option) => option.label, timeout: typeaheadTimeout },
   });
 
@@ -325,9 +328,6 @@ export function useDropdown({
         return;
       }
 
-      // Type-ahead does not reach a closed surface here. Unlike Dropdown, this
-      // component does not open on a typed character, so searching would move a
-      // highlight nobody can see and leave it there for the next open.
       if (
         !isOpen &&
         event.key.length === 1 &&
@@ -335,6 +335,11 @@ export function useDropdown({
         !event.metaKey &&
         !event.altKey
       ) {
+        if (showSearch) {
+          event.preventDefault();
+          handleOpen();
+          setSearchQuery(event.key);
+        }
         return;
       }
 
@@ -342,7 +347,7 @@ export function useDropdown({
         (event.key === "Delete" || event.key === "Backspace") &&
         clearable &&
         currentValue &&
-        !isOpen
+        (!isOpen || (inSearchField && !searchQuery))
       ) {
         event.preventDefault();
         handleClear(event);
@@ -355,6 +360,7 @@ export function useDropdown({
       disabled,
       isOpen,
       showSearch,
+      searchQuery,
       clearable,
       currentValue,
       handleClear,

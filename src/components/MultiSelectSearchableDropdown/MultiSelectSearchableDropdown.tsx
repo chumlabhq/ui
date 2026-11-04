@@ -1,7 +1,7 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
 import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
-import { isBrowser, TEXT_DIRECTION_FROM_CONTENT } from "../../utils/isBrowser.js";
+import { isBrowser, TEXT_DIRECTION_FROM_CONTENT, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 import { FormValue } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
@@ -127,6 +127,7 @@ const OptionItem = memo(function OptionItem({
       data-selected={isSelected || undefined}
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
+      onMouseDown={(e) => e.preventDefault()}
       onClick={() => onToggle(option)}
       onMouseEnter={option.disabled ? undefined : () => onHover(index)}
     >
@@ -434,6 +435,7 @@ const MultiSelectSearchableDropdown = forwardRef<
         const portalEl = (target as HTMLElement).closest?.(`[data-dropdown-id="${dropdownId}"]`);
         if (portalEl) return;
         handleClose();
+        returnFocusAfterOutsidePress(triggerNode, event);
       };
 
       document.addEventListener("mousedown", handleClickOutside);
@@ -449,6 +451,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       if (!isOpen || !isBrowser) return;
       const handleDocumentKeyDown = (event: globalThis.KeyboardEvent) => {
         if (event.key !== "Escape" && event.key !== "Tab") return;
+        if (event.key === "Tab") triggerNode?.focus();
         handleClose();
         if (event.key === "Escape") {
           event.preventDefault();
@@ -460,7 +463,7 @@ const MultiSelectSearchableDropdown = forwardRef<
       return () => {
         document.removeEventListener("keydown", handleDocumentKeyDown, true);
       };
-    }, [isOpen, handleClose, shouldRestoreFocusRef]);
+    }, [isOpen, handleClose, shouldRestoreFocusRef, triggerNode]);
 
     const mergedTriggerRef = useMemo(
       () =>
@@ -538,6 +541,11 @@ const MultiSelectSearchableDropdown = forwardRef<
       "aria-required": (required || undefined) as boolean | undefined,
       disabled,
       onClick: handleToggle,
+      onMouseDown: (event: React.MouseEvent<HTMLElement>) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        event.currentTarget.focus();
+      },
       onKeyDown: handleKeyDownWithPassthrough,
       onFocus: onFocusProp,
       onBlur: onBlurProp,

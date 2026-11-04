@@ -4,6 +4,7 @@ import { CrossGlyph, SearchGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import type { ActTools } from "./_act.js";
 import { neverResolves, rejectsWith, resolvesTo } from "./_async.js";
+import { withNeighbours, KEY_CASCADE } from "./_keys.js";
 
 const MULTI = [
   {
@@ -374,5 +375,6 @@ const fixtures: Fixtures<typeof CascadingDropdown> = [
     props: { options: [...NESTED, { value: "plain", label: "Plain" }], defaultValue: { root: "plain" }, defaultOpen: true },
     note: "A selected top-level option with no submenu, which showed no selected icon until S3.",
   },
+  { name: "keys", props: { options: KEY_CASCADE }, wrap: withNeighbours },
 ];
 export default fixtures;

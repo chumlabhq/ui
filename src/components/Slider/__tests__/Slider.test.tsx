@@ -185,13 +185,10 @@ describe("Slider", () => {
       );
     });
 
-    it("sets default aria-label to Minimum for single thumb", () => {
+    it("gives a single thumb no invented name", () => {
       render(<Slider />);
 
-      expect(screen.getByRole("slider")).toHaveAttribute(
-        "aria-label",
-        "Minimum"
-      );
+      expect(screen.getByRole("slider")).not.toHaveAttribute("aria-label");
     });
   });
 

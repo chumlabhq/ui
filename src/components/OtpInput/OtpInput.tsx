@@ -16,6 +16,7 @@ import { FormValue } from "../../utils/FormValue.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 export { OtpInputLabel };
 
 /**
@@ -368,6 +369,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
           dir="ltr"
           onPaste={handlePaste}
           role="group"
+          aria-busy={loading || undefined}
           aria-label={ariaLabel ?? "One-time password input"}
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
@@ -383,6 +385,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
             focusTarget={firstCellRef}
           />
         )}
+        {loading && <span role="status" style={SR_ONLY_STYLE}>Loading</span>}
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>{errorMessage}</div>
         )}

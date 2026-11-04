@@ -123,7 +123,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
 
     const loaderElement = loading
       ? (loader ?? (
-          <CircularLoader size={loaderSize} thickness={2} aria-hidden="true" />
+          <CircularLoader size={loaderSize} thickness={2} />
         ))
       : null;
 

@@ -1703,6 +1703,31 @@ const LIBRARY_TOTAL_HISTORY = [
       "(DatePicker entry -2 B, index -1 B, PresetsPanel -3 B). No comments added to " +
       "src/components or src/utils.",
   },
+  {
+    kb: 163.49,
+    commit: "this slice",
+    date: "2026-11-04",
+    attribution: "attributed",
+    reason:
+      "INCREASE, APPROVAL PENDING, +1.30 KB (166,056 -> 167,417 B gzipped, +1,361 B, on a build of " +
+      "36013216), 83 -> 82 files: srOnlyStyle's chunk folded into the shared useReducedMotion chunk " +
+      "so nothing gained an import edge. No chunk's module imports were added; eight lost srOnlyStyle. " +
+      "Run E, keyboard and semantics audits. Chunks at or over 0.10 KB, each awaiting approval, with " +
+      "the smaller shape measured: useReducedMotion +351 B (returnFocusAfterOutsidePress on 12 " +
+      "surfaces, and SR_ONLY_STYLE; without the focusable-target check -73 B, but a press on another " +
+      "control then loses its focus), Tooltip +287 B (focus inside the bubble: Escape, Tab, pointer " +
+      "leave, outside press; without the outside press -50 B), CascadingDropdown +167 B (documented " +
+      "type-ahead, Enter and Space land on the first item, Tab hand-off; without the seed -105 B), " +
+      "FilterPanel +147 B, lazy (Tab walks the dialog in every engine; boundary only -10 B, and WebKit " +
+      "falls to body), Slider +126 B (loading status and aria-busy, no invented name, range thumbs " +
+      "told apart under a label, development warning; without the thumbs -66 B), Breadcrumb +118 B " +
+      "(href items are links, first key works, focus returns; without the return -14 B), Pagination " +
+      "+115 B (an arrow disabling itself hands focus on; opposite arrow only -44 B). Under 0.10 KB: " +
+      "Avatar +93 B (onClick is a button with keys), MultiSelectSearchableDropdown +91 B, TimePicker " +
+      "+74 B, Table +70 B, DatePicker +43 B, Stepper +42 B, OtpInput +38 B, Checkbox +29 B; " +
+      "the rest -22 to +8 B on hashes and the moved constant. API descriptions only in " +
+      "src/components and src/utils.",
+  },
 ];
 
 const LIBRARY_TOTAL_KB = LIBRARY_TOTAL_HISTORY.at(-1).kb;
@@ -1756,8 +1781,18 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.36,
-      why: "2026-10-31, A2d: 16.29 -> 16.36 (exclusive 16,685 -> 16,752 B gzipped, +67 B; own " +
+      kb: 16.43,
+      why: "2026-11-04, run E, keyboard and semantics: 16.37 -> 16.43 (exclusive 16,760 -> 16,827 B " +
+        "gzipped, +67 B; own chunk +70 B, on a build of 36013216): a row carries aria-selected only " +
+        "with selection, the expand toggle reports aria-expanded, the expand and drag columns' headers " +
+        "are named, decorative icons are aria-hidden, an outside press returns focus to the filter trigger. " +
+        "2026-11-04, run E: 16.36 -> 16.37, recording what it measures (exclusive 16,760 B " +
+        "gzipped against 16,752 at the last record; the gate had passed it inside the 0.25 slack). " +
+        "Walked on builds of each commit: 1fbb3b54 16,757, then 9eac438b 16,758 (+1 B), which is " +
+        "where the reading rounds to 16.37, not D2, held through 8e247c62 and 609e32ff; 36013216 " +
+        "(D2) 16,760 (+2 B; own 16,402 -> 16,406), lint's two dependency additions in Table.tsx, " +
+        "filterDropdownId and resizeIndicatorClassName. " +
+        "2026-10-31, A2d: 16.29 -> 16.36 (exclusive 16,685 -> 16,752 B gzipped, +67 B; own " +
         "chunk +70 B), measured on a build of 7fa7310c: the column resize handle sits on the " +
         "inline-end edge, its arrows read the header's direction through isRtl, a press passes " +
         "the handle's direction to TanStack's columnResizeDirection so a drag moves the edge the " +
@@ -1875,8 +1910,11 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.84,
-      why: "2026-11-02, C run, approved by Aditya 2026-11-02 (+0.16 KB, at or over the 0.10 KB line): 12.67 -> " +
+      kb: 12.88,
+      why: "2026-11-04, run E, keyboard and semantics: 12.84 -> 12.88 (exclusive 13,144 -> 13,185 B " +
+        "gzipped, +41 B; own chunk +43 B, on a build of 36013216): an outside press returns focus to " +
+        "the trigger, the loading spinner is out of aria-hidden, and a status announces the month. " +
+        "2026-11-02, C run, approved by Aditya 2026-11-02 (+0.16 KB, at or over the 0.10 KB line): 12.67 -> " +
         "12.84 (exclusive 12,977 -> 13,144 B gzipped, +167 B; own chunk shared/DatePicker.js " +
         "12,771 -> 12,937 B, +166 B, styles.css +10 B; no chunk's imports changed; measured on a " +
         "build of 9eac438b plus this slice against the same tree with HEAD's DatePicker): M1-L2, " +

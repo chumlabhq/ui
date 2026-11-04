@@ -203,6 +203,7 @@ export interface MultiSelectSearchableDropdownTriggerRenderProps {
   "aria-label"?: string;
   disabled: boolean;
   onClick: () => void;
+  onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
   onKeyDown: (event: React.KeyboardEvent) => void;
   /** Fires when the trigger takes focus, with the native focus event. */
   onFocus?: (event: FocusEvent<HTMLElement>) => void;

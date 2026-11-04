@@ -79,6 +79,7 @@ const CircularLoader = forwardRef<HTMLDivElement, CircularLoaderProps>(
         {...rest}
       >
         <svg
+          aria-hidden="true"
           viewBox="0 0 24 24"
           fill="none"
           className={mergedClasses.control || undefined}

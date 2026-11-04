@@ -652,7 +652,7 @@ const InternationalPhoneInput = forwardRef<
             {...rest}
           />
           {loading && (
-            <CircularLoader size={16} thickness={2} unstyled={unstyled} style={{ alignSelf: "center" }} aria-hidden="true" />
+            <CircularLoader size={16} thickness={2} unstyled={unstyled} style={{ alignSelf: "center" }} />
           )}
           {clearable && phoneInput && !disabled && !readOnly && !loading && (
             <button

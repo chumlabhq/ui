@@ -13,6 +13,7 @@ import {
   DEFAULT_SHAPE,
   DEFAULT_AVATAR_CLASSES,
   UNSTYLED_AVATAR_CLASSES,
+  AVATAR_ACTION,
 } from "./utils/constants.js";
 import {
   parseBorder,
@@ -204,6 +205,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const showFallback = (!showImage || imagePending) && fallback && !initials;
     const showInitials = (!showImage || imagePending) && initials;
 
+    const isAction = !!rest.onClick && !asChild;
+
     const containerStyle: React.CSSProperties = {
       width: numericSize,
       height: numericSize,
@@ -230,13 +233,25 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const avatarElement = (
       <Comp
         ref={ref}
-        className={cn(mergedClasses.root, className) || undefined}
+        className={cn(mergedClasses.root, isAction && AVATAR_ACTION, className) || undefined}
         style={containerStyle}
-        role={!showImage ? "img" : undefined}
-        aria-label={alt || name || rest["aria-label"]}
+        role={isAction ? "button" : !showImage ? "img" : undefined}
+        tabIndex={isAction ? 0 : undefined}
+        aria-label={showImage && !isAction ? undefined : alt || name || rest["aria-label"]}
         data-has-image={showImage || undefined}
         data-shape={effectiveShape}
         {...rest}
+        onKeyDown={
+          isAction
+            ? (event: React.KeyboardEvent<HTMLDivElement>) => {
+                rest.onKeyDown?.(event);
+                if (!event.defaultPrevented && (event.key === "Enter" || event.key === " ")) {
+                  event.preventDefault();
+                  event.currentTarget.click();
+                }
+              }
+            : rest.onKeyDown
+        }
       >
         <div
           className={mergedClasses.control || undefined}

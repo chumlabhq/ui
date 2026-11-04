@@ -195,8 +195,8 @@ filter is now derived from the same pattern, so all four agree.
 | `Tab` | Moves to the next box. Every box is in the tab order — there is no roving tabindex, so tabbing out of the field takes as many presses as it has boxes. |
 | `ArrowLeft`, `ArrowRight` | Moves between boxes. |
 | `Home`, `End` | Jumps to the first or last box. |
-| `Backspace` | Clears the current box and steps back. On a box that is already empty it steps back and clears that one instead. |
-| `Delete` | Clears the current box without moving. |
+| `Backspace` | Removes the current box's digit and steps back. On a box that is already empty it steps back and removes that digit instead. The value is one string, so later digits close up. |
+| `Delete` | Removes the current box's digit without moving focus. The value is one string, so later digits close up. |
 | Printable characters | Fills the box and advances. A paste of the full code fills every box at once. |
 
 ---

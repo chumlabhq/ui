@@ -3,6 +3,7 @@ import type { Fixtures } from "./types.js";
 import { DotsGlyph, SlashGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import { CRUMBS } from "./_data.js";
+import { withNeighbours, KEY_CRUMBS } from "./_keys.js";
 
 const fixtures: Fixtures<typeof Breadcrumb> = [
   { name: "default", props: { items: CRUMBS } },
@@ -50,5 +51,6 @@ const fixtures: Fixtures<typeof Breadcrumb> = [
     props: { items: [{ id: "home", label: "Home" }, { id: "docs", label: "Docs" }, { id: "here", label: "Here" }], onItemClick: () => {} },
     note: "Crumbs without an href render as buttons, the only crumbs that carry `data-clickable`.",
   },
+  { name: "keys", props: { items: KEY_CRUMBS, maxVisible: 3 }, wrap: withNeighbours },
 ];
 export default fixtures;

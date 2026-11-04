@@ -10,6 +10,7 @@ import {
   resolvesTo,
   settleAsync,
 } from "./_async.js";
+import { withNeighbours, KEY_OPTIONS } from "./_keys.js";
 
 
 const fixtures: Fixtures<typeof Dropdown> = [
@@ -109,5 +110,6 @@ const fixtures: Fixtures<typeof Dropdown> = [
     note: "Closed, so only the trigger: its value starts at the right and the clear button sits beside the chevron at the left.",
   },
   { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
+  { name: "keys", props: { options: KEY_OPTIONS }, wrap: withNeighbours },
 ];
 export default fixtures;

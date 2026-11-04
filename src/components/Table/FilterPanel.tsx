@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode, type RefObject } from "react";
-import { isRtl, toInlineStart } from "../../utils/isBrowser.js";
+import { isRtl, toInlineStart, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 
 /**
@@ -95,7 +95,9 @@ export default function FilterPanel({
     };
 
     const onPointerDown = (e: MouseEvent) => {
-      if (!isInside(e.target as Node)) onClose();
+      if (isInside(e.target as Node)) return;
+      onClose();
+      returnFocusAfterOutsidePress(triggerRef.current, e);
     };
     const onScroll = (e: Event) => {
       if (!isInside(e.target as Node)) onClose();
@@ -163,6 +165,18 @@ export default function FilterPanel({
       aria-label={`Filter ${columnId}`}
       tabIndex={-1}
       onKeyDown={(e) => {
+        if (e.key === "Tab") {
+          const items = [...e.currentTarget.querySelectorAll<HTMLElement>("button,input")];
+          const at = items.indexOf(e.target as HTMLElement);
+          const next = items[at < 0 ? (e.shiftKey ? -1 : 0) : at + (e.shiftKey ? -1 : 1)];
+          if (next) {
+            e.preventDefault();
+            next.focus();
+          } else {
+            onClose();
+          }
+          return;
+        }
         if (e.key !== "Escape") return;
         e.stopPropagation();
         onClose();
@@ -217,6 +231,7 @@ export default function FilterPanel({
                 >
                   {isSelected && (
                     <svg
+                      aria-hidden="true"
                       width="10"
                       height="10"
                       viewBox="0 0 24 24"

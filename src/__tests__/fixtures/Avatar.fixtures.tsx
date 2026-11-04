@@ -1,6 +1,7 @@
 import { Avatar, AvatarGroup } from "../../components/Avatar/index.js";
 import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
+import { withNeighbours } from "./_keys.js";
 
 /** A 1x1 transparent PNG, so `load` actually fires in a browser. */
 const PNG_1PX =
@@ -62,5 +63,6 @@ const fixtures: Fixtures<typeof Avatar> = [
     props: { src: PNG_1PX, alt: "Ada" },
     note: "A data URI, not a URL: the fixture page has no network and CSP blocks one, so a real decode needs the bytes inline.",
   },
+  { name: "keys", props: { name: "Ada Lovelace", onClick: () => {} }, wrap: withNeighbours },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

@@ -24,13 +24,14 @@ import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons.js";
 import { useClockFace } from "./useClockFace.js";
 import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep, isMinutesInRange, timeValueToMinutes } from "./utils.js";
-import { isBrowser } from "../../utils/isBrowser.js";
+import { isBrowser, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
+import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 const TimeOption = memo(function TimeOption({
   time,
@@ -404,6 +405,14 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
             return;
           }
           break;
+        case "ArrowUp":
+          if (!isOpen && mode === "dropdown") {
+            event.preventDefault();
+            handleOpen();
+            setFocusedIndex(displayOptions.length - 1);
+            return;
+          }
+          break;
       }
 
       if (mode === "dropdown") hookHandleKeyDown(event);
@@ -429,6 +438,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         if (containerRef.current?.contains(target)) return;
         if (dropdownContentRef.current?.contains(target)) return;
         handleClose();
+        returnFocusAfterOutsidePress(inputRef.current, event);
       };
 
       document.addEventListener("mousedown", handleClickOutside);
@@ -627,6 +637,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         data-error={error || rangeError || undefined}
         data-open={isOpen || undefined}
         data-loading={loading || undefined}
+        aria-busy={loading || undefined}
         data-valid={(!error && success) || undefined}
       >
         {name ? (
@@ -757,6 +768,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
           {dropdownPortal}
         </div>
 
+        {loading && <span role="status" style={SR_ONLY_STYLE}>Loading</span>}
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mergedClasses.message}>
             {errorMessage}

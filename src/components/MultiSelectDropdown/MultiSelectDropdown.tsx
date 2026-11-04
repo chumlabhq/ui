@@ -25,6 +25,7 @@ import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
+import { returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 const MAX_STATUS_LABELS = 5;
 
 interface MultiSelectDropdownContentProps {
@@ -329,6 +330,7 @@ const MultiSelectDropdown = forwardRef<
         const portalEl = (target as HTMLElement).closest?.(`[data-dropdown-id="${dropdownId}"]`);
         if (portalEl) return;
         handleClose();
+        returnFocusAfterOutsidePress(triggerNode, event);
       };
 
       if (isOpen) {

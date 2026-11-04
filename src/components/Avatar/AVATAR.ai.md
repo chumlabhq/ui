@@ -445,7 +445,7 @@ For grouped avatars, match `ringColor` to your background:
 
 ## Keyboard Interactions
 
-Only an avatar with `onClick` is focusable; a plain one is an image and takes no keyboard input.
+Only an avatar with `onClick` is focusable, as `role="button"`; a plain one is an image and takes no keyboard input.
 
 | Key | Behaviour |
 |-----|-----------|

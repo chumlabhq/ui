@@ -55,6 +55,7 @@ const TabButton = memo(function TabButton({
         classNames.count,
       ) || undefined}
       data-state={isActive ? "active" : "inactive"}
+      role="img"
       aria-label={`${count} items`}
     >
       {count}

@@ -204,9 +204,6 @@ export function useMultiSelectDropdown({
     typeahead: { getLabel: (option) => option.label, timeout: typeaheadTimeout },
     onOpen: handleToggle,
     onClose: (reason) => {
-      // Tab already closes through blur; calling handleClose as well would set
-      // the restore-focus flag and pull focus back to the control the user is
-      // tabbing away from.
       if (reason === "escape") handleClose();
     },
   });
@@ -228,9 +225,24 @@ export function useMultiSelectDropdown({
         return;
       }
 
+      if (
+        !isOpen &&
+        showSearch &&
+        event.key !== " " &&
+        event.key.length === 1 &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey
+      ) {
+        event.preventDefault();
+        setIsOpen(true);
+        setSearchQuery(event.key);
+        return;
+      }
+
       onMenuKeyDown(event);
     },
-    [disabled, isOpen, showSearch, onMenuKeyDown],
+    [disabled, isOpen, showSearch, onMenuKeyDown, setIsOpen],
   );
 
   return {

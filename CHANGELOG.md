@@ -732,6 +732,43 @@ The physical values are retired, not aliased: start and end follow the page's di
 
 ### Fixed
 
+- **Pressing outside an open surface hands focus back to its trigger.** Dropdown, MultiSelectDropdown,
+  SearchableDropdown, MultiSelectSearchableDropdown, CascadingDropdown, DatePicker, TimePicker,
+  InternationalPhoneInput, Breadcrumb's menu, Pagination's rows menu and Table's filter dialog each left
+  focus on `<body>`, so the next Tab started from the top of the page. A press on something focusable
+  keeps its focus, and a touch is left alone.
+- **Tab from a portalled search box moves forward.** SearchableDropdown, MultiSelectSearchableDropdown
+  and CascadingDropdown sent it backwards or left it on the trigger, by engine; it now goes on to the
+  control after the trigger.
+- Pressing an option in MultiSelectDropdown or MultiSelectSearchableDropdown keeps focus in the widget
+  while the list stays open. It fell to `<body>`, which ended keyboard use of the open list.
+- CascadingDropdown's documented type-ahead exists, at both levels, and Enter or Space on the trigger
+  lands on the first item, as ArrowDown does.
+- Breadcrumb's collapsed menu follows an item's `href`, which it ignored; its items with one are links.
+  The first Enter or Space after opening works, and focus returns to the ellipsis on a selection.
+- SearchableDropdown and MultiSelectSearchableDropdown open on a printable key from the closed trigger and
+  start the search with it. SearchableDropdown's Backspace and Delete clear from an empty search box, as
+  documented.
+- Pagination's Previous or Next hands focus to the current page when it disables itself.
+- TimePicker's ArrowUp opens the closed list on its last time, as documented.
+- Tooltip: with focus inside its bubble, Escape returns focus to the trigger, the pointer leaving no longer
+  closes it, and Tab past either end leaves through the trigger.
+- Table's filter dialog walks its own controls by Tab in every engine, and closes past either end. It left
+  focus on `<body>` while still open.
+- Avatar with `onClick` is `role="button"`, in the tab order, and fires on Enter and Space, as documented.
+  It was a `div` a keyboard could not reach.
+- **Loading is announced.** Input, TextArea, RadioGroup, DatePicker and InternationalPhoneInput rendered
+  their `role="status"` spinner inside `aria-hidden`; Checkbox, OtpInput, Slider and TimePicker had no status at
+  all and now also set `aria-busy`.
+- Slider: a single thumb no longer invents the name "Minimum", which hid a missing label. A labelled range's
+  thumbs read "Volume Minimum" and "Volume Maximum", where both read "Volume".
+- Table: a row carries `aria-selected` only when the table has selection, the expand toggle reports
+  `aria-expanded`, and the expand and drag columns' headers have names.
+- Stepper: a labelled step's completed or error status reaches the tree. It was only painted.
+- ToastProvider's region is `aria-live` before the first toast, which is what lets that toast be announced.
+- DatePicker announces the month it moves to through a status. TabPanel's count and Avatar's root no longer carry `aria-label` on a role-less element.
+  Decorative icons in Breadcrumb, CascadingDropdown, Modal, Loader, Table and TimePicker are `aria-hidden`.
+
 - Stepper's connectors run through the indicators' centres at every width. Below 640 px they
   sat off the indicators' centres, by 2 px for numbered, 4 px for icon and 1 px for dot, because the
   offset used the indicator's size from 640 px up. `indicatorSize` still overrides it, now

@@ -305,6 +305,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `Ctrl+Home`, `Ctrl+End` | Moves to the first cell in the first row, or the last cell in the last row. The header row is not part of this navigation: its sort, filter and pin buttons are reached with `Tab`. |
 | `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. |
 | `F2` | Opens the focused cell's editor when `editable` is set. |
+| `Tab`, `Shift+Tab` in the filter dialog | Move through its controls. Past either end the dialog closes and focus moves on from its trigger. |
 | `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress and returns focus to the cell. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |
 | `ArrowLeft`, `ArrowRight` on a resize handle | Resizes the column in steps, so column widths are reachable without a drag (SC 2.5.7). |
 

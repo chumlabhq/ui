@@ -4,6 +4,7 @@ import { ChevronGlyph, CrossGlyph, SearchGlyph } from "./_icons.js";
 import { RtlBoundary } from "./_harness.js";
 import { OPTIONS } from "./_data.js";
 import { neverResolves, resolvesTo, settleAsync } from "./_async.js";
+import { withNeighbours, KEY_OPTIONS } from "./_keys.js";
 
 
 const fixtures: Fixtures<typeof SearchableDropdown> = [
@@ -120,5 +121,7 @@ const fixtures: Fixtures<typeof SearchableDropdown> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
   { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
+  { name: "keys", props: { options: KEY_OPTIONS }, wrap: withNeighbours },
+  { name: "keys-clearable", props: { options: KEY_OPTIONS, defaultValue: "b", clearable: true }, wrap: withNeighbours },
 ];
 export default fixtures;

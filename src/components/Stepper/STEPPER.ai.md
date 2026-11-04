@@ -289,7 +289,7 @@ const steps = [
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves focus into the step list. |
-| `ArrowRight`, `ArrowDown` | Moves to the next step. `ArrowLeft`/`ArrowUp` move back. `loop` wraps past the ends. |
+| `ArrowRight`, `ArrowLeft` | Moves to the next or previous step in a horizontal stepper, stepping over disabled ones. A vertical stepper uses `ArrowDown`/`ArrowUp`. `loop` wraps past the ends. |
 | `Home`, `End` | Jumps to the first or last step. |
 | `Enter`, `Space` | Activates the focused step, when the step is clickable. |
 

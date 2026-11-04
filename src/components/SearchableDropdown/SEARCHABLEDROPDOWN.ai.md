@@ -310,7 +310,7 @@ Defaults use Tailwind `dark:` prefix. When overriding, always provide both light
 | `Escape` | Closes the menu and returns focus to the trigger. Always: there is no prop to turn it off, because the APG combobox pattern requires Escape to close the popup. |
 | `Tab` | Closes the menu and moves focus on. |
 | `Backspace`, `Delete` | Clears the selection when the search box is empty and `clearable` is set. |
-| Printable characters | Filters the list. |
+| Printable characters | Filters the list. On a closed trigger, opens it and starts the search with that character. |
 
 ---
 

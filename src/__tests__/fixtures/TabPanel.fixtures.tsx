@@ -3,6 +3,7 @@ import type { Fixtures } from "./types.js";
 import { motionOverrides } from "./_motion.js";
 import { TABS } from "./_data.js";
 import { CircleIcon } from "./_icons.js";
+import { withNeighbours, KEY_TABS } from "./_keys.js";
 
 const fixtures: Fixtures<typeof TabPanel> = [
   { name: "default", props: { tabs: TABS }, children: (tab) => `${tab.label} panel` },
@@ -37,5 +38,6 @@ const fixtures: Fixtures<typeof TabPanel> = [
       iconPosition: "end" as const,
     },
   },
+  { name: "keys", props: { tabs: KEY_TABS }, wrap: withNeighbours },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

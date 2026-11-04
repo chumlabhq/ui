@@ -72,6 +72,11 @@ import {
   FilterIcon as DefaultFilterIcon,
 } from "./icons.js";
 
+const SERVICE_COLUMN_NAMES: Record<string, string> = {
+  __expand: "Row details",
+  __dragHandle: "Reorder",
+};
+
 const EMPTY_DATA: unknown[] = [];
 
 const sizePaddingMap = {
@@ -612,6 +617,7 @@ function TableInner<TData>(
                 }}
                 className={`${TABLE_HIT_AREA} shrink-0 transition-transform cursor-pointer ${expandIconClassName}`}
                 aria-label={isExpanded ? "Collapse row" : "Expand row"}
+                aria-expanded={isExpanded}
                 data-expanded={isExpanded || undefined}
               >
                 {hasCustomExpandIcon && expandIconRef.current ? (
@@ -1247,6 +1253,7 @@ function TableInner<TData>(
           colSpan={header.colSpan > 1 ? header.colSpan : undefined}
           className={`group/header ${headerCellClassName} ${sizeClass}`}
           role="columnheader"
+          aria-label={SERVICE_COLUMN_NAMES[header.column.id]}
           aria-sort={getSortDirection(header.column.getIsSorted())}
           data-pinned={isPinned || undefined}
           data-column-index={index}
@@ -1654,7 +1661,7 @@ function TableInner<TData>(
             }
             role="row"
             aria-rowindex={rowIndex + 1}
-            aria-selected={selected}
+            aria-selected={selectionMode !== "none" || selectedRowId !== undefined ? selected : undefined}
             data-selected={selected || undefined}
             data-clickable={onRowClick ? true : undefined}
             data-striped={isStriped || undefined}
@@ -1967,6 +1974,7 @@ function TableInner<TData>(
                   aria-label="Clear search"
                 >
                   <svg
+                    aria-hidden="true"
                     viewBox="0 0 16 16"
                     fill="currentColor"
                     className="w-3.5 h-3.5"
@@ -2165,6 +2173,7 @@ function TableInner<TData>(
                     aria-label="Clear search"
                   >
                     <svg
+                      aria-hidden="true"
                       viewBox="0 0 16 16"
                       fill="currentColor"
                       className="w-3.5 h-3.5"

@@ -327,7 +327,8 @@ const items: BreadcrumbItem[] = [
 | Key | Behaviour |
 |-----|-----------|
 | `Tab` | Moves through the crumbs, and to the ellipsis trigger when the trail is collapsed. |
-| `Enter`, `Space` | Follows a crumb, or opens the collapsed-items menu from the ellipsis. |
+| `Enter` | Follows a link crumb, as a native link does, and activates a button crumb. |
+| `Enter`, `Space` | Activates a button crumb, opens the collapsed-items menu from the ellipsis, and follows the focused item inside that menu. Focus then returns to the ellipsis. |
 | `ArrowDown`, `ArrowUp` | Moves between items inside the open menu. |
 | `Home`, `End` | Jumps to the first or last item in the menu. |
 | `Escape` | Closes the menu and returns focus to the ellipsis. Always: there is no prop to turn it off, because the APG menu button pattern requires Escape to close the menu. |
