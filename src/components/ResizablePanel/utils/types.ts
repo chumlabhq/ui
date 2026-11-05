@@ -22,9 +22,9 @@ export interface ResizablePanelProps extends ComponentPropsWithoutRef<"div"> {
   defaultValue?: number;
   /** Fires with new pixel size. Not `onChange` or `onResize`. */
   onValueChange?: (value: number) => void;
-  /** Fires when the user begins resizing. */
+  /** Fires when a drag starts moving, and before each keyboard step. A press with no movement fires neither this nor `onResizeEnd`. */
   onResizeStart?: (value: number) => void;
-  /** Fires when the user finishes resizing. */
+  /** Fires when a drag ends, with the restored size if Escape abandoned it, and after each keyboard step. */
   onResizeEnd?: (value: number) => void;
   /** Minimum allowed size in pixels. */
   minValue?: number;

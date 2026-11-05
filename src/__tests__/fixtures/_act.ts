@@ -96,6 +96,8 @@ const setNativeValue = (element: Element, value: string) => {
  * events do not, which is the point — a fixture that opens a menu in the
  * contract tier opens the same menu on the fixture page.
  */
+let pointerTravel = 0;
+
 export const gestures = {
   click: (target: Element | null | undefined) => {
     const element = required(target);
@@ -109,6 +111,12 @@ export const gestures = {
     const element = required(target);
     dispatch(element, mouse("mouseover", true));
     dispatch(element, mouse("mouseenter", false));
+    // List highlights follow real movement (trackPointer in utils/isBrowser):
+    // two moves, so the second has somewhere to have come from.
+    for (let step = 0; step < 2; step++) {
+      pointerTravel += 1;
+      dispatch(element, new MouseEvent("mousemove", { bubbles: true, cancelable: true, clientX: pointerTravel, clientY: 1 }));
+    }
   },
   pointerDown: (
     target: Element | null | undefined,
@@ -158,3 +166,9 @@ export const browserActTools: ActTools = {
 
 /** Whether a fixture's rendered state depends on its act having run. */
 export const needsAct = (fixture: Pick<Fixture, "act">) => typeof fixture.act === "function";
+
+/** Records one callback call for `callbacks.spec`, read back from `window.__fixtureCallLog`. */
+export function logFixtureCall(name: string, args: unknown[]): void {
+  const w = window as unknown as { __fixtureCallLog?: { name: string; args: unknown[] }[] };
+  (w.__fixtureCallLog ??= []).push({ name, args });
+}

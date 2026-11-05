@@ -15,6 +15,7 @@ branch or a local link, these are the changes that will reach you.
 
 ### Added
 
+- A `Toast` shown with an `id` keeps it: `useToast()`'s methods return it and `onDismiss` reports it, and showing that id again replaces the toast on screen. It was generated regardless. New type `ToastOptions`.
 - `--cl-on-warning`, the colour for text and icons on a warning fill: `#050608` in dark,
   `#0f1218` in light, dark in both themes because the warning fill is light in both.
 - `useControllableState` (`@chumlab/ui`) returns a third element, `reset()`, which puts an
@@ -732,6 +733,17 @@ The physical values are retired, not aliased: start and end follow the page's di
 
 ### Fixed
 
+- Slider `onValueCommit` reports the new value on a key, not the previous one, and fires only when the value changed: no call on a key at a bound or a press that moved nothing.
+- DatePicker `onMonthChange` fires for keyboard paging and for the month a reopened calendar returns to. `onValueChange` no longer fires for the day already selected. A press on a month or year button keeps focus there, so Escape still closes, and an arrow paging a `defaultOpen` calendar keeps focus on a day.
+- InternationalPhoneInput takes `preferredCountries` in the order listed for a pasted number on a shared dial code: `+1` is the US, not Canada, and `+7` Russia with no preference.
+- ResizablePanel `onResizeStart` fires on a drag's first movement, a press with none fires neither it nor `onResizeEnd`, and a drag abandoned with Escape ends with `onResizeEnd` and the restored size.
+- Pagination `onRowsPerPageChange` stays quiet on the current option, its fit is measured again when a font arrives, and its `<nav>` no longer carries `aria-disabled`.
+- TimePicker `onValueChange` stays quiet when the field is left, or the clock confirmed, with the time it had.
+- Table: `selectionMode="single"` selects the row pressed (it had no way to select); Enter on a cell does what pressing the row does; `onRowHover` reports leaving once; `onHeaderHoverChange` fires without `onCursorPositionChange`, once per state, from the header rather than the top 60 px; `onColumnOrderChange` and `onGroupByChange` fire with no state yet; `onCellEdit` stays quiet on an unchanged edit.
+- Drawer `onTransitionEnd` fires for a `defaultOpen` drawer and under an inline handler, and a sheet drags up to a larger snap point as well as down.
+- MultiSelectDropdown and MultiSelectSearchableDropdown no longer nest controls in the trigger: chips sit in a layer beside the `<button role="combobox">`, and each chip's remove control is a `<button>`.
+- A list opening under a resting pointer keeps the keyboard's highlight, in every list that highlights on hover. Only real pointer movement takes it.
+- Success messages arrive in a `role="status"` node that exists beforehand, in all 15 fields that take one, so the announcement is not left to a status inserted with its text.
 - **Pressing outside an open surface hands focus back to its trigger.** Dropdown, MultiSelectDropdown,
   SearchableDropdown, MultiSelectSearchableDropdown, CascadingDropdown, DatePicker, TimePicker,
   InternationalPhoneInput, Breadcrumb's menu, Pagination's rows menu and Table's filter dialog each left

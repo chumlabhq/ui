@@ -11,7 +11,7 @@ import {
 } from "./utils/constants.js";
 import { CheckIcon as CheckIconDefault, IndeterminateIcon } from "./utils/icons.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { useFormReset } from "../../utils/FormValue.js";
+import { useFormReset, SuccessStatus } from "../../utils/FormValue.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -268,9 +268,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

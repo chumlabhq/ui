@@ -63,6 +63,12 @@ const openFilterPanel = async (container: HTMLElement, ui: ActTools) => {
 // `Fixture<TableProps<Row>>` rather than `Fixtures<typeof Table>`: Table is
 // generic over its row, and `ComponentProps` of a generic forwardRef collapses
 // the parameter to `unknown`, which would reject every typed accessor.
+type HeaderContext = { table: { setColumnOrder: (order: string[]) => void }; column: { toggleGrouping: () => void } };
+const headerCalling = (act: (context: HeaderContext) => void): TableProps<Row>["columns"] => [
+  { id: "name", accessorKey: "name", header: (context: unknown) => <button data-header-action onClick={() => act(context as HeaderContext)}>Name</button> },
+  COLUMNS[1],
+];
+
 const fixtures: Fixture<TableProps<Row>>[] = [
   { name: "default", props: { data: ROWS, columns: COLUMNS } },
   {
@@ -210,5 +216,10 @@ const fixtures: Fixture<TableProps<Row>>[] = [
   },
   { name: "sorted", props: { data: ROWS, columns: COLUMNS, sortable: true, sorting: [{ id: "name", desc: false }] } },
   { name: "striped", props: { data: ROWS, columns: COLUMNS, striped: true } },
+  { name: "callbacks", props: { data: ROWS, columns: COLUMNS, getRowId: getRowId }, note: "Run F: the state `callbacks.spec` spies on." },
+  { name: "callbacks-editable", props: { data: ROWS, columns: COLUMNS, getRowId: getRowId, editable: true, editableColumns: ["name"] }, note: "Run F: the state `callbacks.spec` spies on." },
+  { name: "callbacks-single", props: { data: ROWS, columns: COLUMNS, getRowId: getRowId, selectionMode: "single" }, note: "Run F: the state `callbacks.spec` spies on." },
+  { name: "callbacks-header-order", props: { data: ROWS, columns: headerCalling((c) => c.table.setColumnOrder(["role", "name"])), getRowId: getRowId }, note: "Run F: the state `callbacks.spec` spies on." },
+  { name: "callbacks-header-group", props: { data: ROWS, columns: headerCalling((c) => c.column.toggleGrouping()), getRowId: getRowId }, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default fixtures;

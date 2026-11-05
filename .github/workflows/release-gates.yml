@@ -20,22 +20,32 @@ env:
   PLAYWRIGHT_BROWSERS_PATH: "0"
 
 jobs:
-  # ── the browser matrix ──────────────────────────────────────────────────
+  # ── the browser matrix, one project per job ─────────────────────────────
   #
-  # macOS, and not by preference. `e2e/visual.spec.ts-snapshots` holds 360
-  # baselines named `<subject>-<theme>-<width>-visual-darwin.png`; Playwright
-  # stamps the platform into the filename, so on Linux it looks for
-  # `-visual-linux.png`, finds none, and every visual test fails. Until Linux
-  # baselines are recorded, the visual project can only run here.
+  # One macOS job holding all seven projects ran into GitHub's 1h30 limit and was
+  # cancelled with no verdict (run 41801071572). The durations below are the
+  # local ones from runs B to E on an 8-core Mac; the runner has 3 cores, so each
+  # shard count leaves room for a slower machine, and each job's timeout is 45.
+  # Nothing here is expected past 40 minutes.
   #
-  # `run-e2e-matrix.mjs` requires every project in playwright.config.ts to have
-  # a fresh passing record before it reports green, and `visual` is one of them
-  # — so the five engines and the baselines run in one job rather than being
-  # split across two runners.
-  e2e-matrix:
-    name: e2e matrix (5 engines + visual baselines)
-    runs-on: macos-latest
-    timeout-minutes: 90
+  # The last job, `reconcile`, sums what every shard says it collected and fails
+  # if a shard is missing or the sum falls short of `playwright test --list`.
+  #
+  # macOS 26 by name: `e2e/visual.spec.ts-snapshots` holds 920 baselines named
+  # `-visual-darwin.png`, recorded on macOS 26 (local 26.6.1). The name holds the
+  # platform and no version, and the files carry no metadata, so the first run
+  # here is what says whether this runner's rasteriser matches: `visual` reds on
+  # its own and no other job waits for it.
+
+  e2e-chromium:
+    name: e2e chromium (${{ matrix.shard }}/4)
+    # 72.8 min on one worker (2026-10-31), 2 workers here, the same four shards as ci.yml: 26.2, 15.2, 24.8, 6.6 min of tests, 25 min at worst on CI.
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -43,29 +53,292 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-
       - uses: actions/cache@v6
         id: browsers
         with:
           path: node_modules/playwright-core/.local-browsers
-          key: playwright-all-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - if: steps.browsers.outputs.cache-hit != 'true'
-        run: npx playwright install
-
-      - run: npm run test:e2e:all
-
+        run: npx playwright install chromium
+      - run: npx playwright test --project="chromium" --shard=${{ matrix.shard }}/4
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-chromium-${{ matrix.shard }}
+          path: reconcile.json
+          retention-days: 14
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: e2e-matrix-report
-          # The visual diffs are the point of keeping these: a failed
-          # screenshot writes actual/expected/diff PNGs and nothing else
-          # explains the failure.
+          name: report-e2e-chromium-${{ matrix.shard }}
           path: |
             test-results/
             playwright-report/
-            e2e/.matrix-state.json
           retention-days: 14
+
+  e2e-firefox:
+    name: e2e firefox (${{ matrix.shard }}/4)
+    # 59 min to 1.1 h on 2 workers (run D, three full runs): 15 to 25 min a shard.
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-firefox-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install firefox
+      - run: npx playwright test --project="firefox" --shard=${{ matrix.shard }}/4
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-firefox-${{ matrix.shard }}
+          path: reconcile.json
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: report-e2e-firefox-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  e2e-webkit:
+    name: e2e webkit (${{ matrix.shard }}/4)
+    # 1.2 h on 1 worker (run B): 18 to 30 min a shard.
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-webkit-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install webkit
+      - run: npx playwright test --project="webkit" --shard=${{ matrix.shard }}/4
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-webkit-${{ matrix.shard }}
+          path: reconcile.json
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: report-e2e-webkit-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  e2e-mobile-chrome:
+    name: e2e Mobile Chrome (${{ matrix.shard }}/4)
+    # The chromium tests in a phone viewport, so chromium's estimate: 25 min at worst.
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+      - run: npx playwright test --project="Mobile Chrome" --shard=${{ matrix.shard }}/4
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-mobile-chrome-${{ matrix.shard }}
+          path: reconcile.json
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: report-e2e-mobile-chrome-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  e2e-mobile-safari:
+    name: e2e Mobile Safari (${{ matrix.shard }}/4)
+    # 1.2 h on 1 worker (4400 s, run B): 18 to 30 min a shard.
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-webkit-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install webkit
+      - run: npx playwright test --project="Mobile Safari" --shard=${{ matrix.shard }}/4
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-mobile-safari-${{ matrix.shard }}
+          path: reconcile.json
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: report-e2e-mobile-safari-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  e2e-visual:
+    name: visual baselines
+    # 550 tests, 5.0 min on 4 local workers (run C): 15 min on 2 here.
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+      - run: npx playwright test --project="visual"
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-visual-1
+          path: reconcile.json
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: report-e2e-visual-1
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  e2e-a11y-full:
+    name: a11y-full (${{ matrix.shard }}/2)
+    # 22 tests, 22.2 min on 2 workers (run C), three of them most of it: 20 min a shard here.
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        id: browsers
+        with:
+          path: node_modules/playwright-core/.local-browsers
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+      - run: npx playwright test --project="a11y-full" --shard=${{ matrix.shard }}/2
+        env:
+          E2E_RECONCILE_JSON: reconcile.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: reconcile-e2e-a11y-full-${{ matrix.shard }}
+          path: reconcile.json
+          retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: report-e2e-a11y-full-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+
+  reconcile:
+    name: e2e matrix reconcile (every shard, every test)
+    needs: [e2e-chromium, e2e-firefox, e2e-webkit, e2e-mobile-chrome, e2e-mobile-safari, e2e-visual, e2e-a11y-full]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: reconcile-*
+          path: shards
+      - run: node scripts/reconcile-shards.mjs --self-check
+      - run: node scripts/reconcile-shards.mjs shards
 
   # ── the scroll lock against a classic scrollbar ─────────────────────────
   #
@@ -77,7 +350,7 @@ jobs:
   # with nothing measured.
   scroll-lock-windows:
     name: scroll lock (Windows, Firefox)
-    runs-on: windows-latest
+    runs-on: windows-2025
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
@@ -95,9 +368,23 @@ jobs:
       - if: steps.browsers.outputs.cache-hit != 'true'
         run: npx playwright install firefox
 
+      # What each switch does, printed before the test that needs the result:
+      # run 41801071572 measured a gutter of 0 here in both directions, and
+      # nothing said why. No pref of Playwright's forces overlay bars (its
+      # playwright.cfg has no `overlay` or `scrollbar` line), so what draws them
+      # is Windows' own setting and Firefox's reading of it.
+      - run: node scripts/measure-scrollbar-gutter.mjs none
+      - run: node scripts/measure-scrollbar-gutter.mjs prefs-only
+      - name: Windows "Always show scrollbars"
+        shell: pwsh
+        run: Set-ItemProperty -Path 'HKCU:\Control Panel\Accessibility' -Name DynamicScrollbars -Value 0
+      - run: node scripts/measure-scrollbar-gutter.mjs registry-only
+      - run: node scripts/measure-scrollbar-gutter.mjs both
+
       - run: npx playwright test --project=firefox e2e/open-close.spec.ts -g "scroll lock never moves the page"
         env:
           SCROLL_LOCK_GUTTER_FLOOR: "1"
+          E2E_FIREFOX_CLASSIC_SCROLLBARS: "1"
 
       - uses: actions/upload-artifact@v7
         if: failure()
@@ -174,7 +461,8 @@ jobs:
   # not, because planting defects on every build is not worth the minutes.
   packaging:
     name: packaging gate (publint, attw, shipped links)
-    runs-on: ubuntu-latest
+    # Pinned: every job names its image (scripts/assert-ci-runners.mjs).
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7

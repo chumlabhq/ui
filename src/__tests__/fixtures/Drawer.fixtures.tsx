@@ -153,5 +153,11 @@ const fixtures: Fixtures<typeof Drawer> = [
     note: "`side=\"start\"` in a right-to-left page: the panel enters from the right."
   },
   { name: "open-with-footer", props: { open: true }, children: <><DrawerHeader>Drawer</DrawerHeader>Body<DrawerFooter>Footer</DrawerFooter></> },
+  {
+    name: "callbacks",
+    props: { defaultOpen: true, side: "bottom", swipeable: true, snapPoints: [0.3, 0.9], "aria-label": "Sheet" },
+    children: "Body",
+    note: "Run F: the state `callbacks.spec` spies on.",
+  },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

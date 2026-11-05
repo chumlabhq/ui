@@ -1705,11 +1705,11 @@ const LIBRARY_TOTAL_HISTORY = [
   },
   {
     kb: 163.49,
-    commit: "this slice",
+    commit: "cdf15a66",
     date: "2026-11-04",
     attribution: "attributed",
     reason:
-      "INCREASE, APPROVAL PENDING, +1.30 KB (166,056 -> 167,417 B gzipped, +1,361 B, on a build of " +
+      "INCREASE, approved by Aditya 2026-11-04, +1.30 KB (166,056 -> 167,417 B gzipped, +1,361 B, on a build of " +
       "36013216), 83 -> 82 files: srOnlyStyle's chunk folded into the shared useReducedMotion chunk " +
       "so nothing gained an import edge. No chunk's module imports were added; eight lost srOnlyStyle. " +
       "Run E, keyboard and semantics audits. Chunks at or over 0.10 KB, each awaiting approval, with " +
@@ -1727,6 +1727,29 @@ const LIBRARY_TOTAL_HISTORY = [
       "+74 B, Table +70 B, DatePicker +43 B, Stepper +42 B, OtpInput +38 B, Checkbox +29 B; " +
       "the rest -22 to +8 B on hashes and the moved constant. API descriptions only in " +
       "src/components and src/utils.",
+  },
+  {
+    kb: 164.69,
+    commit: "this slice",
+    date: "2026-11-05",
+    attribution: "attributed",
+    reason:
+      "INCREASE, APPROVAL PENDING, +1.20 KB, on a build of cdf15a66, 82 files either way: no chunk " +
+      "added and no import edge added between chunks (compared module by module). Run F, callbacks " +
+      "and run E's findings. Chunks at or over 0.10 KB, each awaiting approval, with the smaller shape " +
+      "measured: useReducedMotion +234 B (isBrowser: the pointer tracker every hover list reads, F-2, " +
+      "and the chip layer's constants, F-1; without reading movement on the first event -16 B, but " +
+      "a first real move then highlights nothing), FormValue +137 B (the always-mounted success " +
+      "status, F-3, in the one chunk all 15 fields already import; a module of its own costs a new " +
+      "chunk, +0.15 KB and 13 import edges, measured 164.86 KB; without data-slot -7 B, but Input, " +
+      "TextArea and Phone document it), Table +134 B (single selection, Enter on a row, hover and " +
+      "header state, order and grouping handlers, no report of an unchanged edit; without Enter -31 B, " +
+      "and a row's action is then pointer only). Under 0.10 KB: DatePicker +93 B, " +
+      "MultiSelectSearchableDropdown +87 B, Pagination +70 B, MultiSelectDropdown +68 B, FieldWrapper " +
+      "+63 B, InternationalPhoneInput +51 B, Drawer's chunk +47 B, ResizablePanel +47 B, ToastProvider " +
+      "+45 B, TimePicker +27 B, CascadingDropdown +26 B, Slider +25 B, useMenuNavigation +15 B, " +
+      "Dropdown +14 B, SearchableDropdown +12 B, the rest under 10 B. API descriptions only " +
+      "in src/components and src/utils.",
   },
 ];
 
@@ -1781,8 +1804,9 @@ const DECLARED_BREACHES = new Map([
   [
     "Table",
     {
-      kb: 16.43,
-      why: "2026-11-04, run E, keyboard and semantics: 16.37 -> 16.43 (exclusive 16,760 -> 16,827 B " +
+      kb: 16.57,
+      why: "2026-11-05, run F: 16.43 -> 16.57 (own chunk +134 B on a build of cdf15a66): selectionMode single selects, Enter acts on the row, hover and header state report once, order and grouping fire with no state yet, an unchanged edit stays quiet. Without Enter -31 B. " +
+        "2026-11-04, run E, keyboard and semantics: 16.37 -> 16.43 (exclusive 16,760 -> 16,827 B " +
         "gzipped, +67 B; own chunk +70 B, on a build of 36013216): a row carries aria-selected only " +
         "with selection, the expand toggle reports aria-expanded, the expand and drag columns' headers " +
         "are named, decorative icons are aria-hidden, an outside press returns focus to the filter trigger. " +
@@ -1876,8 +1900,9 @@ const DECLARED_BREACHES = new Map([
   [
     "InternationalPhoneInput",
     {
-      kb: 8.75,
-      why: "10.65 until the 193 countries were packed into a delimited string " +
+      kb: 8.78,
+      why: "2026-11-05, run F: 8.75 -> 8.78 (own chunk +51 B on a build of cdf15a66): preferred countries in the order listed, each shared dial code's primary country, the success status. " +
+        "10.65 until the 193 countries were packed into a delimited string " +
         "parsed at module load: 4.06 KB gzipped of object literals became 1.90, " +
         "and four fifths of what was there was structure rather than " +
         "information — five repeated keys a bundler cannot dedupe, plus `flag` " +
@@ -1910,8 +1935,9 @@ const DECLARED_BREACHES = new Map([
   [
     "DatePicker",
     {
-      kb: 12.88,
-      why: "2026-11-04, run E, keyboard and semantics: 12.84 -> 12.88 (exclusive 13,144 -> 13,185 B " +
+      kb: 12.96,
+      why: "2026-11-05, run F: 12.88 -> 12.96 (own chunk +93 B on a build of cdf15a66): onMonthChange through one path, focus kept while paging, no report of the same day. " +
+        "2026-11-04, run E, keyboard and semantics: 12.84 -> 12.88 (exclusive 13,144 -> 13,185 B " +
         "gzipped, +41 B; own chunk +43 B, on a build of 36013216): an outside press returns focus to " +
         "the trigger, the loading spinner is out of aria-hidden, and a status announces the month. " +
         "2026-11-02, C run, approved by Aditya 2026-11-02 (+0.16 KB, at or over the 0.10 KB line): 12.67 -> " +

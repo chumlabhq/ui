@@ -48,5 +48,6 @@ const fixtures: Fixtures<typeof Slider> = [
     note: "A slider's zero is on the right in RTL; the fill and the thumb are the directional part."
   },
   { name: "loading", props: { "aria-label": "Volume", defaultValue: 40, loading: true } },
+  { name: "callbacks", props: { "aria-label": "Volume", defaultValue: 50 }, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default fixtures;

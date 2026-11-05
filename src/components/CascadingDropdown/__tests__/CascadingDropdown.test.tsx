@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { CascadingDropdown } from "../index.js";
 import { physicalSide } from "../utils/side.js";
@@ -35,6 +35,12 @@ const nestedOptions: CascadingOption[] = [
     ],
   },
 ];
+
+let pointerAt = 0;
+const movePointerOnto = (element: Element) => {
+  fireEvent.mouseMove(document.body, { clientX: (pointerAt += 10), clientY: 1 });
+  fireEvent.mouseMove(element, { clientX: (pointerAt += 10), clientY: 1 });
+};
 
 describe("CascadingDropdown", () => {
   describe("Rendering", () => {
@@ -190,7 +196,7 @@ describe("CascadingDropdown", () => {
       await user.click(screen.getByRole("button"));
 
       const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']");
-      await user.hover(fruitItem!);
+      movePointerOnto(fruitItem!);
 
       const submenu = await screen.findByRole("menu", {
         name: "Fruits submenu",
@@ -467,7 +473,7 @@ describe("CascadingDropdown — single-mode submenu selection display", () => {
     await user.click(screen.getByRole("button"));
 
     const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']");
-    await user.hover(fruitItem!);
+    movePointerOnto(fruitItem!);
 
     const submenu = await screen.findByRole("menu", { name: "Fruits submenu" });
 
@@ -624,7 +630,7 @@ describe("CascadingDropdown — submenuSide start", () => {
     await user.click(screen.getByRole("button"));
 
     const fruitItem = screen.getByText("Fruits").closest("[role='menuitem']");
-    await user.hover(fruitItem!);
+    movePointerOnto(fruitItem!);
 
     const submenu = await screen.findByRole("menu", { name: "Fruits submenu" });
 

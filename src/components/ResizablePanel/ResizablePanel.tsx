@@ -97,6 +97,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
     const sizeRef = useRef(size);
     const minValueRef = useRef(minValue);
     const maxValueRef = useRef(maxValue);
+    const dragStartedRef = useRef(false);
     const onResizeStartRef = useRef(onResizeStart);
     const onResizeEndRef = useRef(onResizeEnd);
     const setSizeRef = useRef(setSize);
@@ -141,6 +142,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       restoreBodyStyles();
       releasePointerCapture();
       setSizeRef.current(startSizeRef.current);
+      if (dragStartedRef.current) onResizeEndRef.current?.(startSizeRef.current);
     }, [restoreBodyStyles, releasePointerCapture]);
 
     const finishResize = useCallback(() => {
@@ -149,7 +151,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
       setIsResizing(false);
       restoreBodyStyles();
       releasePointerCapture();
-      onResizeEndRef.current?.(sizeRef.current);
+      if (dragStartedRef.current) onResizeEndRef.current?.(sizeRef.current);
     }, [restoreBodyStyles, releasePointerCapture]);
 
     useEffect(() => {
@@ -164,6 +166,11 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         const delta = isVert
           ? e.clientY - startPosRef.current
           : (e.clientX - startPosRef.current) * (startRtlRef.current ? -1 : 1);
+        if (!dragStartedRef.current) {
+          if (delta === 0) return;
+          dragStartedRef.current = true;
+          onResizeStartRef.current?.(startSizeRef.current);
+        }
         const newSize =
           dir === "end" || dir === "bottom"
             ? startSizeRef.current + delta
@@ -225,7 +232,7 @@ const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         captureTargetRef.current = e.currentTarget;
         pointerIdRef.current = e.pointerId;
         e.currentTarget.setPointerCapture(e.pointerId);
-        onResizeStartRef.current?.(sizeRef.current);
+        dragStartedRef.current = false;
       },
       [disabled, resizeDirection, isVertical],
     );

@@ -76,7 +76,7 @@ export interface SliderProps
   defaultValue?: SliderValue;
   /** Fires when the value changes. Not `onChange`. */
   onValueChange?: (value: SliderValue) => void;
-  /** Fires when drag starts. */
+  /** Fires with the final value when a drag ends or a key moves a thumb, and only if the value changed. */
   onValueCommit?: (value: SliderValue) => void;
 
   /** Minimum value. Default: 0 */

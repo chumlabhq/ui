@@ -12,7 +12,7 @@ import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
@@ -389,9 +389,7 @@ const OtpInput = forwardRef<HTMLInputElement, OtpInputProps>(
         {error && errorMessage && (
           <div id={errorId} role="alert" data-invalid className={mergedClasses.message || undefined}>{errorMessage}</div>
         )}
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

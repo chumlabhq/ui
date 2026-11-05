@@ -26,8 +26,13 @@ import { COMPONENT_DOCS } from "../src/pages/demo/generated/componentDocs";
 
 /** Components with a `disabled` prop of their own, when the population was first measured (S4). */
 const COMPONENT_FLOOR = 22;
-/** Controls clicked and keyed, across every case, at the same moment. */
-const CONTROL_FLOOR = 88;
+/**
+ * Controls clicked and keyed, across every case, at the same moment.
+ *
+ * 87 from 88: the landmark was counted as a control; it never was (run E F-5,
+ * approved by Aditya 2026-11-04).
+ */
+const CONTROL_FLOOR = 87;
 
 /**
  * Input takes `disabled` from the native input's attributes, which the docs'

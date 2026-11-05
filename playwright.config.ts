@@ -31,8 +31,32 @@ const ONE_AT_A_TIME = {
   use: { video: "off" as const },
 };
 
+/**
+ * One address for the tests and for the server, so a run pointed at its own port
+ * never starts or reuses a server on another. `e2e/_global-setup.ts` then proves
+ * that what answers there is this repository.
+ */
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173";
+
+/**
+ * Chromium on Linux rounds glyph advances to whole pixels unless hinting is off,
+ * so Geist's "20" is 21 px there and 20.51 on macOS (run F, the font is the same
+ * file on both). Pagination's row and every other width a gate reads then differ
+ * by platform. A switch macOS ignores: visual baselines did not move.
+ */
+const SAME_TEXT_ON_EVERY_PLATFORM = { launchOptions: { args: ["--font-render-hinting=none"] } };
+
+/**
+ * release-gates' scroll-lock job, and nowhere else: Windows Firefox draws an
+ * overlay scrollbar by default, which leaves the lock no gutter to pad.
+ */
+const CLASSIC_SCROLLBARS = process.env.E2E_FIREFOX_CLASSIC_SCROLLBARS
+  ? { launchOptions: { firefoxUserPrefs: { "widget.windows.overlay-scrollbars.enabled": false, "ui.useOverlayScrollbars": 0 } } }
+  : {};
+
 const config = defineConfig({
   testDir: "./e2e",
+  globalSetup: "./e2e/_global-setup.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -79,7 +103,7 @@ const config = defineConfig({
     },
   },
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173",
+    baseURL: BASE_URL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -98,7 +122,7 @@ const config = defineConfig({
       // The painted-contrast sweep runs here too: it walks the same 367 fixture
       // pages, twice each for the two themes, which is the same shape of cost.
       testMatch: /(accessibility-full|contrast-painted|default-state)\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"] },
+      use: { ...devices["Desktop Chrome"], ...SAME_TEXT_ON_EVERY_PLATFORM },
     },
     /**
      * Visual baselines. Its own project for the same reason `a11y-full` is:
@@ -109,12 +133,12 @@ const config = defineConfig({
     {
       name: "visual",
       testMatch: /visual\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"] },
+      use: { ...devices["Desktop Chrome"], ...SAME_TEXT_ON_EVERY_PLATFORM },
     },
     {
       name: "chromium",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"] },
+      use: { ...devices["Desktop Chrome"], ...SAME_TEXT_ON_EVERY_PLATFORM },
     },
     {
       name: "firefox",
@@ -143,7 +167,7 @@ const config = defineConfig({
        * failure still leaves its screenshot and error context.
        */
       workers: 2,
-      use: { ...devices["Desktop Firefox"], video: "off" },
+      use: { ...devices["Desktop Firefox"], video: "off", ...CLASSIC_SCROLLBARS },
     },
     {
       name: "webkit",
@@ -155,7 +179,7 @@ const config = defineConfig({
     {
       name: "Mobile Chrome",
       testIgnore: /(accessibility-full|contrast-painted|default-state|visual)\.spec\.ts/,
-      use: { ...devices["Pixel 5"] },
+      use: { ...devices["Pixel 5"], ...SAME_TEXT_ON_EVERY_PLATFORM },
     },
     {
       name: "Mobile Safari",
@@ -165,8 +189,8 @@ const config = defineConfig({
     },
   ],
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:5173",
+    command: `npm run dev -- --port ${new URL(BASE_URL).port} --strictPort`,
+    url: BASE_URL,
     reuseExistingServer: true,
     timeout: 120000,
   },

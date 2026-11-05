@@ -7,7 +7,7 @@ import { useCascadingDropdown } from "./utils/useCascadingDropdown.js";
 import { ChevronDownIcon, ChevronRightIcon, CheckIcon, ClearIcon as ClearIconDefault, SearchIcon as SearchIconDefault } from "./utils/icons.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
-import { isBrowser, MIRROR_IN_LTR, MIRROR_IN_RTL, TEXT_DIRECTION_FROM_CONTENT, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
+import { isBrowser, pointerMoved, MIRROR_IN_LTR, MIRROR_IN_RTL, TEXT_DIRECTION_FROM_CONTENT, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { motionSafeClasses } from "../../utils/classLayers.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useInertPropWarning } from "../../utils/useInertPropWarning.js";
@@ -15,7 +15,7 @@ import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusAndReveal } from "../../utils/focusAndReveal.js";
 import { setRef } from "../../utils/mergeRefs.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import {
   DEFAULT_CASCADINGDROPDOWN_CLASSES,
   UNSTYLED_CASCADINGDROPDOWN_CLASSES,
@@ -69,7 +69,7 @@ const SubmenuItem = memo(function SubmenuItem({
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       onClick={onSelect}
-      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
+      onMouseMove={option.disabled ? undefined : () => { if (pointerMoved() && !isFocused) onHover(index); }}
     >
       {selectionMode === "multi" && (
         <span
@@ -154,7 +154,7 @@ const MenuItem = memo(forwardRef<HTMLDivElement, MenuItemProps>(function MenuIte
       data-highlighted={isFocused || undefined}
       data-disabled={option.disabled || undefined}
       data-has-submenu={hasSubmenu || undefined}
-      onMouseEnter={() => onHover(option, index)}
+      onMouseMove={() => { if (pointerMoved() && !isFocused) onHover(option, index); }}
       onClick={() => onClick(option)}
     >
       <span className="flex-1 truncate">{option.content || option.label}</span>
@@ -970,9 +970,7 @@ const CascadingDropdown = forwardRef<HTMLButtonElement, CascadingDropdownProps>(
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

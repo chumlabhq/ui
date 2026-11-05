@@ -30,7 +30,7 @@ import {
   UNSTYLED_SEARCHABLEDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 
@@ -722,9 +722,7 @@ const SearchableDropdown = forwardRef<
         </div>
       )}
 
-      {success && successMessage && !error && (
-        <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-      )}
+      <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
     </div>
   );
 });

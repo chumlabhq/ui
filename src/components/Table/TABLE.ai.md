@@ -155,7 +155,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `onSortingChange` | object | — | (sorting: SortingState) => void — Callback when sorting state changes. |
 | `sorting` | array | — | Controlled sorting state. |
 | `manualSorting` | boolean | `false` | When true, sorting is handled server-side. |
-| `selectionMode` | `"single"` \| `"multiple"` \| `"none"` | `"none"` | Row selection mode. |
+| `selectionMode` | `"single"` \| `"multiple"` \| `"none"` | `"none"` | Row selection mode. `"multiple"` adds checkboxes; `"single"` selects the row pressed, or the row of the cell Enter is pressed on. |
 | `selectedRowIds` | array | — | Array of selected row IDs (controlled). |
 | `onSelectedRowIdsChange` | object | — | (selectedRowIds: string[]) => void — Fires with the new `selectedRowIds` when selection changes. |
 | `selectAllMode` | `"page"` \| `"all"` | `"page"` | Whether select-all selects current page or all rows. |
@@ -175,21 +175,21 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `expandColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the expand column sits at. `start` is the first column. |
 | `expandOnRowClick` | boolean | `false` | Make the entire row clickable to toggle expansion. |
 | `columnVisibility` | object | — | Controlled column visibility map (column ID to boolean). |
-| `onColumnVisibilityChange` | object | — | (visibility: Record<string, boolean>) => void — Callback when column visibility changes. |
+| `onColumnVisibilityChange` | object | — | (visibility: Record<string, boolean>) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleVisibility()`. |
 | `striped` | boolean | `false` | Alternate row background colors. |
 | `stripedClassName` | string | — | Custom CSS class for striped rows. |
 | `size` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Cell padding and text size. |
 | `pinnedEndColumns` | array | — | Column IDs to pin to the inline end: the right in a left-to-right page, the left in a right-to-left one. |
 | `editable` | boolean | `false` | Enable inline cell editing: double-click a cell, or press Enter or F2 on it. |
 | `editableColumns` | array | — | Column IDs that are editable. |
-| `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited. |
+| `onCellEdit` | object | — | (rowId: string, columnId: string, value: unknown) => void — Fires when an edit commits a changed value. An edit ending on the value it started with is not reported. |
 | `resizable` | boolean | `false` | Enable column resizing via drag handles. |
 | `columnSizing` | object | — | Controlled column sizing state. |
 | `onColumnSizingChange` | object | — | (sizing: ColumnSizingState) => void — Callback when column sizing changes. |
 | `manualPagination` | boolean | `false` | When true, pagination is handled server-side. |
 | `manualFiltering` | boolean | `false` | When true, filtering is handled server-side. |
 | `columnOrder` | array | — | Controlled column order (array of column IDs). |
-| `onColumnOrderChange` | object | — | (order: string[]) => void — Callback when column order changes. |
+| `onColumnOrderChange` | object | — | (order: string[]) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `table.setColumnOrder()`. |
 | `reorderable` | boolean | `false` | Enable row drag-and-drop reordering. |
 | `onRowReorder` | object | — | (fromIndex: number, toIndex: number) => void — Callback when a row is reordered. |
 | `dragColumnPosition` | `"start"` \| `"end"` | `"start"` | Which end of the row the drag handle column sits at. |
@@ -206,7 +206,7 @@ DOM nesting: `container > flex(pinned + unpinned(overflow-x-auto) + pinnedRight)
 | `responsiveBreakpoint` | number | — | Viewport width below which the table renders as card layout. |
 | `renderMobileCard` | object | — | (row: TData) => ReactNode — Render function for mobile card layout. |
 | `groupBy` | array | — | Column IDs to group rows by. |
-| `onGroupByChange` | object | — | (groupBy: string[]) => void — Callback when group-by columns change. |
+| `onGroupByChange` | object | — | (groupBy: string[]) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleGrouping()`. |
 | `showSearch` | boolean | `false` | Show a built-in search bar above the table. |
 | `searchPlaceholder` | string | `"Search..."` | Placeholder text for the search bar. |
 | `searchIconPosition` | `"start"` \| `"end"` \| `"none"` | `"start"` | Which end of the search field the icon sits at, or `none`. |
@@ -303,7 +303,7 @@ Cell navigation is on the grid itself; the controls inside a cell keep their own
 | `ArrowLeft`, `ArrowRight` | Moves the focused cell along a row. `ArrowUp`/`ArrowDown` move down a column. |
 | `Home`, `End` | Moves to the first or last cell in the row. |
 | `Ctrl+Home`, `Ctrl+End` | Moves to the first cell in the first row, or the last cell in the last row. The header row is not part of this navigation: its sort, filter and pin buttons are reached with `Tab`. |
-| `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. |
+| `Enter` | Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. On any other cell, it does what pressing the row does: `onRowClick`, `expandOnRowClick`, and selecting the row under `selectionMode="single"`. |
 | `F2` | Opens the focused cell's editor when `editable` is set. |
 | `Tab`, `Shift+Tab` in the filter dialog | Move through its controls. Past either end the dialog closes and focus moves on from its trigger. |
 | `Escape` | Closes the filter dialog and returns focus to its trigger, or abandons an edit in progress and returns focus to the cell. Always: there is no prop to turn it off, because the APG dialog pattern requires Escape to close the filter dialog. |

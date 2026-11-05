@@ -20,12 +20,12 @@
     },
     "onResizeStart": {
       "type": "object",
-      "description": "(value: number) => void — Callback fired when a resize drag begins.",
+      "description": "(value: number) => void — Fires when a drag starts moving, and before each keyboard step. A press with no movement fires neither this nor `onResizeEnd`.",
       "x-tsType": "((value: number) => void) | undefined"
     },
     "onResizeEnd": {
       "type": "object",
-      "description": "(value: number) => void — Callback fired when a resize drag ends.",
+      "description": "(value: number) => void — Fires when a drag ends, with the restored size if Escape abandoned it, and after each keyboard step.",
       "x-tsType": "((value: number) => void) | undefined"
     },
     "minValue": {

@@ -12,6 +12,7 @@ import {
   computeCursorPosition,
 } from "../utils.js";
 import type { CountryOption } from "../utils/types.js";
+import { DEFAULT_COUNTRIES, DEFAULT_PREFERRED_COUNTRIES } from "../constants.js";
 
 const US: CountryOption = {
   value: "us",
@@ -543,6 +544,19 @@ describe("sortCountryOptions", () => {
     const frIdx = names.indexOf("France");
     expect(usIdx).toBeLessThan(frIdx);
   });
+});
+
+describe("parseInternationalNumber on a shared dial code", () => {
+  it("takes preferred countries in the order listed, so +1 is the US before Canada", () => {
+    expect(parseInternationalNumber("+14155550100", DEFAULT_COUNTRIES, DEFAULT_PREFERRED_COUNTRIES).detectedCountry?.value).toBe("US");
+    expect(parseInternationalNumber("+14165550100", DEFAULT_COUNTRIES, ["ca", "us"]).detectedCountry?.value).toBe("CA");
+  });
+
+  it("names the dial code's primary country when no preferred country has it", () => {
+    expect(parseInternationalNumber("+14155550100", DEFAULT_COUNTRIES, []).detectedCountry?.value).toBe("US");
+    expect(parseInternationalNumber("+79161234567", DEFAULT_COUNTRIES, []).detectedCountry?.value).toBe("RU");
+  });
+
 });
 
 describe("parseInternationalNumber", () => {

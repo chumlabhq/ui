@@ -3,6 +3,7 @@ import type { MultiSelectOption, MultiSelectDropdownClasses } from "../utils/typ
 import { cn } from "../../../utils/scopedCn.js";
 import { CheckIcon } from "../utils/icons.js";
 import type { ReactNode } from "react";
+import { pointerMoved } from "../../../utils/isBrowser.js";
 
 export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption({
   option,
@@ -48,7 +49,7 @@ export const MultiSelectDropdownOption = memo(function MultiSelectDropdownOption
       data-disabled={option.disabled || undefined}
       onMouseDown={(e) => e.preventDefault()}
       onClick={() => onToggle(option)}
-      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
+      onMouseMove={option.disabled ? undefined : () => { if (pointerMoved()) onHover(index); }}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected &&

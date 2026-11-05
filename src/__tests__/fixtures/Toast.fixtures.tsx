@@ -2,7 +2,7 @@ import Toast from "../../components/Toast/Toast.js";
 import { Dismissable } from "./_harness.js";
 import type { Fixtures } from "./types.js";
 import { RtlBoundary } from "./_harness.js";
-import { ToastAt } from "./_toast.js";
+import { ToastAt, ToastById } from "./_toast.js";
 
 const fixtures: Fixtures<typeof Toast> = [
   { name: "default", props: { id: "t1", onDismiss: () => {}, message: "Saved" } },
@@ -77,5 +77,6 @@ const fixtures: Fixtures<typeof Toast> = [
     ),
     note: "The default bottom-end corner in a right-to-left page is the bottom left.",
   },
+  { name: "callbacks", props: { id: "t9", onDismiss: () => {}, message: "Saved" }, render: () => <ToastById />, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default fixtures;

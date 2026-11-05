@@ -14,6 +14,8 @@ import { scrollUntil } from "./_helpers";
  * CascadingDropdown's top-level menu had no cap: 24 items made a 960px fixed
  * menu whose item 23 sat at 889-929px in a 720px window.
  */
+const FONT_FILE = /\.(woff2?|ttf|otf)(\?|$)/;
+
 const VIEWPORTS = [
   { width: 1280, height: 720 },
   { width: 375, height: 667 },
@@ -120,13 +122,25 @@ for (const vp of VIEWPORTS) {
       {
         name: " with the web font held until focus lands",
         setup: async (page: Page) => {
-          let release!: () => void;
-          const held = new Promise<void>((resolve) => (release = resolve));
-          await page.route(/\.(woff2?|ttf|otf)(\?|$)/, async (route) => {
+          let open!: () => void;
+          const held = new Promise<void>((resolve) => (open = resolve));
+          let requested = 0;
+          await page.route(FONT_FILE, async (route) => {
+            requested++;
             await held;
             await route.continue();
           });
-          return release;
+          // A font the page asked for answered, and the page has applied it. Not
+          // a change in the layout: Linux's fallback (DejaVu Sans) gives this
+          // fixture the same height as Geist, so scrollHeight never moves there
+          // and a wait on it ran out its 30 s on every CI run (run F).
+          return async () => {
+            await expect.poll(() => requested, "the page never asked for a font, so nothing was held").toBeGreaterThan(0);
+            const answered = page.waitForResponse(FONT_FILE);
+            open();
+            await answered;
+            await page.evaluate(() => document.fonts.ready.then(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))));
+          };
         },
       },
     ];
@@ -137,13 +151,7 @@ for (const vp of VIEWPORTS) {
           await gotoFixture(page, "Drawer", fixture);
           await expect(page.getByRole("button", { name: "Last action" })).toBeFocused();
           if (release) {
-            // Landed means the layout changed, not `document.fonts.status`:
-            // WebKit reports "loaded" while the font request is still held. The
-            // extra frame is WebKit's: it scrolls at its next rendering update.
-            const before = await page.locator("[data-drawer-panel]").evaluate((p) => p.scrollHeight);
-            release();
-            await page.waitForFunction((h) => document.querySelector("[data-drawer-panel]")!.scrollHeight !== h, before, { polling: "raf" });
-            await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
+            await release();
           }
           const s = await seen(page);
           console.log(`OVERLAY_REACH ${vp.width}x${vp.height} Drawer/${fixture}${condition.name} initial: "${s.label}" at ${s.at} visible=${s.visible}`);

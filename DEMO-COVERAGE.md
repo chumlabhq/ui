@@ -13,7 +13,7 @@ recorded there because they belong next to the code that implements them.
 | Components audited | 59 |
 | Library-authored props across the public surface | 1253 |
 | With no demo | 263 (21%) |
-| With no fixture | 685 (55%) |
+| With no fixture | 673 (54%) |
 | Phantom claims (documented, absent from the type) | 0 |
 | Demonstrated but undocumented | 0 |
 | Tier-A demonstrated canonically (once, for the library) | 54 |
@@ -105,9 +105,9 @@ listed here with no demo anywhere fails the generator.
 | CountryFlagGroup | 9 | 279 | 3 | 2 | 4 | 0 | `unstyled` | `countTooltip`, `surplusTooltipContent` |
 | CountryFlagGroupShimmer | 6 | 280 | 3 | 2 | 6 | 0 | `reduceMotion` | `aspectRatio`, `animate` |
 | CountryFlagShimmer | 6 | 280 | 4 | 3 | 2 | 0 | `unstyled` | `classes`, `aspectRatio`, `animate` |
-| DatePicker | 62 | 276 | 10 | 6 | 32 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `todayAction`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
+| DatePicker | 62 | 276 | 10 | 6 | 31 | 0 | `unstyled`, `portalContainer`, `keepMounted` | `todayAction`, `showCalendarIcon`, `monthDropdownSelectedIcon`, `yearDropdownSelectedIcon`, `dropdownZIndex`, `dropdownOffset` |
 | DotLoader | 7 | 280 | 4 | 2 | 3 | 0 | `reduceMotion`, `unstyled` | `animationDuration`, `classes` |
-| Drawer | 30 | 278 | 5 | 3 | 19 | 0 | `unstyled`, `portalContainer` | `zIndex`, `overlayColor`, `swipeThreshold` |
+| Drawer | 30 | 278 | 5 | 3 | 18 | 0 | `unstyled`, `portalContainer` | `zIndex`, `overlayColor`, `swipeThreshold` |
 | DrawerBody | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerCloseButton | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
 | DrawerFooter | 1 | 279 | 0 | 0 | 1 | 0 | — | — |
@@ -115,25 +115,25 @@ listed here with no demo anywhere fails the generator.
 | Dropdown | 51 | 2 | 3 | 0 | 26 | 0 | `unstyled` | — |
 | Input | 26 | 307 | 2 | 0 | 10 | 0 | `unstyled` | — |
 | InputLabel | 2 | 280 | 0 | 0 | 2 | 0 | — | — |
-| InternationalPhoneInput | 49 | 296 | 10 | 5 | 33 | 0 | `unstyled`, `portalContainer` | `clearable`, `onClear`, `numberAriaLabel`, `dropdownZIndex`, `dropdownOffset` |
+| InternationalPhoneInput | 49 | 296 | 10 | 5 | 31 | 0 | `unstyled`, `portalContainer` | `clearable`, `onClear`, `numberAriaLabel`, `dropdownZIndex`, `dropdownOffset` |
 | LinearLoader | 8 | 280 | 3 | 1 | 4 | 0 | `reduceMotion`, `unstyled` | `classes` |
 | Modal | 41 | 2 | 11 | 5 | 28 | 0 | `unstyled` | `minWidth`, `minHeight`, `animationDuration`, `maxNestingLevel`, `contentStyle` |
 | ModalBody | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalFooter | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
 | ModalHeader | 2 | 278 | 2 | 0 | 2 | 0 | — | — |
-| MultiSelectDropdown | 52 | 2 | 7 | 4 | 25 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
-| MultiSelectSearchableDropdown | 57 | 2 | 12 | 9 | 29 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
+| MultiSelectDropdown | 52 | 2 | 7 | 4 | 24 | 0 | `unstyled` | `clearable`, `typeaheadTimeout`, `clearIcon`, `renderTrigger` |
+| MultiSelectSearchableDropdown | 57 | 2 | 12 | 9 | 28 | 0 | `unstyled` | `shimmerCount`, `clearable`, `showChevron`, `loading`, `typeaheadTimeout`, `clearIcon`, `renderTrigger`, `searchInputAriaLabel`, `initialOptions` |
 | OtpInput | 29 | 277 | 3 | 1 | 13 | 0 | `unstyled` | `inputPattern` |
 | OverlayLayerContext | 0 | 2 | 0 | 0 | 0 | 0 | — | — |
-| Pagination | 31 | 278 | 5 | 1 | 20 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` | `dropdownOffset` |
+| Pagination | 31 | 278 | 5 | 1 | 19 | 0 | `reduceMotion`, `unstyled`, `portalContainer`, `keepMounted` | `dropdownOffset` |
 | PulseLoader | 6 | 280 | 4 | 2 | 3 | 0 | `reduceMotion`, `unstyled` | `animationDuration`, `classes` |
 | RadioButton | 8 | 279 | 1 | 0 | 3 | 0 | `size` | — |
 | RadioGroup | 21 | 275 | 4 | 2 | 5 | 0 | `unstyled`, `reduceMotion` | `onFocus`, `onBlur` |
-| ResizablePanel | 14 | 279 | 2 | 0 | 10 | 0 | `reduceMotion`, `unstyled` | — |
+| ResizablePanel | 14 | 279 | 2 | 0 | 7 | 0 | `reduceMotion`, `unstyled` | — |
 | SearchableDropdown | 58 | 2 | 5 | 2 | 30 | 0 | `unstyled` | `searchInputAriaLabel`, `typeaheadTimeout` |
 | Slider | 36 | 273 | 5 | 0 | 16 | 0 | `unstyled` | — |
 | Slot | 1 | 279 | 1 | 0 | 1 | 0 | — | — |
-| Stepper | 32 | 2 | 7 | 1 | 19 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |
+| Stepper | 32 | 2 | 7 | 1 | 17 | 0 | `reduceMotion`, `unstyled` | `indicatorSize` |
 | Switch | 28 | 277 | 5 | 2 | 11 | 0 | `reduceMotion` | `loader`, `loaderSize` |
 | TabPanel | 26 | 2 | 6 | 0 | 15 | 0 | `reduceMotion`, `unstyled` | — |
 | Table | 103 | 0 | 14 | 6 | 65 | 0 | `unstyled` | `showHeader`, `pinnableColumns`, `onCursorPositionChange`, `onHeaderHoverChange`, `minHeight`, `onGroupByChange` |

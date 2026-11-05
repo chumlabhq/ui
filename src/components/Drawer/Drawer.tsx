@@ -218,18 +218,19 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       }
     }, [mounted, isOpen]);
 
-    const prevOpenRef = useRef(isOpen);
+    const onTransitionEndRef = useRef(onTransitionEndProp);
     useEffect(() => {
-      const changed = prevOpenRef.current !== isOpen;
-      prevOpenRef.current = isOpen;
-
-      if (!changed || !onTransitionEndProp) return;
-      const timer = setTimeout(
-        () => onTransitionEndProp(isOpen),
-        effectiveDuration,
-      );
+      onTransitionEndRef.current = onTransitionEndProp;
+    });
+    const reportedOpenRef = useRef(false);
+    useEffect(() => {
+      if (reportedOpenRef.current === isOpen) return;
+      const timer = setTimeout(() => {
+        reportedOpenRef.current = isOpen;
+        onTransitionEndRef.current?.(isOpen);
+      }, effectiveDuration);
       return () => clearTimeout(timer);
-    }, [isOpen, effectiveDuration, onTransitionEndProp]);
+    }, [isOpen, effectiveDuration]);
 
     const prevOpenForCapture = useRef(false);
     useEffect(() => {
@@ -353,7 +354,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       isDragging: boolean;
       hasMoved: boolean;
       frame: number;
-      pending: { closingDelta: number; panelSize: number; baseFraction: number } | null;
+      pending: { closingDelta: number; panelSize: number; baseFraction: number; canExpand: boolean; maxFraction: number } | null;
     }>({
       startX: 0,
       startY: 0,
@@ -462,20 +463,26 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
          * reported on desktop. The latest position is the only one worth
          * painting, so the frame keeps that and drops the rest.
          */
-        dragRef.current.pending = { closingDelta, panelSize, baseFraction };
+        dragRef.current.pending = {
+          closingDelta,
+          panelSize,
+          baseFraction,
+          canExpand: hasSnapPoints,
+          maxFraction: hasSnapPoints ? Math.max(...snapPoints!) : 1,
+        };
         if (dragRef.current.frame !== 0) return;
         dragRef.current.frame = requestAnimationFrame(() => {
           dragRef.current.frame = 0;
           const next = dragRef.current.pending;
           const el = panelRef.current;
           if (!next || !el) return;
-          if (next.closingDelta <= 0) {
+          if (next.closingDelta <= 0 && !next.canExpand) {
             el.style.transform = "";
             el.style.transition = "";
             return;
           }
           const dragFraction = next.closingDelta / next.panelSize;
-          const newFraction = Math.max(0, next.baseFraction - dragFraction);
+          const newFraction = Math.min(next.maxFraction, Math.max(0, next.baseFraction - dragFraction));
           el.style.transition = "none";
           el.style.transform = getTransformString(side, (1 - newFraction) * 100);
         });
@@ -514,7 +521,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         const elapsed = Date.now() - startTime;
         const closingDelta = getClosingDelta(side, deltaX, deltaY, isRtl(panel));
 
-        if (closingDelta <= 0) return;
+        if (closingDelta <= 0 && !hasSnapPoints) return;
 
         const horizontal = isHorizontalSide(side);
         const panelSize = panel
@@ -523,7 +530,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
             : panel.offsetHeight
           : 300;
         const dragFraction = closingDelta / panelSize;
-        const velocity = closingDelta / Math.max(elapsed, 1);
+        const velocity = Math.max(closingDelta, 0) / Math.max(elapsed, 1);
 
         if (hasSnapPoints && snapPoints!.length > 0) {
           const baseFraction = snapPoints![clampedSnapIndex];

@@ -360,6 +360,7 @@ describe("ResizablePanel", () => {
       renderPanel({ defaultValue: 300, onResizeStart, resizeDirection: "end" });
       const sep = screen.getByRole("separator");
       fireEvent.pointerDown(sep, { clientX: 100, button: 0, pointerId: 1 });
+      fireEvent.pointerMove(document, { clientX: 120 });
       expect(onResizeStart).toHaveBeenCalledWith(300);
     });
 
@@ -430,8 +431,9 @@ describe("ResizablePanel", () => {
       renderPanel({ defaultValue: 300, onResizeEnd });
       const sep = screen.getByRole("separator");
       fireEvent.pointerDown(sep, { clientX: 100, button: 0, pointerId: 1 });
+      fireEvent.pointerMove(document, { clientX: 120 });
       fireEvent.pointerUp(document);
-      expect(onResizeEnd).toHaveBeenCalledWith(300);
+      expect(onResizeEnd).toHaveBeenCalledWith(320);
     });
 
     it("cancels drag on Escape and restores original size", () => {

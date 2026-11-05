@@ -215,7 +215,7 @@ export interface TableProps<TData> {
   /** When true, sorting is handled server-side; the table will not sort data locally. */
   manualSorting?: boolean;
 
-  /** Row selection mode. Defaults to "none". */
+  /** Row selection mode. Defaults to "none". `"multiple"` adds checkboxes; `"single"` selects the row pressed, or the row of the cell Enter is pressed on. */
   selectionMode?: "single" | "multiple" | "none";
   /** Array of selected row IDs (controlled). */
   selectedRowIds?: string[];
@@ -259,7 +259,7 @@ export interface TableProps<TData> {
 
   /** Controlled column visibility. Keys are column IDs, values indicate visibility. */
   columnVisibility?: Record<string, boolean>;
-  /** Callback when column visibility changes. */
+  /** The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleVisibility()`. */
   onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void;
 
   /** Alternate row background colors. */
@@ -277,7 +277,7 @@ export interface TableProps<TData> {
   editable?: boolean;
   /** Column IDs that are editable. If not set, all columns are editable when `editable` is true. */
   editableColumns?: string[];
-  /** Callback when a cell value is edited. */
+  /** Fires when an edit commits a changed value. An edit ending on the value it started with is not reported. */
   onCellEdit?: (rowId: string, columnId: string, value: unknown) => void;
 
   /** Enable column resizing via drag handles. */
@@ -294,7 +294,7 @@ export interface TableProps<TData> {
 
   /** Controlled column order (array of column IDs). */
   columnOrder?: string[];
-  /** Callback when column order changes. */
+  /** The table renders no control for this. Fires when a column's `header` or `cell` render calls `table.setColumnOrder()`. */
   onColumnOrderChange?: (order: string[]) => void;
 
   /** Enable row drag-and-drop reordering. */
@@ -339,7 +339,7 @@ export interface TableProps<TData> {
 
   /** Column IDs to group rows by. */
   groupBy?: string[];
-  /** Callback when group-by columns change. */
+  /** The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleGrouping()`. */
   onGroupByChange?: (groupBy: string[]) => void;
 
   /** Show a built-in search bar above the table. */

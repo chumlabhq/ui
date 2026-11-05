@@ -17,7 +17,7 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "./utils/icon
 import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { isBrowser, MIRROR_IN_RTL, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
+import { isBrowser, MIRROR_IN_RTL, pointerMoved, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -138,7 +138,7 @@ const RowSelectorPortal = memo(function RowSelectorPortal({
           data-highlighted={activeOptionIndex === index || undefined}
           className={cn(optionClassName)}
           onClick={() => onSelect(option)}
-          onMouseEnter={() => onOptionMouseEnter(index)}
+          onMouseMove={() => { if (pointerMoved()) onOptionMouseEnter(index); }}
         >
           {option}
         </div>
@@ -303,11 +303,11 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 
     const handleRowsChange = useCallback(
       (rows: number) => {
-        onRowsPerPageChange?.(rows);
+        if (rows !== rowsPerPage) onRowsPerPageChange?.(rows);
         setIsDropdownOpen(false);
         shouldRestoreFocusRef.current = true;
       },
-      [onRowsPerPageChange],
+      [onRowsPerPageChange, rowsPerPage],
     );
 
     /**
@@ -378,6 +378,13 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       observer.observe(host);
       return () => observer.disconnect();
     }, [stepDown]);
+    useEffect(() => {
+      const fonts = isBrowser ? document.fonts : undefined;
+      if (!fonts?.addEventListener) return;
+      const refit = () => setFit(null);
+      fonts.addEventListener("loadingdone", refit);
+      return () => fonts.removeEventListener("loadingdone", refit);
+    }, []);
 
     const visiblePages = useMemo(
       () => getVisiblePages(safeTotalPages, safeCurrentPage, shownSiblings),
@@ -568,7 +575,6 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
       <nav
         ref={mergedNavRef}
         aria-label={paginationAriaLabel}
-        aria-disabled={disabled || undefined}
         data-disabled={disabled || undefined}
         data-reduce-motion={prefersReducedMotion || undefined}
         className={cn(mergedClasses.root, className)}

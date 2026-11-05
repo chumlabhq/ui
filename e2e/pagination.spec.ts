@@ -845,6 +845,38 @@ test.describe("Pagination fits one row", () => {
     });
   }
 
+  test("a wide fallback font fits one row, and the web font arriving brings the row back up", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    let open!: () => void;
+    const held = new Promise<void>((resolve) => (open = resolve));
+    await page.route(/\.woff2(\?|$)/, async (route) => {
+      await held;
+      await route.continue();
+    });
+    // Linux's system-ui and the widest common fallback: a digit is 0.636 em in
+    // DejaVu Sans and Verdana, 0.556 in Arial and 0.539 in Segoe UI. The letter
+    // spacing is what makes macOS need the tightest step as well: its Verdana
+    // rounds narrower than Linux's DejaVu, and this has to hold on both.
+    await page.addInitScript(() => {
+      document.addEventListener("DOMContentLoaded", () => {
+        const style = document.createElement("style");
+        style.id = "wide-fallback";
+        style.textContent = '*{font-family:"DejaVu Sans",Verdana,sans-serif !important;letter-spacing:.15em}';
+        document.head.append(style);
+      });
+    });
+    await gotoFixture(page, "Pagination", "middle");
+    const wide = await read(page);
+    expectOneRow(wide, "middle@320 wide fallback", "5");
+    expect.soft(wide.list[0], `the page list overflows: ${wide.list.join(" > ")}`).toBeLessThanOrEqual(wide.list[1]);
+    expect(wide.step, "the wide fallback should need the tightest padding").toBe("compact-padding:3");
+    await page.locator("#wide-fallback").evaluate((style) => style.remove());
+    const answered = page.waitForResponse(/\.woff2(\?|$)/);
+    open();
+    await answered;
+    await expect.poll(async () => (await read(page)).step).toBe("compact-spacing:3");
+  });
+
   test("five pages at 375px show every page", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 700 });
     await gotoFixture(page, "Pagination", "default");

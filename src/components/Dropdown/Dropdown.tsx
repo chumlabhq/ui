@@ -42,8 +42,8 @@ import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
-import { FormValue } from "../../utils/FormValue.js";
-import { returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
+import { pointerMoved, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 const DropdownOptionItem = memo(function DropdownOptionItem({
   option,
   isSelected,
@@ -94,7 +94,7 @@ const DropdownOptionItem = memo(function DropdownOptionItem({
           onSelect(option);
         }
       }}
-      onMouseEnter={() => { if (!isDisabled) onHover(index); }}
+      onMouseMove={() => { if (!isDisabled && pointerMoved()) onHover(index); }}
     >
       <span>{option.content || option.label}</span>
       {isSelected &&
@@ -673,9 +673,7 @@ const Dropdown = forwardRef<HTMLButtonElement, DropdownProps>(
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

@@ -744,6 +744,7 @@ describe("Slider", () => {
       );
 
       const slider = screen.getByRole("slider");
+      vi.spyOn(Element.prototype, "getBoundingClientRect").mockReturnValue({ left: 0, right: 100, width: 100, top: 0, bottom: 20, height: 20, x: 0, y: 0, toJSON: () => ({}) });
 
       fireEvent.pointerDown(slider, {
         button: 0,
@@ -753,10 +754,14 @@ describe("Slider", () => {
       });
 
       act(() => {
+        document.dispatchEvent(new MouseEvent("pointermove", { clientX: 70, clientY: 10 }));
+      });
+      act(() => {
         document.dispatchEvent(new PointerEvent("pointerup"));
       });
 
-      expect(onValueCommit).toHaveBeenCalled();
+      vi.restoreAllMocks();
+      expect(onValueCommit.mock.calls).toEqual([[70]]);
     });
   });
 

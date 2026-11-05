@@ -411,33 +411,6 @@ describe("MultiSelectDropdown", () => {
       expect(onRemove).toHaveBeenCalledWith("apple");
     });
 
-    it("calls stopPropagation on keyboard events", () => {
-      const onRemove = vi.fn();
-      const parentKeyDown = vi.fn();
-      render(
-        <div onKeyDown={parentKeyDown}>
-          <SelectedChip option={chipOption} classes={classes} onRemove={onRemove} />
-        </div>
-      );
-
-      const removeButton = screen.getByRole("button", { name: "Remove Apple" });
-      removeButton.focus();
-
-      // Fire a native KeyboardEvent so we can check stopPropagation
-      const enterEvent = new KeyboardEvent("keydown", {
-        key: "Enter",
-        bubbles: true,
-        cancelable: true,
-      });
-      removeButton.dispatchEvent(enterEvent);
-
-      // The comment that used to close this test described the assertion
-      // without making it: the chip handles Enter itself and stops the event
-      // reaching the surrounding handler.
-      expect(onRemove).toHaveBeenCalledWith("apple");
-      expect(parentKeyDown).not.toHaveBeenCalled();
-    });
-
     it("displays selectedContent when available", () => {
       const optionWithSelectedContent: MultiSelectOption = {
         value: "apple",

@@ -20,7 +20,7 @@ import {
   UNSTYLED_RADIO_GROUP_CLASSES,
 } from "./utils/constants.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { useFormReset } from "../../utils/FormValue.js";
+import { useFormReset, SuccessStatus } from "../../utils/FormValue.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
@@ -237,9 +237,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
             </div>
           )}
 
-          {success && successMessage && !error && (
-            <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-          )}
+          <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
         </div>
       </RadioGroupContext.Provider>
     );

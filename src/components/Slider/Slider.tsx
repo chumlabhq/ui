@@ -15,7 +15,7 @@ import {
 } from "./utils/constants.js";
 import { isBrowser, isRtl, INLINE_SIGN, inlineSigned } from "../../utils/isBrowser.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { setRef } from "../../utils/mergeRefs.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn } from "../../utils/scopedCn.js";
@@ -339,11 +339,21 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           next[0] = clamp(next[0], min, max);
           next[1] = clamp(next[1], min, max);
           setCurrentValue(next);
-        } else {
-          setCurrentValue(clamped);
+          return next;
         }
+        setCurrentValue(clamped);
+        return [clamped, clamped];
       },
       [isRangeMode, min, max, step, minStepsBetweenThumbs, setCurrentValue],
+    );
+
+    const interactionStartRef = useRef<readonly number[]>(values);
+    const commitIfChanged = useCallback(
+      (start: readonly number[], next: readonly number[]) => {
+        if (`${next}` === `${start}`) return;
+        commitRef.current?.(isRangeMode ? (next as [number, number]) : next[0]);
+      },
+      [isRangeMode],
     );
 
     const getValueFromPointer = useCallback(
@@ -383,8 +393,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         e.preventDefault();
         const val = getValueFromPointer(e.clientX, e.clientY);
         const idx = getClosestThumb(val);
-        setActiveThumb(idx);
+        interactionStartRef.current = valuesRef.current;
         updateValue(idx, val);
+        setActiveThumb(idx);
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
       },
       [disabled, getValueFromPointer, getClosestThumb, updateValue],
@@ -395,6 +406,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         if (disabled || e.button !== 0) return;
         e.preventDefault();
         e.stopPropagation();
+        interactionStartRef.current = valuesRef.current;
         setActiveThumb(index);
         if (isBrowser) {
           document.body.style.cursor = "grabbing";
@@ -422,11 +434,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         setIsDragging(false);
         document.body.style.cursor = "";
         document.body.style.userSelect = "";
-        commitRef.current?.(
-          valuesRef.current.length === 2 && isRangeMode
-            ? valuesRef.current
-            : valuesRef.current[0],
-        );
+        commitIfChanged(interactionStartRef.current, valuesRef.current);
       };
 
       document.addEventListener("pointermove", handleMove);
@@ -435,7 +443,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         document.removeEventListener("pointermove", handleMove);
         document.removeEventListener("pointerup", handleUp);
       };
-    }, [activeThumb, getValueFromPointer, updateValue, isRangeMode]);
+    }, [activeThumb, getValueFromPointer, updateValue, commitIfChanged]);
 
     const handleKeyDown = useCallback(
       (e: ReactKeyboardEvent, index: number) => {
@@ -477,13 +485,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
         }
 
         if (newVal !== undefined) {
-          updateValue(index, newVal);
-          commitRef.current?.(
-            isRangeMode ? valuesRef.current : valuesRef.current[0],
-          );
+          commitIfChanged(valuesRef.current, updateValue(index, newVal));
         }
       },
-      [disabled, step, min, max, updateValue, isRangeMode],
+      [disabled, step, min, max, updateValue, commitIfChanged],
     );
 
     const isHorizontal = orientation === "horizontal";
@@ -794,11 +799,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div id={`${sliderId}-success`} role="status" data-valid className={mc.message || undefined}>
-            {successMessage}
-          </div>
-        )}
+        <SuccessStatus className={mc.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

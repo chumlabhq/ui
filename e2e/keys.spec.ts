@@ -28,15 +28,15 @@ type Row = { name: string; want: string; got: string; ok: boolean };
 
 /** Rows per component, counted from run E's audit tables (artifacts/p1-tables.md): a walk pressing fewer has lost rows. */
 const FLOOR: Record<string, number> = {
-  Dropdown: 6,
-  MultiSelectDropdown: 3,
-  SearchableDropdown: 7,
-  MultiSelectSearchableDropdown: 6,
-  CascadingDropdown: 9,
+  Dropdown: 8,
+  MultiSelectDropdown: 7,
+  SearchableDropdown: 9,
+  MultiSelectSearchableDropdown: 10,
+  CascadingDropdown: 11,
   Breadcrumb: 4,
-  Pagination: 2,
-  DatePicker: 1,
-  TimePicker: 2,
+  Pagination: 4,
+  DatePicker: 3,
+  TimePicker: 4,
   InternationalPhoneInput: 1,
   Table: 2,
   Tooltip: 3,
@@ -44,6 +44,7 @@ const FLOOR: Record<string, number> = {
   TabPanel: 2,
   RadioButton: 2,
   Accordion: 2,
+  Stepper: 2,
 };
 
 /** Two frames and a macrotask: WebKit scrolls and hands focus back a frame late. */
@@ -171,8 +172,60 @@ async function printableOpens(page: Page, c: string): Promise<Row[]> {
   return [row("a printable key on the closed trigger opens it and starts the search", "d 1", `${value} ${await openSurfaces(page, '[role="listbox"]')}`)];
 }
 
+/** A chip's Remove button is its own control, after the combobox: by key and by pointer. */
+async function chipsRemovable(page: Page, c: string): Promise<Row[]> {
+  await go(page, c, "multi-value");
+  await focusOn(page, COMBO);
+  await page.getByRole("button", { name: /^Remove / }).first().focus();
+  await tick(page);
+  const before = await page.getByRole("button", { name: /^Remove / }).count();
+  await press(page, "Enter");
+  const afterKey = await page.getByRole("button", { name: /^Remove / }).count();
+  await page.getByRole("button", { name: /^Remove / }).first().click();
+  await tick(page);
+  const afterPointer = await page.getByRole("button", { name: /^Remove / }).count();
+  return [
+    row("Enter on a chip's Remove button removes it", String(before - 1), String(afterKey)),
+    row("a press on a chip's Remove button removes it", String(afterKey - 1), String(afterPointer)),
+  ];
+}
+
+const highlighted = (page: Page) =>
+  page.evaluate(() => document.querySelector('[role^="option"][data-highlighted], [role^="menuitem"][data-highlighted]')?.textContent?.trim() ?? "none");
+
+/**
+ * Run E's F-2: a list that opens under a pointer at rest. Engines send mouse
+ * events to whatever appears beneath it with no movement at all, so the option
+ * there took the highlight from the keyboard. Only movement may.
+ */
+async function restingPointer(page: Page, c: string, fixture: string, trigger: string): Promise<Row[]> {
+  await go(page, c, fixture);
+  await focusOn(page, trigger);
+  await press(page, "ArrowDown");
+  const fromKeyboard = await highlighted(page);
+  const items = page.locator('[role^="option"]:not([aria-disabled="true"]), [role^="menuitem"]:not([aria-disabled="true"])');
+  const other = items.filter({ hasNotText: fromKeyboard }).first();
+  const item = (await other.textContent())?.trim() ?? "";
+  const box = (await other.boundingBox())!;
+  await press(page, "Escape");
+  const x = box.x + box.width / 2;
+  const y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await tick(page);
+  await focusOn(page, trigger);
+  await press(page, "ArrowDown");
+  const atRest = await highlighted(page);
+  await page.mouse.move(x + 4, y);
+  await tick(page);
+  return [
+    row("a list opening under a resting pointer keeps the keyboard's highlight", fromKeyboard, atRest),
+    row("a real movement of the pointer takes the highlight", item, await highlighted(page)),
+  ];
+}
+
 const SUITES: Record<string, (page: Page) => Promise<Row[]>> = {
   Dropdown: async (page) => [
+    ...(await restingPointer(page, "Dropdown", "keys", COMBO)),
     ...(await outsidePress(page, "Dropdown", "keys", COMBO, '[role="listbox"]')),
     ...(await listboxSkips(page, "Dropdown")),
     await (async () => {
@@ -184,12 +237,15 @@ const SUITES: Record<string, (page: Page) => Promise<Row[]>> = {
     })(),
   ],
   MultiSelectDropdown: async (page) => [
+    ...(await restingPointer(page, "MultiSelectDropdown", "keys", COMBO)),
+    ...(await chipsRemovable(page, "MultiSelectDropdown")),
     ...(await outsidePress(page, "MultiSelectDropdown", "keys", COMBO, '[role="listbox"]')).slice(1),
     ...(await optionKeepsFocus(page, "MultiSelectDropdown")),
     ...(await listboxSkips(page, "MultiSelectDropdown")).slice(1, 2),
   ],
   SearchableDropdown: async (page) => {
     const rows = [
+      ...(await restingPointer(page, "SearchableDropdown", "keys", COMBO)),
       ...(await outsidePress(page, "SearchableDropdown", "keys", COMBO, '[role="listbox"]')).slice(1),
       ...(await tabMovesOn(page, "SearchableDropdown", COMBO, '[role="listbox"]')),
       ...(await printableOpens(page, "SearchableDropdown")),
@@ -218,6 +274,8 @@ const SUITES: Record<string, (page: Page) => Promise<Row[]>> = {
     return rows;
   },
   MultiSelectSearchableDropdown: async (page) => [
+    ...(await restingPointer(page, "MultiSelectSearchableDropdown", "keys", COMBO)),
+    ...(await chipsRemovable(page, "MultiSelectSearchableDropdown")),
     ...(await outsidePress(page, "MultiSelectSearchableDropdown", "keys", COMBO, '[role="listbox"]')).slice(1),
     ...(await tabMovesOn(page, "MultiSelectSearchableDropdown", COMBO, '[role="listbox"]')),
     ...(await printableOpens(page, "MultiSelectSearchableDropdown")),
@@ -241,7 +299,7 @@ const SUITES: Record<string, (page: Page) => Promise<Row[]>> = {
       await focusOn(page, MENU_TRIGGER);
       await press(page, "Enter");
     };
-    const rows: Row[] = [...(await outsidePress(page, c, "keys", MENU_TRIGGER, '[role="menu"]')).slice(1), ...(await tabMovesOn(page, c, MENU_TRIGGER, '[role="menu"]'))];
+    const rows: Row[] = [...(await restingPointer(page, c, "keys", MENU_TRIGGER)), ...(await outsidePress(page, c, "keys", MENU_TRIGGER, '[role="menu"]')).slice(1), ...(await tabMovesOn(page, c, MENU_TRIGGER, '[role="menu"]'))];
     await onFruit();
     rows.push(row("Enter on the trigger lands on the first item", "Fruit", await current(page)));
     await press(page, "ArrowDown");
@@ -285,24 +343,43 @@ const SUITES: Record<string, (page: Page) => Promise<Row[]>> = {
     return rows;
   },
   Pagination: async (page) => {
+    const resting = await restingPointer(page, "Pagination", "rows-per-page", '[data-fixture] [aria-haspopup="listbox"]');
     const rows = (await outsidePress(page, "Pagination", "rows-per-page", '[data-fixture] [aria-haspopup="listbox"]', '[role="listbox"]')).slice(1);
     await go(page, "Pagination", "default");
     const next = page.getByRole("button", { name: /next/i });
     await next.focus();
     for (let i = 0; i < 12 && !(await next.isDisabled()); i += 1) await press(page, "Enter");
     const got = await page.evaluate(() => document.activeElement?.getAttribute("aria-current") ?? document.activeElement?.tagName ?? "none");
+    rows.push(...resting);
     rows.push(row("Next disabling itself hands focus to the current page", "page", got));
     return rows;
   },
-  DatePicker: async (page) => (await outsidePress(page, "DatePicker", "closed", '[data-fixture] button[aria-haspopup]', '[role="grid"]')).slice(1),
+  DatePicker: async (page) => [
+    ...(await outsidePress(page, "DatePicker", "closed", '[data-fixture] button[aria-haspopup]', '[role="grid"]')).slice(1),
+    await (async () => {
+      await go(page, "DatePicker", "open");
+      await focusOn(page, '[role="gridcell"][tabindex="0"]');
+      for (let day = 0; day < 16; day++) await press(page, "ArrowRight");
+      return row("an arrow paging a defaultOpen calendar keeps focus on a day", "gridcell", (await focused(page)).split(":")[0]);
+    })(),
+    await (async () => {
+      await go(page, "DatePicker", "open-with-value");
+      await page.getByRole("button", { name: "Next month" }).click();
+      await tick(page);
+      await press(page, "Escape");
+      return row("Escape closes the calendar after a press on Next month", "0", String(await openSurfaces(page, '[role="grid"]')));
+    })(),
+  ],
   TimePicker: async (page) => {
     const input = "[data-fixture] input";
+    const resting = await restingPointer(page, "TimePicker", "closed", input);
     const rows = (await outsidePress(page, "TimePicker", "closed", input, '[role="listbox"]', "ArrowDown")).slice(1);
     await go(page, "TimePicker", "closed");
     await focusOn(page, input);
     await press(page, "ArrowUp");
     const last = (await page.getByRole("option").last().textContent())?.trim() ?? "";
     rows.push(row("ArrowUp opens the closed list on its last time", last, await current(page)));
+    rows.push(...resting);
     return rows;
   },
   InternationalPhoneInput: async (page) => (await outsidePress(page, "InternationalPhoneInput", "default", "[data-fixture] [aria-haspopup]", '[role="listbox"]')).slice(1),
@@ -381,6 +458,15 @@ const SUITES: Record<string, (page: Page) => Promise<Row[]>> = {
     await press(page, "ArrowUp");
     rows.push(row("ArrowUp steps back over it", "b true", await value()));
     return rows;
+  },
+  Stepper: async (page) => {
+    await go(page, "Stepper", "keys");
+    await page.getByRole("button", { name: "One" }).focus();
+    await tick(page);
+    await press(page, "ArrowRight");
+    const skipped = row("ArrowRight steps over the disabled step", "button:Three", (await focused(page)).replace(/^button:.*Three.*$/, "button:Three"));
+    await press(page, "ArrowLeft");
+    return [skipped, row("ArrowLeft steps back over it", "button:One", (await focused(page)).replace(/^button:.*One.*$/, "button:One"))];
   },
   Accordion: async (page) => {
     const rows: Row[] = [];

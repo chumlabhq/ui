@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { browserActTools } from "../../__tests__/fixtures/_act.js";
+import { browserActTools, logFixtureCall } from "../../__tests__/fixtures/_act.js";
 import type { Fixture } from "../../__tests__/fixtures/types.js";
 import { fromSlug, loadComponent, loadFixtures, type Resolved } from "./lazyRegistry.js";
 
@@ -138,17 +138,25 @@ function classesFromQuery(search: string): Record<string, string> | null {
  *
  * `disabled-acts.spec` clicks and keys every control of a disabled component
  * and needs to know whether anything was reported as well as whether anything
- * changed on the page: a controlled consumer sees only the callback. Dev-only.
+ * changed on the page: a controlled consumer sees only the callback.
+ * `callbacks.spec` reads the arguments too, from `window.__fixtureCallLog`. Dev-only.
  */
 function spiesFromQuery(search: string, own: Record<string, unknown>): Record<string, unknown> {
   const names = new URLSearchParams(search).get("spy")?.split(",").filter(Boolean) ?? [];
   const w = window as unknown as { __fixtureCalls?: string[] };
   w.__fixtureCalls ??= [];
+  const shape = (value: unknown) =>
+    value instanceof Date
+      ? `date:${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`
+      : value && typeof value === "object" && "nativeEvent" in value
+        ? `event:${(value as unknown as { type: string }).type}`
+        : value;
   return Object.fromEntries(
     names.map((name) => [
       name,
       (...args: unknown[]) => {
         w.__fixtureCalls!.push(name);
+        logFixtureCall(name, args.map(shape));
         return typeof own[name] === "function" ? (own[name] as (...a: unknown[]) => unknown)(...args) : undefined;
       },
     ]),

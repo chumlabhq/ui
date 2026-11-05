@@ -16,7 +16,7 @@ import {
   UNSTYLED_MULTISELECTDROPDOWN_CLASSES,
 } from "./utils/constants.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 
 import { motionSafeClasses } from "../../utils/classLayers.js";
@@ -25,7 +25,7 @@ import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
 import MenuSurface from "../../utils/menu/MenuSurface.js";
 import { focusTriggerOnMouseDown } from "../../utils/menu/focusTriggerOnMouseDown.js";
-import { returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
+import { CHIP_LAYER_STYLE, returnFocusAfterOutsidePress, TRIGGER_STACK } from "../../utils/isBrowser.js";
 const MAX_STATUS_LABELS = 5;
 
 interface MultiSelectDropdownContentProps {
@@ -234,6 +234,7 @@ const MultiSelectDropdown = forwardRef<
     const descriptionId = `${dropdownId}-description`;
 
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const chipLayerRef = useRef<HTMLDivElement>(null);
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
     const prevIsOpenRef = useRef(false);
 
@@ -326,7 +327,7 @@ const MultiSelectDropdown = forwardRef<
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
-        if (triggerNode?.contains(target)) return;
+        if (triggerNode?.contains(target) || chipLayerRef.current?.contains(target)) return;
         const portalEl = (target as HTMLElement).closest?.(`[data-dropdown-id="${dropdownId}"]`);
         if (portalEl) return;
         handleClose();
@@ -446,6 +447,20 @@ const MultiSelectDropdown = forwardRef<
       "data-placeholder": (selectedOptions.length === 0 || undefined) as true | undefined,
     };
 
+    const chevron = chevronIcon ? (
+      <span
+        className={mergedClasses.icon || undefined}
+        style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+      >
+        {chevronIcon}
+      </span>
+    ) : (
+      <ChevronDownIcon
+        className={cn(mergedClasses.icon) || undefined}
+        style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+      />
+    );
+
     return (
       <div
         className={rootClassName}
@@ -480,33 +495,46 @@ const MultiSelectDropdown = forwardRef<
               { isOpen, selectedOptions, placeholder },
             )
           ) : (
-            <button
-              ref={mergedTriggerRef}
-              {...triggerProps}
-              className={mergedClasses.trigger || undefined}
-            >
-              {/* Each chip carries its own "Remove X" button, and a name computed
-                  from the value element swept those up — the trigger announced
-                  "Apple Remove Apple Banana Remove Banana". Only the chip branch has
-                  that problem, so only it needs a separate name source; pointing at
-                  the visible element everywhere else keeps the text in the DOM once. */}
-              {chipsShown && (
-                <span id={valueId} style={SR_ONLY_STYLE}>
-                  {selectedOptions.map((option) => option.label).join(", ")}
-                </span>
-              )}
-              <span
-                id={chipsShown ? undefined : valueId}
-                className={mergedClasses.value || undefined}
+            <div className={TRIGGER_STACK}>
+              <button
+                ref={mergedTriggerRef}
+                {...triggerProps}
+                className={mergedClasses.trigger || undefined}
               >
-                {showSelectedChips && selectedOptions.length > 0 ? (
-                  <>
+                {chipsShown && (
+                  <span id={valueId} style={SR_ONLY_STYLE}>
+                    {selectedOptions.map((option) => option.label).join(", ")}
+                  </span>
+                )}
+                <span
+                  id={chipsShown ? undefined : valueId}
+                  className={mergedClasses.value || undefined}
+                >
+                  {chipsShown ? null : selectedOptions.length > 0 ? (
+                    <span className="truncate">
+                      {selectedOptions.length} selected
+                    </span>
+                  ) : (
+                    <span className="truncate">{placeholder}</span>
+                  )}
+                </span>
+                {showChevron && chevron}
+              </button>
+              {chipsShown && (
+                <div
+                  ref={chipLayerRef}
+                  className={mergedClasses.trigger || undefined}
+                  style={CHIP_LAYER_STYLE}
+                  data-disabled={disabled || undefined}
+                >
+                  <span className={mergedClasses.value || undefined}>
                     {displayedChips.map((option) => (
                       <SelectedChip
                         key={option.value}
                         option={option}
                         classes={mergedClasses}
                         onRemove={handleRemoveOptionAndFocus}
+                        disabled={disabled}
                       />
                     ))}
                     {remainingCount > 0 && (
@@ -514,31 +542,15 @@ const MultiSelectDropdown = forwardRef<
                         +{remainingCount}
                       </span>
                     )}
-                  </>
-                ) : selectedOptions.length > 0 ? (
-                  <span className="truncate">
-                    {selectedOptions.length} selected
                   </span>
-                ) : (
-                  <span className="truncate">{placeholder}</span>
-                )}
-              </span>
-              {showChevron && (
-                chevronIcon ? (
-                  <span
-                    className={mergedClasses.icon || undefined}
-                    style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-                  >
-                    {chevronIcon}
-                  </span>
-                ) : (
-                  <ChevronDownIcon
-                    className={cn(mergedClasses.icon) || undefined}
-                    style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-                  />
-                )
+                  {showChevron && (
+                    <span aria-hidden="true" style={{ visibility: "hidden", display: "contents" }}>
+                      {chevron}
+                    </span>
+                  )}
+                </div>
               )}
-            </button>
+            </div>
           )}
 
           {clearable && currentValue.length > 0 && (
@@ -637,9 +649,7 @@ const MultiSelectDropdown = forwardRef<
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

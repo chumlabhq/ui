@@ -168,13 +168,13 @@ describe("Input", () => {
 
     it("does not render success message when success=false", () => {
       render(<Input aria-label="test" success={false} successMessage="Looks good!" />);
-      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      expect(screen.queryByText("Looks good!")).not.toBeInTheDocument();
     });
 
     it("error takes precedence over success", () => {
       render(<Input aria-label="test" error errorMessage="Error" success successMessage="Success" />);
       expect(screen.getByRole("alert")).toHaveTextContent("Error");
-      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+      expect(screen.queryByText("Success")).not.toBeInTheDocument();
     });
 
     it("sets data-valid on container only when no error", () => {

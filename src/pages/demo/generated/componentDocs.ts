@@ -5834,7 +5834,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-valid",
         "values": [],
-        "when": "varies"
+        "when": "when (!error && success)"
       }
     ],
     "cssVariables": [],
@@ -8217,15 +8217,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
           "input",
           "label",
           "root",
-          "success",
           "wrapper"
         ],
-        "when": "always"
+        "when": "varies"
       },
       {
         "name": "data-valid",
         "values": [],
-        "when": "varies"
+        "when": "when displaySuccess"
       }
     ],
     "cssVariables": [],
@@ -9321,7 +9320,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "MultiSelectDropdown",
           "slot": "trigger",
-          "element": "button",
+          "element": "button, div",
           "description": "Trigger button"
         },
         {
@@ -9375,7 +9374,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "MultiSelectDropdown",
           "slot": "chipRemoveTrigger",
-          "element": "span",
+          "element": "button",
           "description": "Chip remove button"
         },
         {
@@ -10087,7 +10086,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "MultiSelectSearchableDropdown",
           "slot": "trigger",
-          "element": "button",
+          "element": "button, div",
           "description": "Trigger button"
         },
         {
@@ -10141,7 +10140,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         {
           "part": "MultiSelectSearchableDropdown",
           "slot": "chipRemoveTrigger",
-          "element": "span",
+          "element": "button",
           "description": "Chip remove button"
         },
         {
@@ -11276,7 +11275,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-valid",
         "values": [],
-        "when": "varies"
+        "when": "when (!error && success)"
       }
     ],
     "cssVariables": [],
@@ -11437,7 +11436,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((page: number) => void)",
         "required": false,
         "default": null,
-        "description": "(page: number) => void - Fires when the current page changes."
+        "description": "(page: number) => void - Fires when the user changes the page. A page clamped because `totalPages` fell is shown, not reported: keep your own `value` in range."
       },
       {
         "name": "value",
@@ -12274,14 +12273,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((value: number) => void)",
         "required": false,
         "default": null,
-        "description": "(value: number) => void — Callback fired when a resize drag begins."
+        "description": "(value: number) => void — Fires when a drag starts moving, and before each keyboard step. A press with no movement fires neither this nor `onResizeEnd`."
       },
       {
         "name": "onResizeEnd",
         "type": "((value: number) => void)",
         "required": false,
         "default": null,
-        "description": "(value: number) => void — Callback fired when a resize drag ends."
+        "description": "(value: number) => void — Fires when a drag ends, with the restored size if Escape abandoned it, and after each keyboard step."
       },
       {
         "name": "minValue",
@@ -13342,7 +13341,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((value: SliderValue) => void)",
         "required": false,
         "default": null,
-        "description": "(value: SliderValue) => void — Fires when a drag interaction ends (commit)."
+        "description": "(value: SliderValue) => void — Fires with the final value when a drag ends or a key moves a thumb, and only if the value changed."
       },
       {
         "name": "min",
@@ -13710,7 +13709,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-valid",
         "values": [],
-        "when": "varies"
+        "when": "when (!error && success)"
       }
     ],
     "cssVariables": [],
@@ -14837,7 +14836,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-valid",
         "values": [],
-        "when": "varies"
+        "when": "when (!error && success)"
       }
     ],
     "cssVariables": [
@@ -15440,7 +15439,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "\"single\" | \"multiple\" | \"none\"",
         "required": false,
         "default": "\"none\"",
-        "description": "Row selection mode."
+        "description": "Row selection mode. `\"multiple\"` adds checkboxes; `\"single\"` selects the row pressed, or the row of the cell Enter is pressed on."
       },
       {
         "name": "selectedRowIds",
@@ -15580,7 +15579,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((visibility: Record<string, boolean>) => void)",
         "required": false,
         "default": null,
-        "description": "(visibility: Record<string, boolean>) => void — Callback when column visibility changes."
+        "description": "(visibility: Record<string, boolean>) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleVisibility()`."
       },
       {
         "name": "striped",
@@ -15629,7 +15628,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((rowId: string, columnId: string, value: unknown) => void)",
         "required": false,
         "default": null,
-        "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited."
+        "description": "(rowId: string, columnId: string, value: unknown) => void — Fires when an edit commits a changed value. An edit ending on the value it started with is not reported."
       },
       {
         "name": "resizable",
@@ -15678,7 +15677,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((order: string[]) => void)",
         "required": false,
         "default": null,
-        "description": "(order: string[]) => void — Callback when column order changes."
+        "description": "(order: string[]) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `table.setColumnOrder()`."
       },
       {
         "name": "reorderable",
@@ -15797,7 +15796,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "type": "((groupBy: string[]) => void)",
         "required": false,
         "default": null,
-        "description": "(groupBy: string[]) => void — Callback when group-by columns change."
+        "description": "(groupBy: string[]) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleGrouping()`."
       },
       {
         "name": "showSearch",
@@ -16330,7 +16329,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         },
         {
           "keys": "`Enter`",
-          "description": "Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell."
+          "description": "Opens the focused control: a filter dialog, or an editable cell when `editable` is set. In the editor, commits the edit and returns focus to the cell. On any other cell, it does what pressing the row does: `onRowClick`, `expandOnRowClick`, and selecting the row under `selectionMode=\"single\"`."
         },
         {
           "keys": "`F2`",
@@ -18187,7 +18186,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       {
         "name": "data-valid",
         "values": [],
-        "when": "varies"
+        "when": "when (!error && success)"
       }
     ],
     "cssVariables": [],
@@ -18619,7 +18618,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
             "name": "id",
             "type": "string",
             "required": true,
-            "description": "Identifies the toast so it can be dismissed by name later; generated when omitted."
+            "description": "Identifies the toast so it can be dismissed by name later; generated when omitted. Showing a toast with the id of one still on screen replaces it."
           },
           {
             "name": "variant",
@@ -18725,7 +18724,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
         "members": [
           {
             "name": "toast",
-            "type": "(config: Omit<ToastConfig, \"id\"> | string) => string",
+            "type": "(config: ToastOptions | string) => string",
             "required": true,
             "description": "Shows a toast and returns its id. The other methods are this with `variant` filled in."
           },

@@ -37,7 +37,25 @@ const busy = async (page: Page) => (await page.locator('[data-fixture] [aria-bus
 const noExposedSvg = async (page: Page) =>
   page.evaluate(() => [...document.querySelectorAll("svg")].every((svg) => !!svg.closest('[aria-hidden="true"]')));
 
+/** No control inside the combobox, the chips' Remove buttons beside it, each named once. */
+const chipsBeside = async (page: Page) => {
+  const nested = await page.locator('[data-fixture] [role="combobox"]').first().evaluate((el) => el.querySelectorAll('button, a[href], input, [role="button"], [tabindex]').length);
+  return nested === 0 && (await page.getByRole("button", { name: /^Remove / }).count()) >= 2;
+};
+
+/** The status a success message will arrive in, in the tree and empty before there is one. */
+const statusBeforeMessage = async (page: Page) =>
+  (await page.getByRole("status").evaluateAll((els) => els.filter((el) => !el.textContent).length)) > 0;
+
+const SUCCESS_FIELDS: Record<string, string> = {"Input": "default", "TextArea": "default", "Checkbox": "default", "Switch": "default", "RadioButton": "default", "Slider": "default", "OtpInput": "default", "TimePicker": "closed", "DatePicker": "closed", "InternationalPhoneInput": "default", "Dropdown": "closed", "SearchableDropdown": "closed", "MultiSelectDropdown": "closed", "MultiSelectSearchableDropdown": "closed", "CascadingDropdown": "closed"};
+
 const ROWS: Row[] = [
+  ...Object.entries(SUCCESS_FIELDS).map(
+    ([component, fixture]): Row => ({ component, fixture, property: "the success status exists before its message", read: statusBeforeMessage }),
+  ),
+  ...["MultiSelectDropdown", "MultiSelectSearchableDropdown"].map(
+    (component): Row => ({ component, fixture: "multi-value", property: "no interactive element in the combobox", read: chipsBeside }),
+  ),
   ...["Input", "TextArea", "RadioButton", "DatePicker", "InternationalPhoneInput", "Checkbox", "OtpInput", "Slider", "TimePicker"].map(
     (component): Row => ({ component, fixture: "loading", property: "status announcing Loading", read: announcesLoading }),
   ),
@@ -68,7 +86,7 @@ const ROWS: Row[] = [
 ];
 
 /** Fixed properties, counted from run E's findings (REPORT.md, phase 2): nine loading rows, four busy, and 19 others. */
-const FLOOR = 32;
+const FLOOR = 49;
 
 test.describe("accessibility tree", () => {
   test("every fixed property reads as fixed", async ({ page }) => {

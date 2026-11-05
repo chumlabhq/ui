@@ -11,7 +11,7 @@ import {
 } from "react";
 import { useLayer } from "../../utils/layers.js";
 import { mergeRefs } from "../../utils/mergeRefs.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { cycleTabWithin } from "../../utils/focusUtils.js";
 import { comboboxNameProps } from "../../utils/comboboxName.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -689,6 +689,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
 
     const previousActiveElement = useRef<HTMLElement | null>(null);
     const openSinceMount = useRef(isOpen);
+    const pagedByKeyRef = useRef(false);
 
     useEffect(() => {
       if (!isOpen) {
@@ -744,13 +745,14 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       // leaving, so the roving cell reclaims it. Any other element outside the
       // panel means focus genuinely left, and is left alone.
       const active = document.activeElement;
-      if (panel.contains(active) || ((active === null || active === document.body) && !openSinceMount.current)) {
+      if (panel.contains(active) || ((active === null || active === document.body) && (!openSinceMount.current || pagedByKeyRef.current))) {
         cell.focus();
       }
     }, [isOpen, focusedDate]);
 
     const handlePanelKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
+        pagedByKeyRef.current = true;
         if (event.key === "Escape") {
           event.preventDefault();
           if (openSinceMount.current) triggerRef.current?.focus({ preventScroll: true });
@@ -995,7 +997,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
 
                   return (
                     <div
-                      key={calendarMonth.month.toISOString()}
+                      key={monthIndex}
                       className={mergedClasses.list}
                     >
                       <div className={mergedClasses.header}>
@@ -1004,7 +1006,10 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                             <button
                               type="button"
                               aria-label="Previous year"
-                              onClick={() => handleYearSelect(monthYear - 1)}
+                              onClick={(e) => {
+                                e.currentTarget.focus();
+                                handleYearSelect(monthYear - 1);
+                              }}
                               className={mergedClasses.navTrigger}
                             >
                               {prevYearIcon || (
@@ -1014,7 +1019,10 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                             <button
                               type="button"
                               aria-label="Previous month"
-                              onClick={() => handleMonthNavigation("prev")}
+                              onClick={(e) => {
+                                e.currentTarget.focus();
+                                handleMonthNavigation("prev");
+                              }}
                               className={mergedClasses.navTrigger}
                             >
                               {prevMonthIcon || (
@@ -1055,7 +1063,10 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                             <button
                               type="button"
                               aria-label="Next month"
-                              onClick={() => handleMonthNavigation("next")}
+                              onClick={(e) => {
+                                e.currentTarget.focus();
+                                handleMonthNavigation("next");
+                              }}
                               className={mergedClasses.navTrigger}
                             >
                               {nextMonthIcon || (
@@ -1065,7 +1076,10 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                             <button
                               type="button"
                               aria-label="Next year"
-                              onClick={() => handleYearSelect(monthYear + 1)}
+                              onClick={(e) => {
+                                e.currentTarget.focus();
+                                handleYearSelect(monthYear + 1);
+                              }}
                               className={mergedClasses.navTrigger}
                             >
                               {nextYearIcon || (
@@ -1208,9 +1222,7 @@ const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

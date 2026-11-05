@@ -64,6 +64,38 @@ export function returnFocusAfterOutsidePress(
   });
 }
 
+let pointerX: number | undefined;
+let pointerY: number | undefined;
+let pointerTravelled = false;
+let pointerTracked = false;
+
+export const trackPointer = (): void => {
+  if (pointerTracked || !isBrowser) return;
+  pointerTracked = true;
+  document.addEventListener(
+    "mousemove",
+    (event) => {
+      pointerTravelled = pointerX === undefined ? event.movementX !== 0 || event.movementY !== 0 : event.clientX !== pointerX || event.clientY !== pointerY;
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+    },
+    { capture: true, passive: true },
+  );
+};
+
+export const pointerMoved = (): boolean => pointerTravelled;
+
+export const TRIGGER_STACK = "grid grid-cols-[minmax(0,1fr)] [&>*]:[grid-area:1/1]";
+
+export const CHIP_LAYER_STYLE: CSSProperties = {
+  pointerEvents: "none",
+  background: "transparent",
+  borderColor: "transparent",
+  boxShadow: "none",
+};
+
+export const CHIP_REMOVE_STYLE: CSSProperties = { pointerEvents: "auto" };
+
 export const SR_ONLY_STYLE: CSSProperties = {
   position: "absolute",
   width: 1,

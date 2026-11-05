@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { SR_ONLY_STYLE } from "./srOnlyStyle.js";
 
 // eslint-disable-next-line react-refresh/only-export-components -- shipped as one chunk with FormValue: its own module grows the library 0.06 KB and a file for a dev-only refresh of a hook no demo page edits
@@ -77,5 +77,32 @@ export function FormValue({ entries, required, disabled, form, missing, onReset,
         />
       ))}
     </>
+  );
+}
+
+const EMPTY_STATUS_STYLE: CSSProperties = { position: "absolute", width: 0, height: 0 };
+
+export function SuccessStatus({
+  id,
+  className,
+  message,
+  ...rest
+}: {
+  id?: string;
+  className?: string;
+  message: ReactNode;
+  "data-slot"?: string;
+}) {
+  return (
+    <div
+      id={id}
+      role="status"
+      data-valid={message ? true : undefined}
+      className={message ? className : undefined}
+      style={message ? undefined : EMPTY_STATUS_STYLE}
+      {...rest}
+    >
+      {message || null}
+    </div>
   );
 }

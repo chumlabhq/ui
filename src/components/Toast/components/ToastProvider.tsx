@@ -4,6 +4,7 @@ import { LAYERS } from "../../../utils/layers.js";
 import type {
   ToastConfig,
   ToastContextValue,
+  ToastOptions,
   ToastProviderProps,
 } from "../utils/types.js";
 import Toast from "../Toast.js";
@@ -67,8 +68,8 @@ export const ToastProvider = ({
   }, [animationDuration, restoreFocus]);
 
   const addToast = useCallback(
-    (config: Omit<ToastConfig, "id"> | string): string => {
-      const id = `toast-${++idCounterRef.current}-${Date.now()}`;
+    (config: ToastOptions | string): string => {
+      const id = (typeof config !== "string" && config.id) || `toast-${++idCounterRef.current}-${Date.now()}`;
 
       if (isBrowser) {
         const active = document.activeElement as HTMLElement;
@@ -95,6 +96,7 @@ export const ToastProvider = ({
             };
 
       setToasts((prev) => {
+        if (prev.some((t) => t.id === id)) return prev.map((t) => (t.id === id ? toastConfig : t));
         const newToasts = [...prev, toastConfig];
         if (newToasts.length > maxToasts) {
           const overflowCount = newToasts.length - maxToasts;

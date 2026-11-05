@@ -815,25 +815,21 @@ function TableInner<TData>(
         }
       : {}),
 
-    ...(columnOrder.length > 0
-      ? {
-          onColumnOrderChange: (updater) => {
-            const newOrder =
-              typeof updater === "function" ? updater(columnOrder) : updater;
-            setInternalColumnOrder(newOrder);
-            onColumnOrderChange?.(newOrder);
-          },
-        }
-      : {}),
+    onColumnOrderChange: (updater) => {
+      const newOrder =
+        typeof updater === "function" ? updater(columnOrder) : updater;
+      setInternalColumnOrder(newOrder);
+      onColumnOrderChange?.(newOrder);
+    },
 
+    onGroupingChange: (updater) => {
+      const newGrouping = typeof updater === "function" ? updater(grouping) : updater;
+      onGroupByChange?.(newGrouping);
+    },
     ...(grouping.length > 0
       ? {
           getGroupedRowModel: getGroupedRowModel(),
           enableGrouping: true,
-          onGroupingChange: (updater) => {
-            const newGrouping = typeof updater === "function" ? updater(grouping) : updater;
-            onGroupByChange?.(newGrouping);
-          },
         }
       : {}),
   });
@@ -963,6 +959,17 @@ function TableInner<TData>(
     return () => container.removeEventListener("scroll", handleScroll);
   }, [infiniteScroll]);
 
+  const hoveredRowRef = useRef<number | null>(null);
+  const headerHoveredRef = useRef(false);
+  const reportHeaderHover = useCallback(
+    (isOverHeader: boolean) => {
+      if (headerHoveredRef.current === isOverHeader) return;
+      headerHoveredRef.current = isOverHeader;
+      onHeaderHoverChange?.(isOverHeader);
+    },
+    [onHeaderHoverChange],
+  );
+
   const handleRowHover = useCallback(
     (
       rowIndex: number | null,
@@ -971,14 +978,17 @@ function TableInner<TData>(
       if ((floatingActionsHovered || popupOpen) && rowIndex === null) {
         return;
       }
+      if (hoveredRowRef.current === rowIndex) return;
+      hoveredRowRef.current = rowIndex;
       onRowHover?.(rowIndex, rowRef);
     },
     [onRowHover, floatingActionsHovered, popupOpen],
   );
 
   const handleRowClick = useCallback(
-    (row: Row<TData>, event: React.MouseEvent) => {
+    (row: Row<TData>, event: React.MouseEvent | React.KeyboardEvent) => {
       if (isInteractiveElement(event.target)) return;
+      if (selectionMode === "single" && row.getCanSelect()) row.toggleSelected();
       if (expandOnRowClick && expandable) {
         event.stopPropagation();
         row.toggleExpanded();
@@ -988,7 +998,7 @@ function TableInner<TData>(
       event.stopPropagation();
       onRowClick(row.original);
     },
-    [onRowClick, expandOnRowClick, expandable],
+    [onRowClick, expandOnRowClick, expandable, selectionMode],
   );
 
   const handleKeyDown = useCallback(
@@ -1027,6 +1037,9 @@ function TableInner<TData>(
           setFocusedCell({ row: event.ctrlKey ? (col ? totalRows - 1 : 0) : rowIndex, col });
           break;
         }
+        case "Enter":
+          if (event.target === event.currentTarget) handleRowClick(table.getRowModel().rows[rowIndex], event);
+          break;
         case "Escape":
           // Not marked: this only resets the roving tab stop and tells the
           // consumer no row is hovered. Nothing closes, so the key is still
@@ -1036,7 +1049,7 @@ function TableInner<TData>(
           break;
       }
     },
-    [table, handleRowHover],
+    [table, handleRowHover, handleRowClick],
   );
 
   // Arrow keys move `focusedCell`, but DOM focus has to follow or the
@@ -1084,18 +1097,21 @@ function TableInner<TData>(
     [onPinnedColumnsChange, canPinMore, pinnedColumns],
   );
 
+  const editStartValueRef = useRef("");
   const startEdit = useCallback(
     (rowId: string, columnId: string, currentValue: unknown) => {
       if (!editable) return;
       if (editableColumnSet && !editableColumnSet.has(columnId)) return;
+      const text = currentValue != null ? String(currentValue) : "";
       setEditingCell({ rowId, columnId });
-      setEditValue(currentValue != null ? String(currentValue) : "");
+      setEditValue(text);
+      editStartValueRef.current = text;
     },
     [editable, editableColumnSet],
   );
 
   const commitEdit = useCallback(() => {
-    if (editingCell && onCellEdit) {
+    if (editingCell && onCellEdit && editValue !== editStartValueRef.current) {
       onCellEdit(editingCell.rowId, editingCell.columnId, editValue);
     }
     setEditingCell(null);
@@ -1635,7 +1651,7 @@ function TableInner<TData>(
           }
         : {};
 
-      const rowIsActionable = Boolean(onRowClick) || Boolean(expandOnRowClick && expandable);
+      const rowIsActionable = Boolean(onRowClick) || Boolean(expandOnRowClick && expandable) || selectionMode === "single";
 
       return (
         <React.Fragment key={row.id}>
@@ -1872,31 +1888,29 @@ function TableInner<TData>(
       const x = (event as unknown as { clientX: number }).clientX - rect.left;
       const y = (event as unknown as { clientY: number }).clientY - rect.top;
 
-      const isOverHeader = shouldShowHeader && y < 60;
-      onHeaderHoverChange?.(isOverHeader);
+      reportHeaderHover(!!(event.target as Element).closest?.("thead"));
       onCursorPositionChange?.({ x, y });
     },
     [
       onCursorPositionChange,
       floatingActionsHovered,
       popupOpen,
-      shouldShowHeader,
-      onHeaderHoverChange,
+      reportHeaderHover,
     ],
   );
 
   const handleMouseLeave = useCallback(() => {
-    onRowHover?.(null);
+    handleRowHover(null);
     if (!floatingActionsHovered && !popupOpen) {
       onCursorPositionChange?.(null);
-      onHeaderHoverChange?.(false);
+      reportHeaderHover(false);
     }
   }, [
-    onRowHover,
+    handleRowHover,
     floatingActionsHovered,
     popupOpen,
     onCursorPositionChange,
-    onHeaderHoverChange,
+    reportHeaderHover,
   ]);
 
   if (loading) {
@@ -2245,8 +2259,8 @@ function TableInner<TData>(
               : undefined
         }
         data-testid="table-container"
-        onMouseMove={onCursorPositionChange ? handleMouseMove : undefined}
-        onMouseLeave={onCursorPositionChange ? handleMouseLeave : undefined}
+        onMouseMove={onCursorPositionChange || onHeaderHoverChange ? handleMouseMove : undefined}
+        onMouseLeave={onCursorPositionChange || onHeaderHoverChange || onRowHover ? handleMouseLeave : undefined}
       >
         {hasPinnedColumns &&
           renderTable(

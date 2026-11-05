@@ -60,8 +60,8 @@ export default function Example() {
 | `value` | number | — | Controlled size value of the panel in pixels. |
 | `defaultValue` | number | `300` | Default uncontrolled size value of the panel in pixels. |
 | `onValueChange` | object | — | (value: number) => void — Callback fired when the panel size changes. |
-| `onResizeStart` | object | — | (value: number) => void — Callback fired when a resize drag begins. |
-| `onResizeEnd` | object | — | (value: number) => void — Callback fired when a resize drag ends. |
+| `onResizeStart` | object | — | (value: number) => void — Fires when a drag starts moving, and before each keyboard step. A press with no movement fires neither this nor `onResizeEnd`. |
+| `onResizeEnd` | object | — | (value: number) => void — Fires when a drag ends, with the restored size if Escape abandoned it, and after each keyboard step. |
 | `minValue` | number | `200` | Minimum allowed size value in pixels. |
 | `maxValue` | number | `800` | Maximum allowed size value in pixels. |
 | `resizeDirection` | `"start"` \| `"end"` \| `"top"` \| `"bottom"` | `"end"` | The panel edge the resize handle sits on. Not `orientation`. |

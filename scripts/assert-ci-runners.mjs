@@ -24,7 +24,12 @@
  * browsers is all of them; `install-deps` installs none), and it has to come
  * before the step that launches it.
  *
- * Runners: Linux only. Playwright matches a Linux host by exact distribution
+ * Every job names a pinned image, browser or not: `ubuntu-24.04`, `macos-26`,
+ * `windows-2025`. `-latest` moves under a job without a commit. The packaging
+ * gate was on `ubuntu-latest` when that moved to 26.04, passing only because it
+ * launches no browser.
+ *
+ * Runners, for a job with a browser: Linux only. Playwright matches a Linux host by exact distribution
  * version (`ubuntu24.04-x64`), so a label that moves to a newer release is a
  * host it has never heard of. A macOS host newer than it knows is clamped to
  * the last one it does (`mac15`, hostPlatform.js), so `macos-latest` cannot
@@ -157,6 +162,12 @@ export function refusal(runsOn, browser, hosts) {
   return hosts.get(browser).has(host) ? null : `Playwright has no ${browser} build for ${host}`;
 }
 
+/** Why a `runs-on` is not a pinned image, or null when it is. */
+export function unpinned(runsOn) {
+  if (!runsOn) return "it names no runs-on";
+  return /^(ubuntu-\d+\.\d+(-arm)?|macos-\d+(-intel|-large|-xlarge)?|windows-\d+(-vs\d+)?)$/.test(runsOn) ? null : `"${runsOn}" is not a pinned image`;
+}
+
 /** What is wrong with one job, and what it launches and installs. */
 export function check(job, ctx) {
   const installed = new Set();
@@ -170,6 +181,8 @@ export function check(job, ctx) {
       if (!before.has(browser) && !installed.has(browser)) problems.push(`\`${run.split("\n")[0]}\` launches ${browser} and no earlier step installs it`);
     }
   }
+  const loose = unpinned(job.runsOn);
+  if (loose) problems.push(`runs on ${job.runsOn}: ${loose}`);
   for (const browser of new Set([...installed, ...launched])) {
     const why = refusal(job.runsOn, browser, ctx.hosts);
     if (why && !problems.some((p) => p.startsWith("runs on"))) problems.push(`runs on ${job.runsOn}: ${why}`);
@@ -186,12 +199,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const files = readdirSync(WORKFLOWS).filter((f) => /\.ya?ml$/.test(f));
   const checked = [];
   const failures = [];
+  let jobsChecked = 0;
   for (const file of files) {
     for (const job of jobs(readFileSync(join(WORKFLOWS, file), "utf8"))) {
       const { launched, installed, problems } = check(job, ctx);
+      jobsChecked++;
+      failures.push(...problems.map((p) => `${file}: job ${job.id}: ${p}`));
       if (!launched.size && !installed.size) continue;
       checked.push(`${file}:${job.id} (${job.runsOn}; launches ${[...launched].sort().join(", ") || "none"})`);
-      failures.push(...problems.map((p) => `${file}: job ${job.id}: ${p}`));
     }
   }
   const list = checked.map((c) => `    ${c}`).join("\n");
@@ -200,8 +215,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     process.exit(1);
   }
   if (failures.length) {
-    console.error(`✗ ${failures.length} problem(s) in ${checked.length} Playwright job(s):\n${failures.map((f) => `    ${f}`).join("\n")}\n  checked:\n${list}`);
+    console.error(`✗ ${failures.length} problem(s) in ${jobsChecked} job(s), ${checked.length} with Playwright:\n${failures.map((f) => `    ${f}`).join("\n")}\n  checked:\n${list}`);
     process.exit(1);
   }
-  console.log(`✓ ${checked.length} Playwright job(s) install each browser they launch, first, on a runner Playwright supports:\n${list}`);
+  console.log(`✓ ${checked.length} Playwright job(s) install each browser they launch, first, on a runner Playwright supports; ${jobsChecked} job(s) in all, each on a pinned image:\n${list}`);
 }

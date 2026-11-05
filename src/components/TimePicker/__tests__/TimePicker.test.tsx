@@ -2138,10 +2138,10 @@ describe("TimePicker (additional coverage)", () => {
       await user.click(input);
       await lazyLoaded();
 
-      // Immediately click OK without touching anything → should use parsed "14:30"
       await user.click(screen.getByText("OK"));
 
-      expect(onValueChange).toHaveBeenCalledWith("14:30", expect.objectContaining({ hours: 14, minutes: 30 }));
+      expect(onValueChange).not.toHaveBeenCalled();
+      expect(input).toHaveValue("14:30");
     });
   });
 

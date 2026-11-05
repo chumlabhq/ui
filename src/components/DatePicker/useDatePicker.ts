@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import type {
   UseDatePickerProps,
   CalendarMonth,
@@ -149,18 +149,29 @@ export function useDatePicker(props: UseDatePickerProps) {
     markers,
   ]);
 
+  const displayMonthRef = useRef(displayMonth);
+  const showMonth = useCallback(
+    (month: Date) => {
+      if (month.getTime() === displayMonthRef.current.getTime()) return;
+      displayMonthRef.current = month;
+      setDisplayMonth(month);
+      onMonthChange?.(month);
+    },
+    [onMonthChange],
+  );
+
   const handleOpen = useCallback(() => {
     if (disabled) return;
     setIsOpen(true);
     setFocusedDate(null);
     if (selectionMode === "single" && singleValue) {
-      setDisplayMonth(startOfMonth(singleValue));
+      showMonth(startOfMonth(singleValue));
     } else if (selectionMode === "range" && rangeValue?.start) {
-      setDisplayMonth(startOfMonth(rangeValue.start));
+      showMonth(startOfMonth(rangeValue.start));
     } else if (selectionMode === "multiple" && multipleValue?.length) {
-      setDisplayMonth(startOfMonth(multipleValue[0]));
+      showMonth(startOfMonth(multipleValue[0]));
     }
-  }, [disabled, selectionMode, singleValue, rangeValue, multipleValue, setIsOpen]);
+  }, [disabled, selectionMode, singleValue, rangeValue, multipleValue, setIsOpen, showMonth]);
 
   /**
    * The grid's roving tabindex needs a starting cell, and every way the panel
@@ -212,9 +223,10 @@ export function useDatePicker(props: UseDatePickerProps) {
       const normalizedDate = startOfDay(date);
 
       if (selectionMode === "single") {
-        const dateValue = toDateValue(normalizedDate);
-        setCurrentValue(normalizedDate);
-        emitSingle?.(normalizedDate, dateValue);
+        if (!(singleValue && isSameDay(singleValue, normalizedDate))) {
+          setCurrentValue(normalizedDate);
+          emitSingle?.(normalizedDate, toDateValue(normalizedDate));
+        }
         handleClose();
         return;
       }
@@ -288,43 +300,30 @@ export function useDatePicker(props: UseDatePickerProps) {
       emitMultiple,
       setCurrentValue,
       handleClose,
+      singleValue,
     ],
   );
 
   const handleMonthNavigation = useCallback(
     (direction: "prev" | "next") => {
-      setDisplayMonth((current) => {
-        const newMonth =
-          direction === "prev"
-            ? getPreviousMonth(current)
-            : getNextMonth(current);
-        onMonthChange?.(newMonth);
-        return newMonth;
-      });
+      const current = displayMonthRef.current;
+      showMonth(direction === "prev" ? getPreviousMonth(current) : getNextMonth(current));
     },
-    [onMonthChange],
+    [showMonth],
   );
 
   const handleMonthSelect = useCallback(
     (monthIndex: number) => {
-      setDisplayMonth((current) => {
-        const newMonth = setMonthOfDate(current, monthIndex);
-        onMonthChange?.(newMonth);
-        return newMonth;
-      });
+      showMonth(setMonthOfDate(displayMonthRef.current, monthIndex));
     },
-    [onMonthChange],
+    [showMonth],
   );
 
   const handleYearSelect = useCallback(
     (year: number) => {
-      setDisplayMonth((current) => {
-        const newMonth = setYearOfDate(current, year);
-        onMonthChange?.(newMonth);
-        return newMonth;
-      });
+      showMonth(setYearOfDate(displayMonthRef.current, year));
     },
-    [onMonthChange],
+    [showMonth],
   );
 
   const handleDateHover = useCallback(
@@ -360,10 +359,8 @@ export function useDatePicker(props: UseDatePickerProps) {
   }, [handleDateSelect]);
 
   const goToToday = useCallback(() => {
-    const today = startOfDay(new Date());
-    setDisplayMonth(startOfMonth(today));
-    onMonthChange?.(startOfMonth(today));
-  }, [onMonthChange]);
+    showMonth(startOfMonth(startOfDay(new Date())));
+  }, [showMonth]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -507,10 +504,11 @@ export function useDatePicker(props: UseDatePickerProps) {
             newDate.getFullYear() === m.month.getFullYear(),
         )
       ) {
-        setDisplayMonth(startOfMonth(newDate));
+        showMonth(startOfMonth(newDate));
       }
     },
     [
+      showMonth,
       disabled,
       calendarMonths,
       weekStartsOn,

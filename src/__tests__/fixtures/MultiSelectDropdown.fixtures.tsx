@@ -106,5 +106,6 @@ const fixtures: Fixtures<typeof MultiSelectDropdown> = [
   },
   { name: "full-width", props: { options: OPTIONS, fullWidth: true } },
   { name: "keys", props: { options: KEY_OPTIONS }, wrap: withNeighbours },
+  { name: "no-chevron", props: { options: OPTIONS, defaultValue: ["a", "b"], showChevron: false }, note: "The chip layer reserves the chevron's width only when there is one." },
 ];
 export default fixtures;

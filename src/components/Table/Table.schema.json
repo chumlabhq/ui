@@ -324,7 +324,7 @@
         "multiple",
         "none"
       ],
-      "description": "Row selection mode.",
+      "description": "Row selection mode. `\"multiple\"` adds checkboxes; `\"single\"` selects the row pressed, or the row of the cell Enter is pressed on.",
       "default": "none"
     },
     "selectedRowIds": {
@@ -434,7 +434,7 @@
     },
     "onColumnVisibilityChange": {
       "type": "object",
-      "description": "(visibility: Record<string, boolean>) => void — Callback when column visibility changes.",
+      "description": "(visibility: Record<string, boolean>) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleVisibility()`.",
       "x-tsType": "((visibility: Record<string, boolean>) => void) | undefined"
     },
     "striped": {
@@ -477,7 +477,7 @@
     },
     "onCellEdit": {
       "type": "object",
-      "description": "(rowId: string, columnId: string, value: unknown) => void — Callback when a cell value is edited.",
+      "description": "(rowId: string, columnId: string, value: unknown) => void — Fires when an edit commits a changed value. An edit ending on the value it started with is not reported.",
       "x-tsType": "((rowId: string, columnId: string, value: unknown) => void) | undefined"
     },
     "resizable": {
@@ -514,7 +514,7 @@
     },
     "onColumnOrderChange": {
       "type": "object",
-      "description": "(order: string[]) => void — Callback when column order changes.",
+      "description": "(order: string[]) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `table.setColumnOrder()`.",
       "x-tsType": "((order: string[]) => void) | undefined"
     },
     "reorderable": {
@@ -604,7 +604,7 @@
     },
     "onGroupByChange": {
       "type": "object",
-      "description": "(groupBy: string[]) => void — Callback when group-by columns change.",
+      "description": "(groupBy: string[]) => void — The table renders no control for this. Fires when a column's `header` or `cell` render calls `column.toggleGrouping()`.",
       "x-tsType": "((groupBy: string[]) => void) | undefined"
     },
     "showSearch": {

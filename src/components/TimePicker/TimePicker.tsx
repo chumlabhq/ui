@@ -18,13 +18,13 @@ import {
 } from "./utils/constants.js";
 import { useTimePickerState } from "./useTimePicker.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { useReducedMotion } from "../../utils/useReducedMotion.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import { ChevronDownIcon, CheckIcon as CheckIconDefault, ClearIcon as ClearIconDefault } from "./icons.js";
 import { useClockFace } from "./useClockFace.js";
 import { formatTimeValue, parseTimeInput, getDefaultTimeValue, clampMinuteStep, isMinutesInRange, timeValueToMinutes } from "./utils.js";
-import { isBrowser, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
+import { isBrowser, pointerMoved, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 
 import { cn } from "../../utils/scopedCn.js";
 import { mergeSlot } from "../../utils/mergeSlot.js";
@@ -78,7 +78,7 @@ const TimeOption = memo(function TimeOption({
         e.preventDefault();
         onSelect(time);
       }}
-      onMouseEnter={() => onHover(index)}
+      onMouseMove={() => { if (pointerMoved()) onHover(index); }}
     >
       <span className={optionTextClass}>
         {renderOptionContent ? renderOptionContent(time, isSelected) : time}
@@ -251,10 +251,11 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     const handleValueChange = useCallback(
       (time: string | null, timeValue: TimeValue | null) => {
         setRangeError(false);
+        if (time === value) return;
         setValueState(time);
         onValueChange?.(time, timeValue);
       },
-      [setValueState, onValueChange],
+      [value, setValueState, onValueChange],
     );
 
     const [isOpen, setIsOpen] = useControllableState<boolean>({
@@ -774,9 +775,7 @@ const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
             {errorMessage}
           </div>
         )}
-        {success && successMessage && !error && (
-          <div id={successId} role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus id={successId} className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   },

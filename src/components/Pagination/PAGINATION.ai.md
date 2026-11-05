@@ -105,7 +105,7 @@ DOM nesting: `nav(root) > [selector + pageInfo + nav(reorderable)] > nav > prevB
 | `rowsPerPage` | number | — | Current number of rows displayed per page. |
 | `rowOptions` | array | — | Available row-per-page options for the selector. |
 | `disabled` | boolean | — | Disables the entire pagination control. |
-| `onValueChange` | object | — | (page: number) => void - Fires when the current page changes. |
+| `onValueChange` | object | — | (page: number) => void - Fires when the user changes the page. A page clamped because `totalPages` fell is shown, not reported: keep your own `value` in range. |
 | `value` | number | — | Controlled current page number. |
 | `defaultValue` | number | `1` | Initial page number for uncontrolled usage. |
 | `onRowsPerPageChange` | object | — | (rows: number) => void - Fires when the rows-per-page value changes. |

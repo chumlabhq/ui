@@ -6,6 +6,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react";
+import { trackPointer } from "../isBrowser.js";
 
 export interface MenuNavigationOptions<T> {
   items: readonly T[];
@@ -93,6 +94,7 @@ export function useMenuNavigation<T>({
   commitOnSpace = true,
   typeahead,
 }: MenuNavigationOptions<T>): MenuNavigation {
+  useEffect(trackPointer, []);
   const [internalIndex, setInternalIndex] = useState(-1);
   const isControlled = activeIndexProp !== undefined;
   const activeIndex = isControlled ? activeIndexProp : internalIndex;

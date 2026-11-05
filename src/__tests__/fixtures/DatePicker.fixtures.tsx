@@ -134,5 +134,6 @@ const fixtures: Fixtures<typeof DatePicker> = [
     props: { loading: true, value: D, reduceMotion: true },
     note: "The trigger's spinner follows the picker's reduceMotion, the one state that writes `data-reduce-motion`.",
   },
+  { name: "callbacks", props: { "aria-label": "Date", defaultValue: new Date(2026, 8, 30) }, note: "Run F: the state `callbacks.spec` spies on. The last day of the month, so an arrow crosses it." },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

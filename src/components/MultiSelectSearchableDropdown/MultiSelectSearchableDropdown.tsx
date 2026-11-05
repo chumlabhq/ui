@@ -1,9 +1,9 @@
 import { useRef, useEffect, useId, forwardRef, memo, useCallback, useState, useMemo } from "react";
 import { useLayer } from "../../utils/layers.js";
 import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
-import { isBrowser, TEXT_DIRECTION_FROM_CONTENT, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
+import { CHIP_LAYER_STYLE, CHIP_REMOVE_STYLE, isBrowser, pointerMoved, TEXT_DIRECTION_FROM_CONTENT, TRIGGER_STACK, returnFocusAfterOutsidePress } from "../../utils/isBrowser.js";
 import { SR_ONLY_STYLE } from "../../utils/srOnlyStyle.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { mergeRefs, setRef } from "../../utils/mergeRefs.js";
 import { useAnchoredPosition } from "../../utils/useAnchoredPosition.js";
 import type { MultiSelectOption, MultiSelectSearchableDropdownProps, MultiSelectSearchableDropdownClasses } from "./utils/types.js";
@@ -129,7 +129,7 @@ const OptionItem = memo(function OptionItem({
       data-disabled={option.disabled || undefined}
       onMouseDown={(e) => e.preventDefault()}
       onClick={() => onToggle(option)}
-      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
+      onMouseMove={option.disabled ? undefined : () => { if (pointerMoved()) onHover(index); }}
     >
       <span className={combinedCheckboxClassName} data-checked={isSelected || undefined} data-state={checkboxState}>
         {isSelected && (checkboxIcon || <CheckIcon className={classes.itemIndicator || undefined} />)}
@@ -145,35 +145,28 @@ const SelectedChip = memo(function SelectedChip({
   option,
   classes,
   onRemove,
+  disabled,
 }: {
   option: MultiSelectOption;
   classes: Required<MultiSelectSearchableDropdownClasses>;
   onRemove: (value: string) => void;
+  disabled?: boolean;
 }) {
   return (
     <span className={classes.chip || undefined}>
-      <span className="truncate">
+      <span className="truncate" aria-hidden="true">
         {option.selectedContent || option.content || option.label}
       </span>
-      <span
-        role="button"
-        tabIndex={0}
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove(option.value);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            e.stopPropagation();
-            onRemove(option.value);
-          }
-        }}
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => onRemove(option.value)}
         className={classes.chipRemoveTrigger || undefined}
+        style={CHIP_REMOVE_STYLE}
         aria-label={`Remove ${option.label}`}
       >
         <XIcon className="w-3 h-3" />
-      </span>
+      </button>
     </span>
   );
 });
@@ -316,6 +309,7 @@ const MultiSelectSearchableDropdown = forwardRef<
     const descriptionId = `${dropdownId}-description`;
 
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const chipLayerRef = useRef<HTMLDivElement>(null);
     const [triggerNode, setTriggerNode] = useState<HTMLElement | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const prevIsOpenRef = useRef(false);
@@ -431,7 +425,7 @@ const MultiSelectSearchableDropdown = forwardRef<
 
       const handleClickOutside = (event: MouseEvent | TouchEvent) => {
         const target = event.target as Node;
-        if (triggerNode?.contains(target)) return;
+        if (triggerNode?.contains(target) || chipLayerRef.current?.contains(target)) return;
         const portalEl = (target as HTMLElement).closest?.(`[data-dropdown-id="${dropdownId}"]`);
         if (portalEl) return;
         handleClose();
@@ -556,6 +550,13 @@ const MultiSelectSearchableDropdown = forwardRef<
       "data-placeholder": (selectedOptions.length === 0 || undefined) as true | undefined,
     };
 
+    const chevron = (
+      <ChevronDownIcon
+        className={mergedClasses.icon || undefined}
+        style={isOpen ? { transform: "rotate(180deg)" } : undefined}
+      />
+    );
+
     return (
       <div
         className={rootClassName}
@@ -590,33 +591,46 @@ const MultiSelectSearchableDropdown = forwardRef<
               { isOpen, selectedOptions, placeholder },
             )
           ) : (
-            <button
-              ref={mergedTriggerRef}
-              {...triggerProps}
-              className={mergedClasses.trigger || undefined}
-            >
-              {/* Each chip carries its own "Remove X" button, and a name computed
-                  from the value element swept those up — the trigger announced
-                  "Apple Remove Apple Banana Remove Banana". Only the chip branch has
-                  that problem, so only it needs a separate name source; pointing at
-                  the visible element everywhere else keeps the text in the DOM once. */}
-              {chipsShown && (
-                <span id={valueId} style={SR_ONLY_STYLE}>
-                  {selectedOptions.map((option) => option.label).join(", ")}
-                </span>
-              )}
-              <span
-                id={chipsShown ? undefined : valueId}
-                className={mergedClasses.value || undefined}
+            <div className={TRIGGER_STACK}>
+              <button
+                ref={mergedTriggerRef}
+                {...triggerProps}
+                className={mergedClasses.trigger || undefined}
               >
-                {showSelectedChips && selectedOptions.length > 0 ? (
-                  <>
+                {chipsShown && (
+                  <span id={valueId} style={SR_ONLY_STYLE}>
+                    {selectedOptions.map((option) => option.label).join(", ")}
+                  </span>
+                )}
+                <span
+                  id={chipsShown ? undefined : valueId}
+                  className={mergedClasses.value || undefined}
+                >
+                  {chipsShown ? null : selectedOptions.length > 0 ? (
+                    <span className="truncate">
+                      {selectedOptions.length} selected
+                    </span>
+                  ) : (
+                    <span className="truncate">{placeholder}</span>
+                  )}
+                </span>
+                {showChevron && chevron}
+              </button>
+              {chipsShown && (
+                <div
+                  ref={chipLayerRef}
+                  className={mergedClasses.trigger || undefined}
+                  style={CHIP_LAYER_STYLE}
+                  data-disabled={disabled || undefined}
+                >
+                  <span className={mergedClasses.value || undefined}>
                     {displayedChips.map((option) => (
                       <SelectedChip
                         key={option.value}
                         option={option}
                         classes={mergedClasses}
                         onRemove={handleRemoveOptionAndFocus}
+                        disabled={disabled}
                       />
                     ))}
                     {remainingCount > 0 && (
@@ -624,22 +638,15 @@ const MultiSelectSearchableDropdown = forwardRef<
                         +{remainingCount}
                       </span>
                     )}
-                  </>
-                ) : selectedOptions.length > 0 ? (
-                  <span className="truncate">
-                    {selectedOptions.length} selected
                   </span>
-                ) : (
-                  <span className="truncate">{placeholder}</span>
-                )}
-              </span>
-              {showChevron && (
-                <ChevronDownIcon
-                  className={mergedClasses.icon || undefined}
-                  style={isOpen ? { transform: "rotate(180deg)" } : undefined}
-                />
+                  {showChevron && (
+                    <span aria-hidden="true" style={{ visibility: "hidden", display: "contents" }}>
+                      {chevron}
+                    </span>
+                  )}
+                </div>
               )}
-            </button>
+            </div>
           )}
 
           {clearable && selectedValues.length > 0 && (
@@ -767,9 +774,7 @@ const MultiSelectSearchableDropdown = forwardRef<
           </div>
         )}
 
-        {success && successMessage && !error && (
-          <div role="status" data-valid className={mergedClasses.message || undefined}>{successMessage}</div>
-        )}
+        <SuccessStatus className={mergedClasses.message || undefined} message={success && !error && successMessage} />
       </div>
     );
   }

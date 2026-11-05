@@ -69,7 +69,7 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   rowOptions?: number[];
   /** Disables all pagination controls. */
   disabled?: boolean;
-  /** Page change callback. Not `onChange` or `onPageChange`. */
+  /** Fires when the user changes the page. Not `onChange` or `onPageChange`. A page clamped because `totalPages` fell is shown, not reported: keep your own `value` in range. */
   onValueChange?: (page: number) => void;
   /** Current page number (1-based). Not `currentPage` or `page`. */
   value?: number;

@@ -1608,13 +1608,13 @@ const isHook = (dir: string, attribute: string) => (STATE_PAINT_HOOKS[dir] ?? []
 
 const ECHO = "reports a prop whose paint the component resolves from the prop itself, so removing the attribute changes nothing: the attribute echoes the configuration, it does not cause it";
 for (const [attribute, components] of [
-  ["data-orientation", ["Accordion", "Button"]], ["data-shape", ["Avatar", "Checkbox"]],
+  ["data-orientation", ["Accordion", "Button", "Slider"]], ["data-shape", ["Avatar", "Checkbox"]],
   ["data-size", ["Accordion", "Button", "Checkbox", "Input", "Table", "TextArea"]],
   ["data-full-width", ["Button", "CascadingDropdown", "Dropdown", "InternationalPhoneInput", "MultiSelectDropdown", "MultiSelectSearchableDropdown", "SearchableDropdown"]],
   ["data-centered", ["Modal"]], ["data-fullscreen", ["Modal"]], ["data-mobile-view", ["Table"]],
 ] as const) exempt([...components], attribute, ECHO);
 const AFFORDANCE = "reports that a click handler is set; the element is a button, or takes the pointer cursor and hover paint, and at rest looks like its peers by design";
-for (const [attribute, components] of [["data-clickable", ["Breadcrumb", "Stepper", "Table"]]] as const) exempt([...components], attribute, AFFORDANCE);
+for (const [attribute, components] of [["data-clickable", ["Breadcrumb", "Table"]]] as const) exempt([...components], attribute, AFFORDANCE);
 exempt(["Accordion"], "data-accordion-expand-print", "paints only in print media: the injected print stylesheet opens every panel when the page is printed");
 exempt(["Checkbox", "DatePicker", "Loader", "Modal", "Pagination", "RadioButton", "ResizablePanel", "Stepper", "Switch", "TabPanel"], "data-reduce-motion", "governs motion, not paint; `reduced-motion.contract` holds it");
 

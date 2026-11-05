@@ -21,6 +21,8 @@ export const findCountryByCode = (
   );
 };
 
+const DIAL_CODE_PRIMARY: Record<string, string> = { "1": "US", "7": "RU" };
+
 export const findCountryByDialCode = (
   dialCode: string,
   countries: CountryOption[],
@@ -205,14 +207,12 @@ export const parseInternationalNumber = (
     };
   }
 
-  const preferredSet = new Set(
-    preferredCountries.map((c) => c.toLowerCase()),
-  );
-  const preferredMatch = matches.find((c) =>
-    preferredSet.has(c.flag.toLowerCase()),
-  );
+  const preferredMatch = preferredCountries
+    .map((code) => matches.find((c) => c.flag.toLowerCase() === code.toLowerCase()))
+    .find(Boolean);
 
-  const winner = preferredMatch || matches[0];
+  const primaryMatch = matches.find((c) => c.value === DIAL_CODE_PRIMARY[matchedDialDigits]);
+  const winner = preferredMatch || primaryMatch || matches[0];
   return {
     dialCode: winner.dialCode,
     phoneNumber: digits.slice(matchedDialDigits.length),

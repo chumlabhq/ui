@@ -94,7 +94,7 @@ Each is written or absent, never `"false"`.
 | `value` | number \| array | — | Current value (number for single thumb, [number, number] for range). |
 | `defaultValue` | number \| array | — | Default uncontrolled value. |
 | `onValueChange` | object | — | (value: SliderValue) => void — Fires when the value changes. |
-| `onValueCommit` | object | — | (value: SliderValue) => void — Fires when a drag interaction ends (commit). |
+| `onValueCommit` | object | — | (value: SliderValue) => void — Fires with the final value when a drag ends or a key moves a thumb, and only if the value changed. |
 | `min` | number | `0` | Minimum value. |
 | `max` | number | `100` | Maximum value. |
 | `step` | number | `1` | Step increment. |

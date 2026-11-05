@@ -2,6 +2,7 @@ import { memo } from "react";
 import type { SearchableDropdownOption as OptionType, SearchableDropdownClasses } from "../utils/types.js";
 import { cn } from "../../../utils/scopedCn.js";
 import { CheckIcon } from "../utils/icons.js";
+import { pointerMoved } from "../../../utils/isBrowser.js";
 
 export const SearchableDropdownOption = memo(function SearchableDropdownOption({
   option,
@@ -45,7 +46,7 @@ export const SearchableDropdownOption = memo(function SearchableDropdownOption({
       onClick={() => {
         if (!option.disabled) onSelect(option);
       }}
-      onMouseEnter={option.disabled ? undefined : () => onHover(index)}
+      onMouseMove={option.disabled ? undefined : () => { if (pointerMoved()) onHover(index); }}
     >
       <span className="flex-1 truncate">
         {option.content || option.label}

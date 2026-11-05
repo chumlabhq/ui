@@ -37,7 +37,7 @@ import { CircularLoader } from "../Loader/index.js";
 import { SearchableDropdown } from "../SearchableDropdown/index.js";
 import type { SearchableDropdownOption } from "../SearchableDropdown/index.js";
 import { useControllableState } from "../../utils/useControllableState.js";
-import { FormValue } from "../../utils/FormValue.js";
+import { FormValue, SuccessStatus } from "../../utils/FormValue.js";
 import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect.js";
 import { cn, composeClasses } from "../../utils/scopedCn.js";
 import { useAccessibleNameWarning } from "../../utils/useAccessibleNameWarning.js";
@@ -711,17 +711,7 @@ const InternationalPhoneInput = forwardRef<
           </div>
         )}
 
-        {displaySuccess && displaySuccessMessage && (
-          <div
-            id={successId}
-            role="status"
-            data-valid
-            className={mergedClasses.message || undefined}
-            data-slot="success"
-          >
-            {displaySuccessMessage}
-          </div>
-        )}
+        <SuccessStatus id={successId} data-slot={displaySuccess && displaySuccessMessage ? "success" : undefined} className={mergedClasses.message || undefined} message={displaySuccess ? displaySuccessMessage : undefined} />
       </div>
     );
   },

@@ -15,7 +15,7 @@
  * rule is per group — exactly one member tabbable — rather than per element.
  */
 import { describe, expect, it, beforeEach, afterEach } from "vitest";
-import { cleanup } from "@testing-library/react";
+import { act, cleanup, fireEvent } from "@testing-library/react";
 import { COMPONENTS } from "./registry.js";
 import { fixturesFor } from "../fixtures/index.js";
 import { fixtureSession } from "../fixtures/_act.contract.js";
@@ -65,8 +65,55 @@ const isFocusable = (el: Element): boolean => {
   return NATIVELY_FOCUSABLE.has(el.tagName);
 };
 
+/** What the arrow walk measured, and where: a walk that never ran would pass everything. */
+const rovingComponents = new Set<string>();
+let currentComponent = "";
+/** TabPanel, Stepper and DatePicker: the native-button roving groups their `.ai.md` keyboard tables document. */
+const ROVING_COMPONENT_FLOOR = 3;
+
+/** A control's identity across a re-render: a calendar paged away and back mounts new cells for the same days. */
+const memberKey = (el: Element) => el.getAttribute("aria-label") || el.textContent?.trim() || el.tagName;
+
+/** The controls with a tabindex of their own in `el`'s largest ancestor holding at most one tab stop of its kind. */
+const rovingGroup = (el: Element, controls: Element[]): Element[] => {
+  const sameKind = controls.filter((c) => c.tagName === el.tagName && c.hasAttribute("tabindex"));
+  let group = [el];
+  for (let ancestor = el.parentElement; ancestor; ancestor = ancestor.parentElement) {
+    const within = sameKind.filter((c) => ancestor!.contains(c));
+    if (within.filter((c) => c.getAttribute("tabindex") === "0").length > 1) break;
+    group = within;
+  }
+  return group;
+};
+
+/** Presses the arrows from the tab stop, each way, and names the members focus never reached. */
+const notReachedByArrows = async (stop: Element, members: Element[]): Promise<string[]> => {
+  const wanted = new Set(members.map(memberKey));
+  (stop as HTMLElement).focus();
+  wanted.delete(memberKey(stop));
+  // Each way walks back over the last one first: a calendar's arrows page on past
+  // the month, so the days behind the stop are only reached by outwalking the
+  // days walked forward.
+  let walked = 0;
+  for (const key of ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"]) {
+    const presses = members.length + walked * 2;
+    walked = 0;
+    for (let press = 0; press < presses && wanted.size; press++, walked++) {
+      const before = document.activeElement;
+      if (!before || before === document.body) break;
+      await act(async () => {
+        fireEvent.keyDown(before, { key });
+        await new Promise((frame) => requestAnimationFrame(frame));
+      });
+      if (document.activeElement) wanted.delete(memberKey(document.activeElement));
+      if (document.activeElement === before) break;
+    }
+  }
+  return [...wanted];
+};
+
 /** Controls that no keyboard user can reach. */
-const unreachable = (): string[] => {
+const unreachable = async (): Promise<string[]> => {
   const bad: string[] = [];
   const rovingSeen = new Map<string, Element[]>();
 
@@ -119,18 +166,23 @@ const unreachable = (): string[] => {
     bad.push(`${key}: ${enabled.length} members, no tab stop and no active-descendant owner`);
   }
 
-  // Native controls made unreachable by hand. A member of a roving group is
-  // exempt by its own role rather than by its ancestor's: TabPanel's inactive
-  // tabs are `<button tabindex="-1">` inside a `[role="tablist"]`, and they are
-  // reached with the arrow keys like any other roving group.
-  for (const el of document.querySelectorAll("button, a[href], input, select, textarea")) {
-    if (el.hasAttribute("disabled")) continue;
-    if (el.getAttribute("type") === "hidden") continue;
-    if (el.getAttribute("aria-hidden") === "true") continue;
-    const role = el.getAttribute("role") ?? "";
-    if (ROVING_ROLES.has(role)) continue;
-    if (el.getAttribute("tabindex") === "-1") {
-      bad.push(`${el.tagName.toLowerCase()}[tabindex=-1] is a control the user cannot tab to`);
+  // Native controls made unreachable by hand. The one legitimate `tabindex="-1"`
+  // is a roving group, and what makes it one is measured, not named: exactly one
+  // member is the tab stop, and the arrow keys reach every other member from it.
+  const controls = [...document.querySelectorAll("button, a[href], input, select, textarea")].filter(
+    (el) => !el.hasAttribute("disabled") && el.getAttribute("type") !== "hidden" && el.getAttribute("aria-hidden") !== "true",
+  );
+  const measured = new Set<Element>();
+  for (const el of controls) {
+    if (el.getAttribute("tabindex") !== "-1" || measured.has(el)) continue;
+    const members = rovingGroup(el, controls);
+    members.forEach((member) => measured.add(member));
+    const stops = members.filter((member) => member.getAttribute("tabindex") === "0");
+    if (!stops.length && hasActiveDescendantOwner(members)) continue;
+    const missed = stops.length === 1 ? await notReachedByArrows(stops[0], members) : [];
+    if (stops.length === 1 && currentComponent) rovingComponents.add(currentComponent);
+    if (stops.length !== 1 || missed.length) {
+      bad.push(`${el.tagName.toLowerCase()}[tabindex=-1] is a control the user cannot tab to: ${stops.length} tab stops, arrows miss ${missed.length}`);
     }
   }
   return bad;
@@ -210,58 +262,76 @@ describe("keyboard reachability contract", () => {
   });
 
   describe("self-check", () => {
-    it("catches a control that cannot take focus", () => {
+    it("catches a control that cannot take focus", async () => {
       const host = document.createElement("div");
       host.innerHTML = '<span role="button">click me</span>';
       document.body.appendChild(host);
-      expect(unreachable()).toContain("span[role=button] cannot take focus");
+      expect(await unreachable()).toContain("span[role=button] cannot take focus");
       host.remove();
     });
 
-    it("accepts the same control once it is focusable", () => {
+    it("accepts the same control once it is focusable", async () => {
       const host = document.createElement("div");
       host.innerHTML = '<span role="button" tabindex="0">click me</span>';
       document.body.appendChild(host);
-      expect(unreachable()).toEqual([]);
+      expect(await unreachable()).toEqual([]);
       host.remove();
     });
 
-    it("catches a roving group with no tab stop", () => {
+    it("catches a tabindex=-1 control beside a tab stop that no arrow key leads to", async () => {
+      const host = document.createElement("div");
+      host.innerHTML = '<div><button tabindex="0">a</button><button tabindex="-1">b</button></div>';
+      document.body.appendChild(host);
+      expect((await unreachable()).join()).toContain("arrows miss 1");
+      host.remove();
+    });
+
+    it("accepts the same group when the arrow keys do move focus to every member", async () => {
+      const host = document.createElement("div");
+      host.innerHTML = '<div><button tabindex="0">a</button><button tabindex="-1">b</button></div>';
+      document.body.appendChild(host);
+      const [a, b] = host.querySelectorAll("button");
+      a.addEventListener("keydown", () => b.focus());
+      expect(await unreachable()).toEqual([]);
+      host.remove();
+    });
+
+    it("catches a roving group with no tab stop", async () => {
       const host = document.createElement("div");
       host.innerHTML =
         '<div><div role="option" tabindex="-1">a</div><div role="option" tabindex="-1">b</div></div>';
       document.body.appendChild(host);
-      expect(unreachable().join()).toContain("no tab stop and no active-descendant owner");
+      expect((await unreachable()).join()).toContain("no tab stop and no active-descendant owner");
       host.remove();
     });
 
-    it("accepts a roving group with exactly one tab stop", () => {
+    it("accepts a roving group with exactly one tab stop", async () => {
       const host = document.createElement("div");
       host.innerHTML =
         '<div><div role="option" tabindex="0">a</div><div role="option" tabindex="-1">b</div></div>';
       document.body.appendChild(host);
-      expect(unreachable()).toEqual([]);
+      expect(await unreachable()).toEqual([]);
       host.remove();
     });
 
-    it("accepts a group whose stop is a focused control inside a member", () => {
+    it("accepts a group whose stop is a focused control inside a member", async () => {
       const host = document.createElement("div");
       host.innerHTML =
         '<table><tbody><tr><td role="gridcell" tabindex="-1"><input aria-label="Edit a"></td><td role="gridcell" tabindex="-1">b</td></tr></tbody></table>';
       document.body.appendChild(host);
       host.querySelector("input")!.focus();
-      expect(unreachable()).toEqual([]);
+      expect(await unreachable()).toEqual([]);
       host.remove();
     });
 
-    it("still catches that group once focus leaves the control", () => {
+    it("still catches that group once focus leaves the control", async () => {
       const host = document.createElement("div");
       host.innerHTML =
         '<table><tbody><tr><td role="gridcell" tabindex="-1"><input aria-label="Edit a"></td><td role="gridcell" tabindex="-1">b</td></tr></tbody></table>';
       document.body.appendChild(host);
       host.querySelector("input")!.focus();
       host.querySelector("input")!.blur();
-      expect(unreachable().join()).toContain("gridcell@TR: 2 members, no tab stop");
+      expect((await unreachable()).join()).toContain("gridcell@TR: 2 members, no tab stop");
       host.remove();
     });
   });
@@ -303,6 +373,7 @@ describe("keyboard reachability contract", () => {
    */
   for (const component of withFixtures) {
     it(`${component.name} keeps its controls reachable and clickable`, async () => {
+      currentComponent = component.name;
       const session = fixtureSession();
       const unreached: string[] = [];
       const uncursored: string[] = [];
@@ -311,7 +382,7 @@ describe("keyboard reachability contract", () => {
           component.Component as React.ComponentType<Record<string, unknown>>,
           fixture,
         );
-        unreached.push(...unreachable().map((b) => `${fixture.name}: ${b}`));
+        unreached.push(...(await unreachable()).map((b) => `${fixture.name}: ${b}`));
         uncursored.push(...withoutCursor().map((b) => `${fixture.name}: ${b}`));
         session.unmount();
       }
@@ -319,4 +390,9 @@ describe("keyboard reachability contract", () => {
       expect([...new Set(uncursored)], "a control that does not look clickable").toEqual([]);
     });
   }
+
+  it("walked the arrows in the components that document roving groups", () => {
+    console.log(`KEYBOARD_REACHABLE roving groups walked in ${rovingComponents.size} components (floor ${ROVING_COMPONENT_FLOOR}): ${[...rovingComponents].join(", ")}`);
+    expect(rovingComponents.size).toBeGreaterThanOrEqual(ROVING_COMPONENT_FLOOR);
+  });
 });

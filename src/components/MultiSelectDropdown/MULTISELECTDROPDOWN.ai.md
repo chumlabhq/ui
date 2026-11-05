@@ -204,11 +204,11 @@ root
 ├── label
 ├── description
 └── control
-    └── trigger (role="combobox")
-    │   ├── chips (chip + chipRemoveTrigger) or value
-    │   ├── count (+N more)
-    │   ├── clearTrigger
+    ├── trigger (role="combobox")
+    │   ├── value (text when no chips show)
     │   └── icon
+    ├── trigger's chip layer, stacked over it: chips (chip + chipRemoveTrigger button) and count (+N more)
+    ├── clearTrigger
     └── content (portal)
         └── list (role="listbox")
             └── item (itemControl + itemIndicator + label)
@@ -216,7 +216,7 @@ root
 
 | "I want to change..." | Slot to use | Notes |
 |------------------------|-------------|-------|
-| Trigger button | `trigger` | Contains chips/text |
+| Trigger button | `trigger` | The `<button role="combobox">`. The chip layer stacked over it takes the same class, transparent, so padding set here moves both. |
 | Selected chips | `chip`, `chipRemoveTrigger` | Individual chip + X button |
 | Dropdown panel | `content` | Portal-rendered |
 | Option row | `item` | |

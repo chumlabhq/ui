@@ -142,7 +142,7 @@ describe("an outside press hands focus back to the trigger", () => {
     await act(async () => {
       fireEvent.click(filter);
     });
-    await waitFor(() => expect(document.querySelector("[data-table-filter-content]")).not.toBeNull());
+    await waitFor(() => expect(document.querySelector("[data-table-filter-content]")?.contains(document.activeElement)).toBe(true));
     await pressBlank();
     expect(document.activeElement).toBe(filter);
   });

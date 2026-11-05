@@ -70,5 +70,6 @@ const fixtures: Fixtures<typeof Pagination> = [
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
     note: "Previous on the right pointing right, next on the left pointing left; page 2 so both are enabled.",
   },
+  { name: "callbacks", props: { totalPages: 5, showRowsPerPage: true, rowsPerPage: 10, rowOptions: [10, 25] }, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

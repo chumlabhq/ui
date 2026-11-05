@@ -38,5 +38,6 @@ const fixtures: Fixtures<typeof TimePicker> = [
     props: { defaultOpen: true, label: "Time" },
     wrap: (node) => <RtlBoundary>{node}</RtlBoundary>,
   },
+  { name: "callbacks", props: { label: "Time", format: "24h", defaultValue: "09:30" }, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

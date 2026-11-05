@@ -206,10 +206,9 @@ root
 ├── label
 ├── description
 └── control
-    └── trigger (role="combobox")
-    │   ├── chips / value / count
-    │   ├── clearTrigger
-    │   └── icon
+    ├── trigger (role="combobox"): value (text when no chips show), icon
+    ├── trigger's chip layer, stacked over it: chips (chip + chipRemoveTrigger button) and count
+    ├── clearTrigger
     └── content (portal)
         ├── searchControl > searchIcon + searchInput
         └── list (role="listbox")

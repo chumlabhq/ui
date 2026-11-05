@@ -27,5 +27,6 @@ const fixtures: Fixtures<typeof ResizablePanel> = [
     note: "A press on the handle starts a resize and holds it until release, which is the only moment `data-resizing` is set.",
     act: (c, ui) => ui.pointerDown(c.querySelector('[role="separator"]'), { pointerId: 1, clientX: 300, buttons: 1 }),
   },
+  { name: "callbacks", props: { defaultValue: 300, minValue: 100, maxValue: 500 }, children: <div>Panel</div>, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default [...fixtures, ...motionOverrides(fixtures[0])];

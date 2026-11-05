@@ -120,6 +120,7 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
     const descriptionId = `${fieldId}-description`;
     const isDisabled = disabled;
     const showSuccess = !error && success;
+    const shownSuccess = showSuccess ? successMessage : undefined;
 
     const loaderElement = loading
       ? (loader ?? (
@@ -268,17 +269,16 @@ export const FieldWrapper = forwardRef<HTMLDivElement, FieldWrapperProps>(
           </div>
         )}
 
-        {showSuccess && successMessage && (
-          <div
-            id={successId}
-            role="status"
-            data-slot="success"
-            data-valid
-            className={successClassName}
-          >
-            {successMessage}
-          </div>
-        )}
+        <div
+          id={successId}
+          role="status"
+          data-slot={shownSuccess ? "success" : undefined}
+          data-valid={shownSuccess ? true : undefined}
+          className={shownSuccess ? successClassName : undefined}
+          style={shownSuccess ? undefined : { position: "absolute", width: 0, height: 0 }}
+        >
+          {shownSuccess || null}
+        </div>
       </div>
     );
   },

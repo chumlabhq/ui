@@ -32,11 +32,14 @@ export interface ToastClasses {
   icon?: string;
 }
 
+/** What `toast` takes: a `ToastConfig` whose `id` is optional. */
+export type ToastOptions = Omit<ToastConfig, "id"> & { id?: string };
+
 /**
  * Everything one toast can be told. `useToast()`'s methods take this minus the fields they fill in themselves.
  */
 export interface ToastConfig {
-  /** Identifies the toast so it can be dismissed by name later; generated when omitted. */
+  /** Identifies the toast so it can be dismissed by name later; generated when omitted. Showing a toast with the id of one still on screen replaces it. */
   id: string;
   /** Which status this is, choosing the colour and the status glyph. */
   variant?: ToastVariant;
@@ -134,7 +137,7 @@ export interface ToastProviderProps {
  */
 export interface ToastContextValue {
   /** Shows a toast and returns its id. The other methods are this with `variant` filled in. */
-  toast: (config: Omit<ToastConfig, "id"> | string) => string;
+  toast: (config: ToastOptions | string) => string;
   /** Shows a success toast. */
   success: (message: ReactNode, options?: Partial<ToastConfig>) => string;
   /** Shows a warning toast. */

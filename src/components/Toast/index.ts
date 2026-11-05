@@ -6,6 +6,7 @@ export type {
   ToastVariant,
   ToastPosition,
   ToastConfig,
+  ToastOptions,
   ToastProps,
   ToastProviderProps,
   ToastContextValue,

@@ -30,7 +30,7 @@
     },
     "onValueChange": {
       "type": "object",
-      "description": "(page: number) => void - Fires when the current page changes.",
+      "description": "(page: number) => void - Fires when the user changes the page. A page clamped because `totalPages` fell is shown, not reported: keep your own `value` in range.",
       "x-tsType": "((page: number) => void) | undefined"
     },
     "value": {

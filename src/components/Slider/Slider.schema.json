@@ -43,7 +43,7 @@
     },
     "onValueCommit": {
       "type": "object",
-      "description": "(value: SliderValue) => void — Fires when a drag interaction ends (commit).",
+      "description": "(value: SliderValue) => void — Fires with the final value when a drag ends or a key moves a thumb, and only if the value changed.",
       "x-tsType": "((value: SliderValue) => void) | undefined"
     },
     "min": {

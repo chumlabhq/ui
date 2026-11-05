@@ -50,5 +50,6 @@ const fixtures: Fixtures<typeof InternationalPhoneInput> = [
       await ui.settle();
     },
   },
+  { name: "callbacks", props: { label: "Phone", defaultCountry: "IN", pasteDetection: true }, note: "Run F: the state `callbacks.spec` spies on." },
 ];
 export default fixtures;
